@@ -1,0 +1,120 @@
+.easyScanner-container {
+    height: 100%;
+    background-color: #7ecc44;
+    .es-hd {
+        width: 100%;
+        background-color: #fff;
+        margin-bottom: -1px;
+        .es-hd-info {
+            display: flex;
+            height: 100px;
+            background-color: #7ecc44;
+        }
+        .es-hd-ft {
+            height: 21px;
+            background-color: #7ecc44; 
+            margin-top: -1px;
+            margin-bottom: -1px;
+            // border-bottom-left-radius: 100%;
+            // border-bottom-right-radius: 100%;
+        }
+        .es-info-img {
+            height: 66px;
+            width: 66px;
+            margin-top: 22px;
+            margin-left: 24px;
+            margin-right: 13px;
+            border-radius: 50%;
+        }
+        .es-hd-shop {
+            height: 100px;
+            background-color: #7ecc44;
+            text-align: center;
+            .es-info-name {
+                font-size: 15px;
+                color: #fff;
+            }
+            .es-info-img {
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+        .es-info-txt {
+            flex: 1;
+            margin-top: 43px;
+            font-size: 15px;
+            color: #fff;
+        }
+    }
+    .es-bd {
+        width: 100%;
+        text-align: center;
+        background-color: #fff;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        .es-title {
+            font-size: 20px;
+            color: #f5ba39;
+            font-weight: bolder;
+        }
+        .es-2code {
+            margin-top: 18px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 195px;
+            height: 195px; // padding: 20px;
+            img {
+                width: 100%;
+            }
+        }
+        .es-2code-oper {
+            margin-top: 18px;
+            font-size: 15px;
+            color: #333;
+            line-height: 33px;
+        }
+    }
+    .es-ft {
+        padding-left: 13px;
+        height: 76px;
+        padding-top: 10px;
+        background-color: #7ecc44;
+        .es-share-title {
+            color: #fff;
+            font-size: 15px;
+        }
+        .es-share-url {
+            margin-top: 7px;
+        }
+        .div-input {
+            border: 1px solid #fff;
+            height: 25px;
+            width: 278px;
+            font-size: 12px;
+            color: #fff;
+            padding: 0 6px;
+            line-height: 25px;
+        }
+        button {
+            width: 48px;
+            height: 25px;
+            border-radius: 5px;
+            color: #7ecc44;
+            border: 1px solid #fff;
+            outline: none;
+            font-size: 15px;
+            margin-left: 17px;
+            margin-right: 12px;
+            background-color: #fff;
+        }
+    }
+    .svg-hx {
+        width: 100%;
+        height: 20px;
+        .svg-hx-path {
+            fill: #7ecc44;
+            stroke: #7ecc44;
+            stroke-width: 1px;
+        }
+    }
+}

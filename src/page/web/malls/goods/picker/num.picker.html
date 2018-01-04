@@ -1,0 +1,41 @@
+<div id="mask" v-if="isShow">
+    <div class="mask">
+        <section>
+            <div class="flex">
+
+                <div class="flex_name">
+                    <figure style=" height: 0.36rem;">
+                        <img :src="goods.coverImg">
+                    </figure>
+                    <div class="price">
+                        <span>{{goods.goodsName}}</span>
+                        <p v-if="goods.consuType==2">{{goods.purchasePrice | localMoney}}</p>
+                        <p v-if="goods.consuType==3">{{goods.moneyPrice | localMoney}}</p>
+                    </div>
+
+                </div>
+                <div id="close" @click="onClose"><i class="iconfont icon-iconfontclose"></i></div>
+            </div>
+            <div class="flex">
+                <div class="flex_item">
+                    <div>
+                         <!-- style="color:#ee893e;" -->
+                        <p>购买数量</p>
+                        <p v-if="!goods.isLimitByUserOrder&&min.buy==0">最低消费金额:<span>{{min.minimumConsumption | localMoney}}</span>
+                        </p>        
+                    </div>
+                    <div id="countControl">
+                        <span v-if = "num==1||!num" style="background:#f2f2f2;color:#cccccc;">-</span>
+                        <span @click="decrease()" v-else>-</span>
+                        <input type="number" v-model="num" value="num" @keyup="onNum">
+                        <span @click="increase()">+</span>
+                    </div>
+                </div>
+            </div>
+            <div id="next" @click="nextStep()" v-show="min.buy!=0">下一步</div>
+            <div id="next" @click="nextStep()" v-show="(min.buy==0&&goods.moneyPrice*num>=min.minimumConsumption)&&!goods.isLimitByUserOrder">下一步</div>
+            <div id="next" v-show="min.buy==0&&goods.moneyPrice*num<min.minimumConsumption&&!goods.isLimitByUserOrder" style="background-color:#ccc;">未达到最低消费金额</div>
+            <div id="next" @click="nextStep()" v-show="min.buy==0&&goods.isLimitByUserOrder">下一步</div>
+        </section>
+    </div>
+</div>

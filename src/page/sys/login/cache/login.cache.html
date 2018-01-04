@@ -1,0 +1,22 @@
+<!-- 缓存登录页面 -->
+
+<div class="cache-login-container">
+    <div class="wecat-content">
+        <div class="weui-cell">
+
+            <img class="wecat-head wecat-head-img" :src="headimgurl" @error="imgError">
+        </div>
+        <div class="weui-cells__tips text-center  wecat-head-tip">{{wecat.name || wecat.loginName || wecat.nickname}}</div>
+    </div>
+
+    <div class="wybc-toolbar">
+        <button class="weui-btn  weui-btn_primary" type="button" @click="doOk()">
+            确认
+        </button>
+    </div>
+    <div class="wybc-toolbar">
+        <button class="weui-btn  weui-btn_plain-default" type="button" @click="toLogin()">
+            使用其他帐号登录
+        </button>
+    </div>
+</div>

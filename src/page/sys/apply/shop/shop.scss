@@ -1,0 +1,173 @@
+.applyshop-container {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    .icon {
+        font-size: 25px;
+        color: #ccc;
+        position: relative;
+        top: 3px;
+    }
+    .shop-title {
+        background-color: #fff;
+        padding-left: 12px;
+        height: 35px;
+        line-height: 35px;
+        font-size: 15px;
+        color: #333;
+        margin-bottom: 2px;
+    }
+    .shop-userinfo {
+        background-color: #fff;
+        height: 101px;
+        padding: 10px 0;
+        align-items: center;
+        margin-bottom: 5px;
+        .weui-flex {
+            align-items: center;
+        }
+        img {
+            width: 81px;
+            height: 81px;
+            margin-left: 12px;
+            margin-right: 12px;
+        }
+        .weui-flex__item {
+            font-size: 15px;
+            color: #333;
+        }
+    }
+    .shop-form{
+        height: calc(100% - 1.43rem);
+    }
+    //for ipad
+    @media only screen
+    and (min-device-width : 768px)
+    and (max-device-width : 1024px){
+        .applyshop-bd {
+            overflow: scroll;
+        }
+    }
+    .applyshop-bd {
+        position: relative;
+        z-index: 2;
+        height: calc(100% - .5rem);
+        .shopinfo {
+            .shop-title{
+                display: flex;
+                align-items: center;
+                img{
+                    width: 17px;
+                    height: 16px;
+                    margin-right: 5px;
+                }
+            }
+        }
+        .shop-cell {
+            background-color: #fff;
+            padding-left: 12px;
+            height: 50px;
+            line-height: 50px;
+            position: relative;
+            .weui-input{
+                font-size: .15rem;
+            }
+            .shop_tip{
+                position: absolute;
+                right: .15rem;
+                color: #333;
+                font-size: 0.15rem;
+            }
+            .weui-cell__bd{
+                position: relative;
+                select {
+                    padding-left: 0;
+                    color: #333;
+                    position: absolute;
+                    top:0;
+                    height: 50px;
+                    font-size: 0;
+                    option{
+                        font-size: 15px;
+                        height: 15px;
+                    }
+                }
+            }
+        }
+        .shop-label {
+            width: 56px;
+            font-size: 15px;
+            color: #333;
+        }
+        .shop-agree {
+            padding: 0;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #b3b3b3;
+            &.hide{
+                display: block;
+                input,
+                label{
+                    display: none;
+                }
+            }
+            a {
+                color: #7dcc43;
+            }
+            input {
+                position: relative;
+                border: 1px solid #d1d1d1;
+                background-color: #fff;
+                border-radius: 3px;
+                width: 11px;
+                height: 11px;
+                top: 1px;
+                &:checked {
+                    &:before {
+                        content: ' ';
+                        width: 16px;
+                        height: 12px;
+                        background: url(../../../../static/images/minishop/gou.png) center no-repeat;
+                        background-size: 16px;
+                        position: absolute;
+                        top: 3px;
+                        left: 6px;
+                    }
+                }
+            }
+        }
+        .error-tip{
+            padding-left: 0;
+            background: #fff;
+            border-bottom: 1px solid #f2f2f2;
+            >div{
+                margin-left: .7rem;
+            }
+        }
+    }
+    .applyshop-ft {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        z-index: 1;
+        button{
+            background: #b7df9a;
+            display: block;
+            width: 100%;
+            color: #fff;
+            font-size: 0.19rem;
+            height: 0.5rem;
+        }
+        .ok {
+            background-color: #7ecc44;
+            color: #fff;
+            border: none;
+        }
+    }
+    ::-webkit-input-placeholder {
+        font-size: 15px;
+        color: #b3b3b3;
+    }
+}

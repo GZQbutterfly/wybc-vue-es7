@@ -1,0 +1,38 @@
+<!-- 填写邀请码 -->
+<div class="invitecode-container">
+
+    <section class="invitecode-bd">
+    
+        <img v-lazy="tipImg" class="invitecode-img"/>
+        <!-- <progressive-img :src="tipImg" :placeholder="tipImg" class="invitecode-img" /> -->
+
+        <!-- <div class="invitecode-info">
+            无忧商城
+        </div> -->
+
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="code-label">邀请码</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请填写邀请码" maxlength="12" v-model="incode">
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="invitecode-qs">
+            <i class="icon iconfont icon-wenhao"></i>
+            <a href="javascript:;" @click="toWiki()">什么是邀请码?</a>
+        </div>
+
+    </section>
+    <!-- 填写邀请码后，展示头像，昵称，手机号（ 186****5555）。让用户确认一次 -->
+    <footer class="invitecode-ft">
+        <button type="button" @click="toCreateShop(true)" :class="{'ok':incode!=''}">确定</button>
+        <button class="ok" type="button" @click="toCreateShop(false)">没有邀请码</button>
+    </footer>
+
+</div>

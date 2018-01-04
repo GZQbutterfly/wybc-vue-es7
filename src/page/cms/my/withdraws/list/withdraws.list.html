@@ -1,0 +1,22 @@
+<div class="withdrawsList">
+    <pull-refresh ref="my_scroller" :refresh="refresh" :infinite="infinite">
+        <div class="weui-cells">
+            <div class="weui-cell" v-for="item in withdrawsData" @click="goWithdrawsDetail(item.withdrawId)">
+                <div class="weui-cell__hd">
+                    <figure>
+                        <img src="/static/images/minishop/wechat.png" alt="" v-if="item.optPay==1">
+                        <img src="/static/images/minishop/zhifub.png" alt="" v-else>
+                    </figure>
+                </div>
+                <div class="weui-cell__bd">
+                    <p>{{ item.value | localMoney }}</p>
+                    <p>{{ ['','微信转账','支付宝转账'][item.optPay] }}</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <p :class="withdrawsStatusData[item.state].desc">{{ withdrawsStatusData[item.state].name }}</p>
+                    <p>{{ item.createAt }}</p>
+                </div>
+            </div>
+        </div>
+    </pull-refresh>
+</div>

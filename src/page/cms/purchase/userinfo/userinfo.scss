@@ -1,0 +1,266 @@
+@mixin box-shadow($size:.08rem) {
+    box-shadow: 0 0 $size rgba(0, 0, 0, .15);
+}
+
+@mixin lineCenter($height:.44rem) {
+    height: $height;
+    line-height: $height;
+}
+@mixin user-pic($width:.875rem) {
+    .user-pic {
+        display: inline-block;
+        width: $width;
+        height: $width;
+        overflow: hidden;
+        position: relative;
+        &.vip::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 30%;
+            height: 30%;
+            background: url('http://wybc-webapp.oss-cn-beijing.aliyuncs.com/images/vipmin.gif') center/cover no-repeat;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+    }
+}
+
+
+.box-flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    position: relative;
+    .box-flex-item {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        flex: 1;
+        position: relative;
+    }
+}
+
+.box {
+    width: 100%;
+    position: relative;
+    background: #fff;
+    border: .01rem #f8f8f8;
+    border-style: none none solid none;
+    padding: .16rem .125rem;
+}
+
+.text-left{
+    float: left;
+    position: relative;
+    &:before{
+        content: attr(data-numb);
+        width: .15rem;
+        height: .15rem;
+        line-height: .15rem;
+        border-radius: 50%;
+        font-size: .1rem;
+        color: #ffffff;
+        text-align: center;
+        background: #ed1319;
+        position: absolute;
+        right: .025rem;
+        top: -.025rem;
+    }
+}
+
+.text-right{
+    text-align: right;
+}
+
+.fleft{
+    float: left;
+}
+
+.turn{
+    transform: rotate(180deg);
+}
+
+// .text-left{
+//     float: left;
+//     text-align: left;
+//     background: url('/static/images/newshop/vip.png') center/cover no-repeat;
+//     font-size: .12rem;
+//     color: #fefefe;
+//     line-height: .18rem;
+//     margin-left: -.125rem;
+//     box-sizing: border-box;
+//     width: 1.85rem;
+// }
+
+figure{
+    img{
+        width: 100%;
+    }
+}
+
+
+//ul container
+.mui-table-view {
+    background: none;
+    &:before {
+        display: none;
+    }
+}
+
+#userinfo{
+    .user {
+        background: #7ecc44;
+        // background: url("/static/images/newshop/bg1-big.jpg") repeat-x center top #f2f2f2;
+        background-size: auto 2.085rem;
+        transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+        height: 2.08rem;
+        padding: 0;
+        position: relative;
+        .box_bd{
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            height: 2.08rem;
+            padding: .16rem .125rem;
+        }
+        aside {
+            padding: 0 .1rem;
+            font-size: .22rem;
+            color: #a8b7bc;
+            @include lineCenter(.24rem);
+            i{
+                color: #eee;
+            }
+        }
+        article {
+            text-align: center;
+            @include user-pic(.875rem);
+            .user-pic ~ div {
+                margin-top: .12rem;
+                color: #fff;
+            }
+            button {
+                width: 1.07rem;
+                height: .27rem;
+                font-size: .13rem;
+                color: #808080;
+                border-radius: .27rem;
+                background: #fff;
+                border: 0;
+                outline: none;
+                & ~ span {
+                    display: inline-block;
+                    @include lineCenter(.27rem);
+                    font-size: .13rem;
+                    color: #fff;
+                    margin-top: .22rem;
+                }
+            }
+            span{
+                background: rgba(106,177,63,.7);
+                padding: 0 .06rem;
+                border-radius: .08rem;
+            }
+        }
+    }
+
+    .line{
+        background: #FFF;
+    }
+    .line-points {
+        padding: .11rem;
+        text-align: center;
+        margin-bottom: .06rem;
+        .weui-flex__item {
+            .user-pic-money{
+                width:.4rem;
+                height:.4rem;
+                margin: 0 auto;
+            }
+            h4 {
+                @include lineCenter(.20rem);
+                font-size: .12rem;
+                color: #808080;
+            }
+            p {
+                @include lineCenter(.16rem);
+                font-size: .15rem;
+                color: #333;
+            }
+        }
+    }
+    .line-orders {
+        .weui-flex__item {
+            text-align: center;
+            padding-top: .2rem;
+            position: relative;
+            &:last-child:before{
+                content: '';
+                position: absolute;
+                width: .01rem;
+                height: 80%;
+                background: #e6e6e6;
+                top: 10%;
+                left: 0;
+            }
+            &:last-child:after{
+                content: '';
+                background: #FFF;
+                position: absolute;
+                width: .1rem;
+                height: .1rem;
+                transform:rotate(-45deg);
+                color: #FFF;
+                border: 1px solid;
+                border-right-color: #DDD;
+                border-bottom-color: #DDD;
+                top: 43%;
+                left: -.06rem;
+            }
+            .user-pic-order {
+                width: .25rem;
+                height: .2rem;
+                margin: 0 auto;
+                position: relative;
+                box-sizing: content-box;
+                &:after{
+                    content: attr(data-alert);
+                    position: absolute;
+                    right: -.1rem;
+                    top: -.1rem;
+                    width: .2rem;
+                    line-height: .2rem;
+                    font-size: .12rem;
+                    border-radius: 50%;
+                    color: #fff;
+                    background: #ed1319;
+                    text-align: center;
+                }
+                img {
+                    overflow: hidden;
+                }
+            }
+            p {
+                @include lineCenter(.4rem);
+                font-size: .12rem;
+                color: #333;
+            }
+        }
+    }
+    .line-items{
+        margin-top: 0;
+        .line-item{
+            padding: 0.15rem 0.15rem;
+            font-size: .15rem;
+            color: #333;
+            .weui-cell__ft:after{
+                position: relative;
+                top: -0.02rem;
+            }
+        }
+    }
+}

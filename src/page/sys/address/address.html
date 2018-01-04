@@ -1,0 +1,204 @@
+<app-container>
+<div class="address-container" ref="addressDialogRef">
+    <div class="address-content">
+        <vue-form :state="formstate" class="address-form" @submit.prevent="saveData">  
+            <section class="address-bd">
+                <!-- 收货人 -->
+                <validate class="weui-cell" tag="div">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">收货人</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" 
+                               type="text"                                      
+                               placeholder="姓名" 
+                               v-model="formScope.name"
+                               name="name"
+                               maxlength="20"
+                               required                                                
+                               >
+                    </div>
+                </validate>
+                <transition name="fadeUp">
+                    <field-messages name="name" show="$submitted" class="text-danger  error-tip">
+                        <div slot="required" v-show="formstate.name && formstate.name.$invalid">
+                            请填写姓名
+                        </div>
+                    </field-messages>
+                </transition>
+                <!-- 联系电话 -->
+                <validate class="weui-cell" tag="div">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">联系电话</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" 
+                               type="tel"                                            
+                                placeholder="手机号码" 
+                                v-model="formScope.phone"
+                                maxlength="11"
+                                name="phone"
+                                required
+                                check-phone                                                    
+                                >
+                    </div>
+                </validate>
+                <transition name="fadeUp">
+                    <field-messages name="phone" show="$submitted" class="text-danger  error-tip">
+                        <div slot="required" v-show="formstate.phone && formstate.phone.$invalid">
+                            请填写手机号码
+                        </div>
+                        <div slot="check-phone" v-show="formstate.phone && formstate.phone.$invalid">
+                            请填写正确的手机号码
+                        </div>
+                    </field-messages>
+                </transition>
+                 <!-- 选择地区 -->
+                 <!-- <div class="weui-cell select-zone" >
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">选择地区</label>
+                    </div>
+                    <validate class="weui-cell__bd" tag="div">
+                        <select class="weui-input" 
+                                name="province" 
+                                v-model="formScope.province"  
+                                required 
+                                @change="changeProvinceAddress"
+                                >
+                            <option value="" disabled selected>选择省份</option>
+                            <template v-for="item,index in proviceList">
+                                <option :value="item.co" :data-index="index">{{item.na}}</option>
+                            </template>
+                        </select>
+                    </validate>
+                    <validate class="weui-cell__bd" tag="div">
+                            <select class="weui-input" 
+                                    name="city" 
+                                    v-model="formScope.city"  
+                                    required 
+                                    @change="changeCityAddress($event, 'cityList','districtList')"
+                                    >
+                                <option value="" disabled selected>选择城市</option>
+                                <template v-for="item,index in cityList">
+                                    <option :value="item.co">{{item.na}}</option>
+                                </template>
+                            </select>                                          
+                    </validate>
+                    <validate class="weui-cell__bd" tag="div">
+                            <select class="weui-input" 
+                                    name="district" 
+                                    v-model="formScope.district"  
+                                    required>
+                                    <option value="" disabled selected>选择地区</option>
+                                    <template v-for="item,index in districtList">
+                                        <option :value="item.co">{{item.na}}</option>
+                                    </template>
+                                </select>                                          
+                    </validate>
+                </div>
+                <field-messages name="district" show="$submitted" class="text-danger  error-tip">
+                        <div slot="required" v-if="formstate.province && formstate.province.$invalid">
+                            请选择省份
+                        </div>
+                        <div slot="required" v-else-if="formstate.city && formstate.city.$invalid">
+                            请选择城市
+                        </div>
+                        <div slot="required" v-else-if="formstate.district && formstate.district.$invalid">
+                            请选择地区
+                        </div>
+                </field-messages> -->
+                <!-- 选择学校 -->
+                <validate class="weui-cell flex-align-t select-school" tag="div">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">选择学校</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <select class="weui-input" name="">
+                            <option value="" disabled selected>选择校区</option>
+                            <template v-for="item,index in schoolList">
+                                <option :value="item.name" :data-index="index">{{item.name}}</option>
+                            </template>
+                        </select>
+                        <div class="line"></div>
+                        <select class="weui-input" name="">
+                            <option value="" disabled selected>选择楼栋</option>
+                        </select>
+                    </div>
+                </validate>
+                
+                <!-- 详细地址 -->
+                <validate class="weui-cell flex-align-t" tag="div">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">详细地址</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <textarea class="weui-textarea" 
+                                  type="text" 
+                                  placeholder="如宿舍楼门牌号等" 
+                                  v-model="formScope.address"
+                                  name="address"
+                                  required
+                                  rows="1"
+                                  maxlength="120"
+                                  @input="maxMe"
+                                  ref="textareaRef"
+                                >
+                        </textarea>
+                        <div class="weui-textarea-counter"><span>{{formScope.address.length}}</span>/120</div>
+                    </div>
+                </validate>
+                <field-messages name="address" show="$submitted" class="text-danger  error-tip">
+                    <div slot="required" v-show="formstate.address && formstate.address.$invalid">
+                        请填写详细地址(如宿舍楼门牌号等)
+                    </div>
+                </field-messages>
+                <!-- 邮政编码 -->
+                <validate class="weui-cell" tag="div">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">邮政编码</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" 
+                                    type="tel"
+                                    placeholder="邮政编码 (选填)" 
+                                    v-model="formScope.zipCode"
+                                    maxlength="6"
+                                    name="zipCode"
+                                    check-zipcode                                                                          
+                                    >
+                    </div>
+                </validate>
+                <field-messages name="zipCode" show="$submitted" class="text-danger  error-tip">
+                        <div slot="check-zipcode" v-show="formstate.zipCode && formstate.zipCode.$invalid">
+                            请填写6位纯数字的邮编号码
+                        </div>
+                    </field-messages>
+                <!-- 设为默认收货地址 -->
+                <div class="weui-cell_switch weui-cell">
+                    <div class="weui-cell__hd">
+                        设为默认收货地址
+                    </div>
+                    <div class="weui-cell__bd">                               
+                    </div>
+                    <div class="weui-cell__ft">
+                        <input type="checkbox" class="weui-switch"  :checked="formScope.isDefault" @click="switchDefault"></div>
+                </div> 
+            </section>
+            <footer class="address-ft">
+                <button class="weui-btn weui-btn_primary"  type="submit">
+                                {{saveText}}
+                </button>
+                <button class="weui-btn weui-btn_default del-btn" 
+                                    type="button" 
+                                    v-if="type === 'update'"
+                                    @click="delData">
+                                    删除
+                </button>
+            </footer>                 
+        </vue-form>     
+    </div>
+</div>
+</app-container>    
+
+
+

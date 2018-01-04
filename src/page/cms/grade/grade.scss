@@ -1,0 +1,371 @@
+.ex-after {
+    content: ' ';
+    height: 3px;
+    background-color: #4ead08;
+    position: absolute;
+    z-index: -1;
+    width: 90%;
+    bottom: 49%;
+}
+
+.grade-container {
+    overflow-x: hidden;
+    .grade-c_hd {
+        height: 218px;
+        background-color: #7ecc44;
+        padding-top: 5px;
+        .grade-headinfo {
+            display: flex;
+            align-items: flex-start;
+            text-align: center;
+        }
+        .lock-info {
+            font-size: 20px;
+            color: #333;
+            font-weight: bolder;
+        }
+        .grade-title {
+            margin-top: 6.5px;
+            width: 76px;
+            height: 18px;
+            line-height: 18px;
+            background: url(../../../static/images/minishop/level-flag.png) left no-repeat;
+            background-size: 76px;
+        }
+        .grade-num {
+            font-size: 12px;
+            color: #fefefe;
+            float: right;
+            margin-right: 12px;
+        }
+        .grade-userimg {
+            position: relative;
+            margin-left: 72px;
+            margin-right: 98px;
+            margin-top: 13px;
+            .userImg {
+                margin-top: 5px;
+                width: 78px;
+                border-radius: 40px;
+                text-align: center;
+            }
+            .gradeImg {
+                height: 110px;
+                width: 110px;
+                position: absolute;
+                left: -18px;
+                top: -10px;
+            }
+        }
+    }
+    /*用户被锁定时的头部背景色*/
+    .lock-hd {
+        background-color: #7c8f6d;
+        height: 250px;
+    }
+    .grade-c_bd {
+        font-size: 15px;
+        color: #333;
+        padding-bottom: 60px;
+        .grade-bd-info {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 11px;
+            margin-bottom: 10px;
+            .sj {
+                color: #ffa92f;
+                margin-left: 4px;
+                margin-right: 1px;
+            }
+            .bj-lock {
+                align-items: center;
+                text-align: left;
+            }
+            .lock-img {
+                margin-left: 80px;
+                margin-right: 5px;
+                height: 43px;
+                width: 43px;
+                background: url(../../../static/images/minishop/kulou.png) center no-repeat;
+                background-size: 43px;
+            }
+        }
+        .grade-tj {
+            height: 318px; // 338
+            text-align: center;
+            background-color: #fff;
+            color: #b3b3b3;
+            padding-top: 87px; // 107
+            img {
+                height: 89px;
+                width: 74px;
+            }
+            .grade-tj_bd {
+                font-size: 15px;
+            }
+            .grade-tj_ft {
+                font-size: 12px;
+            }
+        }
+        .weui-cell {
+            align-items: center;
+            background-color: #fff;
+            //margin-bottom: 1px;
+        }
+        .grade-bd-zs {
+            margin-top: 4px;
+            img {
+                width: 31px;
+                height: 17px;
+                margin-top: 5px;
+                margin-bottom: 5px;
+                margin-right: 6px;
+                margin-left: 15px;
+            }
+            .weui-flex {
+                background-color: #fff;
+                height: 50px;
+                align-items: center;
+            }
+        }
+        .grade-circle {
+            width: 60px;
+            height: 60px;
+            margin-right: 10px;
+            .yd-progressbar-content {
+                font-size: 15px;
+            }
+        }
+        .grade-bd-title {
+            position: relative;
+            padding-left: 15px;
+            padding-top: 9px;
+            padding-bottom: 9px;
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            margin-bottom: 1px;
+            img {
+                width: 70px;
+                margin-left: 10px;
+            }
+        }
+        .fr {
+            position: absolute;
+            right: 12px;
+            top: 8px;
+        }
+        a {
+            text-decoration: underline;
+            color: #808080;
+        }
+    }
+    .font-error {
+        color: #f23a13;
+        .yd-progressbar-content {
+            color: #f23a13;
+        }
+    }
+    .font-warn {
+        color: #ffa92f;
+    }
+    .font-success {
+        color: #7ecc44;
+        .yd-progressbar-content {
+            color: #7ecc44;
+        }
+    }
+    .grade-c_ft {
+        height: 50px;
+        text-align: center;
+        button {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: none;
+            color: #fff;
+            font-size: 19px;
+        }
+        .not_reached_btn {
+            background-color: #f996b9;
+        }
+        .to_up_btn {
+            background-color: #ff3a80;
+        }
+        .to_unlock_btn {
+            background-color: #7ecc44;
+        }
+    }
+    .flag-title {
+        height: 15px;
+        width: 3px;
+        background-color: #7ecc44;
+        margin-right: 4px;
+    }
+    .swiper-container {
+        overflow: initial;
+        height: 100px!important;
+        .swiper-wrapper {
+            justify-content: center;
+        }
+    }
+    .grade-boxs {
+        display: flex;
+        align-items: flex-end;
+        &:not(:last-child) {
+            .grade-box {
+                &:after {
+                    @extend .ex-after;
+                }
+            }
+            .grade-box-tip {
+                &:after {
+                    @extend .ex-after;
+                    bottom: 35%!important;
+                }
+            }
+            .grade-box-active {
+                &:after {
+                    @extend .ex-after;
+                    bottom: 50%!important;
+                }
+                &.grade-box-tip {
+                    &:after {
+                        @extend .ex-after;
+                        bottom: 36%!important;
+                    }
+                }
+                &.grade-box-ok {
+                    &:after {
+                        @extend .ex-after;
+                        bottom: 50%!important;
+                    }
+                }
+            }
+            .grade-box-ok {
+                &:after {
+                    @extend .ex-after;
+                    background-color: #f9e503!important;
+                }
+            }
+        }
+        .grade-box-tip {
+            .tip {
+                top: -3px;
+                left: 3px;
+            }
+        }
+        .grade-box-active {
+            position: relative;
+            top: 1px;
+            img {
+                //height: 77px!important;
+                //width: 63px!important;
+                transform: scale(1.2, 1.2);
+            }
+            .tip {
+                top: -9px;
+                left: 3px;
+            }
+            &:before {
+                content: ' ';
+                position: absolute;
+                width: 0px;
+                height: 0px;
+                bottom: -11px;
+                left: 40%;
+                border-left: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-bottom: 8px solid #fff;
+            }
+        }
+        .grade-box {
+            position: relative;
+            text-align: center; //flex: 1;
+            width: 120px;
+            img {
+                width: 50px!important;
+                height: 60px!important;
+                border-radius: 6px;
+            }
+        }
+        .tip {
+            position: relative;
+            color: #fff;
+            font-size: 11px;
+            background-color: #f23a13;
+            border-radius: 2px;
+            padding: 0 2px; //display: inline-block;
+            padding-left: 2px;
+            margin-left: -6px;
+            &:after {
+                content: ' ';
+                position: absolute;
+                width: 0px;
+                height: 0px;
+                bottom: -3px;
+                left: 44%;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 4px solid #f23a13;
+            }
+        } // .grade-progress {
+        //     // width: 45px;
+        //     height: 3px;
+        //     background-color: #4ead08;
+        //     //display: flex;
+        //     position: relative;
+        //     bottom: 32%;
+        //     .grade-progress-slider {
+        //         background-color: #f9e503;
+        //     }
+        //     .slider-zero {
+        //         width: 0;
+        //     }
+        //     .slider-full {
+        //         width: 100%;
+        //     }
+        // }
+    }
+}
+
+
+/*图片抖动*/
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.3);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.img-scale {
+    animation-fill-mode: both;
+    animation-duration: 0s;
+    animation-duration: 1s;
+    animation-name: pulse;
+}
+
+
+@keyframes bounce-up {
+    25% {
+        transform: translateY(20px);
+    }
+    50%,
+    100% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(10px);
+    }
+}
+
+.animate-bounce-up {
+    background: #ddd;
+    animation: bounce-up 1.4s linear infinite;
+}

@@ -1,0 +1,47 @@
+<div class="inventory_list">
+    <!-- 屏蔽 -->
+    <!-- <div class="weui-cells">
+        <div class="weui-cell box_search iconfont">
+            <div class="weui-cell__bd">
+                <form id="frm-search" @submit="func_search">
+                    <input type="text" class="ipt_search" placeholder="搜索商品" autocomplete="off" spellcheck="false" v-model="ipt_search">
+                </form>
+            </div>
+            <div class="weui-cell__ft">
+                <p class="btn_search" @click="func_search">搜索</p>
+            </div>
+        </div>
+    </div> -->
+    <div class="box_goodses">
+        <pull-refresh ref="my_scroller" :refresh="refresh" :infinite="infinite">
+            <div class="weui-cells" v-for="goods in goodsData.data" @click="goDetail(goods.goodsId)">
+                <div class="weui-cell box_goods">
+                    <div class="weui-cell__hd" @click="goGoods(goods.goodsId)">
+                        <figure class="pic_goods">
+                            <img :src="goods.coverImg" alt="">
+                        </figure>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <h4 class="txt_goodsName" v-text="goods.goodsName || goods.name || goods.goodsname"></h4>
+                        <p class="txt_goodsPrice">进货价:
+                            <span>{{goods.moneyPrice | localMoney}}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"></div>
+                    <div class="weui-cell__bd">
+                        <p class="txt_goodsNumb">当前库存:
+                            <span>{{goods.amount}}</span>
+                        </p>
+                    </div>
+                    <div class="weui-cell__ft">
+                        <p class="txt_goodsNumb">待进货数量:
+                            <span>{{goods.purchase}}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </pull-refresh>
+    </div>
+</div>

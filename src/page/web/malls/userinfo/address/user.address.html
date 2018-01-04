@@ -1,0 +1,39 @@
+<app-container class="user-address-container">
+    <header class="user-address-header" slot="header">
+        <div class="weui-cell" @click="toCreate()">
+            <div class="weui-cell__bd">
+                <!--  -->
+                <i class="wybc-icon wybc-icon-plus"></i>
+                <span>新增收货地址</span>
+            </div>
+            <!--  @click="dialogSelectAddress()" -->
+            <div class="weui-cell__ft">
+                <i class="wybc-icon wybc-icon-arrow-right"></i>
+            </div>
+        </div>
+    </header>
+
+    <section class="user-address-content address-list">
+        <div class="address-list-item weui-cell" v-for="item in addressList">
+            <div class="weui-cell__bd">
+                <div class="address-detail-user">
+                    <span class="address-detail-name text-ellipsis">{{item.name}}</span>
+                    <span class="address-detail-phone">{{item.phone}}</span>
+                </div>
+                <div class="address-detail text-ellipsis">收货地址：
+                    <span class="address-info">
+                        <span>{{item.addressInfo.province.na}}</span>
+                        <span>{{item.addressInfo.city.na}}</span>
+                        <span>{{item.addressInfo.district.na}}</span>
+                        <span>{{item.address}}</span>
+                    </span>
+                </div>
+            </div>
+            <!-- 修改地址 -->
+            <div class="weui-cell__ft" @click="toUpdate(item)">
+                <div class="address-default-tip" v-if="item.isDefault">默认</div>
+                <i class="icon iconfont icon-icon-yxj-edit"></i>
+            </div>
+        </div>
+    </section>
+</app-container>

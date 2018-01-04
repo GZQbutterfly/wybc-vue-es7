@@ -1,0 +1,187 @@
+<!-- 提交订单 -->
+<div class="order-submitting-container">
+    <!-- <div class="weui-flex flex-satisfy">
+        <div class="weui-flex__item">
+            <i class="iconfont icon-tanhao"></i>
+            <b>校内地址10元包邮，校外地址60元包邮！</b>
+        </div>
+    </div> -->
+    <!-- <pull-refresh> -->
+    <!--  订单详情界面 -->
+    <div class="order-detail-content">
+        <!-- 新增收货订单 -->
+        <header class="order-submitting-header">
+            <!-- 实物购买 地址选择-->
+            <div v-if="entityModel">
+                <div class="weui-cell" v-if="!selectAddressFlag" @click="dialogSelectAddress()">
+                    <!-- @click="dialogCrateAddress()" -->
+                    <div class="weui-cell__bd">
+                        <i class="wybc-icon wybc-icon-plus"></i>
+                        <span>新增收货地址</span>
+                    </div>
+                    <div class="weui-cell__ft">
+                        <i class="icon iconfont icon-xiangyoujiantou"></i>
+                    </div>
+                </div>
+                <div v-if="selectAddressFlag" class="order-submitting-address-info">
+                    <div class="weui-cell" @click="dialogSelectAddress()">
+                        <div class="weui-cell__hd">
+                            <i class="icon iconfont icon-shouhuodizhi"></i>
+                        </div>
+                        <div class="weui-cell__bd">
+                            <span class="address-sjr text-ellipsis">收件人： {{orderAddress.name}}</span>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <span class="phone-fl-right">{{orderAddress.phone}}</span>
+                        </div>
+                    </div>
+                    <div class="address-detail text-ellipsis" >
+                        收货地址：
+                        <span class="address-info" v-if="orderAddress.addressInfo">
+                            <span>{{orderAddress.addressInfo.province.na}}</span>
+                            <span>{{orderAddress.addressInfo.city.na}}</span>
+                            <span>{{orderAddress.addressInfo.district.na}}</span>
+                            <span>{{orderAddress.address}}</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="weui-progress">
+                    <div class="weui-progress__bar">
+                        <div class="weui-progress__inner-bar subitting-progress" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 虚拟购买 后台返回格式 -->
+            <div v-if="!entityModel">
+                <div class="weui-cell" v-for="item in leaveMsg">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">
+                            <span class="text-danger">*</span>{{item.name}}</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" :type="item.format === 1 ? 'tel' : 'text'" :placeholder="item.placeholder" :value="item.value"
+                            @change="changeInput(item, $event)">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 商品box list -->
+        <section>
+
+            <!-- 商品box -->
+            <div class="order-detail-list">
+                <div class="order-detail-item" v-for="(item, index) in orderList">
+                    <div class="order-detail-head">
+                        <i class="icon iconfont icon-shop"></i>
+                        <span>{{item.shopName}}</span>
+                    </div>
+                    <div v-for="v in item.shopCarts">
+                        <div class="weui-cell order-box-detail">
+                            <div class="weui-cell__hd">
+                                <img :src="v.coverImg" alt="商品图片" class="order-img">
+                            </div>
+                            <div class="weui-cell__bd">
+                                <div class="order-text">{{v.goodsName}}</div>
+                                <!-- <span class="order-cashroll" v-if="item.showRoll">{{item.moneyRoll | localVolume}}券 + {{item.moneyPrice| localMoney}}</span> -->
+                            </div>
+                            <div class="weui-cell__ft">
+                                <div class="label-money">{{v.purchasePrice | localMoney}}</div>
+                                <div class="order-num-tip" :class="{'label-money': !v.number}">x{{v.number}}</div>
+                            </div>
+                        </div>
+                        <!-- 实物创建配送方式 -->
+                        <div class="bg-white" v-if="entityModel">
+                            <!-- 配送方式 -->
+                            <div class="weui-cell">
+                                <div class="weui-cell__bd">
+                                    <div>配送方式</div>
+                                </div>
+                                <div class="weui-cell__ft">
+                                    <div class="order-text order-ps-num">{{ 0 | localMoney}}
+                                    </div>
+                                    <div class="order-ps-tip">快递发货</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- 商品总计 -->
+        <section class="order-total">
+
+            <!-- 实物结算明细 -->
+            <div v-if="entityModel">
+                <div class="weui-cell zero"></div>
+                <!-- 原计小价 -->
+                <!-- <div class="weui-cell">
+                    <div class="weui-cell__bd">原价小计</div>
+                    <div class="weui-cell__ft">
+                        <span class="label-money-volume">{{orderTotal.price | localMoney}}</span>
+                    </div>
+                </div> -->
+                <!-- 进货价小计-->
+                <div class="weui-cell weui-noborder">
+                    <div class="weui-cell__bd">原价小计</div>
+                    <div class="weui-cell__ft order-text">
+                        {{orderTotal.price | localMoney}}
+                    </div>
+                </div>
+                <!-- 配送费 -->
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">配送费</div>
+                    <div class="weui-cell__ft order-text">{{ orderTotal.transportPrice | localMoney}}</div>
+                </div>
+                <!-- 分销折扣 -->
+                <div class="weui-cell" v-if="orderTotal.discount">
+                    <div class="weui-cell__bd">分销折扣</div>
+                    <div class="weui-cell__ft  label-money-volume">-{{ orderTotal.discount | localMoney}}</div>
+                </div>
+            </div>
+            <!-- 虚拟物品结算明细 -->
+            <div v-if="!entityModel">
+                <div class="weui-cell zero"></div>
+                <!-- 进货价小计-->
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">原价小计</div>
+                    <div class="weui-cell__ft order-text">
+                        {{orderTotal.purchasePrice | localMoney}}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 合计 -->
+            <div class="weui-cell">
+                <div class="weui-cell__bd">合计</div>
+                <div class="weui-cell__ft order-text">
+                    {{orderTotal.pay | localMoney}}
+                </div>
+            </div>
+        </section>
+
+    </div>
+    <!-- </pull-refresh> -->
+    <!-- 提交订单 -->
+    <footer class="order-submitting-footer weui-tabbar">
+        <div class="weui-flex weui-cell__bd text-right flex-right">
+            <span class="span-money label-money">{{orderTotal.pay | localMoney}}</span>
+            <span>需付:</span>
+            <span v-if="minimumConsumption>=0 && minimumConsumption>orderTotal.pay" class="min_cost">最低消费 {{ minimumConsumption |localMoney}}</span>
+        </div>
+        <div class="weui-cell__ft">
+            <button :class="['weui-btn_mini', 'weui-btn',minimumConsumption>=0 && minimumConsumption>orderTotal.pay?'button_disable':'button_able']" :disabled="minimumConsumption>orderTotal.pay" type="button" @click="submitOrder()">提交订单</button>
+        </div>
+    </footer>
+
+    <div class="address-container">
+        <!-- 地址操作 -->
+        <address-dialog :close="closeDialogAddess" v-if="showDialogAddress" :selectAddress="selectAddress" :selectId="orderAddress.addrId"></address-dialog>
+
+        <!-- 新增地址界面 -->
+        <address-operation :close="closeCrateAddress" v-if="showAddAddress" :item="{}"></address-operation>
+    </div>
+</div>

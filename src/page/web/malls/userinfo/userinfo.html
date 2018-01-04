@@ -1,0 +1,48 @@
+<div id="userinfo" ref="userinfo">
+    <section class="box user" ref="user">
+        <div class="box_bd">
+            <aside class="text-left" :data-numb=" userMsgNum ? userMsgNum : '' " v-if="userLogin">
+                <i class="iconfont icon-talk" @click="toUserMsg()">
+                </i>
+            </aside>
+            <aside class="text-right">
+                <i class="iconfont icon-tuichu login-out" v-if="userLogin" @click="logOff()"></i>
+            </aside>
+            <article>
+                <figure class="user-pic">
+                    <img :src="user_img" @error="imgError()" @load="imgLoad()">
+                </figure>
+                <div>
+                    <span v-if="userLogin" v-text=" getUserName (userInfo.name || userInfo.nickname || userInfo.loginName || '? ? ?') "></span>
+                    <button type="button" id="login" @click="toLogin" v-else>点击登录</button>
+                </div>
+            </article>
+        </div>
+    </section>
+    <div class="weui-flex line line-orders">
+        <div class="weui-flex__item" @click="toOrderList(order.index)" v-for="order in orderList">
+            <figure class="user-pic user-pic-order" :data-alert="order.num">
+                <img :src="'/static/images/newshop/' + order.pic + '.png'">
+            </figure>
+            <p v-text="order.type"></p>
+        </div>
+    </div>
+    <div class="weui-cells line-items" v-if="!hasShopError">
+        <div class="weui-cell weui-cell_access line line-item" style="padding: 2px 2px 0 !important;background: #f2f2f2;">
+            <div class="weui-cell__bd">
+                <figure>
+                    <img src="static/images/minishop/yikaidian.png" alt="" style="display:block;" @click="toShop" v-if="hasShop">
+                    <img src="static/images/minishop/weikaidian.png" alt="" style="display:block;" @click="toApply" v-else>
+                </figure>
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells line-items">
+        <router-link class="weui-cell weui-cell_access line line-item" :to="'user_address'">
+            <div class="weui-cell__bd">
+                <p>收货地址管理</p>
+            </div>
+            <div class="weui-cell__ft"></div>
+        </router-link>
+    </div>
+</div>

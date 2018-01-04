@@ -1,0 +1,41 @@
+<div class="teamList">
+    <pull-refresh :refresh="refresh" :infinite="infinite">
+        <div class="weui-cells" v-for="item in dataList">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <figure :data-vip="'M' + grade">
+                        <img :src="item.wdImg" alt="">
+                    </figure>
+                    <span>{{item.wdName}}</span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="imgBox">
+                        <img src="../../../static/images/minishop/ipho.png" alt="">
+                    </div>
+                    <span>手机号: {{item.phone}}</span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="imgBox">
+                        <img src="../../../static/images/minishop/xm.png" alt="">
+                    </div>
+                    <span>店长: {{item.userName}}</span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="imgBox">
+                        <img src="../../../static/images/minishop/up.png" alt="">
+                    </div>
+                    <span>供货人: {{item.upperName}}</span>
+                </div>
+                <div class="weui-cell__ft">
+                    <span>{{item.applyTime}}</span>
+                </div>
+            </div>
+        </div>
+    </pull-refresh>
+</div>

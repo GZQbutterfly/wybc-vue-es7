@@ -1,0 +1,56 @@
+<div class="withdrawsDetail">
+    <pull-refresh ref="my_scroller" :refresh="refresh" :infinite="infinite">
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    提现方式
+                </div>
+                <div class="weui-cell__ft">
+                    {{ ['','微信转账','支付宝转账'][withdrawData.optPay] }}
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    提现金额
+                </div>
+                <div class="weui-cell__ft money">
+                    {{ withdrawData.value | localMoney }}元
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    处理进度
+                </div>
+                <div class="weui-cell__ft progress">
+                    <p class="success"><i class="iconfont icon-chenggong"></i>提现已申请</p>
+                    <p class="normal" v-if="withdrawData.state == 0"><i class="iconfont icon-money"></i>提现成功</p>
+                    <p class="success" v-else-if="withdrawData.state == 1"><i class="iconfont icon-chenggong"></i>提现成功</p>
+                    <p class="error" v-else-if="withdrawData.state == 2"><i class="iconfont icon-cha"></i>提现失败</p>
+                    <p class="warning" v-else-if="withdrawData.state == 3"><i class="iconfont icon-gth"></i>异常</p>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    申请时间
+                </div>
+                <div class="weui-cell__ft">
+                    {{ withdrawData.createAt }}
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells" v-if="withdrawData.state == 2 && withdrawData.sysMsg">
+            <div class="weui-cell leaveMsg">
+                <div class="weui-cell__bd">
+                    客服留言
+                </div>
+                <div class="weui-cell__ft">
+                    <!-- 由于您填写的信息有误，导致本次打款失败，请联系无忧本草工作人员。
+                    <p>联系电话：028-65779101</p> -->
+                    {{ withdrawData.sysMsg }}
+                </div>
+            </div>
+        </div>
+    </pull-refresh>
+</div>

@@ -1,0 +1,209 @@
+.up-container {
+    .up-hd {
+        height: 81px;
+    }
+    .up-steps {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        background-color: #fff;
+        .up-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            &:not(:first-child) {
+                .up-step-state:before {
+                    content: ' ';
+                    position: absolute;
+                    left: 0;
+                    top: 24%;
+                    width: 43%;
+                    height: 2px;
+                    background-color: #b3b3b3;
+                }
+            }
+            &:not(:last-child) {
+                .up-step-state:after {
+                    content: ' ';
+                    position: absolute;
+                    right: 0;
+                    top: 24%;
+                    width: 43%;
+                    height: 2px;
+                    background-color: #b3b3b3;
+                }
+            }
+        }
+        .up-step-state {
+            display: inline-block;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            border: 2px solid #b3b3b3;
+        }
+        .success {
+            .up-step-state {
+                background-color: #08a1f8!important;
+                border-color: #08a1f8!important;
+                &:before {
+                    background-color: #08a1f8!important;
+                }
+                &:after {
+                    background-color: #08a1f8!important;
+                }
+            }
+        }
+    }
+    .up-bd {
+        padding-bottom: 60px;
+        .no-pay {
+            text-align: center;
+            margin-top: 156px;
+            .no-pay-img {
+                display: block;
+                height: 75px;
+                width: 75px;
+                margin: 25px auto;
+                background: url(../../../../static/images/minishop/happy.png) center no-repeat;
+                background-size: 75px;
+            }
+            .no-pay-info {
+                font-size: 15px;
+                color: #808080;
+            }
+        }
+        .up-pay-info {
+            width: 100%;
+            padding: 15px 13px;
+            .pay-info-text {
+                width: 100%;
+                height: 73px;
+                padding-top: 8px;
+                background-color: #fff;
+                text-align: center;
+                font-size: 12px;
+                color: #333;
+                border-radius: 4px;
+            }
+            .pay-money {
+                font-size: 25px;
+            }
+        }
+        .pay-cell {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            padding: 15px 12px;
+            &:not(:first-child) {
+                margin-top: 2px;
+            }
+            img {
+                width: 29px;
+                position: relative;
+                top: 3px;
+                margin-right: 7px;
+            }
+            .pay-cell_ft {
+                position: absolute;
+                right: 14px;
+            }
+        }
+        .no-reach {
+            text-align: center;
+            height: 466px;
+            background-color: #fff;
+            margin: 15px 12px 0 12px;
+            padding-top: 25px;
+            border-radius: 4px;
+            .no-reach-img {
+                display: block;
+                height: 150px;
+                width: 150px;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 25px;
+                background: url(../../../../static/images/minishop/target.png) center no-repeat;
+                background-size: 150px;
+            }
+            .no-reach-info {
+                color: #333;
+            }
+            .no-reach-money {
+                font-size: 25px;
+                color: #7ecc44;
+            }
+            .no-reach-text {
+                font-size: 12px;
+            }
+        }
+        .no-reach-remarks {
+            text-align: left;
+            margin: 35px 11px 0 11px;
+            color: #333;
+            .no-reach-remarks_hd {
+                font-size: 15px;
+            }
+            .no-reach-remarks_bd {
+                font-size: 12px;
+                height: 137px;
+                overflow-y: scroll;
+                background-color: #f2f2f2;
+                padding: 10px 12px;
+            }
+        }
+        .up-reach {
+            margin-top: 10px;
+            background-color: #fff;
+            padding-top: 105px;
+            text-align: center;
+            padding-bottom: 160px;
+            &-img {
+                width: 115px;
+                height: 115px;
+                margin-left: auto;
+                margin-right: auto;
+                background: url(../../../../static/images/minishop/wine.png) center no-repeat;
+                background-size: 115px;
+            }
+            h2 {
+                margin-top: 23px;
+                color: #ffa92f;
+            }
+            &-bd{
+                font-size: 25px;
+            }
+            &-ft {
+                font-size: 17px;
+                color: #333;
+                span{
+                    color: #f5ba39;
+                }
+            }
+        }
+    }
+    .up-ft {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        button {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: none;
+            color: #fff;
+            font-size: 19px;
+        }
+        .deposit {
+            background-color: #ff3a80;
+        }
+        .reach {
+            background-color: #7ecc44;
+        }
+    }
+    .remind {
+        color: #f23a13;
+    }
+}

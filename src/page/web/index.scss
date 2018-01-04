@@ -1,0 +1,187 @@
+#app,
+body,
+html {
+    font-family: PingFang SC, Microsoft Yahei, PingHei, Helvetica Neue, Helvetica, STHeitiSC-Light, Arial, sans-serif;
+    background-color: #f2f2f2;
+    height: 100%;
+    color: #5a5a5a;
+}
+
+.warp {
+    height: 100%;
+    .views {
+        position: relative;
+        height: 100%;
+        box-sizing: border-box; // padding-bottom: 50px;
+        z-index: 20;
+        overflow-x: hidden;
+    }
+}
+
+
+/**/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-size: 16px;
+}
+
+ul li {
+    list-style: none;
+}
+
+img {
+    border: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/**/
+
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.hide {
+    display: none;
+}
+
+
+/* vue transition 过渡*/
+
+.fade-down-enter-active,
+.fade-down-leave-active {
+    transition: opacity .5s;
+}
+
+.fade-down-enter,
+.fade-down-leave-active {
+    opacity: 0;
+}
+
+.fold-enter-active {
+    animation-name: fold-in;
+    animation-duration: .5s;
+}
+
+.fold-leave-active {
+    animation-name: fold-out;
+    animation-duration: .5s;
+}
+
+.fade-img-enter-active,
+.fade-img-leave-active {
+    transition: all 1s ease;
+}
+
+.fade-img-enter,
+.fade-img-leave-active {
+    opacity: 0
+}
+
+.fadeZone-enter-active,
+.fadeZone-leave-active {
+    transition: all 10s ease;
+}
+
+.fadeZone-enter,
+.fadeZone-leave-active {
+    opacity: 0
+}
+
+@keyframes fold-in {
+    0% {
+        transform: translate3d(0, 100%, 0);
+    }
+    50% {
+        transform: translate3d(0, 50%, 0);
+    }
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes fold-out {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    50% {
+        transform: translate3d(0, 50%, 0);
+    }
+    100% {
+        transform: translate3d(0, 100%, 0);
+    }
+}
+
+.text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.text-danger {
+    color: #ff1c1c; // position: absolute;
+    // left: 5px;
+}
+
+.text-required-flag {
+    @extend .text-danger;
+    position: absolute;
+    left: 5px;
+}
+
+.label-money {
+    color: #ff1c1c!important;
+}
+
+.label-money-volume {
+    color: #ee893e!important;
+}
+
+.wybc-toolbar {
+    text-align: center;
+    padding: 5px 15px;
+}
+
+::-webkit-input-placeholder {
+    color: #b3b3b3;
+}
+
+.text-placeholder {
+    color: #b3b3b3;
+    font-family: initial;
+}
+
+.error-tip {
+    font-size: 12px;
+    padding-left: 120px;
+}
+
+.address-info {
+    span {
+        margin-right: 5px;
+    }
+}
+
+.layout-ft {
+    position: absolute;
+    right: 15px; // &:last-child{
+    //     position: relative;
+    // }
+}

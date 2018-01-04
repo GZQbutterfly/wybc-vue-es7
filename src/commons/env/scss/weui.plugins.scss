@@ -1,0 +1,57 @@
+.weui-cells {
+    background-color: #fff;
+    .weui-cell {
+        align-items: flex-start;
+        padding-left: 15px!important;
+    }
+}
+
+.weui-btn_plain-primary {
+    color: #7ecc44;
+    border: 1px solid #7ecc44;
+}
+
+.weui-cells_checkbox .weui-check:checked+.weui-icon-checked:before {
+    color: #7ecc44;
+}
+
+.weui-picker {
+    .weui-picker__hd {
+        height: 40px!important;
+        background-color: #eeeff1;
+        #weui-picker-confirm{
+            color: #0a78d4;
+        }
+        .iconfont{
+            color:#b3b3b3;
+            font-size: 20px;
+            margin-right: 5px;
+        }
+        .active{
+            color: #2775d1;
+        }
+    }
+    .weui-picker__bd {
+        height: 200px!important;
+        background-color: #c9ccd5;
+        .weui-picker__mask {
+            display: none;
+        }
+        .weui-picker__indicator {
+            &:before{
+                border-top-color: #afb2bb;
+            }
+            &:after{
+                border-bottom-color: #afb2bb;
+            }
+            
+        }
+        .weui-picker__item {
+            color: #738188;
+        }
+    }
+}
+
+.weui-mask {
+    opacity: .5;
+}

@@ -1,0 +1,89 @@
+.myspread-container {
+    .myspread-hd {
+        height: 180px;
+        background-color: #7ecc44;
+        text-align: center;
+        padding-top: 8px;
+        img {
+            height: 88px;
+            width: 88px;
+            margin: auto;
+            border-radius: 50%;
+            margin-top: 12px;
+            margin-bottom: 10px;
+        }
+        .myspread-name {
+            font-size: 15px;
+            color: #fff;
+        }
+        .myspread-level-tip {
+            width: 76px;
+            height: 18px;
+            line-height: 18px;
+            background: url(../../../../static/images/minishop/level-flag.png) left no-repeat;
+            background-size: 76px;
+        }
+        .level-num {
+            font-size: 14px;
+            color: #fff;
+            float: right;
+            margin-right: 10px;
+        }
+    }
+    .myspread-bd {
+        background-color: #fff;
+        .myspread-codeinfo {
+            height: 108px;
+            text-align: center;
+            color: #333;
+            padding-top: 25px;
+            .codeinfo-title {
+                font-size: 15px;
+            }
+            .codeinfo-value {
+                position: relative;
+                display: inline-block;
+                font-size: 20px;
+                &:after {
+                    content: ' ';
+                    position: absolute;
+                    bottom: -5px;
+                    left: 0;
+                    height: 2px;
+                    width: 100%;
+                    background-color: #7ecc44;
+                }
+            }
+        }
+    }
+    .myspread-ft {
+        margin-top: 5px;
+        .weui-flex {
+            align-items: center;
+            text-align: center;
+        }
+        .weui-flex__item {
+            height: 94px;
+            background-color: #fff;
+            &:first-child {
+                margin-right: 1px;
+            }
+            &:touched {
+                opacity: .5;
+            }
+        }
+        .icon {
+            font-size: 33px;
+        }
+        .icon-erweima1 {
+            color: #ffbc2d;
+        }
+        .icon-fenxiang {
+            color: #6eb6ff;
+        }
+        .text {
+            font-size: 15px;
+            color: #333;
+        }
+    }
+}

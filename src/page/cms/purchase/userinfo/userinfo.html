@@ -1,0 +1,41 @@
+<div id="userinfo" ref="userinfo">
+    <section class="box user" ref="user">
+        <div class="box_bd">
+            <aside class="text-right">
+            </aside>
+            <article>
+                <figure class="user-pic">
+                    <img :src="user_img" @load="imgLoad()">
+                </figure>
+                <div>
+                    <span v-if="userLogin" v-text=" getUserName (userInfo.name || userInfo.nickname || userInfo.loginName || '? ? ?') "></span>
+                </div>
+            </article>
+        </div>
+    </section>
+    <div class="weui-flex line line-orders">
+        <div class="weui-flex__item" @click="toOrderList(order.index)" v-for="order in orderList">
+            <figure class="user-pic user-pic-order" :data-alert="order.num?order.num:''">
+                <img :src="'../static/images/newshop/' + order.pic + '.png'">
+            </figure>
+            <p v-text="order.type"></p>
+        </div>
+    </div>
+    <div class="weui-cells line-items">
+            <div class="weui-cell weui-cell_access line line-item" style="padding: 2px 2px 0 !important;background: #f2f2f2;">
+                <div class="weui-cell__bd">
+                    <figure>
+                        <img src="../static/images/minishop/yikaidian.png" alt="" style="display:block;" @click="toHome">
+                    </figure>
+                </div>
+            </div>
+        </div>
+    <div class="weui-cells line-items">
+        <div class="weui-cell weui-cell_access line line-item" @click="toInventoryList()">
+            <div class="weui-cell__bd">
+                <p>我的库存</p>
+            </div>
+            <div class="weui-cell__ft"></div>
+        </div>
+    </div>
+</div>

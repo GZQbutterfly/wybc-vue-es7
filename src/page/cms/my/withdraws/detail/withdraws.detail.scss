@@ -1,0 +1,100 @@
+.withdrawsDetail{
+    .weui-cells{
+        margin-top: 5px;
+        &:first-child{
+            margin-top: 0;
+        }
+        .weui-cell{
+            // height: 50px;
+            line-height: 1;
+            padding: 17.5px;
+            font-size: 15px;
+            color: #323233;
+            &::before{
+                left: 0;
+            }
+            .weui-cell__ft{
+                color: #323233;
+                &.money{
+                    color: #ff3a80;
+                    font-size: 18px;
+                }
+                &.progress{
+                    text-align: left;
+                    p{
+                        font-size: 15px;
+                        position: relative;
+                        &::before{
+                            content: ' ';
+                            width: 1px;
+                            height: 28px;
+                            position: absolute;
+                            left: 10px;
+                        }
+                        &:first-child{
+                            &::before{
+                                bottom: -28px;
+                            }
+                        }
+                        &:last-child{
+                            margin-top: 56px;
+                            &::before{
+                                top: -28px;
+                            }
+                        }
+                        &.normal{
+                            color: #cccccc;
+                            &::before{
+                                background: #cccccc;
+                            }
+                        }
+                        &.success{
+                            color: #7ecc44;
+                            &::before{
+                                background: #7ecc44;
+                            }
+                        }
+                        &.error{
+                            color: #ed1319;
+                            &::before{
+                                background: #ed1319;
+                            }
+                        }
+                        &.warning{
+                            color: #ff9239;
+                            &::before{
+                                background: #ff9239;
+                            }
+                        }
+                        i{
+                            width: 21px;
+                            display: inline-block;
+                            &::before{
+                                display: block;
+                                width: 21px;
+                                text-align: center;
+                            }
+                        }
+                    }
+                }
+            }
+            &.leaveMsg{
+                flex-direction: column;
+                .weui-cell__ft{
+                    flex: 1;
+                    margin-top: 14px;
+                    text-align: left;
+                    color: #ed1319;
+                    line-height: 20px;
+                    p{
+                        margin-top: 4px;
+                    }
+                }
+            }
+        }
+    }
+    //hide
+    .loading-layer{
+        display: none;
+    }
+}

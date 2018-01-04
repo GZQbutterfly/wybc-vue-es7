@@ -1,0 +1,53 @@
+<app-container>
+    <div class="easyScanner-container" :style="{'background-color': urlParams.type? '#7ecc44' : '#fff'}">
+        <header class="es-hd">
+            <div class="es-hd-info" v-if="!urlParams.shop">
+                <img class="es-info-img" :src="headimgurl" alt="" v-if="headimgurl">
+                <div class="es-info-txt">
+                    <span class="text-ellipsis">{{username}}</span>邀请你到无忧商城来开店</div>
+            </div>
+            <div class="es-hd-shop" v-if="urlParams.shop">
+                <img class="es-info-img" :src="headimgurl" alt="head">
+                <div class="es-info-name">
+                    <span class="text-ellipsis">{{ wdName }}</span></div>
+            </div>
+            <div class="es-hd-ft"> </div>
+            <svg class="svg-hx" ref="svgRef">
+                <!-- d="M0 0 C 187 12, 187 12, 375 0" -->
+                <path :d="svgPathD" class="svg-hx-path"></path>
+            </svg>
+        </header>
+
+        <section class="es-bd">
+            <div class="es-title">
+                {{title}}
+            </div>
+
+            <div class="es-2code" ref="codeRef">
+                <!-- <img src="" alt=""> -->
+                <!-- <template v-if="codeimg">
+                <progressive-img :src="codeimg" :placeholder="codeimg" />
+            </template> -->
+            </div>
+
+            <div class="es-2code-oper">
+                <div>
+                    长按此图，识别图中二维码
+                </div>
+                <div>
+                    打开微信>扫一扫>右上角>从相册选取二维码
+                </div>
+            </div>
+        </section>
+
+        <footer class="es-ft" v-if="urlParams.type">
+            <div class="es-share-title">
+                复制推广链接分享给好友
+            </div>
+            <div class="es-share-url weui-flex">
+                <div class="weui-flex__item div-input text-ellipsis" type="text"> {{shareUrl}}</div>
+                <button type="button" @click="copyToClipBoard">复制</button>
+            </div>
+        </footer>
+    </div>
+</app-container>

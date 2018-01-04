@@ -1,0 +1,20 @@
+<div class="user-orders weui-flex flex-v">
+	<div class="tab-header weui-flex-item">
+		<!-- <div v-if="orderBanners.length>0" class="order-banner">
+			<ob :dataList="orderBanners" :selectItem="selectItem"></ob>
+		</div> -->
+		<tab style="padding: 0 0.1rem" :tabs="tabItemList" @on-change="onChange" :index="index"></tab>
+	</div>
+
+	<div class="order-list-content flex-1">
+		<div v-for="(tab,tindex) in tabItemList">
+			<div v-show="tableIndex==tindex">
+				<pull-refresh :refresh="refresh" :infinite="infinite">
+					<div v-for="order in ordersList[tableIndex]">
+						<oi :order="order" @removeItem="resetAllData"></oi>
+					</div>
+				</pull-refresh>
+			</div>
+		</div>
+	</div>
+</div>

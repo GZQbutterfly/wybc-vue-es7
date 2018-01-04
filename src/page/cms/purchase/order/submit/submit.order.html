@@ -1,0 +1,107 @@
+<!-- cms提交订单 -->
+<app-container id="order-submit-container-import">
+<div>
+    <!-- <app-nowifi :callBack="callBack" v-if="showNowifi"></app-nowifi> -->
+    <!-- <pull-refresh> -->
+        <!-- 商品box list -->
+        <section style="background-color:#fff;">
+            <!-- 商品box -->
+            <div class="order-detail-list">
+                <div class="order-detail-item" v-for="item in orderList">
+                    <div class="order-detail-head">
+                        <i class="icon iconfont icon-shop"></i>
+                        <span>{{item.shopName}}</span>
+                    </div>
+                     
+                    <div class="order-content" v-for="v in item.res">
+                       
+                        <div class="weui-cell order-box-detail">
+                            <div class="weui-cell__hd">
+                                <!-- static/images/newshop/xiezi.jpg -->
+                                <img :src="v.coverImg" alt="商品图片" class="order-img">
+                            </div>
+                            <div class="weui-cell__bd">
+                                <div class="order-text">{{v.goodsName}}</div>
+                            </div>
+                            <div class="weui-cell__ft">
+                                <!-- {{item.purchasePrice | localMoney}} -->
+                                <div class="label-money">{{v.moneyPrice | localMoney}}</div>
+                                <div class="order-num-tip">x{{v.number}}</div>
+                            </div>
+                        </div>
+                    <div class="order-detail-border" v-if="v.length!=1">
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 商品总计 -->
+        <section class="order-total">
+            <!-- 实物结算明细 -->
+            <div>
+                <!-- <div class="weui-cell zero"></div> -->
+                <!-- 进货价小计-->
+                <div class="weui-cell weui-noborder">
+                    <div class="weui-cell__bd">进货价小计</div>
+                    <div class="weui-cell__ft order-text">
+                        {{orderTotal.price | localMoney}}
+                    </div>
+                </div>
+            </div>
+            <!-- 合计 -->
+            <div class="weui-cell">
+                <div class="weui-cell__bd">合计</div>
+                <div class="weui-cell__ft order-text">
+                    {{orderTotal.pay | localMoney}}
+                </div>
+            </div>
+        </section>
+    <!-- </pull-refresh> -->
+    <!-- 提交订单 -->
+    <div class="weui-flex flex-satisfy" v-show="satisfyShow">
+        <div class="weui-flex__item">
+            <i class="iconfont icon-chenggong"></i>
+            <b>订单金额已满</b>
+            <span>1000.00元</span>
+            <b>，升级条件已达成，快去下单吧!</b>
+        </div>
+    </div>
+    <!--遮罩-->
+    <!-- <div class="order-cover" v-show="satisfyShow">
+        <div class="order-cover-box"></div>
+        <div class="order-cover-content">
+            <div class="weui-media-box weui-media-box_text">
+                <h4 class="weui-media-box__title title-h4">金额已达成升级条件</h4>
+                <p class="weui-media-box__desc title-h4">下单立享新等级进货价，请选择所返商品</p>
+            </div>
+            <div class="weui-media-box weui-media-box_appmsg" v-for="(item,index) in chooseGoodsList">
+                <div class="weui-media-box__bd">
+                    <div class="radus" :class="{'radus-active':item.checkedShow}" @click="chooseGoods(index)">
+                        <div class="radus-bg" v-show="item.checkedShow"></div>
+                    </div>
+                </div>
+                <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb" :src="item.coverImg" alt="">
+                </div>
+                <div class="weui-media-box__bd flexone">
+                    <p class="weui-media-box__desc color-b">{{item.goodsName}}
+                        <span>{{item.number}}</span>件</p>
+                </div>
+            </div>
+            <div class="weui-btn weui-btn_primary btn" @click="confirm">确定</div>
+        </div>
+    </div> -->
+    
+   
+</div>
+<footer class="order-submitting-footer weui-tabbar" slot="footer">
+    <div class="weui-cell__bd text-right">
+        <span>需付:</span>
+        <span class="span-money label-money">{{orderTotal.pay | localMoney}}</span>
+    </div>
+    <div class="weui-cell__ft">
+        <button class="weui-btn_mini weui-btn" type="button" @click="submitOrder()">提交订单</button>
+    </div>
+</footer>
+
+</app-container>

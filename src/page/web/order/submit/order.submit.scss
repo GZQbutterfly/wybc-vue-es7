@@ -1,0 +1,198 @@
+.order-submitting-container {
+    .flex-satisfy {
+        width: 100%; // position: absolute;
+        // bottom: 0.5rem;
+        background-color: #fefbee;
+        .weui-flex__item {
+            height: 0.3rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            i {
+                font-size: 0.14rem!important;
+                margin-right: 0.05rem;
+                color: #ee893e;
+            }
+            b {
+                font-weight: normal;
+                font-size: 0.12rem;
+                color: #ee893e;
+            }
+        }
+    } // position: relative;
+    color: #333;
+    .order-detail-content {
+        // padding-bottom: 50px;
+        background-color: #fff;
+    }
+    .order-submitting-header {
+        .weui-cell__bd {
+            button {
+                background-color: #7ecc44;
+                border: none;
+            }
+        }
+        .order-submitting-address-info {
+            font-size: 15px;
+            .weui-cell {
+                align-items: center;
+                padding-bottom: 0px;
+            }
+            .iconfont {
+                font-size: 20px;
+            }
+            .address-sjr {
+                //position: relative;
+                //top: 0px;
+                margin-left: 4px;
+                width: 150px;
+                display: inline-block;
+            }
+            .address-detail {
+                font-size: 13px;
+                width: 75%;
+                margin-left: 39px;
+                margin-bottom: 10px;
+            }
+            .weui-cell__ft {
+                color: #333;
+            }
+        }
+    }
+    .weui-progress {
+        .weui-progress__bar {
+            height: 6px;
+        }
+        .subitting-progress {
+            background-color: #f7768a;
+            background-image: linear-gradient( 50deg, rgba(247, 118, 138, 1) 25%, transparent 25%, transparent 50%, rgba(241, 239, 239, 1) 50%, rgba(241, 239, 239, 1) 75%, transparent 75%, transparent);
+            background-size: 40px 40px;
+        }
+    }
+    .order-detail-head {
+        height: 40px;
+        padding: 0 0 0 6px;
+        display: flex;
+        align-items: center;
+        .icon {
+            font-size: 19px;
+            color: #808080;
+        }
+        span {
+            font-size: 0.15rem;
+            margin-left: 0.05rem;
+            color: #333;
+        }
+    }
+    .order-detail-list {
+        .order-box-detail {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            align-items: flex-start;
+            background-color: #fafafa;
+            &:before {
+                border: 0;
+            }
+        }
+    }
+    .order-submitting-footer {
+        position: fixed;
+        height: 50px;
+        background-color: #fff;
+        z-index: 700;
+        bottom: 0;
+        width: 100%;
+        span {
+            line-height: 50px;
+        }
+        button {
+            height: 50px;
+            margin-left: 10px;
+            border-radius: inherit;
+            border: none;
+            font-size: 17px;
+        }
+        .button_able {
+            background-color: #ff3a80;
+        }
+        .button_disable {
+            background-color: #808080;
+        }
+        .flex-right {
+            flex-direction: row-reverse;
+        }
+    }
+    .min_cost {
+        flex: 1;
+        text-align: left;
+        padding-left: .125rem;
+        font-size: 0.12rem;
+        color: #808080;
+    }
+    .weui-cell:before {
+        left: 0;
+    }
+    .order-total {
+        margin-bottom: 0.51rem;
+    }
+    .span-money {
+        margin-left: 3px;
+        margin-right: -4px;
+    }
+    .order-text {
+        color: #333;
+        font-size: 16.5px;
+    }
+    .order-num-tip {
+        font-size: 13px;
+        color: #808080;
+    }
+    .order-ps-tip {
+        font-size: 12px;
+        color: #808080;
+    }
+    .order-ps-num {
+        font-size: 12px;
+    }
+    .order-img {
+        padding-top: 5px;
+        height: 65px;
+        padding-left: 5px;
+        padding-right: 18px;
+    }
+    .bg-white {
+        height: 48px;
+        background-color: #fff;
+        position: relative;
+        .weui-cell {
+            align-items: flex-start;
+        }
+        &:before {
+            content: '';
+            position: absolute;
+            bottom: 0px;
+            left: 0;
+            height: 1px;
+            border-bottom: 1px solid #f2f2f2;
+            z-index: 5;
+            width: 100%;
+        }
+    }
+    .zero {
+        margin: 0;
+        padding: 3px;
+        height: 0;
+        width: 0;
+    }
+    .weui-noborder:before {
+        border: 0;
+    }
+    .order-cashroll {
+        font-size: 10px;
+        background-color: #d8271c;
+        color: #faeae9;
+        padding: 0 2px;
+        position: relative;
+        top: -8px;
+    }
+}

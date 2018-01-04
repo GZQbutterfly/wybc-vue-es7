@@ -1,0 +1,194 @@
+.cmsorder-content {
+    height: 100%;
+    .cmsorder-detail {
+        flex: 1;
+        overflow: scroll;
+        .cmsorder-title {
+            background-color: #FFFFFF;
+            text-align: center;
+            padding-top: .25rem;
+            img {
+                height: .54rem;
+                width: auto;
+            }
+            .title-title {
+                display: block;
+                margin-top: .2rem;
+                font-size: .15rem;
+                padding-bottom: .115rem;
+            }
+            .title-desc {
+                margin-top: .25rem;
+                color: #808080;
+                position: relative;
+                line-height: .36rem;
+                font-size: .14rem;
+                span {
+                    color: #ff1c1c;
+                }
+            }
+            .title-changed {
+                padding: 0.1rem .5rem;
+                color: #808080;
+                position: relative;
+                font-size: .14rem;
+                margin-top: .25rem;
+                .font-red {
+                    color: red;
+                }
+            }
+            .title-changed:after {
+                content: " ";
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 1px;
+                border-top: 1px solid #e5e5e5;
+                color: #e5e5e5;
+                -webkit-transform-origin: 0 0;
+                transform-origin: 0 0;
+                -webkit-transform: scaleY(.5);
+                transform: scaleY(.5);
+            }
+            .title-desc:after {
+                content: " ";
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 1px;
+                border-top: 1px solid #e5e5e5;
+                color: #e5e5e5;
+                -webkit-transform-origin: 0 0;
+                transform-origin: 0 0;
+                -webkit-transform: scaleY(.5);
+                transform: scaleY(.5);
+            }
+            .timer {
+                color: #ff752a;
+                padding-bottom: .225rem;
+                span {
+                    display: inline;
+                    border: 1px solid;
+                    border-color: #ff752a;
+                    font-size: .2rem;
+                    padding: .02rem;
+                }
+            }
+        }
+        .cmsorder-goods {
+            margin-top: .08rem;
+            .goods-shop-icon {
+                padding: 0 .125rem;
+                background-color: white;
+                line-height: .32rem;
+                font-size: .13rem;
+            }
+            .goods-item {
+                overflow: hidden;
+                background-color: #fafafa;
+                padding: .03rem .125rem;
+                img {
+                    display: block;
+                    width: .8rem;
+                    height: .8rem;
+                    margin: 0 .09rem 0 0;
+                }
+                .order-goods-right {
+                    padding: .05rem 0 .05rem 0;
+                    .goods-title {
+                        font-size: .17rem;
+                        color: #333333;
+                        .title-price {
+                            text-align: right;
+                        }
+                    }
+                    .number {
+                        display: block;
+                        width: 100%;
+                        text-align: right;
+                        color: #808080;
+                        font-size: .12rem;
+                    }
+                    .sigle-footer {
+                        flex-direction: row-reverse;
+                        margin-top: .1rem;
+                        .goods-sigle {
+                            color: #6899f2;
+                            font-size: .12rem;
+                            border: 1px solid;
+                            border-color: #6899f2;
+                        }
+                    }
+                }
+            }
+        }
+        .money-about {
+            .money-about-item {
+                padding: .11rem .125rem;
+                position: relative;
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                background-color: white;
+                -webkit-box-align: center;
+                -webkit-align-items: center;
+                -ms-flex-align: center;
+                align-items: center;
+                font-size: .15rem;
+                span:nth-child(2) {
+                    text-align: right;
+                    flex: 1;
+                }
+                color: #333333;
+            }
+            .money-about-item:after {
+                content: " ";
+                position: absolute;
+                left: 0;
+                bottom: -1px;
+                width: 100%;
+                height: 1px;
+                border-bottom: 1px solid #f2f2f2;
+                color: #f2f2f2;
+                -webkit-transform-origin: 0 0;
+                transform-origin: 0 0;
+                -webkit-transform: scaleY(.5);
+                transform: scaleY(.5);
+            }
+        }
+        .order-info {
+            margin: .1rem 0;
+            background-color: #ffffff;
+            div {
+                padding: 0 .125rem;
+                color: #808080;
+                font-size: .125rem;
+                line-height: .22rem;
+            }
+        }
+    }
+    .footer-button {
+        line-height: .49rem;
+        width: 100%;
+        height: .49rem;
+        background-color: pink;
+        z-index: 9;
+        bottom: 0;
+        text-align: center;
+        div:nth-child(1) {
+            background-color: #e6e6e6;
+            color: #b3b3b3;
+            width: 1.35rem;
+            height: 100%;
+        }
+        ;
+        div:nth-child(2) {
+            background-color: #7ecc44;
+            color: #ffffff;
+            height: 100%;
+        }
+    }
+}

@@ -1,0 +1,9 @@
+<div class="goods-rem-banner">
+    <div class="swiper-container" ref="bannerSwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="(ad,index) in adList" @click="swiperClicked(ad)">
+                <img :src="ad.imgUrl">
+            </div>
+        </div>
+    </div>
+</div>

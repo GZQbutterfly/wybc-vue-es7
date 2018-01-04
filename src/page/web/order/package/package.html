@@ -1,0 +1,131 @@
+<div class="package">
+    <pull-refresh class="package-content" ref="my_scroller" :refresh="refresh" :infinite="infinite">
+        <ul class="special_Offer">
+            <li v-for="(goods,index) in goodsList" v-if="goods.packageGsType == 1">
+                <!-- 商品图片 -->
+                <div class="special_Offer_pic">
+                    <router-link :to="'./goods_detail?goodsId=' + goods.goodsId">
+                        <img :src="goods.img" alt="">
+                    </router-link>
+                </div>
+                <!-- 商品信息 -->
+                <div class="special_Offer_con">
+                    <!-- 固定数量:固定套餐||主商品 -->
+                    <p class="special_Offer_con_gsname">
+                        <router-link :to="'./goods_detail?goodsId=' + goods.goodsId">
+                            {{ goods.name }}
+                        </router-link>
+                    </p>
+                    <p class="special_Offer_con_gsnumb" v-if="packageType == 1 || goods.packageGsType == 1">x&nbsp;{{ goods.number }}</p>
+                    <!-- 套餐活动(特)价 -->
+                    <div class="special_offer_main_goods" v-if="goods.redirect == 2">
+                        <span class="tejia" v-if="goods.packageGsType == 1">特价</span>
+                        <span class="hdjia" v-else>活动价&nbsp;:&nbsp;</span>
+                        <span v-if="goods.moneyRoll">{{ goods.moneyRoll }}券+{{ goods.moneyPrice | localMoney }}</span>
+                        <span v-else>{{ goods.moneyPrice | localMoney }}</span>
+                    </div>
+                    <!-- 删除线:重定价&&足最低消费 -->
+                    <p :class="[{'delete':goods.redirect == 2 && goods.minMoney <= totalMoney},'price']">
+                        <span v-if="goods.consuType == 3">{{ goods.gsMoneyRoll }}券+{{ goods.gsMoneyPrice | localMoney }}</span>
+                        <span v-else>{{ goods.gsMoneyPrice | localMoney }}</span>
+                    </p>
+                    <div class="goodName_num">
+                        <!-- 有效监测:all -->
+                        <span class="amount" v-if="goods.checkGoods">{{ goods.checkGoods==1?"商品已下架":"无库存" }}</span>
+                        <!-- 可选数量:自选&&搭配商品 -->
+                        <template v-else-if="packageType == 2 && goods.packageGsType == 2">
+                            <span class="symbol" @click="minusNumb(index)">-</span>
+                            <span class="numb">{{ goodsNumb[index] }}</span>
+                            <span class="symbol" @click="addNumb(index)">+</span>
+                        </template>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="collocation">
+            <img src="/static/images/newshop/dapei.png" alt="" v-if="this.packageType == 1">
+            <img src="/static/images/newshop/zixuan.png" alt="" v-else>
+        </div>
+        <ul class="special_Offer">
+            <li v-for="(goods,index) in goodsList" v-if="goods.packageGsType == 2">
+                <!-- 商品图片 -->
+                <div class="special_Offer_pic">
+                    <router-link :to="'./goods_detail?goodsId=' + goods.goodsId">
+                        <img :src="goods.img" alt="">
+                    </router-link>
+                </div>
+                <!-- 商品信息 -->
+                <div class="special_Offer_con">
+                    <!-- 固定数量:固定套餐||主商品 -->
+                    <p class="special_Offer_con_gsname">
+                        <router-link :to="'./goods_detail?goodsId=' + goods.goodsId">
+                            {{ goods.name }}
+                        </router-link>
+                    </p>
+                    <p class="special_Offer_con_gsnumb" v-if="packageType == 1 || goods.packageGsType == 1">x&nbsp;{{ goods.number }}</p>
+                    <!-- 套餐活动(特)价 -->
+                    <div class="special_offer_main_goods" v-if="goods.redirect == 2">
+                        <span class="tejia" v-if="goods.packageGsType == 1">特价</span>
+                        <span class="hdjia" v-else>活动价&nbsp;:&nbsp;</span>
+                        <span v-if="goods.moneyRoll">{{ goods.moneyRoll }}券+{{ goods.moneyPrice | localMoney }}</span>
+                        <span v-else>{{ goods.moneyPrice | localMoney }}</span>
+                    </div>
+                    <!-- 删除线:重定价&&足最低消费 -->
+                    <p :class="[{'delete':goods.redirect == 2 && goods.minMoney <= totalMoney},'price']">
+                        <span v-if="goods.consuType == 3">{{ goods.gsMoneyRoll }}券+{{ goods.gsMoneyPrice | localMoney }}</span>
+                        <span v-else>{{ goods.gsMoneyPrice | localMoney }}</span>
+                    </p>
+                    <div class="goodName_num">
+                        <!-- 有效监测:all -->
+                        <span class="amount" v-if="goods.checkGoods">{{ goods.checkGoods==1?"商品已下架":"无库存" }}</span>
+                        <!-- 可选数量:自选&&搭配商品 -->
+                        <template v-else-if="packageType == 2 && goods.packageGsType == 2">
+                            <span class="symbol" @click="minusNumb(index)">-</span>
+                            <span class="numb">{{ goodsNumb[index] }}</span>
+                            <span class="symbol" @click="addNumb(index)">+</span>
+                        </template>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <!-- 占位 -->
+        <div class="line" v-if="packageState"></div>
+    </pull-refresh>
+    <!-- 底部套餐状态显示 -->
+    <div class="showMsg invalid" v-if="packageState === 1">套餐已失效</div>
+    <div class="showMsg dissatisfy" v-else-if="packageState === 2">
+        <div class="showMsg_content">
+            <img src="/static/images/newshop/tishi.png">
+            <span style="color:#ff1c1c;">再买{{ ((minMoney - totalMoney)/100).toFixed(2) }}元&nbsp;</span>
+            <template v-for="(goods,index) in allRedirectGoods" v-if="index == 0">
+                <span style="color:#ffffff;">,&nbsp;"{{ goods.name }}"</span>
+                <span style="color:#ff1c1c;">立减{{ ((goods.purchasePrice - goods.moneyPrice)/100).toFixed(2) }}元</span>
+            </template>
+        </div>
+    </div>
+    <div class="showMsg satisfy" v-else-if="packageState === 3">
+        <div class="showMsg_content">
+            <img src="/static/images/newshop/chenggong.png">
+            <span style="color:#ff1c1c;">已满{{ (minMoney/100).toFixed(2) }}元,&nbsp;</span>
+            <span style="color:#ee893e;">下单立享</span>
+            <template v-for="(goods,index) in allRedirectGoods">
+                <span style="color:#ee893e;" v-if="packageState != 0">,</span>
+                <span style="color:#ee893e;">"</span>
+                <span style="color:#ff1c1c;">{{ (goods.moneyPrice/100).toFixed(2) }}元购&nbsp;{{ goods.name }}</span>
+                <span style="color:#ee893e;">"</span>
+            </template>
+        </div>
+    </div>
+    <div class="total">
+        <div class="total_left">
+            <p>套餐价:
+                <span>{{ payMoney | localMoney }}</span>
+                <b>(不含运费)</b>
+            </p>
+            <!-- <div v-if="redirectMoney">
+                <div>为您节省:{{ redirectMoney | localMoney }}</div>
+            </div> -->
+        </div>
+        <div :class="[{'active':packageState!=1},'total_right']" @click="goBuy">立即购买</div>
+    </div>
+</div>

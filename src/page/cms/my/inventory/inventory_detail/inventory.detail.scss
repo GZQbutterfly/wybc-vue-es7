@@ -1,0 +1,291 @@
+.inventory_detail {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .weui-cells {
+        margin-top: 5px;
+        &:first-child {
+            margin-top: 0;
+            z-index: 999;
+        }
+        .weui-cell {
+            color: #333;
+            font-size: 15px;
+            padding: 7.5px 12.5px; //提示
+            &.tag_note {
+                &:before {
+                    content: none;
+                }
+                background: #fefbee;
+                .weui-cell__bd {
+                    height: 30px;
+                    line-height: 30px;
+                    font-size: 11.5px;
+                    text-align: center;
+                    justify-content: center;
+                    i.icon-remind:before {
+                        font-size: 20px;
+                        color: #ff1c1c;
+                    }
+                }
+            }
+            &:before {
+                left: 0;
+            } //独立的一个商品cell
+            &.box_goods {
+                padding-top: 15px;
+                padding-bottom: 15px;
+                .weui-cell__bd {
+                    height: 65px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                }
+            }
+            .weui-cell__hd {
+                width: 80px;
+                figure {
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                .pic_goods {
+                    width: 65px;
+                    height: 65px;
+                }
+                .pic_order {
+                    width: 77px;
+                    height: 77px;
+                }
+            }
+            .weui-cell__bd {
+                height: 30px;
+                .ipt_search {
+                    width: 304.5px;
+                    height: 30px;
+                    background: #f2f2f2;
+                    border-radius: 15px;
+                    border: 0;
+                    outline: none;
+                    text-indent: 40px;
+                    position: relative;
+                }
+                .txt_goodsName {
+                    font-weight: 300;
+                    font-size: 17px;
+                }
+                .txt_goodsPrice {
+                    span {
+                        color: #ff1c1c;
+                    }
+                }
+                .txt_goodsNumb {
+                    height: 30px;
+                    line-height: 30px;
+                    span {
+                        color: #7ecc44;
+                    }
+                }
+                .txt_orderNo {
+                    //font-weight: 300;
+                    font-size: 12px;
+                    color:#333;
+                }
+                .txt_orderProfit {
+                    //font-weight: 300;
+                    font-size: 15px;
+                    color: #333333;
+                    margin-top: 4px;
+                    margin-bottom: 6px;
+                    span {
+                        padding-left: 3px;
+                        color: #ff1c1c;
+                    }
+                }
+                .discountDetail{
+                    width: 65%;
+                    font-size: 0.12rem;
+                    color: #ff1c1c;
+                    position: absolute;
+                    &~.order_timer{
+                        margin-top: 20px;
+                    }
+                }
+                .total_price{
+                    font-size: .15rem;
+                    line-height: .3rem;
+                    color: #333;
+                    padding-left: 4px;
+                    span{
+                        color:#ff1c1c;
+                    }
+                }
+                .order_timer {
+                    font-size: 11.5px;
+                    .order_timer_time {
+                        float: left;
+                        span {
+                            color: #ff902d;
+                        }
+                    }
+                    .order_timer_numb {
+                        float: right;
+                        span {
+                            color: #7ecc44;
+                        }
+                    }
+                    .order_setTimer {
+                        //width: 100%;
+                        height: 5px;
+                        border-radius: 5px;
+                        overflow: hidden;
+                        clear: both;
+                        background: #f2f2f2;
+                        .order_timer_in {
+                            height: 100%;
+                        }
+                    }
+                }
+            }
+            .weui-cell__ft {
+                line-height: 30px;
+                color: #333;
+                .btn_search {
+                    font-weight: 600;
+                }
+                .txt_goodsNumb {
+                    span {
+                        color: #ff902d;
+                    }
+                }
+            }
+        }
+    }
+    .box_list {
+        flex: 1;
+        position: relative;
+        margin-top: 5px;
+        .weui-cell {
+            padding-top: 15px;
+            padding-bottom: 15px;
+            .weui-cell__hd {
+                width: 90px;
+            }
+            .weui-cell__ft {
+               width: 13px;
+            }
+        }
+    }
+    .buyGoods {
+        width: 100%;
+        height: 110px;
+        font-size: 15px;
+        color: #333;
+        background: #fff;
+        padding-top: 11px;
+        position: relative;
+        box-shadow: 0 0.01rem 0.2rem #808080;
+        .buyGoodsText {
+            margin-left: 12.5px;
+            float: left;
+            color: #333;
+            p {
+                &:first-child {}
+                &:last-child {
+                    font-size: 11.5px;
+                    color: #ee893e;
+                }
+            }
+        }
+        .buyGoodsNumb {
+            margin-right: 12.5px;
+            float: right;
+            font-size: 0;
+            p {
+                margin-left: -1px;
+                width: 36px;
+                height: 36px;
+                line-height: 36px;
+                text-align: center;
+                font-size: 15px;
+                border: 1px solid #b3b3b3;
+                display: inline-block;
+                &.disabled {
+                    background: #f2f2f2;
+                    color: #ccc;
+                }
+                &.buyGoodsNumb_num {
+                    width: 50px;
+                    input {
+                        width: 100%;
+                        text-align: center;
+                        outline: none;
+                        border: 0;
+                        padding: 0;
+                    }
+                }
+            }
+        }
+        .buyGoodsSubmit {
+            clear: both;
+            width: 100%;
+            height: 49px;
+            position: absolute;
+            bottom: 0;
+            font-size: 0;
+            box-shadow: 0 0.01rem 0.2rem #808080;
+            >p {
+                width: calc(100% - 100px);
+                height: 49px;
+                display: inline-block;
+                padding-right: 6px;
+                line-height: 49px;
+                text-align: right;
+                font-size: 16.5px;
+                color: #333;
+                span {
+                    color: #ff1c1c;
+                }
+            }
+            .btn {
+                width: 100px;
+                height: 49px;
+                display: inline-block;
+                line-height: 49px;
+                font-size: 18.5px;
+                color: #fff;
+                background: #ff3a80;
+                text-align: center;
+                &.disabled {
+                    background: #ffb0cc;
+                }
+            }
+        }
+    }
+    .thisOrderFlag{
+        color:#fff;
+        padding-left: 9px;
+        padding-right: 1px;
+        font-size: 11px;
+        display: inline-block;
+        position: relative;
+        &_jhdd{
+            background-color: #f0c46f;
+        }
+        &__yhdd{
+            background-color: #6fb2f0;
+        }
+        &:before{
+            content: " ";
+            position: absolute;
+            left: -1px;
+            border-top: 9px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 8px solid #fff;
+        }
+    }
+    // .money-price{
+    //     color: #ff1c1c;
+    // }
+}

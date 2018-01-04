@@ -1,0 +1,39 @@
+.myTeam{
+    .weui-cells{
+        margin-top: .05rem; 
+        &:first-child{
+            margin-top: 0; 
+        }
+        .weui-cell{
+            padding: 0 .15rem;
+            font-size: .145rem;
+            height: .36rem;
+            line-height: .36rem;
+            &::before{
+                left: 0;
+            }
+            &.cell__bg{
+                height: .5rem;
+                line-height: .5rem;
+            }
+            .weui-cell__bd{
+                display: flex;
+                align-items: center;
+                img{
+                    width: .22rem;
+                    height: .22rem;
+                    display: block;
+                    margin-right: .08rem;
+                }
+                b{
+                    color: #399bfb;
+                    font-weight: 300;
+                }
+            }
+            .weui-cell__ft{
+                height: 100%;
+                color: #333;
+            }
+        }
+    }
+}

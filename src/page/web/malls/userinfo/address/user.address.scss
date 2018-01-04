@@ -1,0 +1,50 @@
+.user-address-container {
+    .user-address-header {
+        position: absolute;
+        right: 0;
+        left: 0;
+        top: 0;
+        z-index: 3000;
+        .weui-cell {
+            background-color: #fff;
+        }
+        padding-bottom: 4px;
+        background-color: #f2f2f2;
+    }
+    .user-address-content {
+        background-color: #fff;
+        padding-top: 55px;
+        .weui-cell__bd {
+            width: 200px;
+        }
+        .address-default-tip {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 10px;
+            background-color: #ff2020;
+            color: #fff;
+            line-height: 13px;
+        }
+        .address-detail {
+            font-size: 14px;
+            color: #949494;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .address-detail-user {
+            display: flex;
+            .address-detail-name {
+                width: 150px;
+                display: inline-block;
+            }
+            .address-detail-phone {
+                flex: 1;
+                margin-left: 10px;
+                margin-right: 15px;
+                text-align: right;
+            }
+        }
+    }
+}

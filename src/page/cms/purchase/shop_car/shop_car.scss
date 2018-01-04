@@ -1,0 +1,578 @@
+ .shoppingCart {
+     position: relative;
+     overflow: hidden; // margin-bottom: 0.96rem;
+     height: 100%; // height: 6.27rem;
+     display: flex;
+     flex-direction: column;
+     .edit {
+         height: 0.36rem;
+         line-height: 0.2rem;
+         padding: 0.08rem 0.1rem;
+         background: #ffffff;
+         .iconfont {
+             color: #7ecc44;
+             font-size: 0.2rem!important;
+         }
+         span {
+             float: right;
+         }
+     }
+     .home-content {
+         // height: 5.68rem;
+         flex: 1;
+         position: relative;
+     }
+     .shopCartEmpty {
+         background: #ffffff;
+         height: 3.94rem;
+         border-bottom: 0.06rem solid #f2f2f2;
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         img {
+             height: 1.08rem;
+             width: 1.08rem;
+         }
+         h3,
+         h4 {
+             color: #b3b3b3;
+             font-weight: normal;
+         }
+         p {
+             height: 0.3rem;
+             width: 1rem;
+             border: 0.01rem solid #7ecc44;
+             color: #7ecc44;
+             text-align: center;
+             line-height: 0.3rem;
+             border-radius: 0.05rem;
+         }
+     }
+     .wxShop {
+         border-top: 0.06rem solid #f2f2f2;
+         height: 0.51rem;
+         background: #fff;
+         border-bottom: 0.02rem solid #f2f2f2;
+         padding: 0 0.1rem;
+         .shopCheck {
+             display: block;
+             height: 0.16rem;
+             width: 0.16rem;
+             float: left;
+             position: relative;
+             font-size: 18px!important;
+             margin-top: 0.12rem;
+             i {
+                 font-size: 18px!important;
+                 position: absolute;
+                 top: 0px;
+                 left: 0px;
+                 color: #7ecc44;
+             }
+         }
+         .shopName {
+             margin-top: 0.07rem;
+             float: left;
+             .iconfont {
+                 font-size: 0.19rem!important;
+                 color: #808080;
+             }
+             span {
+                 font-size: 0.15rem;
+                 color: #333333;
+             }
+         }
+         .arrow {
+             float: right;
+             color: #b3b3b3;
+             font-size: 0.2rem;
+             margin-top: 0.06rem;
+         }
+     }
+     .shoppingCart_list {
+         min-height: 1rem;
+         background: #ffffff;
+         li {
+             height: 1.02rem;
+             border-bottom: 0.02rem solid #f2f2f2;
+             padding: 0.1rem;
+             .checkbx {
+                 display: block;
+                 height: 0.16rem;
+                 width: 0.16rem;
+                 margin-right: 0.05rem;
+                 margin-top: 0.3rem;
+                 float: left;
+                 position: relative;
+                 font-size: 18px!important;
+                 i {
+                     font-size: 18px!important;
+                     position: absolute;
+                     top: 0px;
+                     left: 0px;
+                     color: #7ecc44;
+                 }
+             }
+             .pic_img {
+                 height: 0.8rem;
+                 width: 0.8rem;
+                 float: left;
+                 margin-left: 0.05rem;
+                 img {
+                     width: 100%;
+                     height: 100%;
+                     object-fit: contain;
+                 }
+             }
+             .goodName {
+                 height: 0.8rem;
+                 width: 2.4rem;
+                 float: right;
+                 padding-top: 0.1rem;
+                 position: relative;
+                 .goodName_name {
+                     font-size: 0.15rem;
+                     color: #333333;
+                     position: relative;
+                     height: 0.15rem;
+                     line-height: 0.15rem;
+                     span {
+                         position: absolute;
+                         left: 0;
+                         bottom: -0.16rem;
+                         display: block;
+                         height: 0.16rem;
+                         background: #ff1c1c;
+                         color: #ffffff;
+                         padding: 0 0.04rem;
+                         font-size: 0.12rem;
+                         line-height: 0.16rem
+                     }
+                 }
+                 .goodName_pir {
+                     color: #ff1c1c;
+                     font-size: 0.15rem;
+                     p {
+                         span {
+                             float: right;
+                             font-size: 0.13rem;
+                             color: #808080;
+                         }
+                     }
+                 }
+                 .purchase {
+                     font-size: 0.12rem;
+                     color: #808080;
+                     .purchase_y {
+                         text-decoration: line-through;
+                     }
+                     .purchase_num {
+                         float: right;
+                         font-size: 0.13rem;
+                     }
+                 }
+                 .goodName_num {
+                     position: absolute;
+                     height: 0.2rem;
+                     width: 0.75rem;
+                     right: 0;
+                     bottom: 0;
+                     .number {
+                         width: 0.75rem;
+                         text-align: right;
+                         font-size: 0.13rem;
+                         color: #808080;
+                     }
+                     span {
+                         height: 0.2rem;
+                         width: 0.2rem;
+                         display: block;
+                         float: left;
+                         background: #f2f2f2;
+                         color: #333333;
+                         text-align: center;
+                         line-height: 0.2rem;
+                     }
+                     .amount {
+                         margin: 0;
+                         display: block;
+                         float: left;
+                         height: 0.2rem;
+                         width: 0.35rem;
+                         text-align: center;
+                         line-height: 0.2rem;
+                         font-size: 0.12rem;
+                         color: #333333;
+                         border: none;
+                     }
+                 }
+             }
+         }
+     }
+     .invalid {
+         border-bottom: 0.2rem solid #f2f2f2;
+         background: #ffffff;
+         .titl {
+             height: 0.5rem;
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             img {
+                 height: 0.16rem;
+                 width: 0.16rem;
+             }
+             span {
+                 margin-left: 0.04rem;
+                 font-size: 0.12rem;
+                 color: #333333;
+             }
+         }
+         li {
+             height: 1.02rem;
+             border-bottom: 0.02rem solid #e6e6e6;
+             padding: 0.1rem;
+             background: #f2f2f2;
+             .checkbx {
+                 float: left;
+                 margin-top: 0.3rem;
+             }
+             .pic_img {
+                 height: 0.8rem;
+                 width: 0.8rem;
+                 float: left;
+                 img {
+                     width: 100%;
+                     height: 100%;
+                     object-fit: contain;
+                 }
+             }
+             .goodName {
+                 height: 0.8rem;
+                 width: 2.4rem;
+                 float: right;
+                 .goodName_name {
+                     font-size: 0.15rem;
+                     color: #333333;
+                 }
+                 .goodName_price {
+                     height: 100%;
+                     .goodName_pir {
+                         height: 0.2rem;
+                         line-height: 0.2rem;
+                         width: 1.5rem;
+                         float: left;
+                         display: flex;
+                         flex-direction: column;
+                         b {
+                             font-size: 0.15rem;
+                             color: #ff1c1c;
+                             font-weight: normal;
+                         }
+                         span {
+                             &:nth-of-type(1) {
+                                 font-size: 0.12rem;
+                                 color: #808080;
+                                 height: 0.13rem;
+                                 display: block;
+                                 line-height: 0.13rem;
+                                 text-decoration: line-through;
+                             }
+                             &:nth-of-type(2) {
+                                 font-size: 0.15rem;
+                                 color: #b3b3b3;
+                             }
+                         }
+                     }
+                     .goodName_num {
+                         height: 0.2rem;
+                         width: 0.75rem;
+                         float: right;
+                         .number {
+                             width: 0.75rem;
+                             text-align: right;
+                             font-size: 0.13rem;
+                             color: #808080;
+                         }
+                     }
+                 }
+             }
+             &:last-of-type {
+                 border-bottom: 0;
+             }
+         }
+         .delete {
+             height: 0.5rem;
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             p {
+                 height: 0.28rem;
+                 width: 1.1rem;
+                 line-height: 0.28rem;
+                 text-align: center;
+                 color: #7ecc44;
+                 border: 0.01rem solid #7ecc44;
+                 border-radius: 0.05rem 0.05rem;
+             }
+         }
+     }
+     .recommend {
+         background: #ffffff;
+         height: 0.4rem;
+         border-bottom: 0.02rem solid #f2f2f2;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         margin-bottom: 0.02rem;
+         img {
+             height: 0.15rem;
+         }
+     }
+     .goodsList {
+         background: #f2f2f2;
+     }
+     .goodsList li {
+         overflow: hidden;
+         .norecommendgoods {
+             height: 2rem;
+             background: #ffffff;
+             display: flex;
+             flex-direction: column; // justify-content: center;
+             align-items: center;
+             img {
+                 margin-top: 0.2rem;
+                 height: 0.5rem;
+                 width: 0.5rem;
+             }
+             span {
+                 margin-top: 0.08rem;
+                 font-size: 0.14rem;
+                 color: #b3b3b3;
+             }
+         }
+         .shopPic {
+             border-top: 0.02rem solid #f2f2f2;
+             overflow: hidden;
+             .shopPic_gs {
+                 background: #ffffff;
+                 float: left;
+                 width: 1.865rem;    
+                 height: 2.4rem;
+                 margin-bottom: 0.02rem;
+                 &:nth-of-type(even) {
+                     float: right;
+                     width: 1.885rem;
+                     border-left: 0.02rem solid #f2f2f2;
+                 }
+                 a {
+                     display: block;
+                     height: 100%;
+                 }
+                 dt {
+                     height: 1.72rem;
+                     width: 1.865rem;
+                     position: relative;
+                     .progressive-image {
+                         height: 100%;
+                     }
+                     span:nth-of-type(1) {
+                         position: absolute;
+                         display: block;
+                         font-size: 0.12rem;
+                         width: 0.35rem;
+                         line-height: 0.16rem;
+                         height: 0.16rem;
+                         text-align: center;
+                         color: #ffffff;
+                         background: #ff1c1c;
+                         top: 0;
+                         left: 0;
+                     }
+                     span:nth-of-type(2) {
+                         position: absolute;
+                         display: block;
+                         height: 0.16rem;
+                         font-size: 0.12rem;
+                         background: #ff1c1c;
+                         color: #ffffff;
+                         padding: 0 0.05rem;
+                         top: 0;
+                         right: 0;
+                         line-height: 0.16rem;
+                         border-radius: 0.06rem;
+                     }
+                     img {
+                         height: 100%;
+                         width: 100%;
+                     }
+                 }
+                 dd {
+                     margin: 0;
+                     padding-left: 0.13rem;
+                     text-align: left;
+                     &:nth-of-type(1) {
+                         width: 1.75rem;
+                         line-height: 0.16rem;
+                         font-size: 0.15rem;
+                         color: #333333;
+                         margin-top: 0.04rem;
+                         overflow: hidden;
+                         text-overflow: ellipsis;
+                         white-space: nowrap;
+                         font-weight: 600;
+                     }
+                     &:nth-of-type(2) {
+                         width: 1.75rem;
+                         height: 0.16rem;
+                         line-height: 0.16rem;
+                         margin-top: 0.04rem;
+                         span {
+                             display: block;
+                             color: #808080;
+                             font-size: 0.12rem;
+                             overflow: hidden;
+                             text-overflow: ellipsis;
+                             white-space: nowrap;
+                         }
+                     }
+                     &:nth-of-type(3) {
+                         margin-top: 0.04rem;
+                         height: 0.2rem;
+                         line-height: 0.2rem;
+                         color: #ff1c1c;
+                         span {
+                             font-size: 0.16rem;
+                         }
+                     }
+                 }
+             }
+         }
+     }
+     .weui-flex {
+         width: 100%;
+         position: absolute;
+         bottom: 1.08rem;
+         background-color: #b3b3b3;
+         .weui-flex__item {
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             i {
+                 font-size: 0.2rem!important;
+                 color: #ff1c1c;
+             }
+             b {
+                 font-weight: normal;
+                 font-size: 0.12rem;
+                 color: #fff;
+             }
+             span {
+                 color: #ff1c1c;
+                 font-size: 0.12rem;
+             }
+         }
+     }
+     .flex-satisfy {
+         background-color: #fefbee;
+         .weui-flex__item {
+             b {
+                 color: #333;
+             }
+             i {
+                 color: #7ecc44;
+             }
+         }
+     }
+     .total {
+         height: 0.5rem;
+         position: absolute;
+         bottom: 0.59rem;
+         z-index: 100;
+         box-shadow: 0 0.02rem 0.1rem rgba(0, 0, 0, .3);
+         background: #fdfdfd;
+         &:after {
+             content: "";
+             width: 2.75rem;
+             height: 100%;
+             position: absolute;
+             left: 0;
+             top: 0;
+             background: #fdfdfd;
+         }
+         .total_left {
+             padding: 0.1rem;
+             width: 2.75rem;
+             height: 0.5rem;
+             float: left;
+             position: relative;
+             z-index: 55;
+             display: flex;
+             flex-direction: column;
+             justify-content: center;
+             p {
+                 height: 0.2rem;
+                 line-height: 0.2rem;
+                 font-size: 0.15rem;
+             }
+             .txt1 {
+                 color: #333333;
+                 .checkAllState {
+                     display: block;
+                     height: 0.16rem;
+                     width: 0.16rem;
+                     margin-right: 0.05rem;
+                     float: left;
+                     position: relative;
+                     font-size: 18px!important;
+                     i {
+                         font-size: 18px!important;
+                         position: absolute;
+                         top: 0px;
+                         left: 0px;
+                         color: #7ecc44;
+                     }
+                 }
+                 b {
+                     margin-left: 0.02rem;
+                     float: left;
+                     font-weight: normal;
+                 }
+                 span {
+                     float: right;
+                     color: #333333;
+                     b {
+                         color: #ff1c1c;
+                         font-weight: normal;
+                         float: none;
+                     }
+                 }
+             }
+             .txt2 {
+                 text-align: right;
+                 color: #fdb577;
+                 font-size: 0.15rem;
+                 span {
+                     padding-left: 0.05rem;
+                 }
+             }
+         }
+         .total_right {
+             float: left;
+             width: 1rem;
+             height: 0.5rem;
+             background: #ff3a80;
+             line-height: 0.5rem;
+             text-align: center;
+             font-size: 0.17rem;
+             color: #ffffff;
+         }
+     }
+ } //   @media (max-height: 450px) { 
+ //   footer {
+ //     display: none;
+ //   }
+ //   #shoppingCart .total{
+ //     display: none;
+ //   }
+ // }

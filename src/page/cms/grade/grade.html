@@ -1,0 +1,171 @@
+<app-container  class="grade-container">
+
+    <div ref="gradeRef">
+        <!-- VIP等级页面 -->
+        <header class="grade-c_hd" :class="{'lock-hd': currentGrade.status === 'lock'}">
+            <!-- 头部信息 -->
+            <div class="grade-headinfo">
+                <div class="grade-title">
+                    <div class="grade-num">M{{currentGrade.grade}}</div>
+                </div>
+                <div class="grade-userimg">
+                    <img :src="currentGrade.userImg" v-if="currentGrade.userImg" class="userImg">
+                    <img :src="currentGrade.gradeImg" alt="" class="gradeImg" v-if="currentGrade.gradeImg && currentGrade.status !== 'lock'">
+                    <div v-if="currentGrade.status === 'lock'" class="lock-info">
+                        店长锁定
+                    </div>
+                </div>
+            </div>
+            <!-- 等级轮播 -->
+            <div class="swiper-container" ref="gradeSwiper">
+                <div class="swiper-wrapper">
+                    <template v-for="(item, index) in gradeList">
+                        <div class="swiper-slide grade-boxs">
+                            <div class="grade-box" :class="{'grade-box-active': item.grade === gradeActive, 'grade-box-tip':item.msg, 'grade-box-ok': currentGrade.grade > item.grade  }"
+                                @click="switchgrade($event,item)">
+                                <transition name="fadeUp">
+                                    <span class="tip text-ellipsis" v-if="item.msg" :class="{'animate-bounce-up': tipCreate}">
+                                        {{item.msg}}
+                                    </span>
+                                </transition>
+                                <img :src="item.src">
+                            </div>
+                        </div>
+                        <!-- <div class="swiper-slide grade-boxs" v-if=" gradeList.length-1 > index">
+                        <div class="grade-progress">
+                            <div class="grade-progress-slider" :class="[currentGrade.grade >  item.grade ? 'slider-full' : 'slider-zero']"></div>
+                        </div>
+                    </div> -->
+                    </template>
+                </div>
+            </div>
+        </header>
+        <section class="grade-c_bd">
+            <div class="grade-bd-info" v-if="gradeData.showContent">
+                <!-- 考核中 -->
+                <template v-if="status === 'checking'">
+                    <div>
+                        <span class="sj">{{countDate.day}}</span>天
+                        <span class="sj">{{countDate.hour}}</span>时
+                        <span class="sj">{{countDate.minute}}</span>分
+                        <span class="sj">{{countDate.second}}</span>秒
+                    </div>
+                    <div>倒计时结束如未达到保底条件，您将被移入
+                        <span class="font-error">锁定(收益降低至{{gradeData.downIncomeRate}})</span>
+                    </div>
+                </template>
+                <!-- 考核暂停 倒计时不走-->
+                <template v-if="status === 'checkstop'">
+                    <!-- <div>
+                        <span class="sj">{{countDate.day}}</span>天
+                        <span class="sj">{{countDate.hour}}</span>时
+                        <span class="sj">{{countDate.minute}}</span>分
+                        <span class="sj">{{countDate.second}}</span>秒
+                    </div> -->
+                    <div class="font-error">保底审核已暂停</div>
+                </template>
+                <!-- 考核结束 -->
+                <template v-if="status === 'checkover'">
+                    <div v-if="gradeData.grade == currentGrade.grade">
+                        <span class="sj">{{countDate.day}}</span>天
+                        <span class="sj">{{countDate.hour}}</span>时
+                        <span class="sj">{{countDate.minute}}</span>分
+                        <span class="sj">{{countDate.second}}</span>秒
+                    </div>
+                    <div>{{gradeData.name}}考核将于
+                        <span class="font-error">{{reDate | date('yyyy年MM月dd日 hh:mm')}}</span>重置</div>
+                </template>
+                <!-- 锁定 -->
+                <template v-if="status === 'lock'">
+                    <div class="weui-flex bj-lock">
+                        <div class="lock-img"></div>
+                        <div class="weui-flex__item">
+                            <div>您已进入锁定,
+                                <span class="font-error">收益降低至{{gradeData.downIncomeRate}}</span>
+                            </div>
+                            <div class="font-warn">达成解锁条件立刻恢复收益</div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <!-- 保级条件 -->
+            <div class="grade-bd-bj">
+                <div class="grade-bd-title">
+                    <div class="flag-title"></div>
+                    {{gradeData.title}}条件 (
+                    <span>M{{gradeData.grade}}</span>)
+                    <template v-if="gradeData.showContent">
+                        <img v-lazy="gradeData.reachedImg" class="reach-img" @load="reachLoadImg">
+                    </template>
+                </div>
+                <template v-if="showTjContent">
+                    <template v-if="gradeData.showContent">
+                        <div class="weui-cell" v-for="(item, i) in gradeData.tjList" v-if="item.total">
+                            <div class="weui-cell__hd grade-circle" :class="[item.fontClass]">
+                                <app-circle  :progress="item.value/100" trail-width="12" :trail-color="item.color" v-if="item.total">{{item.value}}%</app-circle>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <div>{{item.name}}</div>
+                                <div>
+                                    <span :class="[item.fontClass]">{{item.num}}</span>/ {{item.total}}</div>
+                            </div>
+                            <div class="weui-cell__ft" :class="[item.fontClass]">
+                                {{item.result}}
+                            </div>
+                        </div>
+                    </template>
+                    <template v-if="!gradeData.showContent">
+                        <div class="grade-tj" v-if="  currentGrade.grade > gradeData.grade">
+                            <img src="/static/images/minishop/lulalula2.png" alt="">
+                            <div class="grade-tj_bd">晋级已达成</div>
+                            <div class="grade-tj_ft">晋级时间{{new Date() | date('yyyy-MM-dd')}}</div>
+                        </div>
+                        <div class="grade-tj" v-if=" gradeData.grade > currentGrade.grade">
+                            <img src="/static/images/minishop/lulalula1.png" alt="">
+                            <div class="grade-tj_bd">查看M{{gradeData.grade}}晋级条件需要先达到M{{gradeData.grade-1}}哟</div>
+                        </div>
+                    </template>
+                </template>
+            </div>
+
+            <!-- 特权 -->
+            <div class="grade-bd-zs" v-show="gradeData.tqData">
+                <div class="grade-bd-title">
+                    <div class="flag-title"></div>
+                    {{gradeData.gradeName}}特权 (
+                    <span>M{{gradeData.grade}}</span>)
+                    <div class="fr">
+                        <a href="javascript:void(0)" @click="toGuide">店长等级说明</a>
+                    </div>
+                </div>
+                <div class="weui-flex">
+                    <img src="/static/images/minishop/dis_price.png" alt="">
+                    <div class="weui-flex__item">
+                        进货折扣： {{gradeData.tqData.discount}}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+    <footer class="ft grade-c_ft" slot="footer">
+        <!-- 等于当前等级+1，在下个等级即可查看晋级按钮 -->
+        <template v-if="gradeData.grade -1 == currentGrade.grade">
+            <button class="not_reached_btn" type="button" v-show="!gradeData.isReach" :disabled="!gradeData.isReach">
+                保底任务未达成，不可晋级
+            </button>
+            <!-- 非锁定下，达到保级即可晋级  -->
+            <button class="to_up_btn" type="button" v-show="gradeData.isReach"  @click="toUpGrade">
+                立刻晋级
+            </button>
+        </template>
+
+        <!-- 锁定的情况下，达到保级 -->
+        <template v-if="currentGrade.status === 'lock'">
+            <button class="to_unlock_btn" type="button" v-show="gradeData.isReach" @click="doUnLock">
+                店长解锁
+            </button>
+        </template>
+    </footer>
+
+</app-container>

@@ -1,0 +1,45 @@
+.helper{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .sayHello{
+        figure{
+            width: 250px;
+            margin: 0 auto;
+            img{
+                width: 100%;
+            }
+        }
+    }
+    .swiper-container{
+        width: 100%;
+        height: auto;
+        padding: 0 31px 50px;
+        .swiper-wrapper{
+            margin: 0 auto;
+            .swiper-slide{
+                img{
+                    width: 100%;
+                }
+            }
+        }
+        .swiper-button-prev,
+        .swiper-button-next{
+            width: 15px;
+            height: 28px;
+            right: 5px;
+            background-position-x: -12px;
+            // -22px-(50/2)px
+            margin-top: -49px
+        }
+        .swiper-button-prev{
+            left: 5px;
+            background-position-x: 0px;
+        }
+        .swiper-pagination{
+            font-size: 15px;
+            color: #333;
+        }
+    }
+}

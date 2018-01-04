@@ -1,0 +1,18 @@
+<div class="helper">
+    <div class="sayHello">
+        <figure>
+            <img src="/static/images/minishop/lxkf.png" alt="">
+        </figure>
+    </div>
+    <div class="swiper-container" ref="helperSwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="data in dataList">
+                <img :src="data.imgUrl" alt="">
+                <!-- <progressive-img :src="data.imgUrl" :placeholder="data.imgUrl" /> -->
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+    </div>
+</div>

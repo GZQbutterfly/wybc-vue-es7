@@ -1,0 +1,58 @@
+@keyframes fadeUp-in {
+    0% {
+        transform: translate3d(0, 100%, 0);
+    }
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes fadeUp-out {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(0, 100%, 0);
+    }
+}
+
+.fadeGoUp-enter-active {
+    animation-name: fadeUp-in;
+    animation-duration: .4s;
+}
+
+.fadeGoUp-leave-active {
+    animation-name: fadeUp-out;
+    animation-duration: .2s;
+}
+
+.fadeTipUp-enter-active {
+    animation-name: fadeUp-out;
+    animation-duration: 40s;
+}
+
+.fadeTipUp-leave-active {
+    animation-name: fadeUp-out;
+    animation-duration: .2s;
+}
+
+.fadeAddressDialogUp-enter-active {
+    animation-name: fadeUp-in;
+    animation-duration: .5s;
+}
+
+.fadeAddressDialogUp-leave-active {
+    animation-name: fadeUp-out;
+    animation-duration: .4s;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .5s
+}
+
+.fade-enter,
+.fade-leave-to
+{
+    opacity: 0
+}

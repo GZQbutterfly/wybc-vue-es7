@@ -1,0 +1,20 @@
+<div class="warp" ref="warpRef">
+    <div class="main-content views">
+        <keep-alive>
+            <router-view v-if="$route.meta.keepAlive"></router-view>
+        </keep-alive>
+        <router-view v-if="!$route.meta.keepAlive"></router-view>
+    </div>
+
+    <footer class="layout-nav-footer" v-if="isCreatedMenu">
+        <div class="line"></div>
+        <div class="weui-flex nav-boxs">
+            <router-link :to="item.path" :title="item.title" class="weui-flex__item nav-box" v-for="item,key in list" :key="key">
+                <img class="wybc-icon" :src="item.imgDefSrc" :alt="item.title" v-show="item.name !== activeName">
+                <img class="wybc-icon" :src="item.imgActSrc" :alt="item.title" v-show="item.name === activeName">
+                <span class="weui-badge" v-if="item.showBadge && $store.state.shopCar.count">{{$store.state.shopCar.count}}</span>
+                <p class="nav-label">{{item.title}}</p>
+            </router-link>
+        </div>
+    </footer>
+</div>

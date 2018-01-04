@@ -1,0 +1,22 @@
+.nowifi-container {
+    position: absolute;
+    align-items: center;
+    padding-top: 30%;
+    padding-left: 33%;
+    bottom: 0;
+    color: #c1c1c1;
+    background-color: #fff;
+    z-index: 999999999;
+    .nowifi-content {
+        margin: 0 auto;
+        img {
+            width: 100px;
+        }
+        .nowifi-info {
+            margin-bottom: 6px;
+            .touch-tip {
+                font-size: 12px;
+            }
+        }
+    }
+}

@@ -1,0 +1,101 @@
+.inventory_list{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .weui-cells{
+        margin-top: 5px;
+        &:first-child{
+            margin-top: 0;
+            z-index: 999;
+        }
+        .weui-cell{
+            color: #333;
+            font-size: 15px;
+            padding: 7.5px 12.5px;
+            &::before{
+                left: 0;
+            }
+            &.box_goods{
+                padding-top: 15px;
+                padding-bottom: 15px;
+                .weui-cell__bd{
+                    height: 65px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content:center;
+                }
+            }
+            &.box_search{
+                .weui-cell__bd{
+                    position: relative;
+                    &:before{
+                        content: '\E62F';
+                        position: absolute;
+                        top: 0.01rem;
+                        left: 0.15rem;
+                        z-index: 999;
+                        font-size: 0.2rem;
+                        color: #808080;
+                    }
+                }
+            }
+            .weui-cell__hd{
+                width: 80px;
+                .pic_goods{
+                    width: 65px;
+                    height: 65px;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+            }
+            .weui-cell__bd{
+                height: 30px;
+                .ipt_search{
+                    width: 304.5px;
+                    height: 30px;
+                    background: #f2f2f2;
+                    border-radius: 15px;
+                    border: 0;
+                    outline: none;
+                    text-indent: 40px;
+                    position: relative;
+                }
+                .txt_goodsName{
+                    font-weight: 300;
+                    font-size: 17px;
+                }
+                .txt_goodsPrice{
+                    span{
+                        color: #ff1c1c;
+                    }
+                }
+                .txt_goodsNumb{
+                    height: 30px;
+                    line-height: 30px;
+                    span{
+                        color: #7ecc44;
+                    }
+                }
+            }
+            .weui-cell__ft{
+                line-height: 30px;
+                color: #333;
+                .btn_search{
+                    font-weight: 600;
+                }
+                .txt_goodsNumb{
+                    span{
+                        color: #ff902d;
+                    }
+                }
+            }
+        }
+    }
+    .box_goodses{
+        flex: 1;
+        position: relative;
+        margin-top: -5px;
+    }
+}

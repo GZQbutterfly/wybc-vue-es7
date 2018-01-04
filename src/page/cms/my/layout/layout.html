@@ -1,0 +1,11 @@
+<div class="warp" ref="warpRef">
+    <div class="main-content views">
+        <keep-alive>
+            <router-view v-if="$route.meta.keepAlive"></router-view>
+        </keep-alive>
+        <router-view v-if="!$route.meta.keepAlive"></router-view>
+    </div>
+
+    <!-- <footer class="layout-nav-footer">
+    </footer> -->
+</div>

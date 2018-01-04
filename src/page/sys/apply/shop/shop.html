@@ -1,0 +1,114 @@
+<div class="applyshop-container" ref="applyshop">
+    <header class="applyshop-hd">
+        <div class="shop-title">
+            <i class="icon iconfont icon-ID"></i>
+            <span class="">
+                供货人信息
+            </span>
+        </div>
+        <div class="shop-userinfo weui-flex">
+            <img :src="incodeInfo.userimg" alt="">
+            <div class="weui-flex__item">
+                <div>{{incodeInfo.username}}</div>
+                <div>{{incodeInfo.sex}}</div>
+                <div>{{incodeInfo.phone}}</div>
+            </div>
+        </div>
+    </header>
+    <vue-form :state="formstate" class="shop-form" @submit.prevent="saveData">
+        <section class="applyshop-bd">
+            <div class="shopinfo">
+                <div class="shop-title">
+                    <img src="./static/images/minishop/ziliao.png" alt="">
+                    <span class="">
+                        开店信息
+                    </span>
+                </div>
+                <!-- 性别 -->
+                <validate class="shop-cell weui-flex" tag="div">
+                    <div class="shop-label">
+                        性别
+                    </div>
+                    <div class="weui-flex__item weui-cell__bd">
+                        <input name="sex" class="applyshop_ipt weui-input" tabindex=-1 type="text" placeholder="请选择性别" v-model="['','男','女'][shopInfo.sex]"
+                            required>
+                        <select class="applyshop_ipt weui-select" v-model="shopInfo.sex" @blur="sexBlur(1)" required>
+                            <option value="1">男</option>
+                            <option value="2">女</option>
+                        </select>
+                    </div>
+                </validate>
+                <transition name="fadeUp">
+                    <field-messages name="sex" show="$submitted" class="text-danger  error-tip">
+                        <div slot="required" v-show="formstate.sex && formstate.sex.$invalid">
+                            请选择性别!
+                        </div>
+                    </field-messages>
+                </transition>
+                <!-- 学校 -->
+                <validate class="shop-cell weui-flex" tag="div">
+                    <div class="shop-label">
+                        学校
+                    </div>
+                    <div class="weui-flex__item weui-cell__bd">
+                        <input name="school" class="applyshop_ipt weui-input" tabindex=-1 type="text" placeholder="请选择学校" v-model="shopInfo.school"
+                            required>
+                        <select class="applyshop_ipt weui-select" v-model="shopInfo.school" @blur="schoolBlur(schoolList[0])" required>
+                            <option v-for="item in schoolList" :value="item" v-text="item"></option>
+                        </select>
+                    </div>
+                </validate>
+                <transition name="fadeUp">
+                    <field-messages name="school" show="$submitted" class="text-danger  error-tip">
+                        <div slot="required" v-show="formstate.school && formstate.school.$invalid">
+                            请选择学校!
+                        </div>
+                    </field-messages>
+                </transition>
+                <!-- 店名 -->
+                <validate class="shop-cell weui-flex" tag="div">
+                    <div class="shop-label">
+                        店名
+                    </div>
+                    <div class="weui-flex__item">
+                        <input name="wdName" class="applyshop_ipt weui-input" type="text" placeholder="请输入店名" v-model="shopInfo.wdName" maxlength="16"
+                            required check-wdname>
+                    </div>
+                    <div class="shop_tip">学惠店</div>
+                </validate>
+                <transition name="fadeUp">
+                    <field-messages name="wdName" show="$submitted" class="text-danger  error-tip">
+                        <div slot="required" v-show="formstate.wdName && formstate.wdName.$invalid">
+                            请输入店名!
+                        </div>
+                        <div slot="check-wdname" v-show="formstate.wdName && formstate.wdName.$invalid">
+                            店名仅支持中文、英文、数字、下划线、1-16个字节!
+                        </div>
+                    </field-messages>
+                </transition>
+                <!-- 微信号 -->
+                <div class="shop-cell weui-flex">
+                    <div class="shop-label">
+                            微信号
+                    </div>
+                    <div class="weui-flex__item">
+                        <input name="wxNum" class="applyshop_ipt weui-input" type="text" placeholder="输入微信号(选填),为您安排专业的运营顾问" v-model="shopInfo.wxNum" maxlength="20">
+                    </div>
+                </div>
+                <!-- 协议 -->
+                <div class="shop-agree weui-agree" :class="{'hide':registerSuccess}">
+                    <input class="weui-agree__checkbox" type="checkbox" id="shopCheckBox" v-model="rule_checked">
+                    <label class="weui-agree__text" for="shopCheckBox">
+                        同意并签订
+                        <a href="javascript:;" @click="toWiki()">《开店入驻及用户使用协议》</a>
+                    </label>
+                </div>
+                <!-- end -->
+            </div>
+        </section>
+        <footer class="applyshop-ft">
+            <button class="ok" type="button" @click="goHome" v-if="registerSuccess">管理我的微店</button>
+            <button class="ok" type="submit" v-else>立即开店</button>
+        </footer>
+    </vue-form>
+</div>

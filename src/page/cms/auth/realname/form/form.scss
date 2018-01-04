@@ -1,0 +1,98 @@
+.realform-container {
+    height: 100%;
+    background-color: #fff;
+    .realform-bd {
+        font-size: 15px;
+        color: #323233;
+        position: relative;
+        padding-bottom: 60px;
+        .realform-upload {
+            padding-top: 40px;
+            .upload-img {
+                position: relative;
+                width: 223px;
+                height: 140px;
+                margin: auto;
+                background: url(../../../../../static/images/minishop/shenfenrenzheng.png) center no-repeat;
+                background-size: 223px;
+            }
+            .photo-img {
+                width: 61px;
+                height: 50%;
+                margin: auto;
+                background: url(../../../../../static/images/minishop/photo.png) center no-repeat;
+                background-size: 61px;
+                position: relative;
+                top: 25%;
+            }
+            img {
+                position: absolute;
+                top: 0;
+                height: inherit;
+                width: inherit;
+            }
+            .img-mode{
+                position: absolute;
+                top: 0;
+                height: inherit;
+                width: inherit;
+                background-color: #fff;
+            }
+            .photo-img-del {
+                position: absolute;
+                top: 0px;
+                right: 0;
+                background-color: #ee893e;
+                height: 16px;
+                width: 16px;
+                display: inline-block;
+                border-radius: 8px;
+                &::before {
+                    content: " ";
+                    position: absolute;
+                    top: 7px;
+                    left: 3px;
+                    width: 9px;
+                    display: block;
+                    border: 1px solid #fff;
+                }
+            }
+        }
+        .realform-ex {
+            margin-top: 38px;
+            display: flex;
+            font-size: 14px;
+            color: #323232;
+            .ex-hd {
+                margin-left: 38px;
+            }
+            .ex-img {
+                width: 65px;
+                height: 65px;
+                margin: 0 10px;
+                background: url(../../../../../static/images/minishop/timg.jpg) center no-repeat;
+                background-size: 65px;
+            }
+            .ex-ft {
+                width: 149px;
+                color: #808080;
+            }
+        }
+    }
+    .realform-ft {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        button {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: none;
+            color: #fff;
+            font-size: 19px;
+            background-color: #7ecc44;
+        }
+    }
+}

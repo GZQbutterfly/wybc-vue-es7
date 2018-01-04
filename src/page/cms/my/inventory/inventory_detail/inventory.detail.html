@@ -1,0 +1,89 @@
+<div class="inventory_detail">
+    <div class="weui-cells">
+        <div class="weui-cell box_goods">
+            <div class="weui-cell__hd">
+                <figure class="pic_goods">
+                    <img :src="goodsData.coverImg" alt="">
+                </figure>
+            </div>
+            <div class="weui-cell__bd">
+                <h4 class="txt_goodsName" v-text="goodsData.goodsName"></h4>
+                <p class="txt_goodsPrice">进货价:
+                    <span>{{goodsData.moneyPrice | localMoney}}</span>
+                </p>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"></div>
+            <div class="weui-cell__bd">
+                <p class="txt_goodsNumb">当前库存:
+                    <span>{{ goodsData.amount }}</span>
+                </p>
+            </div>
+            <div class="weui-cell__ft">
+                <p class="txt_goodsNumb">待进货数量:
+                    <span>{{ goodsData.purchase }}</span>
+                </p>
+            </div>
+        </div>
+        <!-- <div class="weui-cell tag_note">
+            <div class="weui-cell__bd weui-flex">
+                <i class="iconfont icon-remind"></i>商品库存充足后，按待接单订单时间先后自动接单
+            </div>
+        </div> -->
+    </div>
+
+    <div class="box_list">
+        <pull-refresh ref="my_scroller" :refresh="refresh" :infinite="infinite">
+            <div class="weui-cells" v-for="(item, index) in dataList" :key="index">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <figure class="pic_order">
+                            <img src="/static/images/minishop/yhdd.png" alt="" v-if="item.userVipGrade == 0">
+                            <img src="/static/images/minishop/jhdd.png" alt="" v-else>
+                        </figure>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <div class="weui-flex">
+                            <span class="txt_orderNo weui-flex__item">订单号: {{ item.orderNo }}</span>
+                            <span class="thisOrderFlag" :class="[item.userVipGrade == 0 ? 'thisOrderFlag__yhdd':'thisOrderFlag_jhdd']" v-if="item.orderId == queryOrderId">当前订单</span>
+                        </div>
+                        <!-- <span class="txt_orderProfit" v-if="!showDiscountDetail">{{item.type == 1 ? '返利' : '利润'}}：<span class="money-price">{{ item.shopIncome | localMoney }}</span></span> -->
+                        <!-- v-if="showDiscountDetail"   -->
+                        <div  class="total_price">售价总计:<span >{{ item.buyTotal | localMoney}}</span></div>
+                        <div class="order_timer">
+                            <p class="order_timer_time">接单倒计时:
+                                <span>{{ getTime(item.acceptTimeLeft) }}</span>
+                            </p>
+                            <p class="order_timer_numb">
+                                <span>{{ item.needAmount }}</span>/{{ item.number }}</p>
+                            <div class="order_setTimer" v-if="item.needAmount">
+                                <div class="order_timer_in" :style="{'width':item.amountRate, 'background-color': (item.needAmount == item.number ? '#7ecc44':'#f0d13e')}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </pull-refresh>
+    </div>
+
+    <div class="buyGoods">
+        <div class="buyGoodsText">
+            <p>购买数量：</p>
+            <p>{{flag ? '首次' : ''}}最低进货金额&nbsp;&nbsp;&nbsp;{{ minMoney | localMoney }}</p>
+        </div>
+        <div class="buyGoodsNumb">
+            <p class="buyGoodsNumb_del" :class="{'disabled':!(chooseNum>0)}" @click="orderNumbPrev()">-</p>
+            <p class="buyGoodsNumb_num">
+                <input type="tel" v-model="chooseNum" :maxlength="buyMaxLength" @blur="chooseNumBlur()" @input="chooseNumInput()">
+            </p>
+            <p class="buyGoodsNumb_add" @click="orderNumbNext()">+</p>
+        </div>
+        <div class="buyGoodsSubmit">
+            <p>总价:
+                <span>{{ totalMoney | localMoney }}</span>
+            </p>
+            <div class="btn" :class="canBuy?'':'disabled'" @click="goBuy()">立即进货</div>
+        </div>
+    </div>
+</div>

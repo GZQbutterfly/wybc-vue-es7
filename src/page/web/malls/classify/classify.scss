@@ -1,0 +1,182 @@
+#indexBox {
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .header {
+        overflow: hidden;
+        background: #ffffff;
+    }
+    .home-content {
+        position: relative; // height: 5.68rem
+        flex: 1; // margin-top: 0.95rem;
+    }
+    .indexBox_logo {
+        height: 0.86rem;
+        padding: 0.13rem 0;
+        border-bottom: 0.08rem solid #f2f2f2;
+        display: flex;
+        justify-content: space-around;
+        .wdName {
+            width: 80%;
+            height: 100%;
+            padding-left: 0.1rem;
+            display: flex;
+            align-items: center;
+            dt {
+                height: 0.5rem;
+                width: 0.5rem;
+                border-radius: 0.05rem;
+                overflow: hidden;
+                img {
+                    height: 100%;
+                    width: 100%;
+                }
+            }
+            dd {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                padding-left: 0.1rem;
+                span {
+                    color: #333;
+                    font-size: 0.17rem;
+                }
+                p {
+                    height: 0.14rem;
+                    width: 0.7rem;
+                    background: url("/static/images/newshop/vip.png") center center;
+                    background-size: 100% 100%;
+                    display: flex;
+                    align-items: center;
+                    span {
+                        display: inline-block;
+                        margin-left: 0.3rem;
+                        font-size: 0.12rem;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+        .serBox {
+            height: 0.5rem;
+            width: 0.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .sercher {
+            font-size: 0.2rem!important;
+            color: #808080;
+        }
+    }
+    .carousel {
+        height: 1.43rem;
+        width: 100%;
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .goodsList li {
+        overflow: hidden;
+        .shopPic {
+            border-top: 0.02rem solid #f2f2f2;
+            overflow: hidden;
+            .shopPic_gs {
+                float: left;
+                width: 1.865rem;
+                height: 2.4rem;
+                background: #ffffff;
+                border-bottom: 0.02rem solid #f2f2f2;
+                &:nth-of-type(even) {
+                    float: right;
+                    width: 1.885rem;
+                    border-left: 0.02rem solid #f2f2f2;
+                }
+                a {
+                    display: block;
+                    height: 100%;
+                }
+                dt {
+                    height: 1.72rem;
+                    width: 1.865rem;
+                    position: relative;
+                    .progressive-image {
+                        height: 100%;
+                    }
+                    span:nth-of-type(1) {
+                        position: absolute;
+                        display: block;
+                        font-size: 0.12rem;
+                        width: 0.35rem;
+                        line-height: 0.16rem;
+                        height: 0.16rem;
+                        text-align: center;
+                        color: #ffffff;
+                        background: #ff1c1c;
+                        top: 0;
+                        left: 0;
+                    }
+                    span:nth-of-type(2) {
+                        position: absolute;
+                        display: block;
+                        height: 0.16rem;
+                        font-size: 0.12rem;
+                        background: #ff1c1c;
+                        color: #ffffff;
+                        padding: 0 0.05rem;
+                        top: 0;
+                        right: 0;
+                        line-height: 0.16rem;
+                        border-radius: 0.06rem;
+                    }
+                    img {
+                        height: 100%;
+                        width: 100%;
+                    }
+                }
+                dd {
+                    margin: 0;
+                    padding-left: 0.13rem;
+                    text-align: left;
+                    &:nth-of-type(1) {
+                        width: 1.75rem;
+                        line-height: 0.16rem;
+                        font-size: 0.15rem;
+                        color: #333333;
+                        margin-top: 0.04rem;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        font-weight: 600;
+                    }
+                    &:nth-of-type(2) {
+                        width: 1.75rem;
+                        height: 0.16rem;
+                        line-height: 0.16rem;
+                        margin-top: 0.04rem;
+                        span {
+                            display: block;
+                            color: #808080;
+                            font-size: 0.12rem;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                    }
+                    &:nth-of-type(3) {
+                        margin-top: 0.04rem;
+                        height: 0.2rem;
+                        line-height: 0.2rem;
+                        color: #ff1c1c;
+                        span {
+                            font-size: 0.15rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

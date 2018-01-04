@@ -1,0 +1,67 @@
+<div id="indexBox">
+    <div class="header">
+        <ul class="indexBox_nav">
+            <li>
+                <img src="/static/images/newshop/jinhuo.png" alt="">
+            </li>
+            <li data-url="/search">
+                <i class="iconfont icon-iconfonticonfontsousuo1"></i>
+                <!-- <input type="text" placeholder="搜索商品" @click="goSearch" /> -->
+                <div class="txt_input" @click="goSearch">搜索商品</div>
+            </li>
+        </ul>
+    </div>
+    <div class="home-content">
+        <pull-refresh :refresh="refresh" ref="my_scroller" :infinite="infinite">
+            <div class="carousels" v-show='homeAd&&homeAd.length!=0'>
+                <app-banner :listImg="homeAd" style="width:100%;height:100%;"></app-banner>
+            </div>
+            <div class="indexBox_logo">
+                <dl class="wdName">
+                    <dt>
+                        <img :src="shopkeeper.wdImg" alt="">
+                    </dt>
+                    <dd>
+                        <span>{{shopkeeper.wdName}}</span>
+                        <div v-if="shopkeeper.id==0">官方</div>
+                        <p v-if="shopkeeper.id==1">
+                            <span>{{'M'+shopkeeper.vipGrade}}</span>
+                        </p>
+                    </dd>
+                </dl>
+            </div>
+
+            <navScrollc :onchangeShop="changeShop"></navScrollc>
+
+
+
+            <!-- 轮播 -->
+            <div class="carousel" v-if='bannerShow'>
+                <app-banner :listImg="classifyAdImgPic" style="width:100%;height:100%;" :config="config"></app-banner>
+            </div>
+            <!-- 商品列表 -->
+            <ul class="goodsList">
+                <li>
+                    <div class="shopPic">
+                        <dl class="shopPic_gs" v-for='item in classfyGoodsList'>
+                            <router-link :to="{path:'cms_purchase_goods_detail',query:{goodsId:item.goodsId}}">
+                                <dt>
+                                    <img :src="item.coverImg" alt="">
+                                    <!-- <span>返利</span> -->
+                                </dt>
+                                <dd>{{item.goodsName}}</dd>
+                                <dd>
+                                    <span>{{item.coverImgDescription}}</span>
+                                    <!-- <span {{itemdata.coverImgDescription}}v-if="itemdata.consuType==3">{{itemdata.moneyPrice | localMoney}}+{{itemdata.moneyRoll | localVolume}}券</span> -->
+                                </dd>
+                                <dd>
+                                    进货价:<span>{{item.moneyPrice | localMoney}}</span>
+                                </dd>
+                            </router-link>
+                        </dl>
+                    </div>
+                </li>
+            </ul>
+        </pull-refresh>
+    </div>
+</div>

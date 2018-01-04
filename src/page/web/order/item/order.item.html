@@ -1,0 +1,59 @@
+<div class="list_content" @click="toOrderDetail()">
+	<!-- 订单号&&交易状态 -->
+	<div class="weui-flex order-title">
+		<span class="color-gray">订单号:{{order.orders[0].orderState==1||order.orders[0].orderState==6?order.orders[0].combinOrderNo:order.orders[0].orderNo}}</span>
+		<span class="weui-flex-item flex title-state color-green">{{transOrderState()}}</span>
+	</div>
+
+	<!-- 订单商品列表 -->
+	<div v-for="(subOrder,index) in order.orders">
+		<div v-if="loadGoods(index)" class="weui-flex order-goods">
+			<img class="goods-cover" :src=order.goodses[index].coverImg alt="">
+			<div class="flex goods-info">
+				<div class="weui-flex">
+					<span>{{order.goodses[index].goodsName}}</span>
+					<span class="flex price">{{subOrder.purchasePrice|localMoney}}</span>
+				</div>
+				<p class="">x {{order.goodses[index].number}}</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- 商品列表展开选项 -->
+	<div v-if="order.orders.length>1" class="expand-link">
+		<span >查看全部 {{order.goodses.length}} 件商品 </span>
+	</div>
+
+	<!-- 已发货 -->
+	<div v-if="order.logis">
+		<div class="order-plus weui-flex flex-right">
+			<span>物流公司: {{order.logis.logisName}}</span>
+			<span class="flex">运单号: {{order.logis.logisNo}}</span>
+		</div>
+		<div class="row-line"></div>
+	</div>
+
+	<!-- 总计 -->
+	<div class="order-plus weui-flex flex-right">
+		<span class="desc-font color-red"> {{orderTotalMoney()| localMoney}}</span>
+		<span class="desc-font color-black">{{order.orders[0].orderState==1||order.orders[0].orderState==6?'需付':'实付款'}}:&nbsp;&nbsp;</span>
+	</div>
+	<div class="row-line"></div>
+
+	<!-- 已发货 -->
+	<div v-if="order.orderState===4">
+		<div class="order-plus weui-flex flex-right">
+			<button class="item-button button-green" @click.stop="confirmRecive()">确认收货</button>
+		</div>
+		<div class="row-line"></div>
+	</div>
+
+	<!-- 功能 -->
+	<div v-if="order.orderState===1">
+		<div class="order-plus weui-flex flex-right">
+			<button @click.stop="payOrder()" class="item-button button-green">支付</button>
+			<button @click.stop="cancelOrder()" class="item-button button-pink">取消</button>
+		</div>
+	</div>
+</div>
+<!-- //订单状态（1：待发货，2：已发货，3：交易完成，4：待支付，5：交易关闭（原因有：买家取消、支付超时、买家退款、订单异常），6：退款中） -->

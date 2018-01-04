@@ -1,0 +1,17 @@
+<div class="circle-progressbar">
+    <div class="circle-progressbar-content" v-if="type != 'line'"><slot></slot></div>
+    <svg :viewBox="viewBox" v-show="show" :preserveAspectRatio="type == 'line' ? 'none' : ''">
+        <path :fill-opacity="!!fillColor ? 1 : 0"
+              :d="getPathString"
+              :fill="fillColor"
+              :stroke="strokeColor"
+              :stroke-width="trailWidth"
+        ></path>
+        <path fill-opacity="0" ref="trailPath"
+              :d="getPathString"
+              :stroke="trailColor"
+              :stroke-width="strokeWidth ? strokeWidth : trailWidth"
+              :style="{strokeDasharray: stroke.dasharray, strokeDashoffset: stroke.dashoffset}"
+        ></path>
+    </svg>
+</div>

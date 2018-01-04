@@ -1,0 +1,53 @@
+<div id="indexBox">
+    <div class="header">
+        <div class="indexBox_logo">
+            <dl class="wdName">
+                <dt>
+                    <img :src="shopkeeper.wdImg" alt="">
+                </dt>
+                <dd>
+                    <span>{{shopkeeper.wdName}}</span>
+                    <p>
+                        <span>{{'M'+shopkeeper.vipGrade}}</span>
+                    </p>
+                </dd>
+            </dl>
+            <div class="serBox" @click='goSearch'><i class="iconfont icon-sousuo sercher"></i></div>
+            
+        </div>
+
+        <navScrollc :onchangeShop="changeShop"></navScrollc>
+    </div>
+
+    <div class="home-content" v-for="i in classfyList" v-if="show==i.goodsClassifyId">
+        <pull-refresh :refresh="refresh"  :infinite="infinite">
+            <!-- 轮播 -->
+            <div class="carousel" v-if='bannerShow'>
+                <app-banner :listImg="classifyAdImgPic"  :config="config"></app-banner>
+            </div>
+            <!-- 商品列表 -->
+            <ul class="goodsList">
+                <li>
+                    <div class="shopPic">
+                        <dl class="shopPic_gs" v-for='item in classfyGoodsList'>
+                            <router-link :to="{path:'goods_detail',query:{goodsId:item.goodsId}}">
+                                <dt>
+                                    <img :src="item.coverImg" alt="">
+                                    <!-- <span>返利</span> -->
+                                </dt>
+                                <dd>{{item.goodsName}}</dd>
+                                <dd>
+                                    <span>{{item.coverImgDescription}}</span>
+                                    <!-- <span v-if="itemdata.consuType==3">{{itemdata.moneyPrice | localMoney}}+{{itemdata.moneyRoll | localVolume}}券</span> -->
+                                </dd>
+                                <dd>
+                                    <span>{{item.purchasePrice | localMoney}}</span>
+                                </dd>
+                            </router-link>
+                        </dl>
+                    </div>
+                </li>
+            </ul>
+        </pull-refresh>
+    </div>
+</div>

@@ -1,0 +1,189 @@
+<!-- 标注为999的是固定参数 -->
+<div class="order-detail">
+    <!-- :style="margin-bottom:.5rem;" -->
+    <pull-refresh :infinite="infinite" :refresh="refresh">
+        <!-- 顶部的状态 -->
+        <div class="order-title">
+            <figure>
+                <img :src="'/static/images/' + (orderInfo.orders.orderState==6?'ddguanbi.png':'shop.png')">
+            </figure>
+            <div>
+                <h5 class="show-status" v-text="getOrderStateName()"></h5>
+                <p id="finalTime" v-if="orderInfo.orders.orderState == 1">
+                    请于
+                    <span v-text="formatDate"></span>内付款，超时订单将自动关闭
+                </p>
+                <p id="finalTime" v-if="orderInfo.orders.orderState == 4">
+                 此订单将于<span>{{orderInfo.leftDay}}</span>天后自动确认收货    
+                </p>
+                <!-- 貌似没了自动收货 0.0 -->
+                <!-- <p id="finalTime" v-else-if="orderInfo.orderState === 4">
+                请于
+                <span v-text="formatDate"></span>内确认收货，超时将自动收货
+            </p> -->
+            </div>
+        </div>
+
+        <!-- 订单状态流程 -->
+        <div class="order-show" v-if="orderInfo.orders.orderState!==6">
+            <span>买家{{ orderInfo.orders.orderState>1?'已':'' }}付款</span>
+            <!--卖家付款-->
+            <span>商家{{ orderInfo.orders.orderState>3?'已':'' }}发货</span>
+            <!--商家发货-->
+            <span>交易完成</span>
+            <p :class="{'e6e6e6':orderInfo.orders.orderState == 1}">
+                <b :class="{'iconfont icon-chenggong':orderInfo.orders.orderState==2||orderInfo.orders.orderState==3}"></b>
+
+                <i></i>
+                <b :class="{'iconfont icon-chenggong':(orderInfo.orders.orderState==4)}"></b>
+                <i></i>
+                <b :class="{'iconfont icon-chenggong':orderInfo.orders.orderState==5}"></b>
+            </p>
+        </div>
+
+        <!-- 收货地址v-if="orderInfo.gsType == 1 -->
+        <div class="order-address">
+            <p>
+                <i class="iconfont icon-dizhi"></i>
+                <b>收货人：{{ orderInfo.orders.name }}</b>
+                <span v-text="orderInfo.orders.phone"></span>
+            </p>
+            <p class="shouhuo" v-text="'收货地址：'+orderInfo._address"></p>
+        </div>
+
+        <!-- 单/多sku订单 -->
+
+        <!-- 订单编号 -->
+        <div class="order-number" v-if="showOrderNumber">
+            <template v-if="orderInfo.logis&&orderInfo.logis[0].logisNo">
+                <p>
+                    <i class="iconfont icon-wuliu"></i> 运单编号：
+                    <b class="logisNo" v-text="orderInfo.logis[0].logisNo"></b>
+                </p>
+                <p class='delivery-company' v-text="orderInfo.logis[0].logisName"></p>
+            </template>
+            <template v-else>
+                <i class="iconfont icon-delivery-truck"></i>
+                <p class="noMessage">暂无物流信息</p>
+            </template>
+        </div>
+        <template v-for="(item,index) in orderInfo.shop">
+            <!-- 商品信息前的图标 -->
+            <div class="order-line">
+                <p class="sm" @click="goShop(item.shopId)">
+                    <!-- 多sku只有第一个商品有 -->
+                    <i class="iconfont icon-shop"></i>
+                    <span>{{item.shopName}}</span>
+                </p>
+            </div>
+            <!-- 订单商品的信息 -->
+            <div class="all"  v-for="v in item.shopGoods">
+            <div class="order-goods">
+                <router-link :to="'./goods_detail?goodsId=' + v.goodsId+ '&shopId=' + item.shopId">
+                    <figure>
+                        <img :src="v.coverImg">
+                    </figure>
+                    <div class="order-goods-left">
+                        <router-link :to="'/goods_detail?goodsId=' + v.goodsId+ '&shopId=' + item.shopId">
+                            <span class="title">{{ v.goodsName }}</span>
+                        </router-link>
+                    </div>
+                    <div class="order-goods-right">
+                        <!-- RMB+ -->
+                        <span class="color-red" v-if="orderInfo.orders.consuType != 1">{{ v.moneyPrice | localMoney }}</span>
+                        <span class="numb">x{{ v.number }}</span>
+                        <!-- 是否能退款 -->
+                        <!-- item.refundStatus: 申请退款 退款申请中 退款关闭 退款失败 -->
+                        <!-- <span class="btn" v-if="showRefund">
+                    <button class="mui-btn" id="tuikuan" @click="refund(item.id)" v-text="getRefundStatus(item.refundStatus)"></button>
+                </span> -->
+                    </div>
+                </router-link>
+            </div>
+
+            <!-- 配送方式 实物 v-if="orderInfo.gsType == 1"-->
+            <div class="order-line">
+                <span class="fleft">配送方式</span>
+                <span>
+                    <!-- RMB+ -->
+                    <i v-if="orderInfo.orders.consuType != 1">{{ 0 | localMoney }}</i>
+                    <!-- 积分 -->
+                    <!-- <i v-else>免运费</i> -->
+                    <mark>快递发货</mark>
+                </span>
+            </div>
+            </div>
+        </template>
+
+
+        <!-- 进货价小计-->
+        <div class="order-line">
+            <span class="fleft">原价小计</span>
+            <!-- RMB+ -->
+            <span v-if="orderInfo.orders.consuType != 1">{{ totalPrice | localMoney }}</span>
+        </div>
+
+        <!-- 实物 v-if="orderInfo.gsType == 1"-->
+        <template>
+
+            <!-- 配送费 实物-->
+            <div class="order-line">
+                <span class="fleft">配送费</span>
+                <!-- RMB+ -->
+                <span v-if="orderInfo.orders.consuType != 1">{{ 0 | localMoney }}</span>
+                <!-- 积分 -->
+                <!-- <span v-else>免费</span> -->
+            </div>
+
+        </template>
+
+        <!-- RMB+ -->
+        <template v-if="orderInfo.orders.consuType != 1">
+            <!-- 合计 RMB+ -->
+            <div class="order-line">
+                <span class="fleft">合计</span>
+                <span>{{ totalPrice | localMoney }}</span>
+            </div>
+
+            <!-- 底部计价 RMB+ -->
+            <div class="order-line order-line-last">
+                <span class="fcenter">
+                    {{ showTypeAndRefund?'需付':'实付'}}
+                    <p class="color-red">{{ totalPrice | localMoney }}</p>
+                </span>
+            </div>
+
+        </template>
+        <!--订单信息 -->
+        <div class="order-info">
+            <p>订单编号：{{ combinOrderNo ? orderInfo.orders.combinOrderNo:orderInfo.orders.orderNo }}</p>
+            <p>创建时间：{{ orderInfo.orders.createAt | date}}</p>
+            <!-- 买家留言 虚物 -->
+            <div class="xunigoods" v-if="orderInfo.orders.gsType == 2 && JSON.stringify(orderLeaveMsg) != '{}'">
+                <p>买家留言</p>
+                <p class="user_msg">
+                    <template v-for="(msg,i) in orderLeaveMsg">
+                        {{ i + ': ' + msg }}
+                        <br>
+                    </template>
+                </p>
+            </div>
+        </div>
+        <!-- 底部补 -->
+        <!-- <div class="bot" v-if="showToast"></div> -->
+    </pull-refresh>
+
+
+    <!-- 底部弹出框 -->
+    <div class="confirm-receipt" v-if="showToast">
+        <template v-if="orderInfo.orders.orderState==1">
+            <div class="box-price">
+                合计：
+                <p class="color-red">{{ totalPrice | localMoney }}&nbsp;</p>
+            </div>
+            <div class="btn btn-red btn-sm" @click="goPay()">去支付</div>
+        </template>
+        <div class="btn btn-orange" v-if="showDelWithRefund" @click="delOrder()">删除并退款</div>
+        <div class="btn btn-green" v-if="orderInfo.orders.orderState==4" @click="confirmReceipt()">确认收货</div>
+    </div>
+</div>

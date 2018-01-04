@@ -1,0 +1,210 @@
+<div class="shoppingCart">
+    <div class="edit" v-show="!isEmpty">
+        <i class="iconfont icon-gouwuche"></i>
+        <span @click="editShopCar">{{edit}}</span>
+    </div>
+    <div class="home-content">
+        <pull-refresh :refresh="refresh" ref="my_scroller" :infinite="infinite">
+            <!-- 购物车为空 -->
+            <div class="shopCartEmpty" v-if="isEmpty">
+                <img src="/static/images/newshop/gouwuche.png" alt="" />
+                <h3>购物车快饿瘪了T.T</h3>
+                <h4>快给我挑点宝贝</h4>
+                <router-link to="/cms_purchase_classify">
+                    <p>去逛逛</p>
+                </router-link>
+            </div>
+            <div class="wxShop" v-show="!isEmpty">
+                <div class="shopName">
+                    <i class="icon iconfont icon-shop"></i>
+                    <span>{{wdName}}</span>
+                </div>
+                <div class="arrow iconfont icon-xiangyoujiantou"></div>
+            </div>
+            <!-- 购物车列表区域 -->
+            <ul class="shoppingCart_list" v-show="!isEmpty">
+                <!-- 购物车列表 -->
+                <!-- <div class="wxShop">
+                    <div class="shopCheck">
+                        <i class="iconfont icon-gou" v-show="1"></i>
+                    </div>
+                    <div class="shopName">
+                        <i class="icon iconfont icon-shop"></i>
+                        <span>星星的微店</span>
+                    </div>
+                    <div class="arrow">></div>
+                </div> -->
+
+                <li v-for="(item, index) in validLists" v-if="isEdit">
+
+                    <div class="checkbx weui-icon-circle" @click="onRadio($event,index)">
+                        <i class="weui-icon-success" v-show="item.check"></i>
+                    </div>
+                    <router-link :to="{ path: '/cms_purchase_goods_detail',query: { goodsId:item.goodsId }}">
+                        <div class="pic_img">
+                            <img :src="item.coverImg" alt="">
+                        </div>
+                    </router-link>
+                    <div class="goodName">
+                        <p class="goodName_name">{{item.goodsName}}</p>
+                        <div class="goodName_pir">
+                            <p v-if="item.consuType==3">{{item.moneyPrice | localMoney}}+{{item.moneyRoll | localVolume}}券</p>
+                            <p v-if="item.consuType==2">{{item.moneyPrice | localMoney}}
+                                <span>x{{item.number}}</span>
+                            </p>
+                        </div>
+                        <div class="purchase" v-if="item.consuType==3">
+                            <span class="purchase_y">原价:{{item.purchasePrice | localMoney}}</span>
+                            <span class="purchase_num">x{{item.number}}</span>
+                        </div>
+                    </div>
+                </li>
+                <!-- 物车编辑状态 -->
+                <li v-for="(item,index) in validLists" v-if="!isEdit">
+
+                    <div class="checkbx weui-icon-circle" @click="onRadio($event,index)">
+                        <i class="weui-icon-success" v-show="item.check"></i>
+                    </div>
+                    <router-link :to="{ path: '/cms_purchase_goods_detail',query: { goodsId: item.goodsId }}">
+                        <div class="pic_img">
+                            <img :src="item.coverImg" alt="">
+                        </div>
+                    </router-link>
+                    <div class="goodName">
+                        <p class="goodName_name">{{item.goodsName}}</p>
+                        <div class="goodName_pir">
+                            <p v-if="item.consuType==3">{{item.moneyPrice | localMoney}}+{{item.moneyRoll | localVolume}}券</p>
+                            <p v-if="item.consuType==2">{{item.moneyPrice | localMoney}}
+                            </p>
+                        </div>
+                        <div class="purchase" v-if="item.consuType==3">
+                            <span class="purchase_y">原价:{{item.purchasePrice | localMoney}}</span>
+                            <span class="purchase_num"></span>
+                        </div>
+                        <div class="goodName_num">
+                            <span id="minus" @click="minus(index)">-</span>
+                            <input type="number" class="amount" v-model='item.number' @blur="changeNum($event,index)" />
+                            <span id="add" @click="add(index)">+</span>
+                        </div>
+                    </div>
+
+                </li>
+            </ul>
+            <!-- 失效物品区域 -->
+            <ul class="invalid" v-show="isShow">
+                <div class="titl">
+                    <img src="/static/images/newshop/bukaixin.png" />
+                    <span>以下商品无法购买</span>
+                </div>
+                <li v-for="(item,index) in invalidLists">
+                    <div class="pic_img">
+                        <img :src="item.coverImg" alt="">
+                    </div>
+                    <div class="goodName">
+                        <p class="goodName_name">{{item.goodsName}}
+                        </p>
+                        <div class="goodName_price">
+                            <div class="goodName_pir">
+                                <b v-if="item.consuType==2">{{item.moneyPrice | localMoney}}</b>
+                                <b v-if="item.consuType==3">{{item.moneyPrice | localMoney}}+{{item.moneyRoll | localVolume}}券</b>
+                                <span v-if="item.consuType==3">原价:{{item.purchasePrice | localMoney}}</span>
+                                <span v-if="item.consuType==2" style="margin-bottom:0.13rem;"></span>
+                                <span>{{ item.isValid ==0?'商品已下架':'' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <div class="delete" @click="onClear">
+                    <p>清空失效物品</p>
+                </div>
+            </ul>
+            <!-- 为你推荐图标 -->
+            <div class="recommend">
+                <img src="/static/images/newshop/weinituijian.png" alt="">
+            </div>
+            <!-- 推荐商品列表 -->
+            <ul class="goodsList">
+                <li>
+                    <div class="norecommendgoods" v-if="recommendShow">
+                        <img src="/static/images/newshop/yihan.png" alt="">
+                        <span>很遗憾，暂无推荐商品给您</span>
+                    </div>
+                    <div class="shopPic" v-else>
+                        <dl class="shopPic_gs" v-for="(item,index) in recommendLists">
+                            <router-link :to="{ path: '/cms_purchase_goods_detail',query: { goodsId: item.goodsId }}">
+                                <dt>
+                                    <img :src="item.coverImg" alt="">
+                                    <!-- <span v-show="item.consuType !== 1">返利</span> -->
+                                </dt>
+                                <dd>{{item.goodsName}}</dd>
+                                <dd>
+                                    <span>{{item.coverImgDescription}}</span>
+                                    <!-- <span {{itemdata.coverImgDescription}}v-if="itemdata.consuType==3">{{itemdata.moneyPrice | localMoney}}+{{itemdata.moneyRoll | localVolume}}券</span> -->
+                                </dd>
+                                <dd>
+                                    <span>{{item.moneyPrice | localMoney}}</span>
+                                </dd>
+                            </router-link>
+                        </dl>
+                        <!-- <dl class="shopPic_gs" v-if="recommendLists&&recommendLists.length%2!=0" style="border:0"></dl> -->
+                    </div>
+
+                </li>
+            </ul>
+        </pull-refresh>
+    </div>
+    <!-- 升级条件 -->
+    <!-- <div class="weui-flex">
+        <div class="weui-flex__item">
+            <i class="iconfont icon-remind"></i>
+            <b>未达成升级条件，再买</b>
+            <span>1000.00元</span>
+            <b>，立刻升级享新进货价!</b>
+        </div>
+    </div> -->
+    <!-- <div class="weui-flex flex-satisfy">
+        <div class="weui-flex__item">
+            <i class="iconfont icon-chenggong"></i>
+            <b>订单金额已满</b>
+            <span>1000.00元</span>
+            <b>，升级条件已达成，快去下单吧!</b>
+        </div>
+    </div> -->
+    <!-- 购物车结算 -->
+    <div class="total" v-if="isEdit" v-show="!isEmpty">
+        <div class="total_left">
+            <p class="txt1">
+
+                <em class="checkAllState weui-icon-circle" @click="checkAllState">
+                    <i class="weui-icon-success" v-show="checkAll"></i>
+                </em>
+                <b @click="checkAllState">全选</b>
+                <span>合计:<b>{{total | localMoney}}</b></span>   
+            </p>
+            <p class="txt2">
+                <span v-if="leastMoney>0&&total<leastMoney">{{ isFirst?'首次':'' }}最低进货金额：{{ leastMoney | localMoney }}</span>
+            </p>
+        </div>
+        <div class="total_right" @click="onSettle" v-if="leastMoney<=total">
+            结算({{settlement}})</div>
+           
+      
+        <div class="total_right" style="background-color:#ccc;" v-else>
+            结算({{settlement}}) 
+        </div>
+    </div>
+    <div class="total" v-if="!isEdit" v-show="!isEmpty">
+        <div class="total_left">
+            <p class="txt1">
+                <em class="checkAllState weui-icon-circle" @click="checkAllState">
+                    <i class="weui-icon-success" v-show="checkAll"></i>
+                </em>
+                <b @click="checkAllState">全选</b>
+            </p>
+        </div>
+        <div class="total_right" @click="onDelete">
+            删除
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,72 @@
+<div class="cmsHome" ref="cmsHome">
+    <div class="cmsBox cmsHomePic">
+        <div class="cmsHomeLevel" @click="toLevelPage">
+            <figure>
+                <img src="/static/images/minishop/diamond.png" alt="">
+            </figure>
+            <h4>M{{ shopData.vip + shopData.vipName }}</h4>
+            <span>立即晋级</span>
+        </div>
+        <div class="cmsHomeUser">
+            <figure>
+                <img :src="user_img" alt="" @load="imgLoad()">
+            </figure>
+            <h4>{{ shopData.wdName }}</h4>
+            <span @click="toAuthPage" v-text="realNameStateList[realNameInfo.data.state]"></span>
+        </div>
+        <div class="cmsHomeLogOff">
+            <i class="iconfont icon-xinfeng" :data-numb=" msgNum ? msgNum : '' " @click="toMessageNotice"></i>
+            <i class="iconfont icon-qiehuanzhanghao" @click="userLogOff"></i>
+        </div>
+        <div class="cmsHomeHeadMsgBox">
+            <app-topnotice :msgOpts="msgOpts"></app-topnotice>
+            <!-- <div class="cmsHomeHeadMsg" ref="cmsHomeHeadMsg">
+                <figure class="cmsHomeHeadMsgPic">
+                    <img src="/static/images/pic-login.png" alt="">
+                </figure>
+                <div class="cmsHomeHeadMsgTxt">{{ systemMsg.t }}
+                    <span>{{ systemMsg.t2 }}</span>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <div class="cmsBox weui-flex cmsHomePrice">
+        <div class="weui-flex__item" @click="toIncome()">
+            <p>
+                <i class="iconfont icon-shouyi2"></i>累计收益</p>
+            <p>{{ userIncome | localMoney }}</p>
+        </div>
+        <div class="weui-flex__item" @click="toWallet()">
+            <p>
+                <i class="iconfont icon-qianbao"></i>我的钱包</p>
+            <p>{{ userMoney | localMoney }}</p>
+        </div>
+    </div>
+    <div class="cmsBox cmsHomeGridsBox">
+        <div class="swiper-container" ref="gridsSwiper">
+            <div class="swiper-wrapper">
+                <div class="weui-grids swiper-slide" v-for="data in gridsData">
+                    <div class="weui-grid" v-for="item in data" @click="visit(item.href,item.canVisit)">
+                        <figure>
+                            <img :src="item.icon" alt="">
+                        </figure>
+                        <p class="weui-grid__label" v-text="item.title"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    </div>
+    <div class="cmsBox cmsHomeNews">
+        <div class="swiper-container" ref="cmsBannerSwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" v-for="item in bannerData">
+                    <figure @click="goUrl(item.linkType,item.linkTarget,item.goodsId)">
+                        <img :src="item.imgUrl" alt="">
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

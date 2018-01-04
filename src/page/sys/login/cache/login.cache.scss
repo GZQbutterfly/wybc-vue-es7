@@ -1,0 +1,28 @@
+.cache-login-container {
+    position: fixed;
+    left: 0;
+    background-color: #fff;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    .wecat-content {
+        margin: 20px 0;
+        .weui-cell {
+            padding: 0;
+        }
+        .wecat-head {
+            margin: auto;
+            width: 100px;
+        }
+        .wecat-head-img {
+            border-radius: 50px;
+        }
+        .wecat-head-tip {
+            position: relative; // top: -0.15rem;
+        }
+    }
+    .wecat-login-tip {
+        margin-bottom: 30px;
+        font-size: 15px;
+    }
+}

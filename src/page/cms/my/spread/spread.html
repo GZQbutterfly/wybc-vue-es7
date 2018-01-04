@@ -1,0 +1,40 @@
+<app-container>
+    <div class="myspread-container" ref="spreadRef">
+        <header class="myspread-hd">
+            <div class="myspread-level-tip">
+                <div class="level-num">M{{wdVipGrade}}</div>
+            </div>
+            <template v-if="headimgurl">
+                <img v-lazy="headimgurl" />
+            </template>
+            <div class="myspread-name">
+                {{wdName}}
+            </div>
+        </header>
+
+        <section class="myspread-bd">
+            <div class="myspread-codeinfo">
+                <div class="codeinfo-title">
+                    邀请码
+                </div>
+                <div class="codeinfo-value">
+                    {{code}}
+                </div>
+            </div>
+
+        </section>
+
+        <footer class="myspread-ft">
+            <div class="weui-flex">
+                <div class="weui-flex__item" @click="toSpread">
+                    <i class="icon iconfont icon-erweima1"></i>
+                    <div class="text">邀请开店推广</div>
+                </div>
+                <div class="weui-flex__item" @click="toShare">
+                    <i class="icon iconfont icon-fenxiang"></i>
+                    <div class="text">分享店铺</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</app-container>

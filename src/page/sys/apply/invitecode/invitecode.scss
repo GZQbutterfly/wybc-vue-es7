@@ -1,0 +1,93 @@
+.invitecode-container {
+    .invitecode-bd {
+        padding-top: 70px;
+        text-align: center;
+        padding-bottom: 100px;
+        .invitecode-img {
+            margin: auto;
+            width: 150px;
+            height: 150px;
+        }
+        .invitecode-info {
+            margin: auto;
+            width: 150px;
+            height: 50px;
+            padding: 20px 0;
+        }
+        .code-label {
+            margin-right: 15px;
+            font-size: 17px;
+            color: #333;
+        }
+        .invitecode-qs {
+            position: relative;
+            text-align: right;
+            margin-right: 12px;
+            color: #447acc;
+            .icon {
+                position: relative;
+                top: 2px;
+                font-size: 18px;
+            }
+            a {
+                font-size: 12px;
+                text-decoration: underline;
+            }
+        }
+    }
+    .invitecode-ft {
+        margin-left: 12px;
+        margin-right: 12px;
+        button {
+            height: 50px;
+            width: 100%;
+            margin-bottom: 14px;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+            border:none;
+            color: #fff;
+            font-size: 19px;
+        }
+        .ok {
+            background-color: #7ecc44;
+        }
+    }
+}
+
+.invitecode-dialog {
+    font-size: 15px;
+    color: #333;
+    .weui-flex {
+        align-items: center;
+        padding: 0 4px;
+        .weui-flex__item{
+            text-align: right;
+            &:first-child{
+                text-align: left;
+                padding-right: 0px;
+            }
+        }
+    }
+    img {
+        width: 50px!important;
+        height: 50px!important;
+        display: inline-block;
+    }
+}
+// .reinvitecode-dialog{
+//     font-size: 15px;
+//     color: #333;
+//     height: 100px;
+//     background-color: #f2f2f2;
+//     .weui-flex {
+//         align-items: center;
+//         height: 100%;
+//         label{
+//             margin-left: 10px;
+//             margin-right: 10px;
+//         }
+//         .weui-flex__item{
+    
+//         }
+//     }
+// }

@@ -1,0 +1,129 @@
+.myincome-container {
+    height: 100%;
+    .myincome-hd {
+        text-align: center;
+        background-color: #fff; //height: 65px;
+        font-size: 13px;
+        color: #333;
+        padding: 15px 0;
+        .income-total {
+            font-size: 20px;
+            color: #ff902d;
+        }
+        .income-today {
+            font-size: 20px;
+            color: #7ecc24;
+        }
+        .weui-flex__item {
+            position: relative;
+            &:first-child:after {
+                content: ' ';
+                position: absolute;
+                right: 0;
+                top: 0;
+                height: 100%;
+                width: 1px;
+                background-color: #e6e6e6;
+            }
+        }
+    }
+    .myincome-bd {
+        margin-top: 5px;
+        position: relative;
+        height: calc(100% - .82rem);
+        .tabs {
+            .tabs-hd {
+                height: 50px;
+                line-height: 50px;
+                text-align: center;
+            }
+            .tab-active {
+                position: relative;
+                display: inline-block;
+                &:after {
+                    content: ' ';
+                    position: absolute;
+                    width: 100%;
+                    height: 2px;
+                    background-color: #7ecc24;
+                    left: 0;
+                    bottom: 0px;
+                }
+            }
+            .tabs-bd {
+                .tab-item-content {
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                    overflow: hidden;
+                }
+            }
+        }
+        .order-box {
+            margin-top: 3px; // margin-bottom: 3px;
+            .box-hd {
+                padding: 0 12px;
+                height: 32px;
+                line-height: 32px;
+                background-color: #fff;
+                font-size: 13px;
+                color: #808080;
+                .weui-flex__item:last-child {
+                    text-align: right;
+                }
+            }
+            .ch {
+                color: #7ecc24;
+            }
+            .ud {
+                color: #ff902d;
+            }
+            .hd {
+                color: #ff2da9;
+            }
+            .box-bd {
+                margin-top: 1px;
+                background-color: #fff;
+                font-size: 15px;
+                color: #333;
+                .shop-img {
+                    height: 80px;
+                    width: 80px;
+                    margin: 8px 12px;
+                }
+                .shop-info {
+                    position: relative;
+                    margin-top: 8px;
+                    margin-bottom: 8px;
+                    .shop-name{
+                        width: 2.5rem;
+                        overflow: hidden;
+                        text-overflow:ellipsis;
+                        white-space: nowrap;
+                    }
+                }
+                .shop-num {
+                    color: #ff902d;
+                }
+                .shop-money{
+                    span{
+                        font-size: 16px;
+                    }
+                    .xs-money {
+                        color: #7ecc44;
+                    }
+                    .tc-money {
+                        color: #ff1c1c;
+                    }
+                }
+                .shop-date {
+                    font-size: 12px;
+                    color: #808080;
+                    position: absolute;
+                    bottom: -5px;
+                }
+            }
+        }
+    }
+}
+

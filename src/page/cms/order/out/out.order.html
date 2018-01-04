@@ -1,0 +1,26 @@
+<div class="user-orders weui-flex flex-v">
+	<multitab :tabs="tabs" @on-change="onTabChange" :custStyle="custStyle" :index="tabIndex"></multitab>
+	<multitab v-if="tabIndex==2" style="padding : 0 1rem;" :tabs="subTabs" @on-change="onSubTabChange" :index="subTableIndex"></multitab>
+	<div class="order-list-content flex-1">
+		<pull-refresh v-show="tabIndex==0" :refresh="refresh" :infinite="infinite">
+			<div v-for="(order,key) in dataShipmentList[0]">
+				<oi :order="order" @removeItem="resetAllData"></oi>
+			</div>
+		</pull-refresh>
+		<pull-refresh v-show="tabIndex==1" :refresh="refresh" :infinite="infinite">
+			<div v-for="(order,key) in dataShipmentList[1]">
+				<oi :order="order" @removeItem="resetAllData"></oi>
+			</div>
+		</pull-refresh>
+		<pull-refresh v-show="subTableIndex==0 && tabIndex==2" :refresh="refresh" :infinite="infinite">
+			<div v-for="(order,key) in dataShipmentList[2]">
+				<oi :order="order" @removeItem="resetAllData"></oi>
+			</div>
+		</pull-refresh>
+		<pull-refresh v-show="subTableIndex==1 && tabIndex==2 " :refresh="refresh" :infinite="infinite">
+			<div v-for="(order,key) in dataShipmentList[3]">
+				<oi :order="order" @removeItem="resetAllData"></oi>
+			</div>
+		</pull-refresh>
+	</div>
+</div>

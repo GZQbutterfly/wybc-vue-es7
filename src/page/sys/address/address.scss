@@ -1,0 +1,68 @@
+.address-container {
+    .address-content {
+        // position: fixed;
+        z-index: 3000;
+        bottom: 0;
+        left: 0;
+        top: 0;
+        right: 0;
+        background-color: #f2f2f2;
+        width: 100%;
+        overflow-y: scroll; // 只影响低一级的子集
+        >.swiper-container {
+            height: inherit!important;
+            overflow: visible!important;
+        }
+    }
+    .address-hd {
+        height: 52px;
+        align-items: center;
+        background-color: #fff;
+        .address-hd-title {
+            text-align: center;
+            font-size: 17px;
+            color: #333;
+        }
+        .weui-icon-cancel {
+            font-size: 22px;
+            margin-right: 10px;
+        }
+    }
+    .address-bd {
+        background-color: #fff;
+        // margin-top: 2.5px;
+        margin-bottom: 2px;
+        font-size: 15px;
+        color: #333;
+    }
+    .weui-textarea-counter{
+        font-size: 12px;
+    }
+    .swiper-slide {
+        height: auto;
+    }
+    .address-ft {
+        background-color: #fff;
+        padding: 16px 12.5px;
+        .del-btn{
+            background-color: #f9820d;
+            color: #fff;
+        }
+    }
+    .select-school{
+        padding-right: 0;
+        select:first-child{
+            margin-bottom: 10px;
+        }
+        select:last-child{
+            margin-top: 10px;
+        }
+        select{
+            padding-left: 5px;
+        }
+        .line{
+            background-color: #e5e5e5;
+            height: 1px;
+        }
+    }
+}

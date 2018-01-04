@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.cache
+npm-debug.log.?**
+npm-debug.log
+*.dll
+.idea

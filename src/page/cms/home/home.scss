@@ -1,0 +1,389 @@
+.cmsHome {
+    background: url('/static/images/minishop/bj-tuan.png');
+    min-height: 100%;
+    .cmsBox {
+        margin: 0 auto;
+        margin-top: .05rem;
+        width: 0 auto;
+        border-radius: .025rem;
+    }
+    .cmsHomePic {
+        width: 3.5rem;
+        height: 1.83rem;
+        padding-top: .56rem;
+        position: relative;
+        background: #fff;
+        &:before,
+        &:after {
+            content: ' ';
+            width: .16rem;
+            height: .16rem;
+            position: absolute;
+            top: .05rem;
+            background: url('/static/images/minishop/ding.png');
+            background-size: 100%;
+        }
+        &:before {
+            left: .05rem;
+        }
+        &:after {
+            right: .05rem;
+        }
+        .cmsHomeLevel {
+            width: auto;
+            padding: 0 13px;
+            padding-top: .05rem;
+            text-align: center;
+            font-size: 0;
+            position: absolute;
+            top: .2rem;
+            left: 0;
+            figure {
+                width: .175rem;
+                height: .145rem;
+                margin: 0 auto;
+                img {
+                    display: block;
+                }
+            }
+            h4 {
+                font-size: .15rem;
+                line-height: 1;
+                margin: .03rem 0 .05rem;
+                color: #f99939;
+                background-image: -webkit-linear-gradient(top, #f8bc27, #f99939);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+            span {
+                font-size: .12rem;
+                color: #808080;
+                line-height: 1;
+                text-decoration: underline;
+            }
+        }
+        .cmsHomeUser {
+            text-align: center;
+            color: #333;
+            figure {
+                width: .665rem;
+                height: .665rem;
+                margin: 0 auto;
+                border-radius: 50%;
+                overflow: hidden;
+            }
+            h4 {
+                font-size: .15rem;
+            }
+            span {
+                font-size: .12rem;
+                padding: 0 .025rem;
+                border: 1px solid #333333;
+            }
+        }
+        .cmsHomeLogOff {
+            position: absolute;
+            top: .3rem;
+            right: .1rem;
+            font-size: 0;
+            i {
+                margin: 0 .1rem;
+                &:before {
+                    font-size: 21.5px;
+                    color: #b3b3b3;
+                }
+                &:first-child {
+                    position: relative;
+                    &:after {
+                        content: attr(data-numb);
+                        min-width: 8px;
+                        line-height: 16px;
+                        border-radius: 8px;
+                        font-size: 0.12rem;
+                        color: #ffffff;
+                        text-align: center;
+                        background: #ed1319;
+                        position: absolute;
+                        top: -.1rem;
+                        left: 56%;
+                        padding: 0 4px;
+                    }
+                }
+            }
+        }
+        .cmsHomeHeadMsgBox {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 20px;
+            font-size: 0;
+            text-align: center;
+            @keyframes msgIn {
+                from {
+                    transform: translateY(-10px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes msgOut {
+                from {
+                    opacity: 1;
+                }
+                to {
+                    opacity: 0;
+                }
+            }
+            .cmsHomeHeadMsg {
+                width: auto;
+                height: 100%;
+                display: none;
+                line-height: 20px;
+                border-radius: 10px;
+                background: #4c4c4c;
+                font-size: 0;
+                .cmsHomeHeadMsgPic {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    float: left;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                .cmsHomeHeadMsgTxt {
+                    width: auto;
+                    margin-left: 5px;
+                    margin-right: 10px;
+                    height: 20px;
+                    display: inline-block;
+                    color: #ffffff;
+                    font-size: 12px;
+                    span {
+                        height: 20px;
+                        color: #f00;
+                    }
+                }
+            }
+        }
+    }
+    .cmsHomePrice {
+        width: 3.5rem;
+        height: .69rem;
+        padding: .11rem 0;
+        position: relative;
+        background: #fff;
+        &:before,
+        &:after {
+            content: ' ';
+            width: .045rem;
+            height: .21rem;
+            position: absolute;
+            top: -.13rem;
+            background: url('/static/images/minishop/sheng.png');
+            background-size: 100%;
+        }
+        &:before {
+            left: .09rem;
+        }
+        &:after {
+            right: .09rem;
+        }
+        .iconfont {
+            border-radius: 50%;
+            padding: .015rem;
+            margin-right: .02rem;
+            &.bgffc14a {
+                background: #ffc14a;
+            }
+            &.bgff6594 {
+                background: #ff6594;
+            }
+        }
+        .weui-flex__item {
+            color: #808080;
+            position: relative;
+            >p {
+                line-height: 1;
+                text-align: center;
+                width: 100%;
+                &:first-child {
+                    font-size: .13rem;
+                }
+                &:last-child {
+                    margin-top: 10px;
+                    font-size: .2rem;
+                }
+            }
+            &:first-child {
+                border-right: 2px solid #e6e6e6;
+                p:first-child {
+                    i:before {
+                        color: #ffc14a;
+                    }
+                }
+                p:last-child {
+                    color: #ff902d;
+                }
+            }
+            &:last-child {
+                p:first-child {
+                    i:before {
+                        color: #ff6594;
+                    }
+                }
+                p:last-child {
+                    color: #ff586c;
+                }
+            }
+        }
+    }
+    .cmsHomeMsg {
+        width: 3.65rem;
+        height: .28rem;
+        background: #b8c7cb;
+        border-radius: .14rem;
+        position: relative;
+        .cmsHomeMsgInfo {
+            width: .28rem;
+            height: .28rem;
+            background: url('/static/images/minishop/xx.png');
+            background-size: 100%;
+            float: left;
+            position: relative;
+            &:before {
+                content: attr(data-numb);
+                width: .15rem;
+                height: .15rem;
+                line-height: .15rem;
+                border-radius: 50%;
+                font-size: .1rem;
+                color: #ffffff;
+                text-align: center;
+                background: #ed1319;
+                position: absolute;
+                right: -.075rem;
+                top: -.025rem;
+            }
+        }
+        .cmsHomeMsgText {
+            width: 2.63rem;
+            height: .28rem;
+            line-height: .28rem;
+            font-size: .12rem;
+            color: #ffffff;
+            position: absolute;
+            left: .5rem;
+            overflow: hidden;
+            .cmsHomeMsgList {
+                width: auto;
+                display: inline-block;
+                padding-left: 100%;
+                white-space: nowrap;
+                position: relative;
+                animation: marque-anim 12s infinite linear;
+                li {
+                    height: .28rem;
+                    line-height: .28rem;
+                    margin-right: .4rem;
+                    display: inline-block;
+                    white-space: nowrap;
+                    span {
+                        height: .28rem;
+                        line-height: .28rem;
+                        color: #ff0029;
+                    }
+                }
+            }
+            @keyframes marque-anim {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(-100%);
+                }
+            }
+        }
+        .cmsHomeMsgMore {
+            height: .28rem;
+            line-height: .28rem;
+            font-size: .12rem;
+            color: #fff;
+            text-decoration: underline;
+            position: absolute;
+            right: .12rem;
+        }
+    }
+    .cmsHomeGridsBox {
+        .swiper-container {
+            height: auto;
+            padding: 0 .2625rem;
+            .swiper-wrapper {
+                margin: 0 auto;
+                .swiper-slide {
+                    width: 3.225rem;
+                    &:before,
+                    &:after {
+                        display: none;
+                    }
+                    .weui-grid {
+                        width: .9rem;
+                        height: .9rem;
+                        margin: .115rem .0875rem;
+                        padding: 0;
+                        position: relative;
+                        &:before,
+                        &:after {
+                            display: none;
+                        }
+                        figure {
+                            width: .9rem;
+                            height: .9rem;
+                            img {
+                                width: 100%;
+                                height: 100%;
+                            }
+                        }
+                        .weui-grid__label {
+                            width: 100%;
+                            text-align: center;
+                            font-size: .145rem;
+                            color: #ffffff;
+                            position: absolute;
+                            bottom: .1rem;
+                        }
+                    }
+                }
+            }
+        }
+        .swiper-button-prev,
+        .swiper-button-next {
+            width: .2625rem;
+            height: .525rem;
+            top: calc(50% - .2625rem);
+            margin-top: 0;
+            background-size: .14rem .26rem;
+        }
+        .swiper-button-prev {
+            left: .05rem;
+        }
+        .swiper-button-next {
+            right: .05rem;
+        }
+        .swiper-button-disabled {
+            display: none;
+        }
+    }
+    .cmsHomeNews {
+        width: 3.655rem;
+        height: 1.05rem;
+        margin-top: .08rem;
+        figure {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}

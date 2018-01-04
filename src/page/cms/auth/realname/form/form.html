@@ -1,0 +1,90 @@
+<app-container class="realform-container">
+    <vue-form :state="formstate" @submit.prevent="submitInfo">
+
+        <section class="realform-bd">
+            <!-- 真实姓名 -->
+            <validate class="weui-cell" tag="div" style="background:#fff;">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">真实姓名</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请如实填写" name="realName" maxlength="20" v-model="userInfo.realName" required>
+                </div>
+            </validate>
+            <transition name="fadeUp">
+                <field-messages name="realName" show="$submitted" class="text-danger  error-tip">
+                    <div slot="required" v-show="formstate.realName && formstate.realName.$invalid">
+                        请填写真实姓名
+                    </div>
+                </field-messages>
+            </transition>
+            <!-- 证件类型 -->
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">证件类型</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="选择证件类型" value="身份证" readonly>
+                </div>
+            </div>
+            <!-- 证件号码 -->
+            <validate class="weui-cell" tag="div">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">证件号码</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请填写证件号码" maxlength="18" name="idcard" v-model="userInfo.idCard" required
+                        check-card>
+                </div>
+            </validate>
+            <transition name="fadeUp">
+                <field-messages name="idcard" show="$submitted" class="text-danger  error-tip">
+                    <div slot="required" v-show="formstate.idcard && formstate.idcard.$invalid">
+                        请填写证件号码
+                    </div>
+                    <div slot="check-card" v-show="formstate.idcard && formstate.idcard.$invalid">
+                        证件号码格式不对
+                    </div>
+                </field-messages>
+            </transition>
+            <!-- 手持身份证照片 -->
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">手持身份证照片</label>
+                </div>
+                <div class="weui-cell__bd"></div>
+            </div>
+            <div class="realform-upload">
+                <input type="file" style="display:none;" ref="fileBtn" @change="changeFile" accept="image/*">
+                <div class="upload-img">
+                    <div class="photo-img" @click="selectFile"></div>
+                    <div class="img-mode" v-show="upImg"></div>
+                    <img :src="upImg" alt="" v-show="upImg">
+                    <span class="photo-img-del" v-if="upImg" @click="removeFile"></span>
+                </div>
+            </div>
+            <!-- 示例 -->
+            <div class="realform-ex">
+                <div class="ex-hd">示例</div>
+                <div class="ex-bd ex-img"></div>
+                <div class="ex-ft">
+                    必须本人手持身份证，保持身份证上信息清晰可见[样例见左图]
+                </div>
+            </div>
+        </section>
+
+        <footer v-show="false">
+            <button type="submit" ref="submitBtn">
+                提交审核
+            </button>
+        </footer>
+
+    </vue-form>
+
+    <footer class="realform-ft" ref="footerRef" :style="footerStyle" slot="footer">
+        <button type="button" @click="$refs.submitBtn.click()">
+            提交审核
+        </button>
+    </footer>
+
+</app-container>

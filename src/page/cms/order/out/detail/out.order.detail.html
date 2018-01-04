@@ -1,0 +1,128 @@
+<div class="cmsorder-content weui-flex flex-v">
+    <div class="cmsorder-detail">
+        <!-- 自己接单 -->
+        <div v-if="orderState(1)" class="cmsorder-title">
+            <figure>
+                <img src="/static/images/newshop/wancheng.png" alt=""> </figure>
+            <span class="title-title">库存充足，订单完成</span>
+            <!-- <div v-if="curShopBuyDisct!=100" class="title-changed">商品进货价由订单生成时
+                <span class="font-red">{{orderInfo.purchasePrice*orderInfo.shopBuyDisct/100|localMoney}}</span>修改为
+                <span class="font-red">{{orderInfo.purchasePrice*curShopBuyDisct/100|localMoney}}</span>您已完成进货
+            </div>
+            <div v-else class="title-desc">完成此订单获得
+                <span>{{incomeTotal1()|localMoney}}</span>
+                利润</div> -->
+        </div>
+        <!-- 上级接单 -->
+        <div v-else-if="orderState(2)" class="cmsorder-title">
+            <figure>
+                <img src="/static/images/newshop/wancheng.png" alt=""> </figure>
+            <span class="title-title">上级微店订单完成</span>
+            <!-- <div class="title-desc">订单完成,您已获得
+                <span>{{commi.commiTotalMoney|localMoney }}</span> 返利</div> -->
+        </div>
+        <!-- 等待自己进货 -->
+        <div v-else-if="orderState(3)" class="cmsorder-title">
+            <figure>
+                <img src="/static/images/newshop/paytime.png" alt=""> </figure>
+            <span class="title-title">剩余进货时间</span>
+            <div class="timer" :data="orderTimer">
+                <span>{{orderTimer.int_hour}}</span>:
+                <span>{{orderTimer.int_minute}}</span>:
+                <span>{{orderTimer.int_second}}</span>
+            </div>
+            <!-- <div v-if="curShopBuyDisct!=100" class="title-changed">商品进货价由订单生成时
+                <span class="font-red">{{orderInfo.purchasePrice*orderInfo.shopBuyDisct/100|localMoney}}</span>修改为
+                <span class="font-red">{{orderInfo.purchasePrice*orderInfo.shopBuyDisct/100*curShopBuyDisct/100|localMoney}}</span>,请选择性进货！</div>
+            <div v-else class="title-desc">完成此订单获得
+                <span>{{((orderInfo.shopSaleDisct-orderInfo.shopBuyDisct)*orderInfo.punishDisct/100-orderInfo.shopBuyDisct)*orderInfo.number*orderInfo.purchasePrice/100|localMoney
+                    }}
+                </span> 利润</div> -->
+        </div>
+        <!-- 等待上级进货 -->
+        <div v-else-if="orderState(4)" class="cmsorder-title">
+            <figure>
+                <img src="/static/images/newshop/paytime.png" alt=""> </figure>
+            <span class="title-title">等待上级微店完成订单</span>
+            <!-- <div class="title-desc">订单完成,您将获得
+                <span>{{commi.commiTotalMoney|localMoney }}</span> 返利</div> -->
+        </div>
+
+        <div class="cmsorder-goods">
+            <div class="goods-shop-icon">
+                <i :class="{'iconfont':true,'icon-shop':orderInfo.userVipGrade>0,'icon-ID':orderInfo.userVipGrade==0}"></i>
+                <span>{{orderInfo.buyerName}}</span>
+            </div>
+            <!-- <div class="weui-flex logis">
+                <span style="color:green">已发货</span>
+                <span class="flex-1">物流状态</span>
+            </div> -->
+            <div class="goods-item weui-flex" @click="toGoodsDetail(goodsInfo.goodsId)">
+                <img :src="goodsInfo.coverImg">
+                <div class="order-goods-right flex-1">
+                    <div class="goods-title weui-flex ">
+                        <span>{{ goodsInfo.goodsName }}</span>
+                        <span class="title-price flex-1">{{ goodsPrice()|localMoney
+                            }}
+                        </span>
+                    </div>
+                    <span class="number">X{{ orderInfo.number }}</span>
+                    <div v-if="orderState(3)" class="weui-flex sigle-footer">
+                        <span class="goods-sigle">库存不足</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="money-about">
+            <div class="money-about-item">
+                <span>售价总计</span>
+                <span>{{saleTotal()|localMoney}}</span>
+            </div>
+            <!-- <div v-if="buyTotal()" class="money-about-item">
+                <span>进货成本</span>
+                <span>{{buyTotal()|localMoney}}</span>
+            </div> -->
+
+
+            <div v-if="isTichengOrder()">
+                <!-- <div v-if="incomeTotal()" class="money-about-item">
+                    <span>利润</span>
+                    <span>{{incomeTotal()|localMoney}}
+                    </span>
+                </div> -->
+                <div class="money-about-item">
+                    <span>返利比例</span>
+                    <span>{{commi.commiDisct}}%</span>
+                </div>
+                <div v-if="commi.punishDisct&&commi.punishDisct!=100" class="money-about-item">
+                    <span>锁定收益折扣</span>
+                    <span>{{commi.punishDisct}}%</span>
+                </div>
+                <!-- <div class="money-about-item">
+                    <span>返利</span>
+                    <span>{{commi.commiTotalMoney|localMoney }}</span>
+                </div> -->
+            </div>
+            <div v-else-if="orderInfo.punishDisct&&orderInfo.punishDisct!=100" class="money-about-item">
+                <span>锁定收益折扣</span>
+                <span>{{orderInfo.punishDisct}}%</span>
+            </div>
+                <!-- <div v-if="incomeTotal()" class="money-about-item">
+                    <span>利润</span>
+                    <span>{{incomeTotal()|localMoney}}
+                    </span>
+                </div> -->
+
+        </div>
+
+        <div class="order-info">
+            <div>订单号:{{orderInfo.orderNo}}</div>
+            <div>创建时间:{{orderInfo.createAt}}</div>
+        </div>
+    </div>
+    <div v-if="orderState(3)" class="footer-button weui-flex">
+        <div @click="refuse(orderInfo.orderId)">拒绝备货</div>
+        <div @click="stockNow(orderInfo.orderId)" class="flex">立即进货</div>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="wybc-address-dialog"  ref="dialogRef">
+    <div class="weui-mask" @click="closeDialog()" v-if="showDialogMode"></div>
+    <!-- @click="close()" -->
+    <transition name="fadeAddressDialogUp">
+        <div class="address-dialog-content" v-if="showAddressDiaogContent">
+            <!-- 地址详情 -->
+            <div v-show="!showAddAddress">
+                <header class="weui-cell">
+                    <div class="weui-cell__hd"></div>
+                    <div class="weui-cell__bd text-center">选择收货地址</div>
+                    <div class="weui-cell__ft" @click="closeDialog()">
+                        <i class="weui-icon-cancel" style="margin-right: -3px;"></i>
+                    </div>
+                </header>
+                <section class="address-list weui-cells_checkbox">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="address-list-item weui-cell weui-check__label" v-for="item in addressList">
+                                    <div class="weui-cell__hd" @click="selectAddress(item)">
+                                        <input type="checkbox" name="checkbox" class="weui-check" :checked="item._active">
+                                        <i class="weui-icon-checked"></i>
+                                    </div>
+                                    <div class="weui-cell__bd" @click="selectAddress(item)">
+                                        <div class="address-detial-name text-ellipsis">{{item.name}}</div>
+                                        <div class="address-detial text-ellipsis" v-if="item.addressInfo">收货地址：
+                                            <span class="address-info">
+                                                <span>{{item.addressInfo.province.na}}</span>
+                                                <span>{{item.addressInfo.city.na}}</span>
+                                                <span v-if="item.addressInfo.district">{{item.addressInfo.district.na}}</span>
+                                                <span>{{item.address}}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <!-- 修改地址 -->
+                                    <div class="weui-cell__ft" @click="toUpdate(item)">
+                                        <div class="address-default-tip" v-if="item.isDefault">默认</div>
+                                        <i class="icon iconfont icon-icon-yxj-edit"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-scrollbar"></div>
+                    </div>
+
+                </section>
+                <footer class="weui-cell address-dialog-footer" @click="toCreate()">
+                    <div class="weui-cell__bd">
+                        <i class="wybc-icon-min  wybc-icon-plus"></i>
+                        新增地址
+                    </div>
+                    <div class="weui-cell__ft">
+                        <i class="icon iconfont icon-xiangyoujiantou"></i>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </transition>
+</div>

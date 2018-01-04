@@ -1,0 +1,43 @@
+<div id="mask" v-if="isShow">
+    <div class="mask">
+        <section>
+            <div class="flex">
+
+                <div class="flex_name">
+                    <figure style=" height: 0.36rem;">
+                        <img :src="goods.coverImg">
+                    </figure>
+                    <div class="price">
+                        <span>{{goods.goodsName}}</span>
+                        <p v-if="goods.consuType==2">{{goods.moneyPrice | localMoney}}</p>
+                        <!-- <p v-if="goods.consuType==3">style="color:#ee893e;"{{goods.moneyPrice | localMoney}}</p> -->
+                    </div>
+
+                </div>
+                <div id="close" @click="onClose">
+                    <i class="iconfont icon-iconfontclose"></i>
+                </div>
+            </div>
+            <div class="flex">
+                <div class="flex_item">
+                    <div>
+                        <p>购买数量</p>
+                        <p v-if="min.buy==0">{{min.flag?"首次升级":'最低'}}进货金额:
+                            <span>{{min.leastBuy | localMoney}}</span>
+                        </p>
+                    </div>
+                    <div id="countControl">
+                        <span v-if="num==1||!num" style="background:#f2f2f2;color:#cccccc;">-</span>
+                        <span @click="decrease()" v-else>-</span>
+                        <input type="number" v-model="num" @keyup="onNum">
+                        <span @click="increase()">+</span>
+                    </div>
+                </div>
+            </div>
+            <div id="next" @click="nextStep()" v-show="min.buy!=0">下一步</div>
+            <div id="next" v-show="min.buy==0&&min.leastBuy>goods.moneyPrice*num" style="background-color:#ccc;">未达到最低进货金额</div>
+            <div id="next" @click="nextStep()" v-show="min.buy==0&&min.leastBuy<= goods.moneyPrice*num">下一步</div>
+            <!-- <div id="next" @click="nextStep()" v-show="min.buy==0&&goods.isLimitByUserOrder">下一步</div> -->
+    </section>
+</div>
+</div>

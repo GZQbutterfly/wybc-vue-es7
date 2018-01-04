@@ -1,0 +1,26 @@
+<div class="app-dialog">
+    <div class="weui-mask"></div>
+    <transition name="popup">
+        <div class="pay-container">
+            <header class="pay-title">
+                支付方式
+                <div class="pay-close" @click="close()">
+                    <i class="icon iconfont icon-cuowu"></i>
+                </div>
+            </header>
+            <section class="pay-content">
+                <div class="pay-item" v-for="item in listPays" @click="select(item)">
+                    <div class="pay-item-hd">
+                       <i class="icon iconfont" :class="item.icon"></i>
+                    </div>
+                    <div class="pay-item-bd">
+                        {{item.name}}
+                    </div>
+                </div>
+            </section>
+            <footer class="pay-footer">
+
+            </footer>
+        </div>
+    </transition>
+</div>
