@@ -20,6 +20,13 @@ export default ()=>{
                 imgActSrc: 'static/images/newshop/icon2.png'
             },
             {
+                path: '/information',
+                name: 'information',
+                title: '资讯',
+                imgDefSrc: 'static/images/newshop/newspaper.png',
+                imgActSrc: 'static/images/newshop/newspaper3.png'
+            },
+            {
                 path: '/shop_car',
                 name: 'shop_car',
                 title: '购物车',
@@ -35,11 +42,5 @@ export default ()=>{
                 imgActSrc: 'static/images/newshop/man-user2.png'
             }
         ],
-        // getWdInfo(data) {
-        //     return axios.post("api/q_wdInfo_by_userId", data);
-        // },
-        // records(data){
-        //     return axios.post("api/a_shopId_by_openId", data);
-        // }
     }
 };

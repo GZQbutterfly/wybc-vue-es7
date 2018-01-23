@@ -1,11 +1,15 @@
 <!-- 提交订单 -->
 <div class="order-submitting-container">
-    <!-- <div class="weui-flex flex-satisfy">
+    <div class="flex-satisfy">
         <div class="weui-flex__item">
-            <i class="iconfont icon-tanhao"></i>
-            <b>校内地址10元包邮，校外地址60元包邮！</b>
+            <i class="iconfont icon-remind red"></i>
+            <b>校外区域未满<span class="red">{{dissatisfyPrice | localMoney}}元</span>收取配送费
+               <span class="red">{{shipFee | localMoney}}元</span>
+            </b>
+            <br />
         </div>
-    </div> -->
+        <p class="red">(校外偏远地区订单运费另算)</p>
+    </div>
     <!-- <pull-refresh> -->
     <!--  订单详情界面 -->
     <div class="order-detail-content">
@@ -35,12 +39,14 @@
                             <span class="phone-fl-right">{{orderAddress.phone}}</span>
                         </div>
                     </div>
-                    <div class="address-detail text-ellipsis" >
+                    <div class="address-detail text-ellipsis">
                         收货地址：
                         <span class="address-info" v-if="orderAddress.addressInfo">
-                            <span>{{orderAddress.addressInfo.province.na}}</span>
-                            <span>{{orderAddress.addressInfo.city.na}}</span>
-                            <span>{{orderAddress.addressInfo.district.na}}</span>
+                            <span v-if="orderAddress.addressInfo.campus">{{orderAddress.addressInfo.campus}}</span>
+                            <span v-if="orderAddress.addressInfo.dormitory">{{orderAddress.addressInfo.dormitory}}</span>
+                            <span v-if="orderAddress.addressInfo.province">{{orderAddress.addressInfo.province.na}}</span>
+                            <span v-if="orderAddress.addressInfo.city">{{orderAddress.addressInfo.city.na}}</span>
+                            <span v-if="orderAddress.addressInfo.district">{{orderAddress.addressInfo.district.na}}</span>
                             <span>{{orderAddress.address}}</span>
                         </span>
                     </div>
@@ -76,7 +82,7 @@
                         <i class="icon iconfont icon-shop"></i>
                         <span>{{item.shopName}}</span>
                     </div>
-                    <div v-for="v in item.shopCarts">
+                    <div v-for="(v,i) in item.shopCarts">
                         <div class="weui-cell order-box-detail">
                             <div class="weui-cell__hd">
                                 <img :src="v.coverImg" alt="商品图片" class="order-img">
@@ -90,9 +96,9 @@
                                 <div class="order-num-tip" :class="{'label-money': !v.number}">x{{v.number}}</div>
                             </div>
                         </div>
+                        <div class="bg-white-5" v-if="item.shopCarts&&item.shopCarts.length-1>i"></div>
                         <!-- 实物创建配送方式 -->
-                        <div class="bg-white" v-if="entityModel">
-                            <!-- 配送方式 -->
+                        <!-- <div class="bg-white" v-if="entityModel">
                             <div class="weui-cell">
                                 <div class="weui-cell__bd">
                                     <div>配送方式</div>
@@ -103,7 +109,7 @@
                                     <div class="order-ps-tip">快递发货</div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -134,7 +140,7 @@
                 <!-- 配送费 -->
                 <div class="weui-cell">
                     <div class="weui-cell__bd">配送费</div>
-                    <div class="weui-cell__ft order-text">{{ orderTotal.transportPrice | localMoney}}</div>
+                    <div class="weui-cell__ft order-text">{{  noShipFee ? "0" : shipFee | localMoney}}</div>
                 </div>
                 <!-- 分销折扣 -->
                 <div class="weui-cell" v-if="orderTotal.discount">
@@ -173,7 +179,8 @@
             <span v-if="minimumConsumption>=0 && minimumConsumption>orderTotal.pay" class="min_cost">最低消费 {{ minimumConsumption |localMoney}}</span>
         </div>
         <div class="weui-cell__ft">
-            <button :class="['weui-btn_mini', 'weui-btn',minimumConsumption>=0 && minimumConsumption>orderTotal.pay?'button_disable':'button_able']" :disabled="minimumConsumption>orderTotal.pay" type="button" @click="submitOrder()">提交订单</button>
+            <button :class="['weui-btn_mini', 'weui-btn',minimumConsumption>=0 && minimumConsumption>orderTotal.pay?'button_disable':'button_able']"
+                :disabled="minimumConsumption>orderTotal.pay" type="button" @click="submitOrder()">提交订单</button>
         </div>
     </footer>
 

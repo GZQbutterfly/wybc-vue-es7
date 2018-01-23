@@ -1,10 +1,8 @@
 import Vue from 'vue';
 import { merge } from 'lodash';
-
 import { wxAppid, getAuthUser } from 'common.env';
-
-
 import { PayComponent } from './pay.component';
+import { WxAuth } from '../auth/wx';
 
 //
 const wx = require('weixin-js-sdk');
@@ -115,46 +113,44 @@ export class WxPay  {
      * @param payType 给与时不用dialog选择支付类型
      * @return  {boolean}  true 代表已支付， false 代表未支付
      */
-    pay(url, data, payType) {
+    async pay(url, data, payType) {
         let _self = this;
         _self._$payData.openid = this._openid;
         _self._$payData.appid = appid;
-        return new Promise((res, rej) => {
-            let _fn = () => {
-                _self.q(url, merge(data, _self._$payData, true)).then((response) => {
-                    let _data = response.data;
-                    if (!_data.errorCode) {
-                        _self.chooseWXPAY(_data).then((result) => {
-                            res(result);
-                        }).catch((result) => {
-                            res(result);
-                        });
-                    }else{
-                        _self._$state.$dialog({
-                            dialogObj:{
-                                title: '提示',
-                                content: _data.msg || '服务异常！',
-                                type: 'error',
-                                mainBtn: '知道啦',
-                                mainFn() { }
-                            }
-                        });
-                        res(null);
-                    }
-                });
-            }
-            if (payType) {
-                _fn();
+        console.log('支付pay', url, data);
+        if(!this._openid){
+            new WxAuth(this._$vm);
+            return null;
+        }
+        console.log('支付pay', url, data);
+        let _fn = async () => {
+            let _result = (await _self.q(url, merge(data, _self._$payData))).data;
+            if (!_result.errorCode) {
+                return  (await _self.chooseWXPAY(_result));
             } else {
-                _self.dialog().then((item) => {
-                    if (item) {
-                        _fn();
-                    } else {
-                        res(false);
+                _self._$state.$dialog({
+                    dialogObj: {
+                        title: '提示',
+                        content: _result.msg || '服务异常！',
+                        type: 'error',
+                        mainBtn: '知道啦',
+                        mainFn() { }
                     }
                 });
+                return null;
             }
-        });
+        };      
+        if (payType) {
+           return _fn();
+        } else {
+            let item = await _self.dialog();
+            if (item) {
+               return  _fn();
+            } else {
+                return false;
+            }
+        }
+        return;
     }
     chooseWXPAY(_data) {
         return new Promise((res) => {

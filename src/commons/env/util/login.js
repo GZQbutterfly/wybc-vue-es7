@@ -62,7 +62,7 @@ export function cleanLocalUserInfo() {
  * 返回授权环境的user
  */
 export function getAuthUser() {
-    return JSON.parse(localStorage.getItem('_authUser') || null) || getLocalUserInfo();
+    return JSON.parse(localStorage.getItem('_authUser') || null) || {};
 }
 
 export function setAuthUser(authUser) {

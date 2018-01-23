@@ -1,0 +1,19 @@
+<div>
+
+
+    <!-- <card-box cardType="pickup"></card-box> -->
+
+    <!-- <pull-refresh ref="my_scroller" :refresh="refresh" :infinite="infinite">
+        <div class="result_list">
+            <card-box cardType="pickup" v-for="(item, index) in list" :key="index"></card-box>
+        </div>
+    </pull-refresh> -->
+
+
+    <minirefresh :refresh="refresh" :infinite="infinite">
+        <div>
+            <card-box cardType="pickup" v-for="(item, index) in list" :key="index"></card-box>
+        </div>
+    </minirefresh>
+
+</div>

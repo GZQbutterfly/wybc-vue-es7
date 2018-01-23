@@ -111,7 +111,7 @@ figure{
     }
 }
 
-#userinfo{
+.userinfo_cms{
     .user {
         background: #7ecc44;
         // background: url("/static/images/newshop/bg1-big.jpg") repeat-x center top #f2f2f2;
@@ -168,60 +168,40 @@ figure{
         }
     }
 
-    .line{
-        background: #FFF;
-    }
-    .line-points {
-        padding: .11rem;
-        text-align: center;
-        margin-bottom: .06rem;
-        .weui-flex__item {
-            .user-pic-money{
-                width:.4rem;
-                height:.4rem;
-                margin: 0 auto;
-            }
-            h4 {
-                @include lineCenter(.20rem);
-                font-size: .12rem;
-                color: #808080;
-            }
-            p {
-                @include lineCenter(.16rem);
-                font-size: .15rem;
-                color: #333;
-            }
-        }
-    }
-    .line-orders {
+    .weui-flex {
+        background: #fff;
         .weui-flex__item {
             text-align: center;
             padding-top: .2rem;
-            position: relative;
-            &:last-child:before{
-                content: '';
-                position: absolute;
-                width: .01rem;
-                height: 80%;
-                background: #e6e6e6;
-                top: 10%;
-                left: 0;
+            /*绘制箭头*/
+            &:last-child{
+                position: relative;
+                &:before,
+                &:after{
+                    content: '';
+                    position: absolute;
+                }
+                &:before{
+                    width: .01rem;
+                    height: 80%;
+                    background: #e6e6e6;
+                    top: 10%;
+                    left: 0;
+                }
+                &:after{
+                    background: #FFF;
+                    width: .1rem;
+                    height: .1rem;
+                    transform:rotate(-45deg);
+                    color: #FFF;
+                    border: 1px solid;
+                    border-right-color: #DDD;
+                    border-bottom-color: #DDD;
+                    top: 43%;
+                    left: -.06rem;
+                }
             }
-            &:last-child:after{
-                content: '';
-                background: #FFF;
-                position: absolute;
-                width: .1rem;
-                height: .1rem;
-                transform:rotate(-45deg);
-                color: #FFF;
-                border: 1px solid;
-                border-right-color: #DDD;
-                border-bottom-color: #DDD;
-                top: 43%;
-                left: -.06rem;
-            }
-            .user-pic-order {
+            figure {
                 width: .25rem;
                 height: .2rem;
                 margin: 0 auto;
@@ -245,18 +225,31 @@ figure{
                 }
             }
             p {
-                @include lineCenter(.4rem);
+                height: .4rem;
+                line-height: .4rem;
                 font-size: .12rem;
                 color: #333;
             }
         }
     }
-    .line-items{
+    .weui-cells{
         margin-top: 0;
-        .line-item{
+        .weui-cell{
             padding: 0.15rem 0.15rem;
             font-size: .15rem;
             color: #333;
+            &:before{
+                left: 0;
+            }
+            &.userinfo_pic{
+                padding: 2px 2px 0!important;
+                background: #f2f2f2;
+            }
+            .weui-cell__bd{
+                img{
+                    display: block;
+                }
+            }
             .weui-cell__ft:after{
                 position: relative;
                 top: -0.02rem;

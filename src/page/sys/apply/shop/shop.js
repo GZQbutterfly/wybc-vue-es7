@@ -4,13 +4,13 @@ import  BaseVue  from 'base.vue';
 import { isEmpty } from 'lodash';
 import { getLocalUserInfo, toCMS, isNotLogin, toLogin } from 'common.env';
 import { ApplyShopInvitecode } from '../invitecode/invitecode';
-
-
 import shopService from './shop.service';
 import './shop.scss';
+
 @Component({
     template: require('./shop.html'),
 })
+
 export class ApplyShop extends BaseVue {
     formstate = {};
 
@@ -19,6 +19,7 @@ export class ApplyShop extends BaseVue {
         sex: '',
         wdName: '',
         school: '',
+        campusId: '',
         wxNum: '',
         upUserId: '',//upperUSERID
         inviteId: '',//upUserId
@@ -33,7 +34,6 @@ export class ApplyShop extends BaseVue {
         phone: '',
         leave: '',
     }
-    schoolList = [];
     rule_checked = true;
     //是否开店成功
     registerSuccess = false;
@@ -58,14 +58,23 @@ export class ApplyShop extends BaseVue {
         }
         this.$nextTick(() => {
             document.title = "申请开店";
-            _self.isLoginCheckHasWd();
+            _self.checking();
         })
     }
 
-    isLoginCheckHasWd() {
+    checking() {
         let _self = this;
         let _incode = this.$route.query.incode;
+        let _school = this.$route.query.school;
+        let _campusId = this.$route.query.campusId;
         let _auto = this.$route.query.auto;
+        if(!_incode || !_school || !_campusId){
+            //无邀请码获学校名  到开店首页
+            _self.errorNoSchoolOrIncode();
+            return;
+        }
+        _self.shopInfo.school = _school;
+        _self.shopInfo.campusId = _campusId;
         if (isNotLogin()) {
             //to login
             let _url = _incode ? ('?incode=' + _incode) : '';
@@ -75,9 +84,28 @@ export class ApplyShop extends BaseVue {
             //check hasWd
             this.queryUserHasShop(() => {
                 _self.queryCodeInfo();
-                _self.queryAllSchool();
             })
         }
+    }
+
+    /**
+     * 未填写学校名称 或者 无邀请码
+     */
+    errorNoSchoolOrIncode() {
+        let _self = this;
+        _self._$dialog({
+            dialogObj: {
+                title: '提示',
+                type: 'error',
+                content: '系统错误',
+                mainBtn: '确定',
+                assistFn() {
+                },
+                mainFn() {
+                    _self.$router.push('apply_shop_campaign');
+                }
+            }
+        });
     }
 
     /**
@@ -114,17 +142,6 @@ export class ApplyShop extends BaseVue {
             } else {
                 cb && cb();
             }
-        });
-    }
-
-    /**
-     * 查询所有学校的名称
-     */
-    queryAllSchool() {
-        let _self = this;
-        this._$service.queryAllSchool().then((res) => {
-            console.log('所有学校名称', res);
-            _self.schoolList = res.data.schoolList;
         });
     }
 

@@ -50,7 +50,7 @@ export class MyTeam extends BaseVue {
                         content: '服务器错误,请稍后再试！',
                         mainBtn: '返回首页',
                         mainFn() {
-                            _self.$router.push('cmsHome');
+                            _self.$router.push('cms_home');
                         }
                     }
                 });

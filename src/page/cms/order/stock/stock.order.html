@@ -1,5 +1,5 @@
 <div class="user-orders weui-flex flex-v">
-	<multitab :tabs="tabs" @on-change="onTabChange" :index="tabIndex"></multitab>
+	<multitab :tabs="tabs" @on-change="onTabChange" :index="tabIndex" maxItem="5"></multitab>
 	<div class="order-list-content flex-1">
 		<div v-for="(tab,index) in tabs">
 			<pull-refresh v-show="tabIndex==index" :refresh="refresh" :infinite="infinite">

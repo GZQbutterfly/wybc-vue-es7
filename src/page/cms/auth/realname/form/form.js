@@ -16,6 +16,8 @@ export class RealNameForm extends BaseVue {
     upImg = '';
     footerStyle = { position: 'fixed', bottom: 0 };
     resizeFlag = false;
+    clickFlag = true;//防止多次点击 
+
     _$service;
     mounted() {
         this._$service = service(this.$store);
@@ -74,6 +76,7 @@ export class RealNameForm extends BaseVue {
     submitInfo() {
         // console.log(this.formstate, this.userInfo);
         let _self = this;
+        _self.clickFlag = false;
         this._$service.queryRealName().then((res) => {
             if (res.data.state == 4) {
                 let dialogObj = {
@@ -84,6 +87,7 @@ export class RealNameForm extends BaseVue {
                     assistFn() { },
                     mainFn() {
                         _self.$router.push('cms_home');
+                        _self.clickFlag = true;
                     }
                 };
                 _self.$store.state.$dialog({ dialogObj });
@@ -92,6 +96,7 @@ export class RealNameForm extends BaseVue {
             let _userInfo = this.userInfo;
             let _formstate = this.formstate;
             if (_formstate.$invalid) {
+                _self.clickFlag = true;
                 return;
             }
             if (!_userInfo.file) {
@@ -102,7 +107,9 @@ export class RealNameForm extends BaseVue {
                     mainBtn: '知道啦',
                     type: 'info',
                     assistFn() { },
-                    mainFn() { }
+                    mainFn() { 
+                        _self.clickFlag = true;
+                    }
                 };
                 _self.$store.state.$dialog({ dialogObj });
             } else {
@@ -127,7 +134,9 @@ export class RealNameForm extends BaseVue {
             mainBtn: '知道了',
             type: 'error',
             assistFn() { },
-            mainFn() { }
+            mainFn() {
+                _self.clickFlag = true;
+             }
         };
         _self.$store.state.$dialog({ dialogObj });
     }

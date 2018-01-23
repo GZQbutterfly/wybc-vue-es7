@@ -97,6 +97,10 @@ export default (_store) => {
             let _pay = _state.$pay;
             return _pay.pay('api/order/pay_order', data);
         },
+        /*获取邮费*/
+        getFee(){
+            return q("api/q_delivery_config",{})
+        },
         nowifi(fn) {
             nowifi = fn;
         }

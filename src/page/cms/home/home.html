@@ -9,7 +9,7 @@
         </div>
         <div class="cmsHomeUser">
             <figure>
-                <img :src="user_img" alt="" @load="imgLoad()">
+                <img :src="user_img" alt="" @error="imgError()">
             </figure>
             <h4>{{ shopData.wdName }}</h4>
             <span @click="toAuthPage" v-text="realNameStateList[realNameInfo.data.state]"></span>

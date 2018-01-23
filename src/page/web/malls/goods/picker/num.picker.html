@@ -9,8 +9,8 @@
                     </figure>
                     <div class="price">
                         <span>{{goods.goodsName}}</span>
-                        <p v-if="goods.consuType==2">{{goods.purchasePrice | localMoney}}</p>
-                        <p v-if="goods.consuType==3">{{goods.moneyPrice | localMoney}}</p>
+                        <p v-if="!priceShow">{{goods.moneyPrice | localMoney}}</p>
+                        <p v-if="priceShow">{{total | localMoney}}</p>
                     </div>
 
                 </div>
@@ -21,8 +21,8 @@
                     <div>
                          <!-- style="color:#ee893e;" -->
                         <p>购买数量</p>
-                        <p v-if="!goods.isLimitByUserOrder&&min.buy==0">最低消费金额:<span>{{min.minimumConsumption | localMoney}}</span>
-                        </p>        
+                        <p v-if="!goods.limitByUserOrder&&min.buy==0">最低消费金额:<span>{{min.minimumConsumption | localMoney}}</span>
+                        </p>       
                     </div>
                     <div id="countControl">
                         <span v-if = "num==1||!num" style="background:#f2f2f2;color:#cccccc;">-</span>
@@ -33,9 +33,9 @@
                 </div>
             </div>
             <div id="next" @click="nextStep()" v-show="min.buy!=0">下一步</div>
-            <div id="next" @click="nextStep()" v-show="(min.buy==0&&goods.moneyPrice*num>=min.minimumConsumption)&&!goods.isLimitByUserOrder">下一步</div>
-            <div id="next" v-show="min.buy==0&&goods.moneyPrice*num<min.minimumConsumption&&!goods.isLimitByUserOrder" style="background-color:#ccc;">未达到最低消费金额</div>
-            <div id="next" @click="nextStep()" v-show="min.buy==0&&goods.isLimitByUserOrder">下一步</div>
+            <div id="next" @click="nextStep()" v-show="(min.buy==0&&goods.moneyPrice*num>=min.minimumConsumption)&&!goods.limitByUserOrder">下一步</div>
+            <div id="next" v-show="min.buy==0&&goods.moneyPrice*num<min.minimumConsumption&&!goods.limitByUserOrder" style="background-color:#ccc;">未达到最低消费金额</div>
+            <div id="next" @click="nextStep()" v-show="min.buy==0&&goods.limitByUserOrder">下一步</div>
         </section>
     </div>
 </div>

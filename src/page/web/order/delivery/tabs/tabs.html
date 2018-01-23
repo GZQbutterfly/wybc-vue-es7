@@ -1,0 +1,55 @@
+<!-- <app-container> -->
+
+    <div class="delivery-tabs-container" ref="tabsRef">
+        <header class="delivery-tabs-container_hd" @touchmove="noTouchMove">
+            <div class="tabs-hd weui-flex text-center">
+                <div v-for="(item, index) in tabs" :key="index" class="tab-header-item weui-flex__item" :class="{'tab-active': index === headerIndex}"
+                    @click="swtichTab($event, index)">
+                    <label>{{item.label}}</label>
+                    <span class="weui-badge">1000</span>
+                </div>
+            </div>
+            <div class="tabs-hd_line"></div>
+        </header>
+
+        <section class="delivery-tabs-container_bd">
+                
+            <div class="tabs-bd" >
+                
+                <!-- <rob v-if="robShow" v-show="headerIndex === 0"></rob>
+                <pickup v-if="pickupShow" v-show="headerIndex === 1"></pickup>
+                <delivering v-if="deliveringShow" v-show="headerIndex === 2"></delivering> -->
+
+                <div class="swiper-container" ref="bodyRef">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <rob v-if="robShow"></rob>
+                        </div>
+                        <div class="swiper-slide">
+                            <pickup v-if="pickupShow"></pickup>
+                        </div>
+                        <div class="swiper-slide">
+                            <delivering v-if="deliveringShow"></delivering>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="delivery-tabs-container_ft weui-flex" @touchmove="noTouchMove">
+            <div class="weui-flex__item">
+                <button class="button load-btn">
+                    刷新
+                </button>
+            </div>
+            <button class="button menu-btn" @click="toMenu">
+                <i class="icon iconfont icon-caidan"></i>
+            </button>
+        </footer>
+
+
+        <!-- 左滑出菜单 -->
+        <slideslip-menu v-show="menuShow" v-if="menuFirst" :close="toMenu" :showMenu="menuShow"></slideslip-menu>
+    </div>
+
+<!-- </app-container> -->

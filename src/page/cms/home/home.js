@@ -244,7 +244,7 @@ export class CmsHome extends BaseVue {
             slidesPerColumn: 1,
             observer: true,
             followFinger: false,
-            speed: 800,
+            speed: 400,
             spaceBetween: 30,
             // swipeHandler: '.ttttttttttttttt',//禁止用户滑动行为
             navigation: {
@@ -333,17 +333,10 @@ export class CmsHome extends BaseVue {
         // pageNotAccess();
         this.$router.push('my_income');
     }
-    //错误头像处理
-    imgLoad() {
-        //暂用 根据大小判断 用户头像为640*640 错误头像为120*120 默认头像为175*175
-        if (this.userLogin) {
-            let img = new Image();
-            img.src = this.user_img;
-            if (img.width == 120) {
-                console.log('检测到错误的用户头像,正在替换为默认头像...');
-                this.user_img = '/static/images/pic-login.png';
-            }
-        }
+
+    imgError() {
+        console.log(' ! ! ! ! ! ! ! ! ! ', 'user pic error ...');
+        this.user_img = '/static/images/pic-login.png';
     }
 
     goUrl(linkType, linkTarget, id) {

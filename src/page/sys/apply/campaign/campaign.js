@@ -3,7 +3,7 @@ import { Component } from 'vue-property-decorator';
 import BaseVue  from 'base.vue';
 
 import { isEmpty } from 'lodash';
-import { toCMS, isNotLogin, toLogin } from 'common.env';
+import { toCMS, isNotLogin, toLogin, ossEndPoint } from 'common.env';
 
 import campaignService from './campaign.service';
 
@@ -17,6 +17,18 @@ export class ApplyShopCampaign extends BaseVue {
      _$service;
      _$popup;
      _$dialog;
+
+    data(){
+        let imgList = [];
+        for (let index = 1; index < 15; index++) {
+            let name = ossEndPoint + 'static/guide/sqkd_' + (index<10?('0'+index):index) +'.png';
+            imgList.push(name);
+        }
+        return {
+            imgList:imgList,
+        }
+    }
+
     mounted() {
         let _self = this;
         this._$popup = _self.$store.state.$popup;
@@ -29,6 +41,7 @@ export class ApplyShopCampaign extends BaseVue {
             _self.isLoginCheckWd();
         });
     }
+    
 
     /**
      * isLogin && check hasWd
@@ -83,12 +96,12 @@ export class ApplyShopCampaign extends BaseVue {
         let _self = this;
         if (isNotLogin()) {
             let _url = _self.incode ? ('?incode=' + _self.incode) : '';
-            toLogin(this.$router, { toPath: 'apply_shop_invitecode', realTo: 'apply_shop_invitecode' + _url })
+            toLogin(this.$router, { toPath: 'apply_shop_choose_school', realTo: 'apply_shop_choose_school' + _url })
         } else {
             if (_self.incode) {
-                _self.$router.push({ path: 'apply_shop_invitecode', query: { incode: _self.incode } });
+                _self.$router.push({ path: 'apply_shop_choose_school', query: { incode: _self.incode } });
             } else {
-                _self.$router.push('apply_shop_invitecode');
+                _self.$router.push('apply_shop_choose_school');
             }
         }
     }

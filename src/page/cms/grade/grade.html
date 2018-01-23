@@ -55,18 +55,18 @@
                     </div>
                 </template>
                 <!-- 考核暂停 倒计时不走-->
-                <template v-if="status === 'checkstop'">
+                <template v-if="status === 'checkstop' ">
                     <!-- <div>
                         <span class="sj">{{countDate.day}}</span>天
                         <span class="sj">{{countDate.hour}}</span>时
                         <span class="sj">{{countDate.minute}}</span>分
                         <span class="sj">{{countDate.second}}</span>秒
                     </div> -->
-                    <div class="font-error">保底审核已暂停</div>
+                    <div class="font-error">{{gradeData.name}}审核已暂停</div>
                 </template>
                 <!-- 考核结束 -->
-                <template v-if="status === 'checkover'">
-                    <div v-if="gradeData.grade == currentGrade.grade">
+                <template v-if="status === 'checkover' && !noUpInfo">
+                    <div>
                         <span class="sj">{{countDate.day}}</span>天
                         <span class="sj">{{countDate.hour}}</span>时
                         <span class="sj">{{countDate.minute}}</span>分

@@ -7,6 +7,12 @@ let webpack = require('webpack'),
     OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin'),
     baseConfig = require('./webpack.base.config');
 
+
+
+//baseConfig.output.publicPath = "http://qaservice.365bencao.cn/"; //   http://xhjx.365bencao.cn/
+
+
+
 baseConfig.entry = {
      'static/lib/vue_mode': ['vue', 'vue-property-decorator', 'vue-class-component'],
      'static/lib/lodash': ['lodash'],
@@ -27,6 +33,7 @@ baseConfig.plugins.push(
         minify: {
             removeComments: true
         },
+        hash: true,
         favicon: path.join(__dirname, '../src/page/favicon.ico'),
         inject: 'body',
         chunks: [ 'static/lib/lodash','static/lib/vue_mode', 'sys/env/common.env','sys/plugins/swiper', 'web/main']
@@ -37,6 +44,7 @@ baseConfig.plugins.push(
         minify: {
             removeComments: true
         },
+        hash: true,
         favicon: path.join(__dirname, '../src/page/favicon.ico'),
         inject: 'body',
         chunks: ['static/lib/lodash','static/lib/vue_mode', 'sys/env/common.env','sys/plugins/swiper', 'cms/main']

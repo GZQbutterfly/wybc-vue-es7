@@ -111,3 +111,6 @@ Vue.filter('date', (date, fmt = 'yyyy-MM-dd') => {
     return fmt;
 });
 
+Vue.filter('fmtPhone',(value = '')=>{
+    return (value + '').replace(/(\d{3})\d+(\d{4})/, '$1****$2');
+});

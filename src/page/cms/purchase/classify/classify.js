@@ -58,6 +58,8 @@ export class CmsPurchaseClassify extends BaseVue {
     refresh(done) {
         this.page = 1;
         let _this = this;
+        let classify = this.$route.query.classify;
+        _this.$refs._navScrollc.getQueryList(classify);
         setTimeout(() => {
             this._classfyList.then((res) => {
                 this.getClassifyMsg(res);
@@ -109,9 +111,9 @@ export class CmsPurchaseClassify extends BaseVue {
                     wdName: "学惠精选官方商城",
                     wdImg: "/static/images/newshop/xuehui-fang.png",
                     vipGrade: shop.data.vip,
+                    school: '',
                     id: 0
                 }
-                localStorage.upWdName = "学惠精选官方商城";
                 return;
             }
             this._$service.getUpWdInfo(shop.data.upWdInfo).then(res1 => {
@@ -122,9 +124,9 @@ export class CmsPurchaseClassify extends BaseVue {
                     wdName: res1.data.wdVipInfo.wdName,
                     wdImg: res1.data.wdVipInfo.wdImg,
                     vipGrade: res1.data.wdVipInfo.wdVipGrade,
+                    school: res1.data.wdVipInfo.school,
                     id: 1
                 }
-                localStorage.upWdName = res1.data.wdVipInfo.wdName;
 
             })
         })
@@ -147,7 +149,6 @@ export class CmsPurchaseClassify extends BaseVue {
         let classify = _this.$route.query.classify;
         _this.classfyList = res.data.data;
         _this.classfyId = [];
-        console.log(_this.classfyList);
         _this.classfyList.forEach(item => {
             _this.classfyId.push(item.goodsClassifyId);
         });
@@ -166,12 +167,11 @@ export class CmsPurchaseClassify extends BaseVue {
                     classifyAd.push(item);
                 })
                 _this.classifyAdImgPic = classifyAd;
-                console.log(_this.classifyAdImgPic);
             });
             let opt = {
                 classifyId: classify,
                 page: 1,
-                limit: 4
+                limit: 10
             }
             this.classfyGoodsList = [];
             this._$service.getClassfyGoodsList(opt).then(res => {
@@ -202,7 +202,7 @@ export class CmsPurchaseClassify extends BaseVue {
             let opt = {
                 classifyId: _this.classfyId[0],
                 page: 1,
-                limit: 4
+                limit: 10
             };
             _this.classfyGoodsList = [];
             this._$service.getClassfyGoodsList(opt).then(res => {
@@ -238,7 +238,7 @@ export class CmsPurchaseClassify extends BaseVue {
         let opt = {
             classifyId: classfyId,
             page: 1,
-            limit: 4
+            limit: 10
         }
         _this.classfyGoodsList = [];
         this._$service.getClassfyGoodsList(opt).then(res => {

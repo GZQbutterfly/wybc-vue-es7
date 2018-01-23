@@ -42,27 +42,30 @@
         height: auto;
     }
     .address-ft {
-        background-color: #fff;
+        //background-color: #fff;
         padding: 16px 12.5px;
         .del-btn{
             background-color: #f9820d;
             color: #fff;
         }
     }
+    .line1{
+        height: 1px;
+        background: #f2f2f2;
+        margin-left: 15px;
+    }
     .select-school{
         padding-right: 0;
-        select:first-child{
+        .select-valid:first-child{
             margin-bottom: 10px;
         }
-        select:last-child{
+        .select-valid:last-child{
             margin-top: 10px;
-        }
-        select{
-            padding-left: 5px;
         }
         .line{
             background-color: #e5e5e5;
             height: 1px;
+            border-top:1px solid #e5e5e5;
         }
     }
 }

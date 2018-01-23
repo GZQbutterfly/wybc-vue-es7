@@ -1,0 +1,36 @@
+<div class="sideslip-menu-container">
+    <div class="weui-mask" @click="closeSelf" :class="{'weui-mask-show': show}"></div>
+
+    <div class="sideslip-content" :class="{'content-show': show}">
+        <header class="sideslip-content-hd">
+            <div class="user-detail">
+                <img :src="user.headimgurl || defaultUserImg" alt="" @error="imgError">
+                <label>{{user.phone | fmtPhone}}</label>
+            </div>
+        </header>
+
+        <section class="sideslip-content-bd">
+            <div>
+                <i></i>
+                <label>历史任务</label>
+            </div>
+            <div>
+                <i></i>
+                <label>我的钱包</label>
+            </div>
+            <div>
+                <i></i>
+                <label>收益明细</label>
+            </div>
+            <div>
+                <i></i>
+                <label>管理端首页</label>
+            </div>
+        </section>
+
+        <footer class="sideslip-content-ft">
+
+        </footer>
+    </div>
+
+</div>

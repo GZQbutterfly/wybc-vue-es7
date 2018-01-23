@@ -8,14 +8,15 @@ const routes = [
                 resolve(require('./layout/layout')['Layout']);
             }, 'web/malls/malls');
         },
-        redirect: {name: 'home'},
+        redirect: { name: 'home' },
         children: [
             // 首页
             {
                 path: '/home',
                 name: 'home',
                 meta: {
-                    keepAlive: true
+                    keepAlive: true,
+                    title: '首页'
                 },
                 component: resolve => {
                     require.ensure([], require => {
@@ -28,7 +29,8 @@ const routes = [
                 path: '/classify',
                 name: 'classify',
                 meta: {
-                    keepAlive: true
+                    keepAlive: true,
+                    title: '分类'
                 },
                 component: resolve => {
                     require.ensure([], require => {
@@ -36,33 +38,47 @@ const routes = [
                     }, 'web/malls/malls');
                 }
             },
+            // 资讯
+            {
+                path: '/information',
+                name: 'information',
+                meta: {
+                    keepAlive: true,
+                    title: '资讯'
+                },
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./information/information')['Information']);
+                    }, 'web/malls/malls');
+                }
+            },
             // 购物车
-           {
-               path: '/shop_car',
-               name: 'shop_car',
-               meta: { keepAlive: true },
-               component: resolve => {
-                   require.ensure([], require => {
-                       resolve(require('./shop_car/shop_car')['ShopCar']);
-                   }, 'web/malls/malls');
-               }
-           },
+            {
+                path: '/shop_car',
+                name: 'shop_car',
+                meta: { keepAlive: true, title: '购物车' },
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./shop_car/shop_car')['ShopCar']);
+                    }, 'web/malls/malls');
+                }
+            },
             // 我的
-           {
-               path: '/userinfo',
-               name: 'userinfo',
-               meta: { keepAlive: true },
-               component: resolve => {
-                   require.ensure([], require => {
-                       resolve(require('./userinfo/userinfo')['UserInfo']);
-                   }, 'web/malls/malls');
-               }
-           },
-           // 商品详情
+            {
+                path: '/userinfo',
+                name: 'userinfo',
+                meta: { keepAlive: true, title: '我的'  },
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./userinfo/userinfo')['UserInfo']);
+                    }, 'web/malls/malls');
+                }
+            },
+            // 商品详情
             {
                 path: '/goods_detail',
                 name: 'goods_detail',
-                meta: {noMenu: 1},
+                meta: { noMenu: 1 },
                 component: resolve => {
                     require.ensure([], require => {
                         resolve(require('./goods/goods.detail')['GoodsDetail']);
@@ -70,27 +86,28 @@ const routes = [
                 }
             },
             // 搜索、首页、分类的公共商品列表组件
-           {
-               path: '/goods_list',
-               name: 'goods_list',
-               component: resolve => {
-                   require.ensure([], require => {
-                       resolve(require('./goods_list/goods_list')['GoodsList']);
-                   }, 'web/malls/goods');
-               }
-           }
+            {
+                path: '/goods_list',
+                name: 'goods_list',
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./goods_list/goods_list')['GoodsList']);
+                    }, 'web/malls/goods');
+                }
+            }
         ]
     },
     // 地址
     {
         path: '/user_address',
         name: 'user_address',
+        meta: {  title:'地址' },
         component: resolve => {
             require.ensure([], require => {
-                resolve(require('./userinfo/address/user.address')['UserAddress']);
+                resolve(require('../../sys/user_address/user.address')['UserAddress']);
             }, 'web/malls/malls');
         }
-    },
+    }
 ];
 
 export default routes;

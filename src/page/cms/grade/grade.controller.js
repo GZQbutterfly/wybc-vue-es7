@@ -268,11 +268,16 @@ export default {
             _gradeData.name = '晋级';
             _gradeData.title = '晋级';
             _status = 'checkover';
+            //_scope.state = 1;// test
+            if(_scope.state != 1){
+                //_status = 'checkstop';
+                vm.noUpInfo = true;
+            }
         } else {
             vm.currentGrade.status = _status;
         }
         if (_status === 'lock') {
-            _gradeData.title = '解锁';
+            _gradeData.title = '解锁';      
         }
         _gradeData.downIncomeRate = vipInfo.punish;
         let now = new Date();

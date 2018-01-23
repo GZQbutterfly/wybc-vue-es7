@@ -3,11 +3,11 @@ import Vuex from 'vuex';
 import {http} from 'common.env';
 
 
-import dialog from '../../commons/vue_plugins/components/popup/dialog';
+import dialog from 'components/popup/dialog';
 //import info from '../components/popup/info';
- import popup from '../../commons/vue_plugins/components/popup/base';
-import loadding from '../../commons/vue_plugins/components/popup/loadding';
-import toast from '../../commons/vue_plugins/components/popup/toast';
+ import popup from 'components/popup/base';
+import loadding from 'components/popup/loadding';
+import toast from 'components/popup/toast';
 
 import { getLocalUserInfo } from 'common.env';
 

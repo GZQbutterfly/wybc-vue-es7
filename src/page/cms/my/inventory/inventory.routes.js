@@ -18,7 +18,7 @@ const routes = [
         component: resolve => {
             require.ensure([], require => {
                 resolve(require('./inventory_detail/inventory.detail')['MyInventoryDetail']);
-            }, 'cms/my/sys');
+            }, 'cms/my/inventory');
         }
     }
 ];

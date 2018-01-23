@@ -24,6 +24,16 @@
                         开店信息
                     </span>
                 </div>
+                <!-- 学校 -->
+                <div class="shop-cell weui-flex">
+                    <div class="shop-label">
+                        学校
+                    </div>
+                    <div class="weui-flex__item weui-cell__bd">
+                        <input name="school" class="applyshop_ipt weui-input" tabindex=-1 type="text" v-model="shopInfo.school"
+                        disabled>
+                    </div>
+                </div>
                 <!-- 性别 -->
                 <validate class="shop-cell weui-flex" tag="div">
                     <div class="shop-label">
@@ -42,26 +52,6 @@
                     <field-messages name="sex" show="$submitted" class="text-danger  error-tip">
                         <div slot="required" v-show="formstate.sex && formstate.sex.$invalid">
                             请选择性别!
-                        </div>
-                    </field-messages>
-                </transition>
-                <!-- 学校 -->
-                <validate class="shop-cell weui-flex" tag="div">
-                    <div class="shop-label">
-                        学校
-                    </div>
-                    <div class="weui-flex__item weui-cell__bd">
-                        <input name="school" class="applyshop_ipt weui-input" tabindex=-1 type="text" placeholder="请选择学校" v-model="shopInfo.school"
-                            required>
-                        <select class="applyshop_ipt weui-select" v-model="shopInfo.school" @blur="schoolBlur(schoolList[0])" required>
-                            <option v-for="item in schoolList" :value="item" v-text="item"></option>
-                        </select>
-                    </div>
-                </validate>
-                <transition name="fadeUp">
-                    <field-messages name="school" show="$submitted" class="text-danger  error-tip">
-                        <div slot="required" v-show="formstate.school && formstate.school.$invalid">
-                            请选择学校!
                         </div>
                     </field-messages>
                 </transition>

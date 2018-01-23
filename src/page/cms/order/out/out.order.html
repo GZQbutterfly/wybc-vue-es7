@@ -1,4 +1,4 @@
-<div class="user-orders weui-flex flex-v">
+<div class="user-orders weui-flex flex-v ">
 	<multitab :tabs="tabs" @on-change="onTabChange" :custStyle="custStyle" :index="tabIndex"></multitab>
 	<multitab v-if="tabIndex==2" style="padding : 0 1rem;" :tabs="subTabs" @on-change="onSubTabChange" :index="subTableIndex"></multitab>
 	<div class="order-list-content flex-1">

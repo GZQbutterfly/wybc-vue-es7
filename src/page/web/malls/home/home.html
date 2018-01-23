@@ -4,10 +4,11 @@
         <div class="indexBox_logo">
             <dl class="wdName">
                 <dt>
-                    <img :src="shopkeeper.wdImg?shopkeeper.wdImg:'/static/images/newshop/touxiang.png'" >
+                    <img :src="shopkeeper.wdImg?shopkeeper.wdImg:'/static/images/newshop/touxiang.png'">
                 </dt>
                 <dd>
-                    <span>{{shopkeeper.wdName}}</span>
+                    <h4>{{shopkeeper.wdName}}</h4>
+                    <span>{{shopkeeper.school}}</span>
                     <p v-if="shopkeeper.wdVipGrade">
                         <span>{{'M'+shopkeeper.wdVipGrade}}</span>
                     </p>
@@ -26,7 +27,7 @@
         <pull-refresh :refresh="refresh" ref="my_scroller" :infinite="infinite">
             <!-- 轮播 -->
             <div class="carousel" v-show='homeAd&&homeAd.length!=0'>
-                <gs-banner :adList="homeAd" :itemClicked="goodsBannerClicked"  style="width:100%;height:100%;"></gs-banner>
+                <app-banner :listImg="homeAd" style="height:100%;"> </app-banner>
             </div>
 
             <iconsList :iconsList="iconsList" v-show="iconsList&&iconsList.length!=0"></iconsList>
@@ -58,7 +59,7 @@
                         <span id="seeAll" @click="onSeeAll(item.classifyId)">查看全部>></span>
                     </div>
                     <div class="goodsList_carousel">
-                        <gs-banner :adList="item.adList" :itemClicked="goodsBannerClicked" style="width:100%;height:100%;"></gs-banner>
+                        <app-banner :listImg="item.adList"> </app-banner>
                     </div>
 
                     <div class="shopPic">

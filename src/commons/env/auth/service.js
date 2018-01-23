@@ -73,10 +73,15 @@ export class ServiceAuth {
         let data = response.data;
         // 94=用户数据不存在 95=非法请求 96=非法token  119
         if (match(data.errorCode, [96, 94, 119])) {
+            let _route = _self._$vm.$route;
+            // 判断当前路由是否提示登录过期
+            if(get(_route, 'meta.noLoginTip') === false){
+                return response;
+            }
+
             if (getCacheLoginFlag()) {
                 // 默认缓存本地登录的用户，缓存失效，直接跳转到登录首页
                 cleanLocalUserInfo();
-                let _route = _self._$vm.$route;
                 let realTo = _route.name;
                 let realToQuery = _route.query;
                 toLogin(_self._$router, { toPath: _self._$vm.$route.name, realTo, realToQuery });
@@ -85,7 +90,6 @@ export class ServiceAuth {
                     closeDialog();
                     loginDialog('登录过期，请重新登录').then((flag) => {
                         cleanLocalUserInfo();
-                        let _route = _self._$vm.$route;
                         let realTo = _route.name;
                         let realToQuery = _route.query;
                         flag && toLogin(_self._$router, { toPath: _self._$vm.$route.name, realTo, realToQuery });

@@ -22,7 +22,8 @@
                         <img :src="shopkeeper.wdImg" alt="">
                     </dt>
                     <dd>
-                        <span>{{shopkeeper.wdName}}</span>
+                        <h4>{{shopkeeper.wdName}}</h4>
+                        <span>{{shopkeeper.school}}</span>
                         <div v-if="shopkeeper.id==0">官方</div>
                         <p v-if="shopkeeper.id==1">
                             <span>{{'M'+shopkeeper.vipGrade}}</span>
@@ -31,7 +32,7 @@
                 </dl>
             </div>
 
-            <navScrollc :onchangeShop="changeShop"></navScrollc>
+            <navScrollc :onchangeShop="changeShop" ref="_navScrollc"></navScrollc>
 
 
 

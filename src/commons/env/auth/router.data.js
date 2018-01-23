@@ -3,13 +3,15 @@ export default [
 
     'user_order',
     /* 提交订单 */
-    'order_submitting',
+    'order_submit',
     /* 用户物流地址 */
-    'userAddress',
+    'user_address',
+    
+    'lead',
 
     // 开店
-    'applyShopInvitecode',
+    'apply_shop_invitecode',
 
     /* 消息通知 */
-    'messageNotice',
+    'message_notice',
 ];

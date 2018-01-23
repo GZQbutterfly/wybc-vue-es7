@@ -1,9 +1,10 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { merge, isObject, find } from 'lodash';
 
-import { getAreasData, getZoneData, timeout } from 'common.env';
+import { getAreasData, getZoneData, timeout, isAndroid } from 'common.env';
 
 import Swiper from 'swiper';
+
 
 import service from './address.service';
 
@@ -17,14 +18,14 @@ export class Address extends Vue {
     type = 'create';
     item = {};
     title = '新增收货地址';//
-    saveText = '保存';
     formstate = {};
-    formScope = { name: '', phone: '', address: '', zipCode: '', isDefault: 0, province: '', city: '', district: '' };
+    formScope = { name: '', phone: '', address: '', zipCode: '', isDefault: 0, province: '', city: '', district: '', campus:'', dormitory:''  };
     proviceList = [];
     cityList = [];
     districtList = [];
     schoolList = [];
     floorList = [];
+    isCampusAdress = true;
     _$service;
     swiper;
     data() {
@@ -32,39 +33,12 @@ export class Address extends Vue {
     }
     mounted() {
         this._$service = service(this.$store);
-
         this.$nextTick(() => {
             document.title = this.title;
             this.initPage();
-        });
-    }
-    async initPage() {
-        this.schoolList = await this._$service.querySchoolZone();
-        this.proviceList = await getAreasData();
-        let _params = this.$route.query;
-        this.type = _params.type;
-        let _scope = this.formScope;
-        if (this.type === 'update') {
-            let _item = _params.item;
-            if (!isObject(_item)) {
-                _item = JSON.parse(sessionStorage.___addressItem || null) || {};
-            } else {
-                sessionStorage.___addressItem = JSON.stringify(_item);
-            }
-            this.title = '修改收货地址';
-            this.saveText = '保存修改';
-            _scope.addrId = _item.addrId;
-            _scope.name = _item.name;
-            _scope.phone = _item.phone;
-            _scope.address = _item.address;
-            _scope.zipCode = _item.zipCode;
-            _scope.isDefault = _item.isDefault;
-            let _result = await getZoneData(_item);
-            this.cityList = _result.province.ch;
-            this.districtList = _result.city.ch;
-            _scope.province = _result.province.co;
-            _scope.city = _result.city.co;
-            _scope.district = _result.district.co;
+            // getAreasData().then((list) => {
+            //     this.proviceList = list;
+            // });
             // 修正详细地址文本域的默认值高度不凸显
             timeout(() => {
                 let _arearef = this.$refs.textareaRef;
@@ -77,14 +51,56 @@ export class Address extends Vue {
                     }, 100);
                 }
             });
-        }else{
-            _scope.province = '510000';
-            _scope.city = '510100';
-            // this.cityList = find(this.proviceList, {co: '510000'}).ch;
-        }
+        });
     }
-    queryZone() {
-        this._$service.querySchoolZone();
+    async initPage() {
+        let _params = this.$route.query;
+        this.type = _params.type;
+        let _scope = this.formScope;
+        this.proviceList = await getAreasData();
+        this.schoolList = await this._$service.querySchoolZone();
+        if (this.type === 'update') {
+            let _item = _params.item;
+            if (!isObject(_item)) {
+                _item = JSON.parse(sessionStorage.___addressItem) || {};
+            } else {
+                sessionStorage.___addressItem = JSON.stringify(_item);
+            }
+            if (_item.campus){
+                this.isCampusAdress = true;
+            }else{
+                this.isCampusAdress = false;
+                let _result = await getZoneData(_item);
+                this.cityList = _result.province.ch;
+                this.districtList = _result.city.ch;
+                _scope.province = _result.province.co;
+                _scope.city = _result.city.co;
+                _scope.district = _result.district.co;
+            }
+            this.title = '修改收货地址';
+            _scope.addrId = _item.addrId;
+            _scope.name = _item.name;
+            _scope.phone = _item.phone;
+            _scope.address = _item.address;
+            _scope.zipCode = _item.zipCode;
+            _scope.isDefault = _item.isDefault;
+            _scope.campus = _item.campus || '';
+            _scope.dormitory = _item.dormitory || '';
+            // 修正详细地址文本域的默认值高度不凸显
+            let _data = find(this.schoolList, { name: _item.campus });
+      
+            if (_data) {
+                this.floorList = _data.specialMsg;
+            }
+            timeout(() => {
+                let _arearef = this.$refs.textareaRef;
+                _arearef.style.height = _arearef.scrollTop + _arearef.scrollHeight + "px";
+            });
+        } else {
+            _scope.province = '';
+            _scope.city = '';
+            _scope.district = '';
+        }
     }
     /**
      * 省份选择
@@ -134,10 +150,32 @@ export class Address extends Vue {
             _form.district = '';
         }
     }
+    changeSchool(event){
+        let _self = this;
+        let _form = _self.formScope;
+        let _target = event.target;
+        let _index = _target.selectedIndex;
+        if (_index) {
+            let data = _self.schoolList[_index-1];
+            if(data && data.specialMsg){
+                _self.floorList = data.specialMsg
+            }else{
+                _self.floorList = [];
+            }
+            _form.dormitory = '';
+        }else{
+            _self.floorList = [];
+            _form.dormitory = '';
+        }
+    }
     // 切换地址默认checkbox
     switchDefault(event) {
         let _scope = this.formScope;
         _scope.isDefault = event.target.checked ? 1 : 0;
+    }
+    //切换地址
+    swichAdress(){
+        this.isCampusAdress = !this.isCampusAdress;
     }
     saveData() {
         let _toast = this.$store.state.$toast;
@@ -148,6 +186,11 @@ export class Address extends Vue {
         }
         let _scope = this.formScope;
         let data = merge({}, _scope, true);
+        if(!this.isCampusAdress){
+            data.isInsideSchool = 0;
+        }else{
+            data.isInsideSchool = 1;
+        }
         data.province = _scope.province;
         data.city = _scope.city;
         data.district = _scope.district;

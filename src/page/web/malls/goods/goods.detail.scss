@@ -35,15 +35,35 @@
                     display: flex;
                     flex-direction: column;
                     padding-left: 0.1rem;
-                    span {
+                    line-height: 1;
+                    h4 {
                         color: #333;
-                        font-size: 0.17rem;
+                        font-size: 0.16rem;
+                        font-weight: normal;
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
                         display: block;
                         width: 1.45rem;
                     }
+                    >span {
+                        color: #333;
+                        font-size: 0.12rem;
+                        margin: 5px 0;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        display: block;
+                        width: 1.45rem;
+                    } // span {
+                    //     color: #333;
+                    //     font-size: 0.17rem;
+                    //     overflow: hidden;
+                    //     text-overflow: ellipsis;
+                    //     white-space: nowrap;
+                    //     display: block;
+                    //     width: 1.45rem;
+                    // }
                     p {
                         height: 0.14rem;
                         width: 0.7rem;

@@ -3,6 +3,8 @@ import { wxshare } from '../wxshare/share';
 import { isWeiXin } from '../common.env';
 import baseService from './base.vue.service';
 
+import {bridgeRegister} from '../../bridge/bridge';
+
 //config  will be complete with derived class
 @Component({
     template: require('./base.vue.html'),
@@ -21,7 +23,7 @@ export default class BaseVue extends Vue {
     updateWxShare(config) {
         if (isWeiXin()) {
             let tempKey = this.$route.fullPath;
-            wxshare(config,tempKey);
+            wxshare(config,tempKey,this.$store.state.$http);
         }
     }
 

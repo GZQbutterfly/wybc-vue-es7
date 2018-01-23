@@ -9,8 +9,8 @@
                     </figure>
                     <div class="price">
                         <span>{{goods.goodsName}}</span>
-                        <p v-if="goods.consuType==2">{{goods.moneyPrice | localMoney}}</p>
-                        <!-- <p v-if="goods.consuType==3">style="color:#ee893e;"{{goods.moneyPrice | localMoney}}</p> -->
+                        <p v-if="!priceShow">{{goods.moneyPrice | localMoney}}</p>
+                        <p v-if="priceShow">{{total | localMoney}}</p>
                     </div>
 
                 </div>
@@ -33,11 +33,11 @@
                         <span @click="increase()">+</span>
                     </div>
                 </div>
-            </div>
+            </div>         
             <div id="next" @click="nextStep()" v-show="min.buy!=0">下一步</div>
-            <div id="next" v-show="min.buy==0&&min.leastBuy>goods.moneyPrice*num" style="background-color:#ccc;">未达到最低进货金额</div>
-            <div id="next" @click="nextStep()" v-show="min.buy==0&&min.leastBuy<= goods.moneyPrice*num">下一步</div>
-            <!-- <div id="next" @click="nextStep()" v-show="min.buy==0&&goods.isLimitByUserOrder">下一步</div> -->
+            <div id="next" @click="nextStep()" v-show="(min.buy==0&&min.leastBuy<=goods.moneyPrice*num)">下一步</div>
+            <div id="next" v-show="(min.buy==0&&min.leastBuy>goods.moneyPrice*num)" style="background-color:#ccc;">未达到{{min.flag?"首次升级":'最低'}}进货金额</div>
+            <!-- <div id="next" @click="nextStep()" v-show="min.buy==0">下一步</div> -->
     </section>
 </div>
 </div>

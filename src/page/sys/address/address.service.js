@@ -2,32 +2,34 @@
 export default (_store) => {
     let _state = _store.state;
     let _http = _state.$http;
+
     let _cache = _state.cache;
     let _key = 'sys.address.zone';
 
     function q(url, data) {
         return _http({
             data: data,
-            url:  url,
+            url: url,
             method: 'post'
         });
     }
     // ==>
     return {
-        async querySchoolZone(){
+        // 添加物流地址
+        // url:api/a_address
+        async querySchoolZone() {
             let _list = _cache[_key];
             let _result = null;
-            if(!_list){
-                _result = (await q('api/q_api_campus_msg')).data;
-                if(_result.errorCode){
+            if (!_list) {
+                let _result = (await q('api/q_api_campus_msg')).data;
+                if (_result.errorCode) {
                     _list = [];
                 }
                 _list = _result.data;
+                _cache[_key] = _list;
             }
-           return _list;
+            return _list;
         },
-        // 添加物流地址
-        // url:api/a_address
         createAddress(data) {
             return q('api/address/a_address', data);
         },

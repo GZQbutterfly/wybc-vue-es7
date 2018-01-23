@@ -1,14 +1,14 @@
-import {Component} from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import BaseVue from 'base.vue';
 
-import {isNotLogin, toLogin, cacheLogin} from 'common.env';
+import { isNotLogin, toLogin, cacheLogin } from 'common.env';
 
 
 import shopCarService from './shop_car.service';
 
 import './shop_car.scss';
 
-@Component({template: require('./shop_car.html')})
+@Component({ template: require('./shop_car.html') })
 export class ShopCar extends BaseVue {
     // 组件方法也可以直接声明为实例的方法
     validLists = []; //购物车列表
@@ -20,12 +20,12 @@ export class ShopCar extends BaseVue {
     settlement = 0; //结算个数
     checkAll = false;//全选
     isEdit = true; //编辑状态
-    edit ='编辑';
+    edit = '编辑';
     isEmpty = false; //购物车为空
     isShow = false; //失效物品区域显示
     // wxShopCheck: boolean = false;//店铺全选
     recommendShow = true;
-    recommendLists  = [];
+    recommendLists = [];
     page = 1;
     flag = false;
     headImg = '/static/newshop/images/pic-nologin.png';
@@ -58,15 +58,13 @@ export class ShopCar extends BaseVue {
         _this.checkAll = false;
         _this.recommendShow = false;
         _this.isEmpty = false;
-        _this.validLists = [] //购物车列表
-        _this.invalidLists = []; //失效列表
+        _this.validLists = []//购物车列表
+        _this.invalidLists = [];//失效列表
         let flag = !isNotLogin();
         let shopcartCache = _this._shopcartCache;
         if (flag) {
-            if (shopcartCache) { //未测试
-                let goodsId = [],
-                    numbers = [],
-                    shopIds = [];
+            if (shopcartCache) {
+                let goodsId = [], numbers = [], shopIds = [];
                 shopcartCache.forEach(ele => {
                     ele.shopCarts.forEach(item => {
                         goodsId.push(item.goodsId);
@@ -74,7 +72,6 @@ export class ShopCar extends BaseVue {
                         shopIds.push(ele.shopId);
                     })
                 });
-                console.log(goodsId.join(","))
                 let options = {
                     goodsId: goodsId.join(','),
                     number: numbers.join(','),
@@ -86,8 +83,9 @@ export class ShopCar extends BaseVue {
                         _this.toast(res.data.msg, false);
                         return;
                     }
+                    console.log(res);
                     //获取商品列表
-                    _this._$service.getShopcarGoodsesList(1).then((res ) => { //未测试
+                    _this._$service.getShopcarGoodsesList(1).then((res) => {
                         if (res.data.errorCode) {
                             _this.toast(res.data.msg, false);
                             return;
@@ -97,7 +95,7 @@ export class ShopCar extends BaseVue {
                     })
                 })
             } else {
-                _this._$service.getShopcarGoodsesList(1).then((res ) => { //未测试
+                _this._$service.getShopcarGoodsesList(1).then((res) => {
                     if (res.data.errorCode) {
                         _this.toast(res.data.msg, false);
                         return;
@@ -119,19 +117,33 @@ export class ShopCar extends BaseVue {
                 this.isShow = false;
                 _this.validLists.length = 0;
                 _this.invalidLists.length = 0;
+                let goodsIds = [], numbers = [];
                 shopcartCache.forEach(lists => {
-                    let list = [],
-                        obj = {};
-                    lists.wxShopCheck = false;
                     lists.shopCarts.forEach(item => {
-                        item.check = false;
-                        list.push(item);
+                        goodsIds.push(item.goodsId);
+                        numbers.push(item.number);
                     })
-                    lists.data = list;
-                    _this.validLists.push(lists);
+                });
+                _this._$service.getGoodsLists(goodsIds.join(",")).then(res => {
+                    let _result = res.data.data;
+                    _result.forEach((item, i) => {
+                        item.number = numbers[i];
+                    })
+                    shopcartCache[0].shopCarts = _result;
+                    shopcartCache.forEach(lists => {
+                        let list = [], obj = {};
+                        lists.wxShopCheck = false;
+                        lists.shopCarts.forEach(item => {
+                            item.check = false;
+                            list.push(item);
+                        })
+                        lists.data = list;
+                        _this.validLists.push(lists);
+                    })
+                    _this.setGoods();
+                    _this.setNum(_this.validLists);
                 })
-                _this.setGoods();
-                _this.setNum(_this.validLists);
+
             }
         }
 
@@ -205,14 +217,14 @@ export class ShopCar extends BaseVue {
             }, 1500);
         }
     }
-    //查询改商品是否受限制       <有问题>
+    //查询改商品是否受限制     
     checkLimit(data) {
         let _this = this;
         let isflag = false;
         data.forEach(ele => {
             ele.data.forEach(item => {
                 if (item.check && item.limitedByOrder) {
-                    isflag = true; //bu受限制
+                    isflag = true;//bu受限制
                 }
             })
         });
@@ -222,6 +234,7 @@ export class ShopCar extends BaseVue {
     transferFormat(res) {
         if (res.length == 0) {
             this.isEmpty = true;
+            this.$store.state.shopCar.count = 0;
             return;
         }
         this.validLists.length = 0;
@@ -229,8 +242,7 @@ export class ShopCar extends BaseVue {
         let _this = this;
         let arr = [];
         res.forEach(lists => {
-            let list = [],
-                obj = {};
+            let list = [], obj = {};
             if (lists.shopCarts && lists.shopCarts.length == 0) {
                 return;
             }
@@ -251,7 +263,7 @@ export class ShopCar extends BaseVue {
                 return;
             }
             _this.validLists.push(lists);
-        })/* 购物车有效区域为空时，会显示店名 */
+        })
         if (_this.invalidLists.length === 0) {
             _this.isShow = false;
         } else {
@@ -402,7 +414,7 @@ export class ShopCar extends BaseVue {
         if (!this.validLists[index1].data[index2].number || this.validLists[index1].data[index2].number <= 0 || isNum == 1) {
             this.validLists[index1].data[index2].number = 1;
             let _toast = this.$store.state.$toast;
-            _toast({title: '输入数量不正确', success: false});
+            _toast({ title: '输入数量不正确', success: false });
             return;
         }
         this.getCount(index1, index2);
@@ -415,10 +427,7 @@ export class ShopCar extends BaseVue {
             if (this.validLists[index1].data[index2].number > maxNum) {
                 this.validLists[index1].data[index2].number = maxNum;
                 let _toast = this.$store.state.$toast;
-                _toast({
-                    title: '一次最多购买' + maxNum + '件',
-                    success: false
-                });
+                _toast({ title: '一次最多购买' + maxNum + '件', success: false });
             }
         }
         let flag = !isNotLogin();
@@ -442,12 +451,11 @@ export class ShopCar extends BaseVue {
     }
     //计算商品总价
     calTotalMoney() {
-        let totalMoney = 0,
-            settlementNum = 0;
+        let totalMoney = 0, settlementNum = 0;
         this.validLists.forEach(lists => {
             lists.data.forEach(item => {
                 if (item.check) {
-                    totalMoney += item.moneyPrice * item.number; //应付价格
+                    totalMoney += item.moneyPrice * item.number;//应付价格
                     settlementNum += Number(item.number);
 
                 }
@@ -485,28 +493,32 @@ export class ShopCar extends BaseVue {
     //删除购物车
     onDelete() {
         //弹出层
+        let dialog = this.$store.state.$dialog;
         let _this = this;
 
         if (this.settlement == 0) {
             let dialogObj = {
-                title: '',
+                title: '提示',
                 content: '您未选中要删除的商品',
                 assistBtn: '',
                 mainBtn: '确定',
                 type: 'info',
-                assistFn() {},
-                mainFn() {}
+                assistFn() {
+                },
+                mainFn() {
+                }
             };
-            this.$store.state.$dialog({ dialogObj });
+            dialog({ dialogObj });
             return;
         }
         let dialogObj = {
-            title: '删除商品',
+            title: '提示',
             content: '是否删除选中商品',
             assistBtn: '取消',
             mainBtn: '确定',
             type: 'info',
-            assistFn() {},
+            assistFn() {
+            },
             mainFn() {
                 _this.delete();
                 if (_this.validLists.length === 0) {
@@ -514,7 +526,7 @@ export class ShopCar extends BaseVue {
                 }
             }
         };
-        this.$store.state.$dialog({ dialogObj });
+        dialog({ dialogObj });
     }
     //删除购物车选中列表
     delete() {
@@ -525,9 +537,8 @@ export class ShopCar extends BaseVue {
         let goodsIdarr = [];
         let _this = this;
         if (!flag) {
-            let arr = [],
-                arr1 = [];
-            this.validLists.forEach((lists) => { //有问题
+            let arr = [], arr1 = [];
+            this.validLists.forEach((lists) => {
                 let list = [];
                 lists.data.forEach(item => {
                     if (!item.check) {
@@ -570,14 +581,14 @@ export class ShopCar extends BaseVue {
             }
             localStorage.setItem("shopcartCache", JSON.stringify(arr));
         } else {
-            let arr = [],
-                shopCartIds = [];
+            let arr = [], shopCartIds = [];
             this.validLists.forEach((lists, index) => {
                 let list = [];
                 lists.data.forEach(item => {
                     if (!item.check) {
                         list.push(item);
-                    } else {
+                    }
+                    else {
                         shopCartIds.push(item.id);
                     }
                 })
@@ -605,7 +616,7 @@ export class ShopCar extends BaseVue {
                 shopCartIds: shopCartIds.join(',')
             }
             console.log(opt);
-            this._$service.deleteShopcar(opt).then(function(res) {
+            this._$service.deleteShopcar(opt).then(function (res) {
                 if (res.data.errCode) {
                     _this.toast(res.data.msg, false);
                     return;
@@ -627,7 +638,8 @@ export class ShopCar extends BaseVue {
     }
     //结算
     onSettle() {
-        let flag = !isNotLogin(); //判断用户有缓存登录
+        let flag = !isNotLogin();//判断用户有缓存登录
+        let dialog = this.$store.state.$dialog;
         let _this = this;
         let cartId = [];
 
@@ -640,7 +652,7 @@ export class ShopCar extends BaseVue {
         });
         if (cartId.length == 0) {
             let dialogObj = {
-                title: '',
+                title: '提示',
                 content: '您未选中商品！！',
                 assistBtn: '',
                 mainBtn: '确定',
@@ -648,9 +660,10 @@ export class ShopCar extends BaseVue {
                 assistFn() {
                     console.log('ok');
                 },
-                mainFn() {}
+                mainFn() {
+                }
             };
-            this.$store.state.$dialog({ dialogObj });
+            dialog({ dialogObj });
             return;
         }
         if (!flag) {
@@ -660,28 +673,22 @@ export class ShopCar extends BaseVue {
                 assistBtn: '取消',
                 mainBtn: '确定',
                 type: 'info',
-                assistFn() {},
+                assistFn() {
+
+                },
                 mainFn() {
-                    toLogin(_this.$router, {
-                        toPath: 'shop_car',
-                        realTo: 'shop_car'
-                    });
+                    toLogin(_this.$router, { toPath: 'shop_car', realTo: 'shop_car' });
                 }
             };
-            this.$store.state.$dialog({ dialogObj });
+            dialog({ dialogObj });
             return;
         }
 
-        this.$router.push({
-            path: 'order_submit',
-            query: {
-                cartId: cartId.join(','),
-                orderSrouce: 'car'
-            }
-        });
+        this.$router.push({ path: 'order_submit', query: { cartId: cartId.join(','), orderSrouce: 'car' } });
     }
     //清空
     onClear() {
+        let dialog = this.$store.state.$dialog;
         let _this = this;
         let dialogObj = {
             title: '提示',
@@ -689,7 +696,9 @@ export class ShopCar extends BaseVue {
             assistBtn: '取消',
             mainBtn: '确定',
             type: 'info',
-            assistFn() {},
+            assistFn() {
+
+            },
             mainFn() {
                 let cartsId = [];
                 _this.invalidLists.forEach(ele => {
@@ -698,42 +707,38 @@ export class ShopCar extends BaseVue {
                 let opt = {
                     shopCartIds: cartsId.join(',')
                 }
-                _this._$service.deleteShopcar(opt).then(function(res) {
+                _this._$service.deleteShopcar(opt).then(function (res) {
                     console.log(res);
                 })
                 _this.invalidLists = [];
                 _this.isShow = false;
             }
         };
-        this.$store.state.$dialog({ dialogObj });
+        dialog({ dialogObj });
     }
     //报错
     toast(content, boolean) {
         let _toast = this.$store.state.$toast;
-        _toast({title: content, success: boolean});
+        _toast({ title: content, success: boolean });
     }
 
     //更新最低消费额
     updateMinimumConsumption() {
-        if (this.minimumConsumption != -1) { //无需更新
+        if (this.minimumConsumption != -1) {//无需更新
             return;
         } else {
             let self = this;
-            this._$service.getMinimumConsumption().then(res => {
-                if (res && !res.errCode && res.data) {
-                    self.minimumConsumption = res.data.minimumConsumption;
-                }
-            })
+            this._$service.getMinimumConsumption()
+                .then(res => {
+                    if (res && !res.errCode && res.data) {
+                        self.minimumConsumption = res.data.minimumConsumption;
+                    }
+                })
         }
     }
 
     goWdShop(infoId) {
-        this.$router.push({
-            path: 'home',
-            query: {
-                shopId: infoId
-            }
-        });
+        this.$router.push({ path: 'home', query: { shopId: infoId } });
     }
 
 }

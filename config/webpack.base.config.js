@@ -2,37 +2,36 @@
 let webpack = require('webpack'),
     path = require('path'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
-    CopyWebpackPlugin = require('copy-webpack-plugin');
-
-
+    CopyWebpackPlugin = require('copy-webpack-plugin'),
+    HappyPack = require('happypack');
 // ==>
 module.exports = {
     output: {
         path: path.join(__dirname, '../dist'),
         filename: '[name].js',
-        chunkFilename: '[name].js'
+        chunkFilename: '[name].js?[hash:20]',
+        publicPath: '../'
     },
     module: {
         rules: [
             {
                 test: /\.vue$/,
                 use: 'vue-loader',
-                //include: [path.join(__dirname, '../src/commons')],
-                //exclude: /node_modules/
+                //include: [path.join(__dirname, '../src/commons'), path.join(__dirname, '../node_modules/_vue-video-player')],
             }, {
                 test: /\.js$/,
-                use: ['babel-loader'],
+                use: 'happypack/loader?id=js', // 'happypack/loader?id=js', 
                 include: [path.join(__dirname, '../src')],
                 exclude: /node_modules/
             }, {
                 test: /\.(html|htm)$/,
-                use: 'raw-loader',
+                use: 'raw-loader',              
                 exclude: /node_modules/
             },
             {
                 test: /\.(scss|css)$/,
                 use: ExtractTextPlugin.extract({
-                    use: ['css-loader', 'postcss-loader', 'sass-loader'],
+                    use: 'happypack/loader?id=css', //'happypack/loader?id=css', //['css-loader', 'postcss-loader', 'sass-loader'],
                     fallback: 'style-loader'
                 }),
                 exclude: /node_modules/
@@ -53,15 +52,26 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['.js'],
+        extensions: ['.js', '.jsx', '.vue'],
         alias: {
             'vue$': path.join(__dirname, '../node_modules/vue/dist/vue.esm.js'),
             'common.env$': path.join(__dirname, '../src/commons/env/common.env.js'),
             'base.vue$': path.join(__dirname, '../src/commons/env/base_vue/base.vue.js'),
             'swiper$': path.join(__dirname, '../src/commons/assets/swiper/swiper.js')
-        }
+        },
+        modules: [path.resolve(__dirname, '../src/commons/vue_plugins'), 'node_modules']
     },
     plugins: [
+        new HappyPack({
+            id: 'js',
+            threads: 4,
+            loaders: [ 'babel-loader?cacheDirectory' ]
+        }),
+        new HappyPack({
+            id: 'css',
+            threads: 4,
+            loaders: ['css-loader', 'postcss-loader', 'sass-loader']       
+        }),
         new CopyWebpackPlugin([
             {
                 from: path.join(__dirname, '../src/static'),

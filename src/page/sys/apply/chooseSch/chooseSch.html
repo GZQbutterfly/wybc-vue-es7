@@ -1,0 +1,26 @@
+<div class="chooseSch-container">
+    <section class="chooseSch-bd">
+        <img v-lazy="tipImg" class="chooseSch-img"/>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    开店学校
+                </div>
+                <div class="weui-cell__bd">
+                    <!-- {{ school }} -->
+                    <input class="weui-input" tabindex=-1 type="text" placeholder="请选择您所在的学校" v-model="schoolList[schoolIndex].name">
+                    <select class="weui-select" v-model="schoolIndex">
+                        <option v-for="(item,index) in schoolList" :value="index" v-text="item.name" v-if="index"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="chooseSch-qs">
+            <i class="icon iconfont icon-wenhao"></i>
+            <span>学校一经选择不可更改</span>
+        </div>
+    </section>
+    <footer class="chooseSch-ft">
+        <button class="ok" type="button" @click="toCreateShop(false)">下一步</button>
+    </footer>
+</div>

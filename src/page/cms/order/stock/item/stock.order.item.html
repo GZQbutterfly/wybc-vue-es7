@@ -34,10 +34,19 @@
 	</div>
 
 	<!-- 总计 -->
+	<div v-if="order.ownStore">
+		<div class="order-plus weui-flex flex-right">
+			<span class="desc-font color-red"> {{getShipFee() | localMoney}}</span>
+			<span class="desc-font color-black">配送费:&nbsp;&nbsp;</span>
+		</div>
+		<div class="row-line"></div>
+	</div>
+
+	<!-- 总计 -->
 	<div v-if="true">
 		<div class="order-plus weui-flex flex-right">
-			<span class="desc-font color-red"> {{orderTotalMoney() | localMoney}}</span>
-			<span class="desc-font color-black">{{order.orders[0].orderState==1||order.orderState==3?'需付':'实付款'}}:&nbsp;&nbsp;</span>
+			<span class="desc-font color-red"> {{orderTotalMoney()+getShipFee() | localMoney}}</span>
+			<span class="desc-font color-black">{{order.orders[0].orderState==1||order.orderState==6?'需付':'实付款'}}:&nbsp;&nbsp;</span>
 		</div>
 		<div class="row-line"></div>
 	</div>
@@ -45,9 +54,8 @@
 	<!-- 功能 -->
 	<div v-if="order.orderState===1">
 		<div class="order-plus weui-flex flex-right">
-			<button @click.stop="payOrder(order.orders[0].combinOrderNo)" class="item-button button-green">支付</button>
+			<button @click.stop="payOrder(order.orders[0].combinOrderNo,order.orders[0].ownStore)" class="item-button button-green">支付</button>
 			<button @click.stop="cancelOrder()" class="item-button button-pink">取消</button>
 		</div>
 	</div>
 </div>
-<!-- //订单状态（1：待发货，2：已发货，3：交易完成，4：待支付，5：交易关闭（原因有：买家取消、支付超时、买家退款、订单异常），6：退款中） -->

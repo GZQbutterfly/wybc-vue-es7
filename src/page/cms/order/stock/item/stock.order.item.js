@@ -17,6 +17,7 @@ export class StockOrderItem extends Vue {
 
 	_$service;
 
+
 	mounted() {
 		//注册服务
 		this._$service = itemService(this.$store);
@@ -36,7 +37,7 @@ export class StockOrderItem extends Vue {
 
 	toOrderDetail(orderId) {
 		let query = {};
-		if (this.$props.order.orders[0].orderState == 1 || this.$props.order.orders[0].orderState == 3) {//待支付或者交易关闭
+		if (this.$props.order.orders[0].orderState == 1 || this.$props.order.orders[0].orderState == 6) {//待支付或者交易关闭
 			query.combinOrderNo = this.$props.order.orders[0].combinOrderNo;
 		} else {
 			query.orderId = this.$props.order.orders[0].orderId;
@@ -48,10 +49,11 @@ export class StockOrderItem extends Vue {
 	}
 
 	//支付订单
-	payOrder(combinOrderNo) {
+	payOrder(combinOrderNo,ownStore) {
 		let obj = this.$store.state.$loadding();
 		let data = {
-			combinOrderNo: combinOrderNo
+			combinOrderNo: combinOrderNo,
+			ownStore: ownStore
 		}
 		let self = this;
 		this._$service.pay(data).then(res => {
@@ -73,9 +75,16 @@ export class StockOrderItem extends Vue {
 				state = '待支付';
 				break;
 			case 2:
+			case 3:
+				state = '待发货';
+				break;
+			case 4:
+				state = '待收货';
+				break;
+			case 5:
 				state = '交易完成';
 				break;
-			case 3:
+			case 6:
 				state = '交易关闭';
 				break;
 			default:
@@ -156,6 +165,19 @@ export class StockOrderItem extends Vue {
 			}
 		};
 		this.$store.state.$dialog({ dialogObj });
+	}
+
+	getShipFee(){
+		let orders = this.$props.order.orders;
+		if (orders) {
+			let shipFee = 0;
+			for (var i = 0; i < orders.length; ++i) {
+				shipFee += orders[i].shipFee;
+			}
+			return shipFee;
+		} else {
+			return 0;
+		}  
 	}
 
 	orderTotalMoney() {

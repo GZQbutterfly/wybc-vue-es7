@@ -28,7 +28,7 @@ export function http() {
                 relove(response);
             }).catch((response) => {
                 if(process.env.NODE_ENV === 'development'){
-                    debugger;
+                    //debugger;
                 }
                 let _result =  {
                     errorCode: 500,
@@ -38,7 +38,7 @@ export function http() {
               
                 }else if(response.message == 'Network Error'){
                     _result.errorCode = 404;
-                    _result.msg = '抱歉，服务不存在！';
+                    //_result.msg = '抱歉，服务不存在！';
                 }
                 relove({
                     data: _result

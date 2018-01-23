@@ -30,20 +30,15 @@
                     <span>{{int_minute}}</span>分
                     <span>{{int_second}}</span>秒
                 </div>
-                <!-- //促销 -->
-                <div class="promotion" v-if="goods.consuType==3">
-                    <span>促销</span>
-                    <span>惠品券</span>
-                    <span>{{goods.moneyRoll | localVolume}}券+{{goods.moneyPrice | localMoney}}</span>
-                </div>
-                <div class="weui-flex goods-desc">
+            <!-- 
+            <div class="weui-flex goods-desc">
                     <span>运费:
                         <b>免运费</b>
                     </span>
-                    <!-- <span class="desc-right">库存:
+                    <span class="desc-right">库存:
                         <b :style="{color:goods.amount==0?'pink':'#808080'}">{{goods.amount}}</b>
-                    </span> -->
-                </div>
+                    </span> 
+                </div>-->
             </div>
             <div class="indexBox_logo">
                 <dl class="wdName">
@@ -51,7 +46,8 @@
                         <img :src="shopkeeper.wdImg" alt="">
                     </dt>
                     <dd>
-                        <span>{{shopkeeper.wdName}}</span>
+                        <h4>{{shopkeeper.wdName}}</h4>
+                        <span>{{shopkeeper.school}}</span>
                         <p>
                             <span>{{'M'+shopkeeper.vipGrade}}</span>
                         </p>

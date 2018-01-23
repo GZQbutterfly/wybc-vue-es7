@@ -1,0 +1,39 @@
+<div class="search_box">
+    <!-- search formBar -->
+    <div class="search_bar">
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <form class="frm_search iconfont" @submit="func_search_form_submit" :class="{'frm_noKeyword':!txt_search_keyword}">
+                        <input type="text" class="ipt_search_keyword" autocomplete="off" spellcheck="false" ref="ipt_search" :placeholder="txt_search_placeholder"
+                            v-model="txt_search_keyword" @focus="func_search_iptFocus">
+                        <mark class="btn_search_clear" @click="func_search_clear" v-show="bool_search_searching&&txt_search_keyword">
+                            <i class="weui-icon-clear"></i>
+                        </mark>
+                    </form>
+                </div>
+                <div class="weui-cell__ft">
+                    <p class="btn_search" @click="func_search_btnClick" v-text="bool_search_searching?'搜索':'取消'"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- search before -->
+    <div class="search_beforePage" v-show="func_search_isState(1)">
+        <slot name="_search_beforePage">搜索等待 html</slot>
+    </div>
+    <!-- search prompt -->
+    <div class="search_keywordList" v-show="func_search_isState(2)">
+        <slot name="_search_keywordList">
+            <div class="weui-cells">
+                <div class="weui-cell" v-for="val in arr_saerch_hint">
+                    <div class="weui-cell__bd" @click="func_search_wordClick" v-text="val"></div>
+                </div>
+            </div>
+        </slot>
+    </div>
+    <!-- search after -->
+    <div class="search_afterPage" v-show="func_search_isState(3)">
+        <slot name="_search_afterPage">搜索结果</slot>
+    </div>
+</div>

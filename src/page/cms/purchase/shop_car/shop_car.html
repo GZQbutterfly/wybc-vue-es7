@@ -153,58 +153,66 @@
             </ul>
         </pull-refresh>
     </div>
-    <!-- 升级条件 -->
-    <!-- <div class="weui-flex">
-        <div class="weui-flex__item">
-            <i class="iconfont icon-remind"></i>
-            <b>未达成升级条件，再买</b>
-            <span>1000.00元</span>
-            <b>，立刻升级享新进货价!</b>
-        </div>
-    </div> -->
-    <!-- <div class="weui-flex flex-satisfy">
-        <div class="weui-flex__item">
-            <i class="iconfont icon-chenggong"></i>
-            <b>订单金额已满</b>
-            <span>1000.00元</span>
-            <b>，升级条件已达成，快去下单吧!</b>
-        </div>
-    </div> -->
-    <!-- 购物车结算 -->
-    <div class="total" v-if="isEdit" v-show="!isEmpty">
-        <div class="total_left">
-            <p class="txt1">
 
-                <em class="checkAllState weui-icon-circle" @click="checkAllState">
-                    <i class="weui-icon-success" v-show="checkAll"></i>
-                </em>
-                <b @click="checkAllState">全选</b>
-                <span>合计:<b>{{total | localMoney}}</b></span>   
-            </p>
-            <p class="txt2">
-                <span v-if="leastMoney>0&&total<leastMoney">{{ isFirst?'首次':'' }}最低进货金额：{{ leastMoney | localMoney }}</span>
-            </p>
-        </div>
-        <div class="total_right" @click="onSettle" v-if="leastMoney<=total">
-            结算({{settlement}})</div>
-           
-      
-        <div class="total_right" style="background-color:#ccc;" v-else>
-            结算({{settlement}}) 
-        </div>
-    </div>
-    <div class="total" v-if="!isEdit" v-show="!isEmpty">
-        <div class="total_left">
-            <p class="txt1">
-                <em class="checkAllState weui-icon-circle" @click="checkAllState">
-                    <i class="weui-icon-success" v-show="checkAll"></i>
-                </em>
-                <b @click="checkAllState">全选</b>
-            </p>
-        </div>
-        <div class="total_right" @click="onDelete">
-            删除
-        </div>
-    </div>
+    <!--遮罩 stockTypeShow-->
+    <div class="order-cover" v-show="stockTypeShow">
+        <div class="order-cover-box"></div>
+        <div class="order-cover-content">
+            <div class="weui-media-box weui-media-box_text">
+                <h4 class="weui-media-box__title title-h4 close">请选择进货仓储方式<i class="iconfont icon-iconfontclose close1" @click="onClose"></i></h4>
+            </div>
+            <div class="weui-box" v-for="(v,i) in stockTypes" @click="chooseStockTpe(i)">
 
-</div>
+                <div class="radus">
+                    <div class="radus-bg" v-show="v.stocktypeShow"></div>
+                </div>
+                <div class=" color-b">
+                    {{v.stocktype}}
+                </div>
+            </div>
+            <!-- <div class="weuiBtn">
+                 <div class="weui-btn1 color-f" @click="cancel">取消</div>
+                 <div class="weui-btn1 color-c" @click="confirm">确定</div>
+           </div> -->
+            </div>
+        </div>
+        <!-- 购物车结算 -->
+        <div class="total" v-if="isEdit" v-show="!isEmpty">
+            <div class="total_left">
+                <p class="txt1">
+
+                    <em class="checkAllState weui-icon-circle" @click="checkAllState">
+                        <i class="weui-icon-success" v-show="checkAll"></i>
+                    </em>
+                    <b @click="checkAllState">全选</b>
+                    <span>合计:
+                        <b>{{total | localMoney}}</b>
+                    </span>
+                </p>
+                <p class="txt2">
+                    <span v-if="leastMoney>0&&total<leastMoney">{{ isFirst?'首次':'' }}最低进货金额：{{ leastMoney | localMoney }}</span>
+                </p>
+            </div>
+            <div class="total_right" @click="onSettle" v-if="leastMoney<=total">
+                结算({{settlement}})</div>
+
+
+            <div class="total_right" style="background-color:#ccc;" v-else>
+                结算({{settlement}})
+            </div>
+        </div>
+        <div class="total" v-if="!isEdit" v-show="!isEmpty">
+            <div class="total_left">
+                <p class="txt1">
+                    <em class="checkAllState weui-icon-circle" @click="checkAllState">
+                        <i class="weui-icon-success" v-show="checkAll"></i>
+                    </em>
+                    <b @click="checkAllState">全选</b>
+                </p>
+            </div>
+            <div class="total_right" @click="onDelete">
+                删除
+            </div>
+        </div>
+
+    </div>

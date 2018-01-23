@@ -25,19 +25,28 @@ export class WxAuth {
     auth() {
         let _self = this;
         let urlParam = getUrlParams();
+        let _code = urlParam.code;
         if (isEmpty(getAuthUser())) {
-            if (!urlParam.code) {
-                let _href = encodeURIComponent(location.href);// + location.pathname + location.hash;
+            if (!_code || localStorage.__wxCode == _code) {
+                let _href = encodeURIComponent(location.href.replace(new RegExp(`code=${_code}`, 'g'),''));// + location.pathname + location.hash;
                 let _params = `appid=${wxAppid}&redirect_uri=${_href}&response_type=code&scope=snsapi_userinfo&state=hpt_state#wechat_redirect`;
                 location.replace('https://open.weixin.qq.com/connect/oauth2/authorize?' + _params);
             } else {
+                localStorage.__wxCode = _code;
                 _self.queryWxUser(urlParam.code);
             }
         }
     }
+    q(url, data) {
+        return this._$http({
+            data: data,
+            url: url,
+            method: 'post'
+        });
+    }
     queryWxUser(code) {
         let _self = this;
-        return _self._$http.post('api/wx/g_wx_user', { code }).then((res) => {
+        return _self.q('api/wx/g_wx_user', { code }).then((res) => {
             let _result = res.data;
             if (_result.errorCode) {
                 // reauth

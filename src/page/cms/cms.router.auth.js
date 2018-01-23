@@ -20,6 +20,9 @@ export default (vm, router) => {
             let _params = location.hash.replace('#/', '').split('?');
             toLogin(router, { realTo: _params[0], realToQuery: qs.parse(_params[1]) })
         }
+        // if(location.pathname=="/cms/"){
+        //     location.href = location.origin + '/cms' + location.hash;
+        // }      
         return _result;
     }
 
@@ -39,7 +42,7 @@ export default (vm, router) => {
                         assistBtn: '',
                         mainBtn: '确定',
                         mainFn() {
-                            toWEB('userinfo');
+                            //toWEB('userinfo');
                         }
                     }
                 });

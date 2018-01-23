@@ -1,4 +1,4 @@
-import { getUrlParams, getLocalUserInfo ,getAuthUser} from '../common.env';
+import { getUrlParams, getLocalUserInfo ,getAuthUser, isNotLogin} from '../common.env';
 
 
 
@@ -6,6 +6,7 @@ export default (_store) => {
     let _http = _store.state.$http;
     const wdInfo = 'api/wd_vip/queryWdInfo';
     const wdrecode = 'api/a_shopId_by_openId';
+    const wdrecodeUser = 'api/a_ten_shop_history';
 
     function q(url, data) {
         return _http({
@@ -28,19 +29,27 @@ export default (_store) => {
                             if (_result && !_result.errorCode) {
                                 localStorage.wdVipInfo = JSON.stringify(_result.wdVipInfo);
                                 resolve(_result.wdVipInfo);
+                            }else{
+                                reject(_result);
                             }
                         });
-                } else if (params.shopId && localWdInfo && params.shopId != localWdInfo.infoId) {
+                } else if (params.shopId && localWdInfo) {
                     q(wdInfo, { shopId: params.shopId })
                         .then(res => {
                             let _result = res.data;
                             if (_result && !_result.errorCode) {
                                 localStorage.wdVipInfo = JSON.stringify(_result.wdVipInfo);
                                 //记录当前浏览店铺
-                                q(wdrecode, {
-                                    shopId: params.shopId,
-                                    openId: getAuthUser().openid
-                                })
+                                if(isNotLogin()){
+                                    // q(wdrecode, {
+                                    //     shopId: params.shopId,
+                                    //     openId: getAuthUser().openid
+                                    // })
+                                }else{
+                                    q(wdrecodeUser, {
+                                        shopId: params.shopId
+                                    })
+                                }
                             }
                             resolve(_result.wdVipInfo);
                         });

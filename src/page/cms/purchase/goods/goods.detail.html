@@ -1,6 +1,5 @@
 <app-container id="goods-detail" class="goods-detail-content">
     <div>
-        <!-- <navtop style="background: #ffffff;"></navtop> -->
         <div class="home-content">
             <scroller :on-refresh="refresh" ref="my_scroller">
                 <div slot="refresh-spinner" style="position:relative;top:0.1rem;">
@@ -17,20 +16,16 @@
                         <span class="money-price" v-if="goods.consuType==2">
                             <span>进货价:</span>{{ moneyPrice | localMoney}}
                         </span>
-                        <!-- <span class="money-price" v-if="goods.consuType==3">
-                        <span v-if="goods.consuType==3">进货价:</span>{{goods.moneyPrice | localMoney}}+{{goods.moneyRoll | localVolume}}券
-                    </span>
-                    <div class="purchase" v-if="goods.consuType==3">原价：{{goods.purchasePrice | localMoney}}</div> -->
                     </div>
                     <!-- 满赠 -->
-                    <div class="fullOfGifts" v-show="isGradeShow">
+                    <!-- <div class="fullOfGifts" v-show="isGradeShow">
                         <i class="iconfont icon-remind"></i>
                         <b>单笔进货金额满</b>
                         <span>¥8522.00</span>
                         <b>立刻升级</b>
                         <span>M3</span>
                         <b>,享新等级进货价，下单立返XXX商品68件!</b>
-                    </div>
+                    </div> -->
                     <!-- 倒计时 -->
                     <div class="count_down" v-show="showTime">
                         <img src="/static/images/newshop/time.png" />
@@ -40,20 +35,15 @@
                         <span>{{int_minute}}</span>分
                         <span>{{int_second}}</span>秒
                     </div>
-                    <!-- //促销 -->
-                    <!-- <div class="promotion" v-if="goods.consuType==3">
-                        <span>促销</span>
-                        <span>惠品券</span>
-                        <span>{{goods.moneyRoll | localVolume}}券+{{goods.moneyPrice | localMoney}}</span>
-                    </div> -->
-                    <div class="weui-flex goods-desc">
+                  
+                <!--  <div class="weui-flex goods-desc">
                         <span>运费:
                             <b>免运费</b>
                         </span>
-                        <!-- <span class="desc-right">库存:
+                         <span class="desc-right">库存:
                         <b :style="{color:goods.amount==0?'pink':'#808080'}">{{goods.amount}}</b>
-                    </span> -->
-                    </div>
+                    </span> 
+                    </div>-->
                 </div>
                 <div class="indexBox_logo">
                     <dl class="wdName">
@@ -61,10 +51,11 @@
                             <img :src="shopkeeper.wdImg" alt="">
                         </dt>
                         <dd>
-                            <span>{{shopkeeper.wdName}}</span>
+                            <h4>{{shopkeeper.wdName}}</h4>
+                            <span>{{shopkeeper.school}}</span>
                             <div v-if="shopkeeper.id==0">官方</div>
                             <p v-if="shopkeeper.id==1">
-                                <span>M{{shopkeeper.vipGrade}}</span>
+                                <span>{{'M'+shopkeeper.vipGrade}}</span>
                             </p>
                         </dd>
                     </dl>
@@ -78,13 +69,23 @@
                 <div class="rank">
                     <div class="line">
                         <b></b>
-                        <!-- <img src="/static/images/newshop/xiangqing.png" /> -->
+                        
                         <i class="iconfont icon-dengji-copy"></i>
                         <span class="line-font">店长折扣</span>
                         <b></b>
                     </div>
                     <div class="memberlevel">
+                        <div class="stockName">仓储中心代管进货价</div>
                         <p :class="{redColor:item.show}" v-for="(item,index) in grade">
+                            <span>{{item.vipName}}
+                                <i>(M{{item.id}})</i>
+                            </span>
+                            <b>{{item.vipdiscount | localMoney }}</b>
+                        </p>
+                    </div>
+                    <div class="memberlevel">
+                        <div class="stockName">商品自行管理进货价</div>
+                        <p :class="{redColor:item.show}" v-for="(item,index) in owngrade">
                             <span>{{item.vipName}}
                                 <i>(M{{item.id}})</i>
                             </span>
@@ -96,7 +97,7 @@
                     <div v-if="goods.goodsVideo">
                         <div class="line">
                             <b></b>
-                            <!-- <img src="/static/images/newshop/xiangqing.png" /> -->
+                           
                             <i class="iconfont icon-shipin2"></i>
                             <span class="line-font">视频</span>
                             <b></b>
@@ -106,7 +107,7 @@
 
                     <div class="line">
                         <b></b>
-                        <!-- <img src="/static/images/newshop/xiangqing.png" /> -->
+                
                         <i class="iconfont icon-tupian"></i>
                         <span class="line-font">详情</span>
                         <b></b>
@@ -123,11 +124,33 @@
                 </div>
             </scroller>
         </div>
-
+        <!--遮罩 stockTypeShow-->
+       
 
     </div>
-
+   
     <footer slot="footer">
+        <div class="order-cover" v-show="stockTypeShow">
+            <div class="order-cover-box"></div>
+            <div class="order-cover-content">
+                <div class="weui-media-box weui-media-box_text">
+                    <h4 class="weui-media-box__title title-h4 close">请选择进货仓储方式 <i class="iconfont icon-iconfontclose close1" @click="onClose"></i></h4>
+                </div>
+                <div class="weui-box" v-for="(v,i) in stockTypes" @click="chooseStockTpe(i)">
+        
+                    <div class="radus">
+                        <div class="radus-bg" v-show="v.stocktypeShow"></div>
+                    </div>
+                    <div class=" color-b">
+                        {{v.stocktype}}
+                    </div>
+                </div>
+                <!-- <div class="weuiBtn">
+                                 <div class="weui-btn1 color-f" @click="cancel">取消</div>
+                                 <div class="weui-btn1 color-c" @click="confirm">确定</div>
+                           </div> -->
+            </div>
+        </div>
         <div class="buy-content weui-flex">
             <div class="shop-car" @click="goShopcart">
                     <i class="iconfont icon-gouwuche"></i>

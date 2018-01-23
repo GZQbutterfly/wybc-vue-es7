@@ -1,7 +1,7 @@
 // History  Events
 import { isString } from 'lodash';
-import { isCMS, match } from 'common.env';
-let _CMSFlag = isCMS();
+import { clientEnv, match } from '../common.env';
+let _CMSFlag =false;// clientEnv.cms;
 
 /**
  * auth history back to page
@@ -78,7 +78,7 @@ function to(path) {
 
 function getContentPath() {
     if (_CMSFlag) {
-        return location.origin + '/cms#';
+        return location.origin + '/cms/#';
     } else {
         return location.origin;
     }

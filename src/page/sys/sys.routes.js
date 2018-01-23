@@ -1,4 +1,6 @@
 import loginRoutes from './login/login.routes';
+import leadRoutes from './lead/lead.routes';
+
 
 const routes = [
     ...loginRoutes,
@@ -12,7 +14,29 @@ const routes = [
             }, 'sys/system');
         },
         history: false
-    }, {
+    },
+    // 搜索tmp
+    {
+        path: '/search_bar',
+        name: 'search_bar',
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('../../commons/vue_plugins/components/search/tmp/search')['searchBar']);
+            }, 'sys/system');
+        }
+    },
+    // 搜索测试
+    {
+        path: '/search_test',
+        name: 'search_test',
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('./search/test/search_test')['SearchTest']);
+            }, 'sys/system');
+        },
+        history: false
+    }, 
+    {
         path: '/address',
         name: 'address',
         component: resolve => {
@@ -47,7 +71,17 @@ const routes = [
         component: resolve => {
             require.ensure([], require => {
                 resolve(require('./apply/campaign/campaign')['ApplyShopCampaign']);
-            }, 'sys/system');
+            }, 'sys/system/applyshop');
+        }
+    },
+    // 填写学校
+    {
+        path: '/apply_shop_choose_school',
+        name: 'apply_shop_choose_school',
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('./apply/chooseSch/chooseSch')['ApplyShopChooseSch']);
+            }, 'sys/system/applyshop');
         }
     },
     // 邀请码
@@ -57,7 +91,7 @@ const routes = [
         component: resolve => {
             require.ensure([], require => {
                 resolve(require('./apply/invitecode/invitecode')['ApplyShopInvitecode']);
-            }, 'sys/system');
+            }, 'sys/system/applyshop');
         }
     },
     // 申请开店
@@ -67,7 +101,7 @@ const routes = [
         component: resolve => {
             require.ensure([], require => {
                 resolve(require('./apply/shop/shop')['ApplyShop']);
-            }, 'sys/system');
+            }, 'sys/system/applyshop');
         }
     },
     // 申请开店Wiki
@@ -77,9 +111,11 @@ const routes = [
         component: resolve => {
             require.ensure([], require => {
                 resolve(require('./apply/wiki/wiki')['applyShopWiki']);
-            }, 'sys/system');
+            }, 'sys/system/applyshop');
         }
-    }
+    },
+    // 引导页面
+    ...leadRoutes
 ];
 
 export default routes;

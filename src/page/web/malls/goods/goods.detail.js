@@ -12,6 +12,8 @@ import { isNotLogin, toLogin, appendParams } from 'common.env';
 import VideoBanner  from '../../../../commons/vue_plugins/components/video/video.banner.vue';
 import VueVideo  from '../../../../commons/vue_plugins/components/video/video.vue';
 
+// 预加载订单页面数据
+require.ensure([], require => {}, 'web/order/order');
 
 import './goods.detail.scss';
 import goodsService from './goods.service';
@@ -85,7 +87,8 @@ export class GoodsDetail extends BaseVue {
                 _this.shopkeeper = {
                     wdName: res.data.shopName,
                     wdImg: res.data.userImg,
-                    vipGrade: res.data.vip
+                    vipGrade: res.data.vip,
+                    school: res.data.school,
                 }
             })
         } else {
@@ -94,10 +97,9 @@ export class GoodsDetail extends BaseVue {
             if (!this.shopId) {
                 this.shopId = wdInfo.infoId;
             }
-            localStorage._shopId = this.shopId;
             let cartCache = JSON.parse(localStorage.getItem("shopcartCache"));
             if (cartCache) {
-                if (cartCache[0].shopId != localStorage._shopId) {
+                if (cartCache[0].shopId != this.shopId) {
                     localStorage.removeItem("shopcartCache");
                     _this.$store.state.shopCar.count = 0;
                 }
@@ -110,12 +112,16 @@ export class GoodsDetail extends BaseVue {
                 _this.shopkeeper = {
                     wdName: res.wdName,
                     wdImg: res.wdImg,
-                    vipGrade: res.wdVipGrade
+                    vipGrade: res.wdVipGrade,
+                    school: res.school,
                 }
-                localStorage.shopName = res.wdName;
             })
         }
-        goodsService(_this.$store).goodsInfo(_this.$route.query.goodsId)
+        let opt={
+            goodsId: _this.$route.query.goodsId,
+            shopId: _this.shopId
+        }
+        goodsService(_this.$store).goodsInfo(opt)
             .then(res => {
                 if ((res.data.data && res.data.data.state != 1) || res.data.errorCode) {
                     let dialogObj = {
@@ -166,7 +172,7 @@ export class GoodsDetail extends BaseVue {
                             type: "video/mp4",
                             src: res.data.data.goodsVideo
                         }],
-                        poster: res.data.data.goodsVideoImg,
+                        poster: res.data.data.goodsVideoImg,                      
                     }
                 }
                 this.fetchShopData()
@@ -175,7 +181,7 @@ export class GoodsDetail extends BaseVue {
                             title: res.wdName + ': ' + _this.goods.goodsName,
                             desc: '悄悄告诉你：我发现了一枚好东西，千万不要告诉别人！~',
                             imgUrl: _this.goods.coverImg,
-                            link: window.location.href.split('#')[0]
+                            link: window.location.href.split('#')[0] + '&shopId=' + res.infoId
                         }
                         _this.updateWxShare(config);
                     })
@@ -193,23 +199,7 @@ export class GoodsDetail extends BaseVue {
         this.$router.push({ path: "shop_car" });
     }
     joinCar(goodsId) {
-        let own = localStorage.ownShop;
-        if (own == 1) {
-            let dialogObj = {
-                title: '购物车限制',
-                content: '店长不能将自己店里商品加入购物车！',
-                assistBtn: '',
-                mainBtn: '知道了',
-                type: 'info',
-                assistFn() {
-                },
-                mainFn() {
-                }
-            };
-            this.$store.state.$dialog({ dialogObj });
-            return;
-        }
-        this.show2Car = true;//暂时这样
+        this.show2Car = true;
         this.minLimit.buy = 1;
     }
     changeShowIt() {
@@ -235,7 +225,7 @@ export class GoodsDetail extends BaseVue {
             let opt = {
                 goodsId: _this.goods.goodsId,
                 number: num,
-                shopId: localStorage._shopId
+                shopId: _this.shopId
             }
             goodsService(_this.$store).addGoods(opt).then(res => {
                 if (res.data.errorCode) {
@@ -259,7 +249,7 @@ export class GoodsDetail extends BaseVue {
                 if (cout >= 10) {
                     let dialog = _this.$store.state.$dialog;
                     let dialogObj = {
-                        title: '购物车限制',
+                        title: '提示',
                         content: '登录后可加入更多，是否登录？',
                         assistBtn: '取消',
                         mainBtn: '确定',
@@ -281,6 +271,7 @@ export class GoodsDetail extends BaseVue {
 
                 for (let j = 0, len1 = cartCache[0].shopCarts.length; j < len1; j++) {
                     if (cartCache[0].shopCarts[j].goodsId == _this.goods.goodsId) {
+                        cartCache[0].shopCarts[j] = _this.goods;
                         cartCache[0].shopCarts[j].number = _this.goods.number;
                         exit = true;
                         break;
@@ -293,9 +284,10 @@ export class GoodsDetail extends BaseVue {
                 }
 
             } else {
+                let wdInfo = JSON.parse(localStorage.wdVipInfo);
                 cartCache = [{
-                    "shopId": localStorage._shopId,
-                    "shopName": localStorage.shopName,
+                    "shopId": _this.shopId,
+                    "shopName": wdInfo.wdName,
                     "shopCarts": [_this.goods]
                 }];
             }

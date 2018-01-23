@@ -1,0 +1,64 @@
+<app-container>
+    <!--  -->
+    <div class="lead-container" :style="{'visibility': showStr}">
+        <!-- 这是一张宣传图，包含学惠精选的宣传语，但不可点击 -->
+        <header class="lead-container_hd">
+            <div class="propaganda-img">
+                <img v-lazy="scope.propagandaImg" alt="宣传图片" v-if="scope.propagandaImg">
+            </div>
+        </header>
+
+        <!-- 我的足迹 -->
+        <section class="lead-container_bd">
+            <!-- 搜索店铺 -->
+            <div class="search-shop" @click="toSearch">
+                <span>输入店铺名</span>
+                <i class="iconfont icon-iconfonticonfontsousuo1"></i>
+            </div>
+            <!-- 店铺信息 -->
+            <div class="foot-history" v-if="scope.historyList.length">
+                <div class="foot-history_hd lead-title">
+                    <img :src="scope.zujiIcon" alt="足迹">
+                    <div>我的足迹</div>
+                </div>
+
+                <div class="foot-history_bd">
+                    <div class="swiper-container" ref="foothistoryRef">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" v-for="(item, index) in scope.historyList" :key="index" @click="toHome(item)">
+                                <shop-box :data="item" :style="{'background-color': index % 2 ? '#ebedff': '#ebf6ff'}"></shop-box>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="foot-history_ft">
+                        
+                </div>
+            </div>
+        </section>
+
+        <!-- 推荐店铺 -->
+        <footer class="lead-container_ft">
+            <div class="recommend-shop">
+                <div class="recommend-shop_hd lead-title">
+                    <img :src="scope.tuijianIcon" alt="推荐">
+                    <div>推荐店铺</div>
+                </div>
+
+                <div class="recommend-shop_bd">
+                    <div v-for="(item, index) in scope.recommendList" @click="toHome(item)">
+                        <div class="recommend-box weui-flex">
+                            <div class="recommend-box_hd">
+                                <img v-lazy="item.imgUrl" alt="宣传图片">
+                            </div>
+                            <div class="recommend-box_bd">
+                                <div class="shopname"><img v-lazy="item.wdImg || defaultUserImg" alt="用户头像" @error="imgError"><span class="text-ellipsis">{{item.wdName}}</span></div>
+                                <div class="schoolname">{{item.school}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</app-container>

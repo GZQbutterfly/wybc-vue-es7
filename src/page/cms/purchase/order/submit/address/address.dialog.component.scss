@@ -1,0 +1,46 @@
+.wybc-address-dialog {
+    .address-dialog-content {
+        position: fixed;
+        z-index: 2000;
+        bottom: 0;
+        background-color: #fff;
+        width: 100%;
+        .weui-cell:first-child:before {
+            display: block;
+        }
+        .weui-cell__bd {
+            width: 200px;
+        }
+        .address-detial {
+            font-size: 14px;
+            color: #949494;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .address-detial-name{
+            font-size: 16px;
+        }
+    }
+    .address-dialog-footer {
+        margin-left: 5px;
+        .wybc-icon-plus{
+            border-radius: 12px;
+        }
+    }
+    .address-default-tip{
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        font-size: 10px;
+        background-color: #ff2020;
+        color: #fff;
+        line-height: 13px;
+    }
+    .address-list{
+        >.swiper-container{
+            max-height: 400px;
+            height:auto!important;
+        }
+    }
+}

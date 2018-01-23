@@ -70,6 +70,9 @@ export default (_store) => {
         },
         getMinimumConsumption(){
             return q(minimumConsution,null);
+        },
+        getGoodsLists(goodsIds){
+            return q("api/goods/q_multi_goods", { goodsIds: goodsIds});
         }
     }
 

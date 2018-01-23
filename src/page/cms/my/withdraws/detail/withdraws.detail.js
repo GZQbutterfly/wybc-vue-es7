@@ -42,7 +42,7 @@ export class WithdrawsDetail extends BaseVue {
                         mainBtn: '确定',
                         type: 'error',
                         mainFn() {
-                            this.$router.push('withdraws_list')
+                            _self.$router.push('withdraws_list')
                         }
                     }
                 });

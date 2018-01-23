@@ -30,7 +30,13 @@ export default {
                 observer: true,
                 freeMode: true,
             });
+           
         });
+    },
+    activated () {
+         if(this.swiper){
+                this.swiper.slideTo(0);
+            }
     },
     methods: {
         itemSelect(index, data) {

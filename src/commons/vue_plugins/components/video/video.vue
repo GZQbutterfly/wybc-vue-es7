@@ -1,27 +1,58 @@
 <template lang="html">
-    <div class="vue-video">
-      <video-player class="video-js vjs-big-play-centered" :options="playerOptions" :playsinline="true"></video-player>
+    <div class="vue-video" ref="videoLayoutRef">
+        <video-player class="video-js vjs-big-play-centered" 
+                    :options="playerOptions" 
+                    :playsinline="true"
+                    @play="onPlayerPlay($event)"
+                    @pause="onPlayerPause($event)"
+                    v-if="show"
+                    ></video-player>
   </div>
 </template>
 
 <script>
-
+import {clientEnv, timeout} from 'common.env';
 export default {
-    computed: {
-        player() {
-            return this.$refs.videoPlayer.player
-        }
-    },
-    // components: {
-    //     VueVideo
-    // },
     props: ['playerOptions'],
+    data(){
+        return {show:false};
+    },
+    mounted () {
+        this.$nextTick(()=>{
+            this.show = true;
+            this.setVideoDom();  
+        });
+    },
     methods: {
+        setVideoDom(){
+            if(clientEnv.android){
+                 timeout(()=>{
+                    let _videoLayoutRef = this.$refs.videoLayoutRef;
+                    let _videDom = _videoLayoutRef.querySelector('video');
+                    if(_videDom){
+                        _videDom.setAttribute('x-webkit-airplay', 'true');
+                        _videDom.setAttribute('playsinline', 'true');
+                        _videDom.setAttribute('webkit-playsinline', 'true');
+                        //_videDom.setAttribute('x5-video-player-type', 'h5');
+                        _videDom.setAttribute('x5-playsinline', 'h5');
+                        _videDom.setAttribute('x5-video-player-fullscreen', 'false');
+                    }
+                 },100);
+            }
+        },
         onPlayerPlay(player) {
-            // console.log('player play!', player)
+            console.log('player play!', player);
+            //player.enterFullWindow();
         },
         onPlayerPause(player) {
-            // console.log('player pause!', player)
+            console.log('player pause!', player);
+            if(clientEnv.android){
+                this.show=false;
+                timeout(()=>{
+                    this.show= true;
+                    this.setVideoDom();  
+                });
+            }
         },
         // ...player event
 
@@ -40,14 +71,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .vue-video {
+    position: relative!important;
     width: 100%;
     height: 100%;
     .video-center {
         margin: 0;
     }
-
 }
 
 .video-js {
@@ -73,11 +104,11 @@ export default {
 
 .video-js .vjs-big-play-button .vjs-icon-placeholder:before,
 .video-js .vjs-play-control .vjs-icon-placeholder,
-.vjs-icon-play {
-    font-family: VideoJS;
-    font-weight: normal;
-    font-style: normal;
-}
+// .vjs-icon-play {
+//     font-family: VideoJS;
+//     font-weight: normal;
+//     font-style: normal;
+// }
 .video-js .vjs-big-play-button .vjs-icon-placeholder:before,
 .video-js .vjs-play-control .vjs-icon-placeholder:before,
 .vjs-icon-play:before {

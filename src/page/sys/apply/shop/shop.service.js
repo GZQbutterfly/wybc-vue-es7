@@ -8,8 +8,6 @@ export default (_store) => {
     let querycodeinfo = 'api/wd_vip/hasInvited';
     //注册店
     let wdregister = 'api/wd_vip/wdRegister';
-    //取得所有*学校名称
-    let queryallschool = 'api/wd_vip/querySchool';
     //查询用户是否已经开店
     let queryuserhasshop = 'api/wd_vip/ifHasWd';
 
@@ -45,7 +43,7 @@ export default (_store) => {
          * @param res 申请开店数据
          */
         wdRegister(res) {
-            let data = merge({}, res);// { ...res };
+            let data = merge({}, res);
             let reg = /学惠店$/;
             if (!reg.test(data.wdName)) {
                 data.wdName += '学惠店';
@@ -53,13 +51,6 @@ export default (_store) => {
             data.wxNum == '' && (data.wxNum = 'null');
             return q(wdregister, data);
         },
-
-        /**
-         * 取得所有*学校名称
-         */
-        queryAllSchool() {
-            return q(queryallschool, {});
-        }
 
     }
 

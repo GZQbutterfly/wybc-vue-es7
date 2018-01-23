@@ -1,7 +1,7 @@
 // 消息通知组件
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-import { timeout, isCMS, isWEP } from 'common.env';
+import { timeout, isCMS } from 'common.env';
 import { find } from 'lodash';
 
 
@@ -61,7 +61,7 @@ export class MessageNotice extends Vue {
         let _newList = [];
         for (let i = 0, len = datas.length; i < len; i++) {
             let _data = datas[i];
-            let isExist = find(this.list, { orderId: _data.orderId });
+            let isExist = find(this.list, { orderNo: _data.orderNo, maketime: _data.maketime });
             if (!isExist) {
                 _newList.push(_data);
             }

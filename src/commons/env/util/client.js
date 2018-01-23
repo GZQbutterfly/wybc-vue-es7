@@ -1,6 +1,8 @@
 
 let _ua = window.navigator.userAgent;
 
+
+
 //判断是否微信登陆
 export function isWeiXin() {
     return /MicroMessenger/i.test(_ua);
@@ -21,7 +23,10 @@ export function isiOS() {
     return !!_ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
 }
 
-
+//原生iOS
+export function isNativeiOS(){
+    return /Native_iOS/.test(_ua);
+}
 
 //判断QQ浏览器
 export function isQQBrowser() {
@@ -38,6 +43,18 @@ export function isCMS(){
 /**
  * 
  */
-export function isWEP(){
+export function isWEB(){
     return !/#/.test(location.href);
 }
+
+
+let clientEnv = {
+    android: isAndroid(),
+    weixin: isWeiXin(),
+    ios: isiOS(),
+    QQBrowser: isQQBrowser(),
+    web: isWEB(),
+    cms: isCMS()
+}
+
+export {clientEnv};

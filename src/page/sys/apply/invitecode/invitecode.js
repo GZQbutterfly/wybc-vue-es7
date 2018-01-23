@@ -1,6 +1,6 @@
 // 开店宣传信息
 import { Component } from 'vue-property-decorator';
-import  BaseVue  from 'base.vue';
+import BaseVue from 'base.vue';
 import { isEmpty } from 'lodash';
 import { getLocalUserInfo, isNotLogin, toLogin, toCMS } from 'common.env';
 
@@ -13,9 +13,11 @@ import './invitecode.scss';
 export class ApplyShopInvitecode extends BaseVue {
     incode = '';
     tipImg = '/static/images/minishop/shenqingkaidian.png';
-     _$popup;
-     _$dialog;
-     _$service;
+    _$popup;
+    _$dialog;
+    _$service;
+    school = '';
+    campusId = 0;
     mounted() {
         let _self = this;
         this._$popup = _self.$store.state.$popup;
@@ -29,27 +31,35 @@ export class ApplyShopInvitecode extends BaseVue {
             sessionStorage.removeItem("incodeInfo");
         }
         //TODO
+        _self.school = _self.$route.query.school;
+        _self.campusId = _self.$route.query.campusId;
         this.$nextTick(() => {
             document.title = "申请开店";
-            _self.isLoginCheckHasWdAndIncode();
+            _self.checking();
         });
     }
     /**
      * 判断登陆 && 判断是否开店 && 判断邀请码
      */
-    isLoginCheckHasWdAndIncode() {
-        let _incode = this.$route.query.incode;
+    checking() {
+        let _self = this;
+        let _incode = _self.$route.query.incode;
+        if (!_self.school) {
+            //学校名  到开店首页
+            _self.errorNoSchool();
+            return;
+        }
         if (isNotLogin()) {
             //to login
             let _url = _incode ? ('?incode=' + _incode) : '';
-            toLogin(this.$router, { toPath: 'apply_shop_invitecode', realTo: 'apply_shop_invitecode' + _url });
+            toLogin(_self.$router, { toPath: 'apply_shop_invitecode', realTo: 'apply_shop_invitecode' + _url });
         } else {
             //check hasWd
-            this.queryUserHasShop(() => {
+            _self.queryUserHasShop(() => {
                 //check incode
                 if (_incode) {
-                    this.incode = _incode;
-                    this.toCreateShop(true);
+                    _self.incode = _incode;
+                    _self.toCreateShop(true);
                 }
             })
         }
@@ -81,7 +91,7 @@ export class ApplyShopInvitecode extends BaseVue {
                         content: '您的账户已有店铺，不能继续开店！',
                         mainBtn: '管理我的店铺',
                         mainFn() {
-                            toCMS('cmsHome');
+                            toCMS('cms_home');
                         }
                     }
                 });
@@ -147,6 +157,26 @@ export class ApplyShopInvitecode extends BaseVue {
     }
 
     /**
+     * 未填写学校名称
+     */
+    errorNoSchool() {
+        let _self = this;
+        _self._$dialog({
+            dialogObj: {
+                title: '提示',
+                type: 'error',
+                content: '系统错误',
+                mainBtn: '确定',
+                assistFn() {
+                },
+                mainFn() {
+                    _self.$router.push('apply_shop_campaign');
+                }
+            }
+        });
+    }
+
+    /**
      * 邀请码不存在
      */
     errorCodePopup() {
@@ -195,7 +225,11 @@ export class ApplyShopInvitecode extends BaseVue {
                 _self.incode = '';
             },
             mainFn() {
-                _self.$router.push({ path: 'apply_shop', query: { incode: _self.incode } });
+                let query = {
+                    incode: _self.incode,
+                    school: _self.school,
+                }
+                _self.$router.push({ path: 'apply_shop', query: query });
             }
         });
     }
@@ -205,7 +239,11 @@ export class ApplyShopInvitecode extends BaseVue {
      */
     tipPopup() {
         let _self = this;
-        this._$service.queryRandomCode().then((res) => {
+        let query = {
+            school: _self.school,
+            campusId: _self.campusId
+        }
+        this._$service.queryRandomCode(query).then((res) => {
             if (res.data.errorCode) {
                 let _self = this;
                 _self._$dialog({
@@ -230,7 +268,12 @@ export class ApplyShopInvitecode extends BaseVue {
                         assistFn() {
                         },
                         mainFn() {
-                            let query = { incode: res.data.invitationCode, auto: 1 };
+                            let query = { 
+                                incode: res.data.invitationCode, 
+                                auto: 1,
+                                school: _self.school,
+                                campusId: _self.campusId
+                            };
                             _self.$router.push({ path: 'apply_shop', query: query });
                         }
                     }

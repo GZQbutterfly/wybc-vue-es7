@@ -1,3 +1,5 @@
+import deliveryRoutes from './delivery/delivery.routes';
+
 const routes = [
     {
         path: '/order_layout',
@@ -61,7 +63,9 @@ const routes = [
                 }
             }
         ]
-    }
+    },
+    // delivery
+    ...deliveryRoutes
 ];
 
 export default routes;

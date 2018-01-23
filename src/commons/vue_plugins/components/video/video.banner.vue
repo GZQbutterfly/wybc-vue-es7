@@ -4,9 +4,8 @@
             <div class="swiper-slide" v-if="hasVideo">
                 <fsvideo :playerOptions="playerOptions" ></fsvideo>
             </div>
-             <div class="swiper-slide" v-for="(item,index) in dataList">
+             <div class="swiper-slide" v-for="(item,index) in dataList" :key="index">
                 <img :src="item" alt="">
-
             </div>
         </div>
     </div>
@@ -66,7 +65,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .swiper-container {
     width: 100%;
     height: 100%;

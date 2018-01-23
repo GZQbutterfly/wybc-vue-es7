@@ -32,6 +32,7 @@ export class OrderDetail extends BaseVue {
     //底部显示实付还是需付
     showTypeAndRefund = false;
     totalPrice = 0;
+    shipFee = 0;
     mounted() {
         document.title = "我的订单";
         //注册服务
@@ -65,6 +66,8 @@ export class OrderDetail extends BaseVue {
     page_reload() {
         console.log('重加载')
         let _self = this;
+        _self.totalPrice = 0;
+        _self.shipFee = 0;
         if (this.orderId) {
             this._$service.getOrderInfo(this.orderId).then((res) => {
                 if (res.data.errorCode) {
@@ -91,10 +94,9 @@ export class OrderDetail extends BaseVue {
         this.timer && clearInterval(this.timer);
         //待支付
         if (this.orderInfo.orders.orderState == 1 && this.leftTime > 0) {
-            // this.setFormatDate();
             this.timer = setInterval(() => {
                 if (_self.leftTime > 0) {
-                    _self.setFormatDate();
+                    _self.formatDate = _self.setFormatDate(_self.leftTime);
                     _self.leftTime = _self.leftTime - 1000;
                 } else {
                     _self.formatDate = '0秒';
@@ -107,9 +109,14 @@ export class OrderDetail extends BaseVue {
         let _address = {
             province: this.orderInfo.orders.province,
             city: this.orderInfo.orders.city,
-            district: this.orderInfo.orders.district
+            district: this.orderInfo.orders.district,
+            campus: this.orderInfo.orders.campus,
+            dormitory: this.orderInfo.orders.dormitory
         };
-        if (this.orderInfo.orders.province != null) {
+        if (this.orderInfo.orders.campus != null) {
+            // _address = getZoneData(_address);
+            this.orderInfo._address = _address.campus + _address.dormitory + this.orderInfo.orders.address;
+        } else if (this.orderInfo.orders.province != null) {
             // _address = getZoneData(_address);
             this.orderInfo._address = _address.province + _address.city + _address.district + this.orderInfo.orders.address;
         }
@@ -138,7 +145,8 @@ export class OrderDetail extends BaseVue {
             }
         }
         res.orders.forEach(v => {
-            this.totalPrice += v.totalMoney;
+            this.totalPrice += Number(v.totalMoney);
+            this.shipFee += Number(v.shipFee);
         })
 
         let a = {
@@ -189,29 +197,40 @@ export class OrderDetail extends BaseVue {
 
     /**
      * 得到格式化后的时间字符串
-     * @param time
+     * @param time      毫秒数
+     * @param formatLen 格式位数
      */
-    setFormatDate() {
-        let date = '',
-            stp = [
-                60, 60, 24
-            ],
-            mark = [
-                '秒', '分', '小时'
-            ],
-            i = 0;
-        let time = this.leftTime,
-            isMsec = true;
-        isMsec && (time /= 1000);
-        while (time > 0 && i < 3) {
-            date = [
-                Math.floor(time % stp[i]),
-                time = Math.floor(time / stp[i])
-            ][0] + mark[i++] + date;
-        }
-        time > 0 && (date = time + '天' + date);
-        // console.log('剩余时间:',date)
-        this.formatDate = date;
+    setFormatDate(time, formatLen = 4) {
+        let format = [
+            {
+                step: 1000,
+                mark: '秒',
+            }, {
+                step: 60,
+                mark: '分',
+            }, {
+                step: 60,
+                mark: '小时',
+            }, {
+                step: 24,
+                mark: '天',
+            }, {
+                step: 7,
+                mark: '周',
+            }
+        ];
+        let getFormat = (time, i = -1) => {
+            time = Math.floor(time / format[++i].step);
+            if (!time) {
+                return '';
+            }
+            if (formatLen - 1 == i) {
+                return time + format[i].mark;
+            } else {
+                return getFormat(time, i) + (time % format[i + 1].step) + format[i].mark;
+            }
+        };
+        return getFormat(time);
     }
 
     /**
@@ -228,7 +247,7 @@ export class OrderDetail extends BaseVue {
             '交易关闭'
         ][this.orderInfo.orders.orderState] + (
             (this.orderInfo.orders.orderState === 6)
-            ? ' (' + ['', '买家取消', '支付超时', '买家退款', '订单异常'][this.orderInfo.orders.closeReason] + ')'
+            ? ' (' + ['', '买家取消', '支付超时', '订单异常'][this.orderInfo.orders.closeReason] + ')'
             : '');
     }
 
@@ -303,6 +322,7 @@ export class OrderDetail extends BaseVue {
     refresh(done) {
         let _this = this;
         _this.totalPrice = 0;
+        _this.shipFee = 0;
         setTimeout(() => {
             _this.page_reload();
             done();

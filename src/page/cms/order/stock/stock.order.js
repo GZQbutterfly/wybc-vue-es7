@@ -1,8 +1,8 @@
 //进货订单
-import  BaseVue  from 'base.vue';
+import BaseVue from 'base.vue';
 import { Component } from 'vue-property-decorator';
 
-import  MultiTab  from '../../../../commons/vue_plugins/components/multitab/multitab.vue';
+import MultiTab from '../../../../commons/vue_plugins/components/multitab/multitab.vue';
 import stockOrderService from './stock.order.service';
 import { StockOrderItem } from './item/stock.order.item';
 import './stock.order.scss';
@@ -23,13 +23,14 @@ export class StockOrder extends BaseVue {
 
     dataStockList = [];
 
-    noDataList = [false, false, false, false];
+    noDataList = [false, false, false, false, false, false];
 
-    pageList = [0, 0, 0, 0];
+    pageList = [0, 0, 0, 0, 0, 0];
 
     data() {
         return {
-            tabs: ['全部', '待付款', '交易完成', '交易关闭'],
+            tabs: ['全部', '待付款', '待发货', '待收货', '交易完成', '交易关闭'],
+            tabsStateList: [0, 1, 3, 4, 5, 6],
             index: this.tabIndex,
         }
     }
@@ -43,11 +44,11 @@ export class StockOrder extends BaseVue {
 
         this.dataStockList = [];
 
-        this.noDataList = [false, false, false, false];
+        this.noDataList = [false, false, false, false, false, false];
 
-        this.pageList = [0, 0, 0, 0];
+        this.pageList = [0, 0, 0, 0, 0, 0];
 
-        this.fetchOrdersData('', this.tabIndex, 1,null);
+        this.fetchOrdersData('', this.tabIndex, 1, null);
     }
 
     onTabChange(index) {
@@ -71,28 +72,28 @@ export class StockOrder extends BaseVue {
                 order.goodses = new Array();
                 order.orders = new Array();
                 let combinOrderNo = order.combinOrderNo;
-				//组合订单
-				if (combinOrderNo&&(order.orderState==1||order.orderState==3)) {
-					while (orders[i]&&orders[i].combinOrderNo&&combinOrderNo==orders[i].combinOrderNo) {
+                //组合订单
+                if (combinOrderNo && (order.orderState == 1 || order.orderState == 6)) {
+                    while (orders[i] && orders[i].combinOrderNo && combinOrderNo == orders[i].combinOrderNo) {
                         order.orders.push(orders[i]);
-						for (let k = 0; k < goodses.length; ++k) {
-							let goods = goodses[k]
-							if (goods.orderId == order.orderId) {
-								order.goodses.push(goods);
-							}
-						}
-						i++;
-					}
-					--i;
-				}else{
+                        for (let k = 0; k < goodses.length; ++k) {
+                            let goods = goodses[k]
+                            if (goods.orderId == order.orderId) {
+                                order.goodses.push(goods);
+                            }
+                        }
+                        i++;
+                    }
+                    --i;
+                } else {
                     order.orders.push(orders[i]);
-					for (let k = 0; k < goodses.length; ++k) {
-						let goods = goodses[k]
-						if (goods.orderId == order.orderId) {
-							order.goodses.push(goods);
-						}
-					}
-				}
+                    for (let k = 0; k < goodses.length; ++k) {
+                        let goods = goodses[k]
+                        if (goods.orderId == order.orderId) {
+                            order.goodses.push(goods);
+                        }
+                    }
+                }
 
                 if (logis) {
                     for (var index = 0; index < logis.length; index++) {
@@ -111,7 +112,8 @@ export class StockOrder extends BaseVue {
 
     fetchOrdersData(keyword, index, page, done) {
         let self = this;
-        this._$service.stockOrderList(keyword, index, page)
+        let state = self.tabsStateList[index];
+        this._$service.stockOrderList(keyword, state, page)
             .then((res) => {
                 let _toast = self.$store.state.$toast;
                 if (res.errorCode) {
@@ -157,7 +159,7 @@ export class StockOrder extends BaseVue {
         setTimeout(() => {
             if (!self.noDataList[self.tabIndex]) {
                 self.fetchOrdersData('', self.tabIndex, self.pageList[self.tabIndex] + 1, done);
-            }else{
+            } else {
                 done(true);
             }
         }, 500)

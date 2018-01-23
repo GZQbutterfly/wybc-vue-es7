@@ -27,6 +27,10 @@ export default {
         height: {
             type: Number,
             default: 0
+        },
+        callBack:{
+            type: Function,
+            default:()=>{}
         }
     },
     data() {
@@ -72,7 +76,11 @@ export default {
             _self.content_width = _contentSize.width;
             _self.content_height = _contentSize.height;
             _self.debounceArea = debounce(_self.reArea, 500);
-            window.addEventListener('resize', _self.debounceArea);
+            _self.isResize = false;
+            window.addEventListener('resize',()=>{
+                _self.isResize = !_self.isResize;
+                _self.debounceArea();
+            });
         },
         reArea() {
             let _self = this;
@@ -81,7 +89,7 @@ export default {
                 _self.content_width = width;
                 _self.content_height = height;
                 _self.resize();
-            }
+            }         
         },
         resize() {
             let _self = this;
@@ -101,7 +109,7 @@ export default {
         touchStart(e) {
             let _self = this;
             // Don't react if initial down happens on a form element
-            if (e.target.tagName.match(/input|textarea|select/i)) {
+            if (e.target.tagName.match(/input|textarea|select/i)) {             
                 return;
             };
             _self.reArea();
@@ -110,6 +118,10 @@ export default {
         touchMove(e) {
             let _self = this;
             e.preventDefault();
+            let activeElement = document.activeElement;
+            if (/input/i.test(activeElement.tagName) && !_self.isResize) {
+                _self.callBack();
+            }
             _self.scroller.doTouchMove(e.touches, e.timeStamp);
         },
         touchEnd(e) {

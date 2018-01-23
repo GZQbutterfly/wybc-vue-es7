@@ -1,12 +1,12 @@
 // 提交订单页面（预提交订单）
-import {Component} from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import BaseVue from 'base.vue';
-import {get} from 'lodash';
-import {getZoneData} from 'common.env';
+import { get } from 'lodash';
+import { getZoneData } from 'common.env';
 
-import {AddressDialogComponent} from './address/address.dialog.component';
+import { AddressDialogComponent } from './address/address.dialog.component';
 
-import {Address} from '../../../sys/address/address';
+import { Address } from '../../../sys/address/address';
 
 import submitService from './order.submit.service';
 import './order.submit.scss';
@@ -34,7 +34,8 @@ export class OrderSubmit extends BaseVue {
 
     //最小消费额
     minimumConsumption = -1;
-
+    shipFee = 0;//邮费
+    dissatisfyPrice = 0;//未满金额
     orderTotal = {
         price: 0, //总价格
         diffPrice: 0, // 差价（-现金卷）
@@ -49,13 +50,14 @@ export class OrderSubmit extends BaseVue {
         phone: '',
         addrId: ''
     };
+    noShipFee = false;
     leaveMsg = []; // 虚拟商品的用户表单格式json
     selectAddressFlag = false;
     showDialogAddress = false;
     showAddAddress = false;
     payResult = {}; // 支付结果
     _$service;
-
+    isInsideSchool = 1;
     //套餐
     packageId;
     packageData;
@@ -67,15 +69,23 @@ export class OrderSubmit extends BaseVue {
     data() {
         return {};
     }
-    mounted() {
+    created() {
+        document.title = "提交订单";
         this.$nextTick(() => {
+            this.getFee();
             this.initPage();
         })
     }
     closeFn() { //取消支付
         this.choosePayShow = false;
     }
-    initPage() {
+    async getFee() {
+        let _result = await submitService(this.$store).getFee();
+        this.dissatisfyPrice = _result.data.freeShipFee;
+        this.shipFee = _result.data.outSchoolShipFee;
+    }
+
+    async initPage() {
         if (sessionStorage.____addressBack) {
             // 地址修改回调
             sessionStorage.removeItem('____addressBack');
@@ -102,11 +112,11 @@ export class OrderSubmit extends BaseVue {
         if (this.orderSrouce === 'car') {
             //for 购物车
             this.entityModel = true;
-            this._$service.queryCarOrders({shopCartIds: cartIds}).then((res) => {
+            this._$service.queryCarOrders({ shopCartIds: cartIds }).then(async (res) => {
                 this.orderList = get(res, 'data.data') || {};
                 //console.log('购物车所有商品', this.orderList)
+                await this.queryDefaultAddress();
                 this.parseOrderList();
-                this.queryDefaultAddress();
             });
         } else if (this.orderSrouce === 'package') {
             //for 套餐
@@ -125,12 +135,11 @@ export class OrderSubmit extends BaseVue {
             };
             if (this.goodsType == 'entity') {
                 this.entityModel = true;
-                this.queryDefaultAddress();
+                await this.queryDefaultAddress();
             } else {
                 this.entityModel = false;
             }
             let wdInfo = JSON.parse(localStorage.wdVipInfo);
-            console.log(wdInfo);
             this._$service.queryOrder(_parm).then((res) => {
                 let _result = res.data.data;
                 _result.number = this.number;
@@ -150,27 +159,32 @@ export class OrderSubmit extends BaseVue {
     /**
      * 实物商品进入商品默认加载该用户的默认的地址
      */
-    queryDefaultAddress(addrId) {
+    async queryDefaultAddress(addrId) {
+        let _self = this;
         let _orderAddress = {};
-        this._$service.queryDefaultAddress(addrId).then((res) => {
-            let _result = res.data;
-            if (!_result.errorCode) {
-                if (_result) {
-                    _orderAddress.address = _result.address;
-                    _orderAddress.name = _result.name;
-                    _orderAddress.phone = _result.phone;
-                    _orderAddress.addrId = _result.addrId;
-                    this.selectAddressFlag = true;
-                    getZoneData(_result).then((info) => {
-                        _orderAddress.addressInfo = info;
-                        this.orderAddress = _orderAddress;
-                    });
+        let _result = (await this._$service.queryDefaultAddress(addrId)).data;
+        if (!_result.errorCode) {
+            _self.isInsideSchool = _result.isInsideSchool;
+            if (_result) {
+                _orderAddress.address = _result.address;
+                _orderAddress.name = _result.name;
+                _orderAddress.phone = _result.phone;
+                _orderAddress.addrId = _result.addrId;
+                this.selectAddressFlag = true;
+                if (_result.campus) {
+                    _orderAddress.addressInfo = {
+                        campus: _result.campus,
+                        dormitory: _result.dormitory
+                    }
                 } else {
-                    this.orderAddress = {};
-                    this.selectAddressFlag = false;
+                    _orderAddress.addressInfo = await getZoneData(_result);
                 }
+                this.orderAddress = _orderAddress;
+            } else {
+                this.orderAddress = {};
+                this.selectAddressFlag = false;
             }
-        })
+        }
     }
     /**
      * 处理套餐相关
@@ -234,7 +248,7 @@ export class OrderSubmit extends BaseVue {
                     }
                 }
                 console.log('达到最小消费,优惠' + (
-                redirectMoney / 100).toFixed(2));
+                    redirectMoney / 100).toFixed(2));
             }
             //转换成页面上显示的数据
             let _orderTotal = this.orderTotal;
@@ -294,10 +308,10 @@ export class OrderSubmit extends BaseVue {
                 type: 'info',
                 assistBtn: '',
                 mainBtn: '知道啦',
-                assistFn() {},
-                mainFn() {}
+                assistFn() { },
+                mainFn() { }
             };
-            this.$store.state.$dialog({dialogObj});
+            this.$store.state.$dialog({ dialogObj });
         }
         return this.canBuy;
     }
@@ -329,25 +343,11 @@ export class OrderSubmit extends BaseVue {
         this.showAddAddress = false;
     }
 
-    checkOrder() {}
+    checkOrder() { }
     /**
      * 提交订单
      */
     submitOrder() {
-        let own = localStorage.ownShop;
-        if (own && own == 1) {
-            let dialogObj = {
-                title: '',
-                content: '您是店主，不能购买自己店铺的商品!',
-                assistBtn: '',
-                type: 'info',
-                mainBtn: '知道啦',
-                assistFn() {},
-                mainFn() {}
-            };
-            this.$store.state.$dialog({dialogObj});
-            return;
-        }
         let _self = this;
         let _orderTotal = this.orderTotal;
         let orderAddress = _self.orderAddress;
@@ -426,10 +426,10 @@ export class OrderSubmit extends BaseVue {
                             assistBtn: '',
                             type: 'info',
                             mainBtn: '知道啦',
-                            assistFn() {},
-                            mainFn() {}
+                            assistFn() { },
+                            mainFn() { }
                         };
-                        _self.$store.state.$dialog({dialogObj});
+                        _self.$store.state.$dialog({ dialogObj });
                         obj.close();
                     }
                 }
@@ -445,10 +445,10 @@ export class OrderSubmit extends BaseVue {
                             type: 'info',
                             assistBtn: '',
                             mainBtn: '知道啦',
-                            assistFn() {},
-                            mainFn() {}
+                            assistFn() { },
+                            mainFn() { }
                         };
-                        _self.$store.state.$dialog({dialogObj});
+                        _self.$store.state.$dialog({ dialogObj });
                         obj.close();
                     } else {
                         _self.payResult.orderId = _result.orderId;
@@ -474,7 +474,7 @@ export class OrderSubmit extends BaseVue {
         let _self = this;
         if (res) {
             //console.log('已支付');
-            this.$router.replace({path: 'user_order'});
+            this.$router.replace({ path: 'user_order' });
         } else {
             //console.log('未支付');
             this.$router.replace({
@@ -498,10 +498,10 @@ export class OrderSubmit extends BaseVue {
                 type: 'info',
                 assistBtn: '',
                 mainBtn: 'ok',
-                assistFn() {},
-                mainFn() {}
+                assistFn() { },
+                mainFn() { }
             };
-            _self.$store.state.$dialog({dialogObj});
+            _self.$store.state.$dialog({ dialogObj });
             return false;
         }
         return true;
@@ -519,10 +519,10 @@ export class OrderSubmit extends BaseVue {
                 type: 'info',
                 assistBtn: '',
                 mainBtn: 'ok',
-                assistFn() {},
-                mainFn() {}
+                assistFn() { },
+                mainFn() { }
             };
-            _self.$store.state.$dialog({dialogObj});
+            _self.$store.state.$dialog({ dialogObj });
             return false;
         }
         return true;
@@ -531,8 +531,11 @@ export class OrderSubmit extends BaseVue {
      * 处理订单数据
      */
     parseOrderList() {
+        let _self = this;
         let list = this.orderList;
         let _orderTotal = this.orderTotal;
+        _orderTotal.price = 0;
+        _orderTotal.pay = 0;
         if (this.entityModel) {
             // 实物
             for (let i = 0, len = list.length; i < len; i++) {
@@ -540,11 +543,24 @@ export class OrderSubmit extends BaseVue {
                     let item = list[i].shopCarts[j];
                     let _num = item.number; // 数量
                     _orderTotal.price += (item.purchasePrice * _num) || 0; //原价
-                    _orderTotal.transportPrice += item.transportPrice || 0; // 配送费
                 }
-
             }
-            _orderTotal.pay = _orderTotal.price + _orderTotal.transportPrice;
+            console.log(_self.isInsideSchool)
+            if (_self.isInsideSchool == 1) {
+                _orderTotal.pay = _orderTotal.price;
+                _self.noShipFee = true;
+            }
+            else {
+                if (_orderTotal.price >= _self.dissatisfyPrice) {
+                    _orderTotal.pay = _orderTotal.price;
+                    _self.noShipFee = true;
+                }
+                else {
+                    _orderTotal.pay = _orderTotal.price + Number(_self.shipFee);
+                    _self.noShipFee = false;
+                }
+            }
+
         } else {
             //虚拟
             for (let i = 0, len = list.length; i < len; i++) {
@@ -563,6 +579,8 @@ export class OrderSubmit extends BaseVue {
     selectAddress(item) {
         this.selectAddressFlag = true;
         this.orderAddress = item;
+        this.isInsideSchool = item.isInsideSchool;
+        this.parseOrderList();
         this.closeDialogAddess();
     }
     /**

@@ -71,6 +71,16 @@ const routes = [// 我的钱包
                     }, 'cms/my/sys');
                 }
             },
+            // 资讯
+            {
+                path: '/information',
+                name: 'information',
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./information/information')['Information']);
+                    }, 'cms/my/sys');
+                }
+            },
             //提现记录
             ...withdrawsRoutes,
             //我的库存

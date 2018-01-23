@@ -2,7 +2,7 @@
 import { Component } from 'vue-property-decorator';
 import BaseVue from 'base.vue';
 
-import { isNotLogin, isAndroid, isiOS, pageNotAccess, dialog } from 'common.env';
+import { isNotLogin, isAndroid, isiOS, pageNotAccess, dialog, timeout } from 'common.env';
 
 import walletService from './wallet.service';
 import './wallet.scss';
@@ -38,7 +38,7 @@ export class MyWallet extends BaseVue {
         let _self = this;
         //注册服务
         this._$service = walletService(this.$store);
-
+        _self.$refs.walletRef.style.minHeight = document.body.offsetHeight + 'px';
         //TODO
         this.$nextTick(() => {
 
@@ -75,7 +75,7 @@ export class MyWallet extends BaseVue {
         let _self = this;
         _self._$service.queryWithdrawInfo().then((res) => {
             _self.withdrawInfo = res.data;
-            _self.withdrawInfo.withDrawInstruction = _self.withdrawInfo.withDrawInstruction.split(/\s{2}/g);
+            _self.withdrawInfo.withDrawInstruction = _self.withdrawInfo.withDrawInstruction.split(/\s{2}/g).join('');
         });
     }
 
@@ -220,16 +220,20 @@ export class MyWallet extends BaseVue {
             this.$router.push({ path: 'realname_result', query: { result: res } });
         }
     }
+    
+    imgError() {
+        console.log(' ! ! ! ! ! ! ! ! ! ', 'user pic error ...');
+        this.user_img = '/static/images/pic-login.png';
+    }
 
-    imgLoad() {
-        //暂用 根据大小判断 用户头像为640*640 错误头像为120*120 默认头像为175*175
-        if (this.userLogin) {
-            let img = new Image();
-            img.src = this.user_img;
-            if (img.width == 120) {
-                console.log('检测到错误的用户头像,正在替换为默认头像...');
-                this.user_img = '/static/images/pic-login.png';
-            }
+    callBack() {
+        //console.log('aa: ', this.showRule);
+        if(this.showRule){
+            let _ruleRef = this.$refs.walletTextArea;
+            _ruleRef.classList.add('hide');
+            timeout(() => {
+                _ruleRef.classList.remove('hide');
+            });
         }
     }
 }

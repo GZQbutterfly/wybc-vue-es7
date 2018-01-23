@@ -1,0 +1,73 @@
+.chooseSch-container {
+
+    .chooseSch-bd {
+        padding-top: 70px;
+        text-align: center;
+        padding-bottom: 100px;
+        .chooseSch-img {
+            margin: auto;
+            width: 150px;
+            height: 150px;
+        }
+
+        .weui-cells{
+            .weui-cell{
+                .weui-cell__hd{
+                    margin-right: 15px;
+                    font-size: 17px;
+                    color: #333;
+                }
+                .weui-cell__bd{
+                    position: relative;
+                    height: .25rem;
+                    input,
+                    select{
+                        width: 100%;
+                        height: .28rem;
+                        position: absolute;
+                        top:0;
+                        left: 0;
+                    }
+                    select {
+                        padding-left: 0;
+                        color: #333;
+                        font-size: 0;
+                        option{
+                            font-size: 15px;
+                            height: 15px;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        .chooseSch-qs {
+            position: relative;
+            text-align: right;
+            margin-right: 12px;
+            color: #f00;
+            font-size: 12px;
+            .icon {
+                position: relative;
+                top: 2px;
+                font-size: 18px;
+            }
+        }
+    }
+    .chooseSch-ft {
+        margin-left: 12px;
+        margin-right: 12px;
+        button {
+            height: 50px;
+            width: 100%;
+            margin-bottom: 14px;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+            border:none;
+            color: #fff;
+            font-size: 19px;
+            background-color: #7ecc44;
+        }
+    }
+}

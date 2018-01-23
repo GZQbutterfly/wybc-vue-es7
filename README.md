@@ -24,6 +24,7 @@
 - cnpm install  html-webpack-plugin                           --save-dev
    cnpm install  extract-text-webpack-plugin                   --save-dev
    cnpm install  copy-webpack-plugin                           --save-dev
+   
 ###babel
  cnpm install  babel-preset-env                              --save-dev
  cnpm install  babel-loader babel-core                       --save-dev
@@ -75,9 +76,12 @@
  cnpm install  weixin-js-sdk                                  --save
 
 ###other
- ..cnpm install  swiper                                         --save
- cnpm install  clipboard-polyfill                             --save
- cnpm install  axios                                          --save
- cnpm install  qs                                             --save
- cnpm install  es6-promise                                     --save-dev
- cnpm install  node-glob
+  cnpm install  swiper                                         --save
+  cnpm install  clipboard-polyfill                             --save
+  cnpm install  axios                                          --save
+  cnpm install  qs                                             --save
+  cnpm install  es6-promise                                     --save-dev
+  cnpm install  node-glob
+  cnpm install --save-dev happypack
+  cnpm install  babel-plugin-syntax-jsx babel-plugin-transform-vue-jsx babel-helper-vue-jsx-merge-props   --save-dev
+  cnpm install minirefresh

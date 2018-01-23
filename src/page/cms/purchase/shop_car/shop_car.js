@@ -1,5 +1,5 @@
-import { Component} from 'vue-property-decorator';
-import BaseVue  from 'base.vue';
+import { Component } from 'vue-property-decorator';
+import BaseVue from 'base.vue';
 import './shop_car.scss';
 import shopCarService from './shop_car.service';
 import { isNotLogin, toLogin, cacheLogin } from "common.env";
@@ -33,8 +33,17 @@ export class CmsPurchaseShopCar extends BaseVue {
     //最低购买金额
     isFirst = false;
     leastMoney = 0;
+    stockType = '';
+    stocktypeShow = false;
+    stockTypes = [{
+        stocktype: "仓储中心代管",
+        stocktypeShow: false
+    }, {
+        stocktype: "商品自行管理",
+        stocktypeShow: false
+    }];
 
-
+    stockTypeShow = false;
     _shopcartCache;
     data() {
         return {
@@ -57,6 +66,13 @@ export class CmsPurchaseShopCar extends BaseVue {
     getShoppcarMsg() {
         this._shopcartCache = JSON.parse(localStorage.getItem("shopcartCache"));
         let _this = this;
+        this.stockTypes = [{
+            stocktype: "仓储中心代管",
+            stocktypeShow: false
+        }, {
+            stocktype: "商品自行管理",
+            stocktypeShow: false
+        }];
         //用户是否登录
         _this.page = 1;
         _this.edit = "编辑";
@@ -64,6 +80,7 @@ export class CmsPurchaseShopCar extends BaseVue {
         _this.checkAll = false;
         _this.recommendShow = false;
         _this.isEmpty = true;
+        _this.stockTypeShow = false;
         _this.validLists = []//购物车列表
         _this.invalidLists = [];//失效列表
         _this._$service.getShopcarGoodsesList(1).then((res) => {
@@ -88,7 +105,7 @@ export class CmsPurchaseShopCar extends BaseVue {
                 _this.isEmpty = true;
                 return;
             }
-            if (res.data.message){
+            if (res.data.message) {
                 let dialogObj = {
                     title: '',
                     content: '您已升级，进货单商品已更新！',
@@ -106,9 +123,9 @@ export class CmsPurchaseShopCar extends BaseVue {
 
             _this.validLists.length = 0;
             _this.invalidLists.length = 0;
-            if(res.data.data[0].shopId==0){
-                _this.wdName ="学惠精选官方商城";
-            }else{
+            if (res.data.data[0].shopId == 0) {
+                _this.wdName = "学惠精选官方商城";
+            } else {
                 _this.wdName = res.data.data[0].wdName;
             }
 
@@ -130,12 +147,12 @@ export class CmsPurchaseShopCar extends BaseVue {
             _this.$store.state.shopCar.count = num;
             if (_this.invalidLists.length == 0) {
                 _this.isShow = false;
-            }else{
+            } else {
                 _this.isShow = true;
             }
             if (_this.validLists.length != 0) {
                 _this.isEmpty = false;
-            }else{
+            } else {
                 _this.isEmpty = true;
             }
 
@@ -143,24 +160,24 @@ export class CmsPurchaseShopCar extends BaseVue {
         //推荐商品
         this._$service.getShopcarRecommend().then((res) => {
             _this.recommendLists.length = 0;
-            if (res.data.data.length == 0) {
+            if (res.data.data && res.data.data.length == 0 || !res.data) {
                 _this.recommendShow = true;
                 return;
             }
             _this.recommendShow = false;
-           _this.changePrice(res.data.data);
+            _this.changePrice(res.data.data);
         });
     }
 
-    changePrice(res){
-        let _this =this;
-        let shopId = localStorage.selfShopId;
+    changePrice(res) {
+        let _this = this;
+        let shopId = _this.$store.state.workVO.user.userId;
         let goodsIds = []; let opt = { infoId: shopId, listStr: "" };
         res.forEach(ele => {
             goodsIds.push(ele.goodsId)
         });
         opt.listStr = goodsIds.join(",");
-        this._$service.getDiscountPrice(opt).then(discount=>{
+        this._$service.getDiscountPrice(opt).then(discount => {
             for (let i = 0, len = res.length; i < len; i++) {
                 for (let j = 0, lenj = discount.data.length; j < lenj; j++) {
                     if (i == j) {
@@ -183,7 +200,7 @@ export class CmsPurchaseShopCar extends BaseVue {
     }
     //加载更多
     infinite(done) {
-        if(this.qflag){
+        if (this.qflag) {
             done(false);
             return;
         }
@@ -336,7 +353,7 @@ export class CmsPurchaseShopCar extends BaseVue {
             goodsId: this.validLists[index].goodsId
         }
         this._$service.changeShopcarNumber(opt).then(res => {
-            if(res.data.errorCode){
+            if (res.data.errorCode) {
                 let _toast = _this.$store.state.$toast;
                 _toast({ title: res.data.msg, success: false });
                 _this.validLists[index].number = 1;
@@ -502,8 +519,10 @@ export class CmsPurchaseShopCar extends BaseVue {
             this.$store.state.$dialog({ dialogObj });
             return;
         }
-        this.$router.push({ path: 'cms_purchase_submit_order', query: { cartId: cartId.join(','), orderSrouce: 'car' } });
+        this.stockTypeShow = true;
+     
     }
+
     //清空
     onClear() {
         let _this = this;
@@ -532,9 +551,29 @@ export class CmsPurchaseShopCar extends BaseVue {
         };
         this.$store.state.$dialog({ dialogObj });
     }
-
+   //进货方式
+    chooseStockTpe(index){
+        let _this = this;
+        for (let i = 0, len = _this.stockTypes.length;i<len;i++){
+             if(i==index){
+                 _this.stockTypes[i].stocktypeShow = true;
+             }else{
+                 _this.stockTypes[i].stocktypeShow = false;
+             }
+        }
+        let cartId = [];
+        this.validLists.forEach(item => {
+            if (item.check) {
+                cartId.push(item.id);
+            }
+        });
+         this.$router.push({ path: 'cms_purchase_submit_order', query: { cartId: cartId.join(','), orderSrouce: 'car',stockType:index } });
+    }
+    onClose() {
+        this.stockTypeShow = false;
+    }
     //最低购买金额
-    getLeastBuyMoney(){
+    getLeastBuyMoney() {
         let _self = this;
         _self._$service.getLeastBuyMoney().then((res) => {
             _self.isFirst = res.data.flag;

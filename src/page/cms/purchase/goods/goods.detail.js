@@ -2,10 +2,9 @@ import { Component} from 'vue-property-decorator';
 import  BaseVue  from 'base.vue';
 
 import { isNotLogin, toLogin, getLocalUserInfo } from "common.env";
-import { NavTop } from './navtop/navtop.component';
 import { NumberPicker } from './picker/num.picker';
-import  VideoBanner from '../../../../commons/vue_plugins/components/video/video.banner.vue';
-import VueVideo  from '../../../../commons/vue_plugins/components/video/video.vue';
+import  VideoBanner from 'components/video/video.banner.vue';
+import VueVideo  from 'components/video/video.vue';
 
 
 import shopCarGoodsService from '../classify/getShopCarCount';
@@ -15,7 +14,6 @@ import './goods.detail.scss';
 @Component({
     template: require('./goods.detail.html'),
     components: {
-        navtop: NavTop,
         numpicker: NumberPicker,
         gsbanner: VideoBanner,
         fsvideo: VueVideo
@@ -38,6 +36,7 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
     isGradeShow = false;
     myGrade = 1;
     grade = [];
+    owngrade = [];
     _$service;
     goodsPrice = 0;
     moneyPrice = 0;
@@ -49,6 +48,16 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
     playerOptions = {
     }
     shopkeeper = {};
+    stockType = '';
+    stockTypes = [{
+        stocktype: "仓储中心代管",
+        stocktypeShow: false
+    }, {
+        stocktype: "商品自行管理",
+        stocktypeShow: false
+    }];
+    stockTypeShow = false;
+    number = 0;
     created() {
         this.getGoodsMsg();
     }
@@ -65,6 +74,7 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
     getGoodsMsg() {
         document.title = "商品详情";
         let _this = this;
+        this.stockTypeShow = false;
         _this._$service = goodsService(_this.$store);
         this._$service.getLeastBuyMoney().then(v => {
            _this.minExport = {
@@ -82,6 +92,7 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
                     wdName: "学惠精选官方商城",
                     wdImg: "/static/images/newshop/xuehui-fang.png",
                     vipGrade: 1,
+                    school: '',
                     id: 0
                 }
                 return;
@@ -94,6 +105,7 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
                     wdName: res.data.wdVipInfo.wdName,
                     wdImg: res.data.wdVipInfo.wdImg,
                     vipGrade: res.data.wdVipInfo.wdVipGrade,
+                    school: res.data.wdVipInfo.school,
                     id: 1
                 }
             })
@@ -133,11 +145,11 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
                         _this.isGradeShow = false;
                     }
                     let _result = res.data.discMap;
+                    let _result2 = res.data.ownStoreMap;
                     _this.myGrade = res.data.myGrade;
-                    let arr = [];
+                    let arr = [],ownarr=[];
                     for (let i in _result) {
                         let indx = Number(i.substr(i.length - 1, 1));
-                        // console.log(indx);
                         let obj= {
                             id: indx,
                             vip: i,
@@ -152,6 +164,20 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
                         }
                         arr.push(obj);
                     }
+                    for (let i in _result2) {
+                        let indx = Number(i.substr(i.length - 1, 1));
+                        let obj = {
+                            id: indx,
+                            vip: i,
+                            vipName: _result2[i][1],
+                            vipdiscount: Math.ceil((Number(_result2[i][0]) / 100) * _this.goodsPrice),
+                            show: false
+                        };
+                        if (i == 'vip' + res.data.myGrade) {
+                            obj.show = true;
+                        }
+                        ownarr.push(obj);
+                    }
 
                     for (let i = 0; i < arr.length - 1; i++) {
                         for ( let j = 0; j < arr.length - 1 - i; j++) {
@@ -162,7 +188,17 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
                             }
                         }
                     }
+                    for (let i = 0; i < ownarr.length - 1; i++) {
+                        for (let j = 0; j < ownarr.length - 1 - i; j++) {
+                            if (ownarr[j].id < ownarr[j + 1].id) {
+                                let temp = ownarr[j];
+                                ownarr[j] = ownarr[j + 1];
+                                ownarr[j + 1] = temp;
+                            }
+                        }
+                    }
                  _this.grade=arr;
+                 _this.owngrade = ownarr;
                 })
                 _this.goods = res.data.data;
                 let arr = res.data.data.bannerImg.split(",");
@@ -275,7 +311,9 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
         this.minExport.buy=0;
         // console.log(this.minExport);
     }
-
+    onClose(){
+        this.stockTypeShow = false;
+    }
     numberpckerHide() {
         this.show2Car = this.showgoPay = false;
         this.minExport.buy = 1;
@@ -301,11 +339,25 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
     }
 
     finishgoPay(num) {
+        this.stockTypeShow = true;
+        this.number = num;
+     
+    }
+    chooseStockTpe(index){
+        let _this = this;
+        for (let i = 0, len = _this.stockTypes.length; i < len; i++) {
+            if (i == index) {
+                _this.stockTypes[i].stocktypeShow = true;
+            } else {
+                _this.stockTypes[i].stocktypeShow = false;
+            }
+        }
         let gsType = this.goods.gsType, goodsType;
         let goodsId = this.goods.goodsId;
+        let num = this.number;
         // TODO: goto gen order
         gsType == 2 ? goodsType = 'empty' : goodsType = 'entity';
-        this.$router.push({ path: 'cms_purchase_submit_order', query: { goodsId: goodsId, goodsType: goodsType, number: num, orderSrouce: 'goods' } });
+        this.$router.push({ path: 'cms_purchase_submit_order', query: { goodsId: goodsId, goodsType: goodsType, number: num, orderSrouce: 'goods', stockType: index } });
     }
     //倒计时
     countDown(leftchektime) {

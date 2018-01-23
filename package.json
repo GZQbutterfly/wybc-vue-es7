@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config ./build/build.js",
     "dev": "webpack --config ./build/build.js --progress --display-modules --colors --display-reasons",
+    "qa": "webpack --config ./build/qa.env.js --progress  --colors",
     "prod": "webpack --config ./build/prod.env.js --progress  --colors",
     "server": "node ./build/dev.server.js"
   },
@@ -35,6 +36,7 @@
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
+    "happypack": "^4.0.0",
     "html-webpack-plugin": "^2.30.1",
     "node-glob": "^1.2.0",
     "node-sass": "^4.7.2",

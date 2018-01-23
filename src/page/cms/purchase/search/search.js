@@ -105,7 +105,7 @@ export class Search extends BaseVue {
             let hash = this.$route.query.hash;
             // '==' for undefined
             hash = (hash == '1' ? '0' : '1');
-            let origin = this.$route.query.origin || 'home';
+            let origin = this.$route.query.origin || 'cms_purchase_classify';
             let query = { search: search, origin: origin, hash: hash };
             //第一次打开搜索 跳转记录url
             if (this.$route.query.search) {

@@ -1,4 +1,4 @@
-import { BaseVue } from 'base.vue';
+import  BaseVue  from 'base.vue';
 import { Component } from 'vue-property-decorator';
 import './team.list.scss';
 

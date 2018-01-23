@@ -41,13 +41,13 @@ export default (_store) => {
                 {
                     'index': 3,
                     'type': '待收货',
-                    'pic': 'huo',
+                    'pic': 'yifahuo',
                     'num': '',
                 },
                 {
                     'index': 4,
                     'type': '交易完成',
-                    'pic': 'yifahuo',
+                    'pic': 'jiaoyiwancheng',
                     'num': '',
                 },
                 {

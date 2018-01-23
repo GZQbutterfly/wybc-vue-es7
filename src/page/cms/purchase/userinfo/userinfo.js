@@ -1,16 +1,13 @@
 import { Component} from 'vue-property-decorator';
 import  BaseVue from 'base.vue';
-
-
 import { isNotLogin, toLogin, loginDialog, setUserValid, getAuthUser, isWeiXin, setCleanLocalinfo, toWEB, pageNotAccess } from 'common.env';
-
 import userInfoService from './userinfo.service';
-
 import './userinfo.scss';
 
 @Component({
     template: require('./userinfo.html')
 })
+
 export class CmsPurchaseUserinfo extends BaseVue {
     userInfo = {};
     userScore = {};
@@ -21,16 +18,12 @@ export class CmsPurchaseUserinfo extends BaseVue {
     hasShop = false;
     userMsgNumb = 6;
 
-    // private _shopCarCount;
     mounted() {
-        //注册服务
         this._$service = userInfoService(this.$store);
         let _self = this;
 
         this.$nextTick(() => {
-            // 这里面是dom加载完成后的
             this.orderList = this._$service.getOrderListInfo();
-
             //TODO 头像区下拉放大
             let user = _self.$refs.user;
             let dom = _self.$refs.userinfo;
@@ -79,21 +72,17 @@ export class CmsPurchaseUserinfo extends BaseVue {
                 if (_result.errorCode) {
                     return;
                 }
-                // for (let i = 1; i < 4; i++) {
-                //     this.orderList[i - 1].num = _result[i] || '';
-                // }
                 this.orderList[0].num = _result[1];
-                this.orderList[1].num = 0;
-                this.orderList[2].num = 0;
+                this.orderList[1].num = _result[2] + _result[3];
+                this.orderList[2].num = _result[4];
+                this.orderList[3].num = _result[5];
             })
         }
     }
 
     activated() {
-        document.title = "我的"
-        // keep-alive 时 会执行activated
+        document.title = "我的";
         this.$nextTick(() => {
-            console.log('...../////////////')
             this.userinfoInit();
         });
     }
@@ -115,8 +104,10 @@ export class CmsPurchaseUserinfo extends BaseVue {
     }
 
     toInventoryList(){
-        // pageNotAccess();
         this.$router.push('my_inventory_list');
+    }
+    toUserAddress(){
+        this.$router.push('cms_user_address');
     }
 
     initUser() {
@@ -125,23 +116,11 @@ export class CmsPurchaseUserinfo extends BaseVue {
         }
         this.userLogin = false;
         this.user_img = '/static/images/pic-nologin.png';
-        //this._shopCarCount.getShopcarGoodsesList();
     }
 
     imgError() {
         console.log(' ! ! ! ! ! ! ! ! ! ', 'user pic error ...');
         this.user_img = '/static/images/pic-login.png';
     }
-
-    imgLoad() {
-        //暂用 根据大小判断 用户头像为640*640 错误头像为120*120 默认头像为175*175
-        if (this.userLogin) {
-            let img = new Image();
-            img.src = this.user_img;
-            if (img.width == 120) {
-                console.log('检测到错误的用户头像,正在替换为默认头像...');
-                this.user_img = '/static/images/pic-login.png';
-            }
-        }
-    }
+    
 }

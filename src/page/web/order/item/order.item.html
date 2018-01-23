@@ -32,7 +32,12 @@
 		</div>
 		<div class="row-line"></div>
 	</div>
-
+	<!--配送费-->
+	<div class="order-plus weui-flex flex-right">
+		<span class="desc-font postage"> {{getShipFee()| localMoney}}</span>
+		<span class="desc-font color-black postage">配送费:&nbsp;&nbsp;</span>
+	</div>
+	<div class="row-line"></div>
 	<!-- 总计 -->
 	<div class="order-plus weui-flex flex-right">
 		<span class="desc-font color-red"> {{orderTotalMoney()| localMoney}}</span>

@@ -14,13 +14,7 @@
 
 <app-container>
     <div class="campaign-container">
-        <img src="http://wybc-vue.oss-cn-hangzhou.aliyuncs.com/static/guide/sqkd_01.gif" alt="">
-        <img src="http://wybc-vue.oss-cn-hangzhou.aliyuncs.com/static/guide/sqkd_02.gif" alt="">
-        <img src="http://wybc-vue.oss-cn-hangzhou.aliyuncs.com/static/guide/sqkd_03.gif" alt="">
-        <img src="http://wybc-vue.oss-cn-hangzhou.aliyuncs.com/static/guide/sqkd_04.gif" alt="">
-        <img src="http://wybc-vue.oss-cn-hangzhou.aliyuncs.com/static/guide/sqkd_05.gif" alt="">
-        <img src="http://wybc-vue.oss-cn-hangzhou.aliyuncs.com/static/guide/sqkd_06.gif" alt="">
-        <img src="http://wybc-vue.oss-cn-hangzhou.aliyuncs.com/static/guide/sqkd_07.gif" alt="">
+        <img v-for="(img,index) in imgList" :src = "imgList[index]">
     </div>
      
     <div class="campaign-ft" @click="toInvitecode" slot="footer">

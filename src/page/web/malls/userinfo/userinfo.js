@@ -30,6 +30,7 @@ export class UserInfo extends BaseVue {
 
         }
     }
+
     // private _shopCarCount;
     mounted() {
         //注册服务
@@ -150,7 +151,7 @@ export class UserInfo extends BaseVue {
             this.orderList[i].num = '';
         }
         this.userLogin = false;
-        this.hasShop = false;
+        this.hasShopError = true;
         // this.pointData[0].value = '-';
         // this.pointData[1].value = '-';
         this.user_img = '/static/images/pic-nologin.png';
@@ -182,18 +183,6 @@ export class UserInfo extends BaseVue {
     imgError() {
         console.log(' ! ! ! ! ! ! ! ! ! ', 'user pic error ...');
         this.user_img = '/static/images/pic-login.png';
-    }
-
-    imgLoad() {
-        //暂用 根据大小判断 用户头像为640*640 错误头像为120*120 默认头像为175*175
-        if (this.userLogin) {
-            let img = new Image();
-            img.src = this.user_img;
-            if (img.width == 120) {
-                console.log('检测到错误的用户头像,正在替换为默认头像...');
-                this.user_img = '/static/images/pic-login.png';
-            }
-        }
     }
 
     /**

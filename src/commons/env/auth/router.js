@@ -41,11 +41,9 @@ export class RouterAuth {
         // 监听授权环境
         this._$authEnv();
         if (to.meta && to.meta.title) {
-            timeout(()=>{
+            this._$vm.$nextTick(() => {
                 document.title = to.meta.title;
-            }, 1000);
-        } else {
-           // document.title = isCMS() ? '微店管理' : '微商城';
+            });
         }
         // 清除弹窗
         closeDialog();

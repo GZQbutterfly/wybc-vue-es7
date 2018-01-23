@@ -1,14 +1,12 @@
-import {Component} from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import BaseVue from 'base.vue';
 
-import {debounce} from 'lodash';
-import {isNotLogin, toLogin, appendParams, isWeiXin, getAuthUser} from 'common.env';
+import { debounce } from 'lodash';
+import { isNotLogin, toLogin, appendParams, isWeiXin, getAuthUser } from 'common.env';
 
-import  NavRow  from '../../../../commons/vue_plugins/components/nav_row/nav_row.vue';
+import NavRow from '../../../../commons/vue_plugins/components/nav_row/nav_row.vue';
 import { IconsList } from './nav_scroll2/nav_scroll';
 import { TopNotice } from '../../../sys/notice/top/top.notice';
-
-import { GoodsBanner } from './goods_banner/banner';
 
 import homeService from './home.service';
 
@@ -20,7 +18,6 @@ import './home.scss';
         'nav-row': NavRow,
         'iconsList': IconsList,
         'app-topnotice': TopNotice,
-        'gs-banner': GoodsBanner
     }
 })
 
@@ -28,15 +25,15 @@ export class Home extends BaseVue {
     //单次请求个数
     pageLimit = 5;
     //顶部店铺信息
-    shopkeeper= {};
+    shopkeeper = {};
     //顶部banner
-    homeAd= [];
+    homeAd = [];
     //小分类
-    iconsList= [];
+    iconsList = [];
     //三格数据
-    recommendations= [];
+    recommendations = [];
     //导航分类选项卡
-    classfyList= [
+    classfyList = [
         {
             classifyName: '学惠推荐',
             selectedImgUrl: '/static/images/newshop/tuijian_s.png',
@@ -45,13 +42,13 @@ export class Home extends BaseVue {
         }
     ];
     //分类及商品数据
-    classfyGoodses= [];
+    classfyGoodses = [];
     //当前页数信息
     page = 0;
     //公告
-    msgOpts= {list: []};
+    msgOpts = { list: [] };
     //顶部活动banner
-    activeBanner= [];
+    activeBanner = [];
     data() {
         return {
 
@@ -61,7 +58,8 @@ export class Home extends BaseVue {
         let self = this;
         self._$service = homeService(this.$store);
         this.$nextTick(() => {
-           // return;
+            // return;
+            self.ownShop();
             //初始化三格数据
             self.fetchRecommentData();
             //查询公告信息
@@ -70,16 +68,27 @@ export class Home extends BaseVue {
             self.homeBanner();
             //分类列表
             //self.classList();
+    
             //活动banner
             self.activitBanner();
         })
     }
-
+    //判断进入的店是否是自己的
+    ownShop() {
+        let _self = this;
+        let _query = this.$route.query.user;
+        let flag  = isNotLogin();
+        if (flag && _query=='own'){
+            toLogin(_self.$router, { toPath: "home", realTo:"home?user=own"});
+        }
+    }
     fetchRecommentData() {
         let self = this;
-        this._$service.recommendations().then(function(res) {
+        this._$service.recommendations().then(function (res) {
             if (res.data && res.data.data && res.data.data.length == 3) {
                 self.recommendations = res.data.data;
+            }else{
+                self.recommendations = [];
             }
         });
     }
@@ -91,7 +100,7 @@ export class Home extends BaseVue {
                 title: res.wdName + ',超值特惠',
                 desc: '一言不合买买买！~',
                 imgUrl: 'http://wybc-pro.oss-cn-hangzhou.aliyuncs.com/Wx/wxfile/share_gs.jpg',
-                link: appendParams({shopId: res.infoId}).replace('user=own', '')
+                link: appendParams({ shopId: res.infoId }).replace('user=own', '')
             }
             self.updateWxShare(config);
             self.shopkeeper = res;
@@ -99,10 +108,12 @@ export class Home extends BaseVue {
             let dialog = self.$store.state.$dialog;
             let dialogObj = {
                 title: '提示',
-                content: '店铺不存在!',
-                mainBtn: '知道了',
+                content: '店铺不存在,立即去开店吧!',
+                mainBtn: '确定',
                 type: 'info',
-                mainFn() {}
+                mainFn() {
+                    self.$router.push({ path:"apply_shop_campaign"});
+                 }
             };
             self.$store.state.$dialog({ dialogObj });
         })
@@ -117,7 +128,7 @@ export class Home extends BaseVue {
             }
             let _newList = [];
             for (let i = 0, len = _result.length; i < len; i++) {
-                _newList.push({img: '', msg: _result[i], flag: ''});
+                _newList.push({ img: '', msg: _result[i], flag: '' });
             }
             this.msgOpts.list = _newList;
         });
@@ -142,7 +153,7 @@ export class Home extends BaseVue {
     //小图标分类
     inconsList() {
         let self = this;
-        this._$service.iconsList().then(function(res) {
+        this._$service.iconsList().then(function (res) {
             if (res.data.data.length == 0 || res.data.errorCode) {
                 self.iconsList = [];
             } else {
@@ -162,7 +173,7 @@ export class Home extends BaseVue {
     }
 
     //分类导航
-    classList() {
+    classListAndFirstPage(done) {
         let self = this;
         this._$service.classfyList().then(res => {
             self.classfyList = [
@@ -178,6 +189,7 @@ export class Home extends BaseVue {
                     self.classfyList.push(element);
                 });
             }
+            self.fetchGoodsData(1, done);
         })
     }
 
@@ -219,15 +231,26 @@ export class Home extends BaseVue {
 
         this._$service.classfyShop(ids).then(res => {
             if (res.data.errorCode || !res.data || res.data.data.length == 0) {
+                if (page <= 1) {
+                    self.classfyGoodses = [];
+                }
                 if (done) {
                     done(true);
                 }
             } else {
                 if (page <= 1) {
+                    res.data.data.forEach(element => {
+                        element.adList.forEach(ads => {
+                            ads.url = ads.imgUrl;
+                        });
+                    });
                     self.classfyGoodses = res.data.data;
                     self.page = 1;
                 } else {
                     res.data.data.forEach(element => {
+                        element.adList.forEach(element => {
+                            element.url = element.imgUrl;
+                        });
                         self.classfyGoodses.push(element);
                     });
                     self.page = page;
@@ -236,11 +259,12 @@ export class Home extends BaseVue {
                     done(true);
                 }
             }
-        }).catch((error) => {
-            if (done) {
-                done();
-            }
         })
+            .catch((error) => {
+                if (done) {
+                    done();
+                }
+            })
     }
 
     goodsBannerClicked(ad) {
@@ -295,7 +319,7 @@ export class Home extends BaseVue {
             self.fetchRecommentData();
             //banner
             self.homeBanner();
-            self.fetchGoodsData(1, done);
+            self.classListAndFirstPage(done);
             //活动banner
             self.activitBanner();
         }, 500)
@@ -335,23 +359,7 @@ export class Home extends BaseVue {
         let self = this;
         this.$nextTick(() => {
             self.updateShop();
-            //分类列表
-            self._$service.classfyList().then(res => {
-                self.classfyList = [
-                    {
-                        classifyName: '学惠推荐',
-                        selectedImgUrl: '/static/images/newshop/tuijian_s.png',
-                        unselectedImgUrl: '/static/images/newshop/tuijian.png',
-                        goodsClassifyId: 0
-                    }
-                ]
-                if (res.data && !res.data.errorCode) {
-                    res.data.data.forEach(element => {
-                        self.classfyList.push(element);
-                    });
-                }
-                self.fetchGoodsData(1, null);
-            })
+            self.classListAndFirstPage(null);
         })
     }
 }

@@ -36,7 +36,7 @@ export class Login extends BaseVue {
         return {};
     }
     mounted() {
-        // 注册服务
+        // 注册服务   
         this._$service = loginService(this.$store);
         // 页面执行
         this.$nextTick(() => {

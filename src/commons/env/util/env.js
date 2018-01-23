@@ -1,9 +1,11 @@
-import {find} from 'lodash';
-import {getLocalUserInfo} from './login';
+import { find } from 'lodash';
+import { getLocalUserInfo } from './login';
 // import loadding from '../../components/popup/loadding';
 // import topLoadding from '../../components/popup/topLoadding';
 import dialog from '../../vue_plugins/components/popup/dialog';
 import qs from 'qs';
+
+import {baseURL} from './http';
 
 // 序列化对象
 export {
@@ -19,6 +21,16 @@ if (location.origin.indexOf('xhjx.') != -1) {
 } else {
     wxAppid = 'wx6a032ad0cdca7a6b';
 }
+
+
+let ossEndPoint = 'http://wybc-vue-qa.oss-cn-hangzhou.aliyuncs.com/';
+if (location.origin.indexOf('xhjx.') != -1) {
+    ossEndPoint = 'http://wybc-vue.oss-cn-hangzhou.aliyuncs.com/';
+} else {
+    ossEndPoint = 'http://wybc-vue-qa.oss-cn-hangzhou.aliyuncs.com/';
+}
+export { ossEndPoint };
+
 //全局微信 wxAppid
 export {
     wxAppid
@@ -95,7 +107,7 @@ export function interval(fn, time) {
  * 获取32位的UUID
  */
 export function guid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0,
             v = c == 'x'
                 ? r
@@ -158,8 +170,8 @@ export function pageNotAccess() {
         type: 'info',
         assistBtn: '',
         mainBtn: '确认',
-        assistFn() {},
-        mainFn() {}
+        assistFn() { },
+        mainFn() { }
     };
     dialog({ dialogObj });
 }
@@ -181,16 +193,17 @@ export function formHttp(url, data, type = 'POST') {
         for (let key in data) {
             hasOwn.call(data, key) && formData.append(key, data[key]);
         }
-        xhr.onload = function(event) {
+        xhr.onload = function (event) {
             let _currentTarget = event.currentTarget;
             let _response = _currentTarget.response;
             resolve(JSON.parse(_response));
             //_loadding.close();
         }
-        xhr.onerror = function(...args) {
+        xhr.onerror = function (...args) {
             reject(...args);
             //_loadding.close();
         }
+        console.log(baseURL + url)
         xhr.open("POST", baseURL + url, true);
         xhr.send(formData);
     });
@@ -204,7 +217,7 @@ try {
         content: '尊敬的用户，为了您的更好体验，我们建议您不要使用无痕或者隐身模式进行浏览！', //'本地储存写入错误，浏览器请关闭隐身模式浏览。',
         mainBtn: '知道啦',
         type: 'error',
-        mainFn() {}
+        mainFn() { }
     };
     dialog({ dialogObj });
 }

@@ -10,10 +10,10 @@
                 </router-link>
             </div>
             <div class="swiper-slide" v-for="(item,index) in classfyList" :key="index">
-                <div :class="{active:item.goodsClassifyId==classifyShow}" @click="changeShop($event,item.goodsClassifyId)">
-                    <img :src="item.unselectedImgUrl" v-show="item.goodsClassifyId!=classifyShow" />
-                    <img :src="item.selectedImgUrl" v-show="item.goodsClassifyId==classifyShow" />
-                    <b :class="{active:item.goodsClassifyId==classifyShow}">{{item.classifyName}}</b>
+                <div :class="{'active':index==showIndex}" @click="changeShop(item.goodsClassifyId)">
+                    <img :src="item.unselectedImgUrl" v-show="index!=showIndex" />
+                    <img :src="item.selectedImgUrl" v-show="index==showIndex" />
+                    <b :class="{'active':index==showIndex}">{{item.classifyName}}</b>
                 </div>
             </div>
         </div>

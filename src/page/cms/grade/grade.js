@@ -29,6 +29,7 @@ export class Grade extends BaseVue {
     gradeActive = '';
     tipCreate = false;
     showTjContent = false;
+    noUpInfo=false;
     time;
     timer;
      _$service;

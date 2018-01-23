@@ -33,19 +33,25 @@ export default (_store) => {
                 },
                 {
                     'index': 2,
+                    'type': '待发货',
+                    'pic': 'daifahuo',
+                    'num': '',
+                },
+                {
+                    'index':3,
+                    'type': '待收货',
+                    'pic': 'yifahuo',
+                    'num': '',
+                },
+                {
+                    'index':4,
                     'type': '交易完成',
                     'pic': 'jiaoyiwancheng',
                     'num': '',
                 },
                 {
-                    'index':3,
-                    'type': '交易关闭',
-                    'pic': 'guanbi',
-                    'num': '',
-                },
-                {
                     'index': 0,
-                    'type': '全部订单',
+                    'type': '更多订单',
                     'pic': 'quanbudingdan',
                     'num': '',
                 },

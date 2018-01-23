@@ -168,13 +168,24 @@ export class OrderItem extends Vue {
 		};
 		this.$store.state.$dialog({ dialogObj });
 	}
-
+   getShipFee(){
+	   let orders = this.$props.order.orders;
+	   if (orders) {
+		   let shipFee = 0;
+		   for (var i = 0; i < orders.length; ++i) {
+			   shipFee += orders[i].shipFee;
+		   }
+		   return shipFee;
+	   } else {
+		   return 0;
+	   }  
+   }
 	orderTotalMoney() {
 		let orders = this.$props.order.orders;
 		if (orders) {
 			let total = 0;
 			for (var i = 0; i < orders.length; ++i) {
-				total += orders[i].totalMoney;
+				total += orders[i].totalMoney + orders[i].shipFee;
 			}
 			return total;
 		} else {

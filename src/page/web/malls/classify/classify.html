@@ -6,7 +6,8 @@
                     <img :src="shopkeeper.wdImg" alt="">
                 </dt>
                 <dd>
-                    <span>{{shopkeeper.wdName}}</span>
+                    <h4>{{shopkeeper.wdName}}</h4>
+                    <span>{{shopkeeper.school}}</span>
                     <p>
                         <span>{{'M'+shopkeeper.vipGrade}}</span>
                     </p>
@@ -16,7 +17,7 @@
             
         </div>
 
-        <navScrollc :onchangeShop="changeShop"></navScrollc>
+        <navScrollc :onchangeShop="changeShop" ref="_navScrollc"></navScrollc>
     </div>
 
     <div class="home-content" v-for="i in classfyList" v-if="show==i.goodsClassifyId">

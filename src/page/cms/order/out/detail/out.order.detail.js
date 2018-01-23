@@ -5,7 +5,7 @@ import { getLocalUserInfo, toWEB } from 'common.env';
 
 
 
-require('./out.order.detail.scss');
+import './out.order.detail.scss';
 
 @Component({
     template: require('./out.order.detail.html')
@@ -90,11 +90,10 @@ export class OutOrderDetail extends BaseVue {
         this._$service.upShopInfo(getLocalUserInfo().userId)
             .then(res => {
                 if (res && !res.errorCode) {
-                    let order = self.orderInfo;
-                    if ((!order.shopId &&order.shopId!=res.data.infoId )|| order.shopId != res.data.infoId) {
+                    if (res.data && res.data.infoId) {
                         let dialogObj = {
                             title: '',
-                            content: '该店铺不是你的进货人店铺,是否直接进入当前进货人的进货店铺? ' + res.data.wdName,
+                            content: '即将进入您的当前进货店铺：' + res.data.wdName,
                             assistBtn: '取消',
                             mainBtn: '确定',
                             type: 'info',
@@ -112,14 +111,6 @@ export class OutOrderDetail extends BaseVue {
                             }
                         };
                         self.$store.state.$dialog({ dialogObj });
-                    }else{
-                        self.$router.push({
-                            path: 'cms_purchase_goods_detail',
-                            query: {
-                                goodsId: goodsId,
-                                shopId: res.data.infoId
-                            }
-                        });
                     }
                 }
             })

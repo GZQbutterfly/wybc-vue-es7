@@ -1,0 +1,84 @@
+.delivery-tabs-container {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    .delivery-tabs-container_hd {
+        //position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+    .delivery-tabs-container_bd {
+        position: relative;
+        flex: 1;
+    }
+    .tabs-hd {
+        background-color: #fff;
+        height: 50px;
+        line-height: 50px;
+        .tab-active {
+            position: relative;
+            &:after {
+                content: ' ';
+                position: absolute;
+                width: 60%;
+                height: 2px;
+                background-color: #7ecc44;
+                left: 20%;
+                bottom: 0;
+            }
+        }
+        &_line {
+            height: 5px;
+        }
+        .weui-badge{
+            position: absolute;
+            top:5px;
+        }
+    }
+    .tabs-bd {
+        height: 100%;
+        position: relative; // margin-top: 55px;
+        //background-color: #fff;
+        //padding-bottom: 55px;
+        -webkit-overflow-scrolling: touch;
+        .swiper-container {
+            height: 100%;
+        }
+        .delivery-card-box:not(:first-child) {
+            margin-top: 5px;
+        }
+    }
+    .delivery-tabs-container_ft {
+        background-color: #fff;
+        height: 49px;
+        text-align: center;
+        align-items: center;
+        font-size: 15px;
+        color: #333;
+        box-shadow: 0 1px 10px #808080;
+        z-index: 50;
+        button {
+            display: block;
+            width: 60%;
+            font-size: 17px;
+            height: 36px;
+            margin: auto;
+        }
+        .menu-btn {
+            width: 70px;
+            background-color: #fff;
+            transform: translate3d(0, 0, 0) rotate(180deg);
+            .icon-caidan{
+                font-size: 30px;
+                color:#808080;
+            }
+        }
+        .load-btn {
+            background-color: #fff;
+            border: 1px solid #333;
+        }
+    }
+}

@@ -4,7 +4,6 @@ let webpack = require('webpack'),
     config = require('./build.js');
 
 
-
 let pathname = 'qaservice.365bencao.cn',
     port = 80;
 

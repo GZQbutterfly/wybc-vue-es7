@@ -1,27 +1,27 @@
-import { Component} from 'vue-property-decorator';
-import BaseVue  from 'base.vue';
+import { Component } from 'vue-property-decorator';
+import BaseVue from 'base.vue';
 import orderDetailService from './order.detail.service';
-import { toLogin, getZoneData ,getLocalUserInfo} from 'common.env';
+import { toLogin, getZoneData, getLocalUserInfo } from 'common.env';
 
 
 // import { hptPayDialog } from '../../../../commons/pay/hptDialog';
-require('./order.detail.scss');
+import './order.detail.scss';
 
 @Component({
     template: require('./order.detail.html')
 })
 
 export class CmsPurchaseOrderDetail extends BaseVue {
-    orderInfo = {};
+    orderInfo = { orderState: 1 };
     orderStateName = '';
     orderLeaveMsg = {};
     orderId;
     combinOrderNo;
-     _$service;
+    _$service;
     //设置和格式化后的事件字符串
     formatDate = '';
-    leftTime;
-    timer;
+    leftTime = '';
+    timer = null;
     //底部删除并退款
     showDelWithRefund = false;
     //底部toast
@@ -32,7 +32,12 @@ export class CmsPurchaseOrderDetail extends BaseVue {
     showOrderNumber = false;
     //底部显示实付还是需付
     showTypeAndRefund = false;
-    totalPrice  = 0;
+    totalPrice = 0;
+    shipFee = 0;
+    shipFeeShow = false;
+    xprice = 0;
+    ownStore = false;
+    stocktype = "";
     mounted() {
         document.title = "订单详情";
         //订单编号
@@ -59,6 +64,9 @@ export class CmsPurchaseOrderDetail extends BaseVue {
     page_reload() {
         console.log('重加载')
         let _self = this;
+        _self.totalPrice = 0;
+        _self.shipFee = 0;
+        _self.xprice = 0;
         if (this.orderId) {
             this._$service.getOrderInfo(this.orderId).then((res) => {
                 this.msg(res);
@@ -72,41 +80,83 @@ export class CmsPurchaseOrderDetail extends BaseVue {
 
     msg(res) {
         let _self = this;
-        let obj = {
-        };
-        if (!res.data.orderWhole || !res.data.orderGoods) {
-            return;
-        }
-
+        let obj = {};
+        // if (!res.data.orderWhole || !res.data.orderGoods) {
+        //     return;
+        // }
+        let ownStore = res.data.ownStore;
+        this.shipFeeShow = ownStore ? 1 : 0;
+        this.stocktype = ownStore ? "商品自行管理" : "仓储中心代管";
+        this.ownStore = res.data.ownStore;
         if (_self.orderId) {
-            res.data.orderGoods.moneyPrice = res.data.orderWhole.moneyPrice;
-            _self.totalPrice = res.data.orderWhole.totalMoney;
-            obj = res.data.orderWhole;
+            let orderWhole = res.data.orderWhole;
+            let o = res.data.order;
+            if ((o && o.province) || (o && o.campus)) {
+                let _address = {
+                    province: o.province,
+                    city: o.city,
+                    district: o.district,
+                    campus: o.campus,
+                    dormitory: o.dormitory,
+                    address: o.address,
+                    name: o.name,
+                    phone: o.phone
+                };
+                Object.assign(orderWhole, _address);
+            }
+            // orderWhole.orderState = 4;//test
+            _self.shipFee = orderWhole.shipFee;
+            res.data.orderGoods.moneyPrice = orderWhole.moneyPrice;
+            _self.xprice = orderWhole.totalMoney
+            _self.totalPrice = orderWhole.totalMoney + orderWhole.shipFee;
+            obj = orderWhole;
+            if (res.data.logis) {
+                obj.logis = [res.data.logis];
+            }
             obj.leftTime = res.data.leftTime;
+            obj.leftDay = res.data.leftDays || 0;
             obj.goods = [];
             obj.goods.push(res.data.orderGoods);
         } else {
-            for (let i = 0, len = res.data.orderWhole.length; i < len; i++) {
-                res.data.orderGoods[i].moneyPrice = res.data.orderWhole[i].moneyPrice;
-                _self.totalPrice += res.data.orderWhole[i].totalMoney;
+            let orderWhole = res.data.orderWhole;
+            for (let i = 0, len = orderWhole.length; i < len; i++) {
+                res.data.orderGoods[i].moneyPrice = orderWhole[i].moneyPrice;
+                _self.shipFee += orderWhole[i].shipFee;
+                _self.xprice += orderWhole[i].totalMoney;
+                _self.totalPrice += orderWhole[i].totalMoney + orderWhole[i].shipFee;
             }
-            obj = res.data.orderWhole[0];
+            obj = orderWhole[0];
+            let o = res.data.orders[0];
+            if (o && o.length != 0) {
+                let _address = {
+                    province: o.province,
+                    city: o.city,
+                    district: o.district,
+                    campus: o.campus,
+                    dormitory: o.dormitory,
+                    address: o.address,
+                    name: o.name,
+                    phone: o.phone
+                };
+                Object.assign(obj, _address);
+            }
+            // obj.orderState=2;//test
             obj.leftTime = res.data.leftTime;
+            obj.leftDay = res.data.leftDays || 0;
             obj.goods = [];
             obj.goods = res.data.orderGoods;
         }
         this.orderInfo = obj;
         console.log('订单详情:', this.orderInfo);
         //设置时间倒计时
-        this.formatDate = '-- ';
-        this.leftTime = this.orderInfo.leftTime || 0;
-        this.timer && clearInterval(this.timer);
+        this.timer && clearInterval(_self.timer);
         //待支付
-        if (this.orderInfo.orderState == 1 && this.leftTime > 0) {
-            // this.setFormatDate();
-            this.timer = setInterval(() => {
+        this.formatDate = '-- ';
+        _self.leftTime = _self.orderInfo.leftTime || 0;
+        if (_self.orderInfo.orderState == 1 && _self.leftTime > 0) {
+            _self.timer = setInterval(() => {
                 if (_self.leftTime > 0) {
-                    _self.setFormatDate();
+                    _self.formatDate = _self.setFormatDate(_self.leftTime);
                     _self.leftTime = _self.leftTime - 1000;
                 } else {
                     _self.formatDate = '0秒';
@@ -120,52 +170,82 @@ export class CmsPurchaseOrderDetail extends BaseVue {
             province: this.orderInfo.province,
             city: this.orderInfo.city,
             district: this.orderInfo.district,
+            campus: this.orderInfo.campus,
+            dormitory: this.orderInfo.dormitory
         };
-        if (this.orderInfo.province != null) {
-            _address = getZoneData(_address);
-            this.orderInfo._address = _address.province.na + _address.city.na + _address.district.na + this.orderInfo.address;
+        if (this.orderInfo.campus) {
+            // _address = getZoneData(_address);
+            this.orderInfo._address = _address.campus + _address.dormitory + this.orderInfo.address;
+        } else if (this.orderInfo.province) {
+            // _address = getZoneData(_address);
+            this.orderInfo._address = _address.province + _address.city + _address.district + this.orderInfo.address;
         }
         //虚物获取买家留言
-        this.orderInfo.gsType === 2 && this.getUserLeaveMsg();
+        //this.orderInfo.gsType === 2 && this.getUserLeaveMsg();
         //判断是否设置显示底部toast
         this.showToast = ([1, 4].indexOf(_self.orderInfo.orderState) !== -1);
-        this.showDelWithRefund = (this.orderInfo.orderState === 2 && this.orderInfo.isDelete === 1);
+        this.showDelWithRefund = (this.orderInfo.orderState == 2 && this.orderInfo.isDelete == 1);
         this.showDelWithRefund && (this.showToast = true);
         //判断是否显示退款按钮
         // (this.orderInfo.orderState > 1 && this.orderInfo.orderState < 6) && (this.showRefund = true);
         //判断是否显示物流信息
-        this.showOrderNumber = ((this.orderInfo.orderState > 1 && this.orderInfo.orderState !== 6) && this.orderInfo.gsType != 2);
+        this.showOrderNumber = (this.orderInfo.orderState > 3 && this.orderInfo.orderState < 6);
         //底部显示实付还是需付
-        this.showTypeAndRefund = (this.orderInfo.orderState === 1 || (this.orderInfo.orderState === 6 && this.orderInfo.closeReason != 3));
+        this.showTypeAndRefund = (this.orderInfo.orderState == 1 || (this.orderInfo.orderState == 6 && this.orderInfo.closeReason != 3));
+
     }
 
     /**
      * 得到格式化后的时间字符串
-     * @param time
+     * @param time      毫秒数
+     * @param formatLen 格式位数
      */
-    setFormatDate() {
-        let date = '',
-            stp = [60, 60, 24],
-            mark = ['秒', '分', '小时'],
-            i = 0;
-        let time = this.leftTime,
-            isMsec = true;
-        isMsec && (time /= 1000);
-        while (time > 0 && i < 3) {
-            date = [Math.floor(time % stp[i]), time = Math.floor(time / stp[i])][0] + mark[i++] + date;
-        }
-        time > 0 && (date = time + '天' + date);
-        // console.log('剩余时间:',date)
-        this.formatDate = date;
+    setFormatDate(time, formatLen = 4) {
+        let format = [
+            {
+                step: 1000,
+                mark: '秒',
+            }, {
+                step: 60,
+                mark: '分',
+            }, {
+                step: 60,
+                mark: '小时',
+            }, {
+                step: 24,
+                mark: '天',
+            }, {
+                step: 7,
+                mark: '周',
+            }
+        ];
+        let getFormat = (time, i = -1) => {
+            time = Math.floor(time / format[++i].step);
+            if (!time) {
+                return '';
+            }
+            if (formatLen - 1 == i) {
+                return time + format[i].mark;
+            } else {
+                return getFormat(time, i) + (time % format[i + 1].step) + format[i].mark;
+            }
+        };
+        return getFormat(time);
     }
 
     /**
      * 得到订单状态全名称
      */
     getOrderStateName() {
-        return ['', '等待买家付款', '交易完成', '交易关闭'][this.orderInfo.orderState]
-            + ((this.orderInfo.orderState == 3) ? ' ('
-                + ['', '买家取消', '支付超时', '买家退款', '订单异常'][this.orderInfo.closeReason] + ')' : '');
+        return ['',
+            '等待买家付款',
+            '等待商家发货',
+            '商家发货中',
+            '商家已发货',
+            '交易完成',
+            '交易关闭'][this.orderInfo.orderState]
+            + ((this.orderInfo.orderState == 6) ? ' ('
+                + ['', '买家取消', '支付超时', '订单异常'][this.orderInfo.closeReason] + ')' : '');
     }
 
     // /**
@@ -232,7 +312,7 @@ export class CmsPurchaseOrderDetail extends BaseVue {
     }
 
     refresh(done) {
-        let _this=this;
+        let _this = this;
         _this.totalPrice = 0;
         setTimeout(() => {
             _this.page_reload();
@@ -255,7 +335,8 @@ export class CmsPurchaseOrderDetail extends BaseVue {
         let obj = this.$store.state.$loadding();
         let _parm = {
             combinOrderNo: this.orderInfo.combinOrderNo,
-            orderId: this.orderInfo.orderId
+            orderId: this.orderInfo.orderId,
+            ownStore: _this.ownStore
         }
         this._$service.pay(_parm).then(res => {
             if (res) {
@@ -299,16 +380,15 @@ export class CmsPurchaseOrderDetail extends BaseVue {
         });
     }
 
-    toGoodsDetail(goodsId,shopId){
+    toGoodsDetail(goodsId, shopId) {
+
         let self = this;
         this._$service.upShopInfo(getLocalUserInfo().userId)
             .then(res => {
                 if (res && !res.errorCode) {
-                    let order = self.orderInfo;
-                    if ((!order.shopId &&order.shopId!=res.data.infoId )|| order.shopId != res.data.infoId) {
                         let dialogObj = {
                             title: '',
-                            content: '该店铺不是你的进货人店铺,是否直接进入当前进货人的进货店铺? ' + res.data.wdName,
+                            content: '即将进入您的当前进货店铺：' + res.data.wdName,
                             assistBtn: '取消',
                             mainBtn: '确定',
                             type: 'info',
@@ -326,16 +406,7 @@ export class CmsPurchaseOrderDetail extends BaseVue {
                             }
                         };
                         self.$store.state.$dialog({ dialogObj });
-                    }else{
-                        self.$router.push({
-                            path: 'cms_purchase_goods_detail',
-                            query: {
-                                goodsId: goodsId,
-                                shopId: res.data.infoId
-                            }
-                        });
-                    }
-                }
+                    } 
             })
     }
 

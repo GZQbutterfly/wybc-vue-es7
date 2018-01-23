@@ -17,7 +17,7 @@ export class LoginLayout extends BaseVue {
 
 
     mounted() {
-
+        document.title = '登录';
     }
 
 }

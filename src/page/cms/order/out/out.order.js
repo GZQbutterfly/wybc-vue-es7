@@ -6,6 +6,7 @@ import shipOrderListService from './out.order.service';
 import { OutOrderItem } from './item/out.order.item';
 
 
+import './out.order.scss';
 @Component({
     template: require('./out.order.html'),
     components: {
@@ -13,7 +14,6 @@ import { OutOrderItem } from './item/out.order.item';
         oi: OutOrderItem
     }
 })
-
 export class OutOrder extends BaseVue {
 
     _$service;
@@ -179,6 +179,7 @@ export class OutOrder extends BaseVue {
     refresh(done) {
         let self = this;
         setTimeout(() => {
+            self.$set(self.dataShipmentList,self.currentOrderState()-1,[]);
             self.fetchOrdersData('', self.currentOrderState(), 1, done);
         }, 500)
     }

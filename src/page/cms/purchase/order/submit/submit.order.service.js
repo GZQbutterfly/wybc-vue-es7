@@ -70,8 +70,7 @@ export default (_store) => {
         //支付
         pay(data) {
             let _pay = _state.$pay;
-            console.log(_pay);
-            _pay._backUrl = '/cms/#/cmsStockOrder?listValue=0';
+            _pay._backUrl = '/cms#/cms_stock_order?listValue=0';
             return _pay.pay('api/order_whole/pay_order', data);
         },
         /**
@@ -91,6 +90,9 @@ export default (_store) => {
         },
         getUpWdInfo(shopId) {
             return q("api/wd_vip/queryWdInfo", { shopId: shopId });
+        }, /*获取邮费*/
+        getFee() {
+            return q("api/q_whole_delivery_config", {})
         }
     };
 }

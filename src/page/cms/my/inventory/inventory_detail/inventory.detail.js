@@ -244,7 +244,7 @@ export class MyInventoryDetail extends BaseVue {
      */
     getTime(t) {
         let _getN = function (n) {
-                return n > 10 ? n : '0' + n;
+                return n > 9 ? n : '0' + n;
             },
             _getT = function (n, t = 3) {
                 return --t ? _getT(Math.floor(n / 60), t) + ':' + _getN(n % 60) : _getN(n);
@@ -377,7 +377,7 @@ export class MyInventoryDetail extends BaseVue {
     goBuy() {
         let _self = this;
         if (this.canBuy) {
-            this.$router.push({ path: 'cms_purchase_submit_order', query: { goodsId: _self.goodsId, goodsType: 'entity', number: this.chooseNum, orderSrouce: 'goods' } });
+            this.$router.push({ path: 'cms_purchase_submit_order', query: { goodsId: _self.goodsId, goodsType: 'entity', number: this.chooseNum, orderSrouce: 'goods', stockType:0 } });
         }
     }
 

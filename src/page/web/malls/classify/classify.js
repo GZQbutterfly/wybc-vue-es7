@@ -31,7 +31,6 @@ export class Classify extends BaseVue {
     noflag = true;
     shopkeeper = {};
     //private _getShopCarCount;
-    _classfyList;
     _$service;
     data() {
         return {
@@ -45,17 +44,6 @@ export class Classify extends BaseVue {
         let _this = this;
         //this.getClassifyMsg();
         this.$nextTick(() => {
-            this._classfyList = this._$service.classfyList();
-            this.fetchShopData()
-                .then((res) => {
-                    let config = {
-                        title: res.wdName + ',超值特惠',
-                        desc: '一言不合买买买！~',
-                        imgUrl: 'http://wybc-pro.oss-cn-hangzhou.aliyuncs.com/Wx/wxfile/share_gs.jpg',
-                        link: appendParams({ shopId: res.infoId }).replace('user=own', '')
-                    }
-                    _this.updateWxShare(config);
-                });
             this.queryWdInfo();
         });
     }
@@ -65,10 +53,21 @@ export class Classify extends BaseVue {
         // keep-alive 时 会执行activated
         this.$nextTick(() => {
             let _this = this;
-            this._classfyList.then((res) => {
+            this._$service.classfyList().then((res) => {
                 _this.getClassifyMsg(res);
             });
         });
+        let _this = this;
+        this.fetchShopData()
+            .then((res) => {
+                let config = {
+                    title: res.wdName + ',超值特惠',
+                    desc: '一言不合买买买！~',
+                    imgUrl: 'http://wybc-pro.oss-cn-hangzhou.aliyuncs.com/Wx/wxfile/share_gs.jpg',
+                    link: appendParams({ shopId: res.infoId }).replace('user=own', '')
+                }
+                _this.updateWxShare(config);
+            });
     }
     getClassifyMsg(res) {
         let _this = this;
@@ -116,7 +115,8 @@ export class Classify extends BaseVue {
                 this.shopkeeper = {
                     wdName: _wdVipInfo.wdName,
                     wdImg: _wdVipInfo.wdImg,
-                    vipGrade: _wdVipInfo.wdVipGrade
+                    vipGrade: _wdVipInfo.wdVipGrade,
+                    school: _wdVipInfo.school,
                 }
             }
           
@@ -125,8 +125,9 @@ export class Classify extends BaseVue {
     refresh(done) {
         this.page = 1;
         let _this = this;
+        this.$refs._navScrollc.queryClassifyList();
         setTimeout(() => {
-            _this._classfyList.then((res) => {
+            this._$service.classfyList().then((res) => {
                 _this.getClassifyMsg(res);
                 done();
             });
@@ -168,7 +169,6 @@ export class Classify extends BaseVue {
     getImgs(classify) {
         let _this = this;
         _this._$service.getClassifyAdImg(parseInt(classify)).then(res => {
-
             _this.classifyAdImgPic = [];
             console.log(res);
             if (res.data.data.length == 0 || !res.data.data) {
@@ -184,11 +184,12 @@ export class Classify extends BaseVue {
             _this.classifyAdImgPic = classifyAd;
 
         });
-
+        let wdInfo = JSON.parse(localStorage.wdVipInfo);
         let opt = {
             classifyId: classify,
             page: 1,
-            limit: 10
+            limit: 10,
+            shopId: wdInfo.infoId
         };
         this._$service.getClassfyGoodsList(opt).then(res => {
             _this.classfyGoodsList = [];
@@ -198,15 +199,26 @@ export class Classify extends BaseVue {
             }
         })
     }
-    changeShop(e, classfyId) {
+    changeShop(classfyId) {
         this.page = 1;
         this.show = classfyId;
         let _this = this;
         _this.getImgs(classfyId);
+        
+        this.fetchShopData()
+            .then((res) => {
+                let config = {
+                    title: res.wdName + ',超值特惠',
+                    desc: '一言不合买买买！~',
+                    imgUrl: 'http://wybc-pro.oss-cn-hangzhou.aliyuncs.com/Wx/wxfile/share_gs.jpg',
+                    link: appendParams({ shopId: res.infoId }).replace('user=own', '')
+                }
+                _this.updateWxShare(config);
+            });
     }
     //跳转搜索页面
     goSearch() {
         let typeId = this.show ? '?classify=' + this.show : '';
-        this.$router.push({ path: "search", query: { origin: 'type' + typeId } });
+        this.$router.push({ path: "search", query: { origin: 'classify' + typeId } });
     }
 }

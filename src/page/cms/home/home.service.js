@@ -97,6 +97,12 @@ export default (_store) => {
                     canVisit: true,
                 },
                 {
+                    href:'/information',
+                    icon:'/static/images/minishop/s4.png',
+                    title:'资讯',
+                    canVisit: true,
+                },
+                {
                     href: 'helper',
                     icon: '/static/images/minishop/skefu.png',
                     title: '联系客服',

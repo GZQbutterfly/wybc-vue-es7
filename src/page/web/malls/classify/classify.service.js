@@ -19,12 +19,8 @@ export default (_store) => {
         classfyList() {
             return q(classfyList, {});
         },
-        getClassfyGoodsList(opt) {
-            return q(classfyGoodsList, {
-                classifyId: opt.classifyId,
-                page: opt.page,
-                limit: opt.limit,
-            })
+        getClassfyGoodsList(data) {
+            return q(classfyGoodsList, data)
         },
         getClassifyAdImg(id) {
             return q(classifyAdImg, {

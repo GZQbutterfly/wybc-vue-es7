@@ -6,7 +6,7 @@ import { qs } from './env';
  * @param name
  */
 export function toCMS(name = '', query) {
-    location.href = 'cms#/' + (name.replace(/^\//, '')) + (query ? '?' + qs.stringify(query) : '');
+    location.href = 'cms/#/' + (name.replace(/^\//, '')) + (query ? '?' + qs.stringify(query) : '');
 }
 
 /**

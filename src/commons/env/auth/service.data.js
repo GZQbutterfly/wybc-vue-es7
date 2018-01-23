@@ -88,4 +88,8 @@ export default [
     'api/wd_vip/q_wd_msgnum',
     'api/wd_vip/q_user_msg',
     'api/wd_vip/q_user_msgnum',
+
+    'api/q_ten_shop_history',
+    'api/a_ten_shop_history'
+
 ];

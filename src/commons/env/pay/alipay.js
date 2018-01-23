@@ -85,6 +85,6 @@ export class AliPay   {
         data.payType = this._$payData.payType;
         data.userId = user.userId;
         data.token = user.token;
-        location.href = baseURL + url + '?' + qs.stringify(data);
+        location.href = baseURL + url + '?' + qs.stringify(data) + '&_pay=alipay';
     }
 }

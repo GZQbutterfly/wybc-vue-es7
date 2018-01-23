@@ -62,7 +62,7 @@ export class EasyScanner extends BaseVue {
             this.shareTitle = '喜大普奔，' + this.username + '邀请您开店！';
             this.shareDesc = '老夫见你骨骼惊奇，是个做生意的好材料。开店自己当老板吧！';
             this.shareImgurl = /http/.test(this.headimgurl) ? this.headimgurl : (location.origin + this.headimgurl);
-            this.shareUrl = location.origin + '/applyShopCampaign?incode=' + this.urlParams.code;
+            this.shareUrl = location.origin + '/apply_shop_campaign?incode=' + this.urlParams.code;
         }
 
         if (this.urlParams.shop) {

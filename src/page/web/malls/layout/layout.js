@@ -3,7 +3,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator';
 
 import layoutService from './layout.service';
 
-//import shopCarGoodsService from '../home/getShopCarCount';
+import shopCarGoodsService from '../home/getShopCarCount';
 //import { isWeiXin, interval, getAuthUser, isNotLogin, toLogin } from '../../commons/common.env';
 import { debounce } from 'lodash';
 
@@ -57,7 +57,7 @@ export class Layout extends Vue {
     refreshServer = debounce((_self)=>{
             _self.$nextTick(() => {
                 // 请求购物车 商品数量
-                //shopCarGoodsService(this.$store).getShopcarGoodsesList();
+                shopCarGoodsService(this.$store).getShopcarGoodsesList();
             });
     }, 500);
 

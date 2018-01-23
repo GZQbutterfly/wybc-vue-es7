@@ -1,75 +1,81 @@
-<div class="wallet">
-    <div class="cmsHeader">
-        <div class="cmsLevel" @click="toLevelPage">
-            <figure>
-                <img src="/static/images/minishop/diamond.png" alt="">
-            </figure>
-            <h4>M{{ shopData.vip + shopData.vipName }}</h4>
-            <span>立即晋级</span>
-        </div>
-        <div class="cmsUser">
-            <figure>
-                <img :src="user_img" alt="" @load="imgLoad()">
-            </figure>
-            <h4>钱包金额</h4>
-            <span>{{ userMoney | localMoney }}</span>
-        </div>
-        <div class="cmsInfo" @click="toWithdraws">
-            提现记录&gt;&gt;
-        </div>
-    </div>
-    <div class="weui-cells">
-        <div class="weui-cell">
-            <div class="weui-cell__hd">
-                <i class="iconfont icon-remind"></i>提现须知</div>
-            <div class="weui-cell__bd fgf23a13">【{{ withdrawInfo.withDrawNotice }}】</div>
-            <div class="weui-cell__ft fg7ecc44" v-text="showRule?'隐藏':'查看'" @click="changeShowRule"></div>
-        </div>
-        <div class="weui-cell walletTextArea" ref="walletTextArea">
-            <div class="weui-cell__bd" ref="walletTextAreaIn">
-                <p v-for="t in withdrawInfo.withDrawInstruction">{{ t }}</p>
+<app-container :callBack="callBack">
+    <div class="wallet" ref="walletRef">
+        <div class="cmsHeader">
+            <div class="cmsLevel" @click="toLevelPage">
+                <figure>
+                    <img src="/static/images/minishop/diamond.png" alt="">
+                </figure>
+                <h4>M{{ shopData.vip + shopData.vipName }}</h4>
+                <span>立即晋级</span>
+            </div>
+            <div class="cmsUser">
+                <figure>
+                    <img :src="user_img" alt="" @error="imgError()">
+                </figure>
+                <h4>钱包金额</h4>
+                <span>{{ userMoney | localMoney }}</span>
+            </div>
+            <div class="cmsInfo" @click="toWithdraws">
+                提现记录&gt;&gt;
             </div>
         </div>
-    </div>
-    <div class="weui-cells cells-wallet">
-        <div class="weui-cell">
-            <div class="weui-cell__hd">
-                <label class="weui-label" for="">提现金额</label>
+        <div class="wallet-bd">
+            <div class="weui-cells">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <i class="iconfont icon-remind"></i>提现须知</div>
+                    <div class="weui-cell__bd fgf23a13">【{{ withdrawInfo.withDrawNotice }}】</div>
+                    <div class="weui-cell__ft fg7ecc44" v-text="showRule?'隐藏':'查看'" @click="changeShowRule"></div>
+                </div>
+                <div class="weui-cell walletTextArea" ref="walletTextArea">
+                    <div class="weui-cell__bd" ref="walletTextAreaIn">
+                        <p v-html="withdrawInfo.withDrawInstruction"></p>
+                    </div>
+                </div>
             </div>
-            <div class="weui-cell__bd">
-                <input type="text" class="weui-input" v-model="data_money" placeholder="请输入提现的金额">
-            </div>
-        </div>
-        <div class="weui-cell">
-            <div class="weui-cell__hd">
-                <label class="weui-label" for="">提现方式</label>
-            </div>
-            <div class="weui-cell__bd">
-                <select class="weui-input" name="payType" v-model="data_type">
-                    <option value="1">微信支付</option>
-                    <option value="2">支付宝支付</option>
-                </select>
-            </div>
-        </div>
+            <div class="weui-cells cells-wallet">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label" for="">提现金额</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input type="text" class="weui-input" v-model="data_money" placeholder="请输入提现的金额">
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label" for="">提现方式</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <select class="weui-input" name="payType" v-model="data_type">
+                            <option value="1">微信支付</option>
+                            <option value="2">支付宝支付</option>
+                        </select>
+                    </div>
+                </div>
 
-        <div class="weui-cell" v-if="data_type == 1">
-            <div class="weui-cell__hd">
-                <label class="weui-label" for="">微信账号</label>
+                <div class="weui-cell" v-if="data_type == 1">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label" for="">微信账号</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input type="text" class="weui-input" v-model="data_name" placeholder="请输入微信账号">
+                    </div>
+                </div>
+                <div class="weui-cell" v-else>
+                    <div class="weui-cell__hd">
+                        <label class="weui-label" for="">支付宝账号</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input type="text" class="weui-input" v-model="data_name" placeholder="请输入支付宝账号">
+                    </div>
+                </div>
             </div>
-            <div class="weui-cell__bd">
-                <input type="text" class="weui-input" v-model="data_name" placeholder="请输入微信账号">
-            </div>
-        </div>
-        <div class="weui-cell" v-else>
-            <div class="weui-cell__hd">
-                <label class="weui-label" for="">支付宝账号</label>
-            </div>
-            <div class="weui-cell__bd">
-                <input type="text" class="weui-input" v-model="data_name" placeholder="请输入支付宝账号">
-            </div>
+            <div class="flex-1"></div>
+
+            <a class="weui-btn weui-btn_primary wallerSubmit" @click="withdraws">
+                提交
+            </a>
         </div>
     </div>
-    <a class="weui-btn weui-btn_primary wallerSubmit" @click="withdraws">
-        提交
-    </a>
-</div>
+</app-container>

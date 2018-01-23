@@ -71,7 +71,18 @@ const routes = [
                         resolve(require('./order/detail/order.detail')['CmsPurchaseOrderDetail']);
                     }, 'cms/purchase/order');
                 }
+            },
+            //仓储说明
+            {
+                path: '/cms_stock_info',
+                name: 'cms_stock_info',
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./order/submit/stockinfo/stock.info')['StockInfo']);
+                    }, 'cms/purchase/order');
+                }
             }
+            
         ]
     },
     //我要进货搜索页面
@@ -83,7 +94,27 @@ const routes = [
                 resolve(require('./search/search')['Search']);
             }, 'cms/search/search');
         }
-    }
+    },
+     // 地址
+    {
+        path: '/cms_user_address',
+        name: 'cms_user_address',
+        meta: {  title:'地址' },
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('../../sys/user_address/user.address')['UserAddress']);
+            }, 'cms/purchase/address');
+        }
+    },
+    {
+        path: '/address',
+        name: 'address',
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('../../sys/address/address')['Address']);
+            }, 'sys/system');
+        }
+    },
 ];
 
 export default routes;
