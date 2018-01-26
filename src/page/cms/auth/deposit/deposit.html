@@ -1,0 +1,34 @@
+<app-container class="up-container">
+    <div>
+        <section class="up-bd">
+                <div class="up-pay">
+                    <div class="up-pay-info">
+                        <div class="pay-info-text">
+                            <div class="pay-money">{{100 | localMoney}}</div>
+                            押金（可退）
+                        </div>
+                    </div>
+                    <div class="up-pay-select">
+                        <div class="pay-cell" v-for="item in payList">
+                            <div class="pay-cell_hd">
+                                <img :src="item.src" alt="">
+                            </div>
+                            <div class="pay-cell_bd">
+                                {{item.name}}
+                            </div>
+                            <div class="pay-cell_ft" @click="swtichPay(item)">
+                                <i :class="[item.type === payActive ? 'weui-icon-success' : 'weui-icon-circle']"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+    </div>
+    <footer class="up-ft" slot="footer">
+        <template>
+            <button class="to_pay_btn deposit" type="button" @click="toPay">
+                立刻支付
+            </button>
+        </template>
+    </footer>
+</app-container>

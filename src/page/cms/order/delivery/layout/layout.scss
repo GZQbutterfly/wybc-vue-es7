@@ -1,0 +1,35 @@
+.delivery-layout {
+    .take-img,
+    .give-img {
+        height: 16px;
+        width: 16px;
+        margin-top: 5px;
+    }
+    .point-img {
+        height: 20px;
+        width: 16px;
+        margin-top: 1px;
+    }
+    button {
+        display: block;
+        width: 100%;
+        font-size: 17px;
+        height: 36px;
+        border-radius: 5px;
+        &.primary {
+            color: #fff;
+            background-color: #7ecc44;
+        }
+        &.default {
+            color: #333;
+            background-color: #fff;
+            border: 1px solid #333;
+        }
+        &:nth-child(2) {
+            margin-left: 10px;
+        }
+    }
+    .success{
+        color:#7ecc44;
+    }
+}

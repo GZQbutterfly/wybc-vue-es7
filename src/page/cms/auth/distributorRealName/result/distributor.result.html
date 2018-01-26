@@ -1,0 +1,65 @@
+<div class="realresult-container-distributor">
+
+    <header class="realresult-hd">
+        <!-- 认证通过 -->
+        <div class="realresult-resolve" v-if="resultType === 'resolve'">
+            <div class="realresult-title success">
+                恭喜！认证成功
+            </div>
+            恭喜您！您已通过配送员认证
+        </div>
+
+        <!-- 认证未通过 -->
+        <div class="realresult-reject" v-if="resultType === 'reject'">
+            <div class="realresult-title error">
+                认证未通过
+            </div>
+            {{result.data.refuseMsg || '请重新提交配送员认证!'}}
+        </div>
+        <!-- 等候认证 -->
+        <div class="realresult-pending" v-if="resultType === 'pending'">
+            <div class="realresult-title warn">
+                等候审核
+            </div>
+            <div>
+                早上9:00到晚上9:00， 15分钟内审核回复
+            </div>
+            <div>
+                晚上9:00到早上9:00， 12小时审核回复
+            </div>
+        </div>
+    </header>
+
+    <section class="realresult-bd">
+
+        <div class="realresult-img" :class="[resultType]">
+
+        </div>
+
+
+    </section>
+
+    <footer class="realresult-ft">
+        <!-- 认证通过 -->
+        <template v-if="resultType === 'resolve'">
+            <button class="ok" type="button" @click="toHome">
+                确认
+            </button>
+        </template>
+        <!-- 认证未通过 -->
+        <template v-if="resultType === 'reject'">
+            <button class="ok" type="button" @click="toForm">
+                重新认证
+            </button>
+            <button type="button" @click="toHome">
+                暂不认证
+            </button>
+        </template>
+        <!-- 等候认证 -->
+        <template v-if="resultType === 'pending'">
+            <button class="ok" type="button" @click="toHome">
+                确认
+            </button>
+        </template>
+    </footer>
+</div>

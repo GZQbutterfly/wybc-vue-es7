@@ -1,0 +1,94 @@
+<div class="distributor">
+    <pull-refresh :refresh="refresh">
+        <section>
+            <div class="rob-box">
+                <div class="rob-box-hd">
+                    <div class="money">￥
+                        <span>{{data.money}}</span>
+                    </div>
+                    <div class="info">本单收入</div>
+                </div>
+            </div>
+            <div class="order-wait" v-text="getOrderStateName()"></div>
+            <div class="order-red">该订单无法获得酬金！~</div>
+            <!-- 订单状态流程 -->
+            <div class="order-show" v-if="orderInfo.orderState > 1&&orderInfo.orderState <= 5">
+                <p :class="{'e6e6e6':orderInfo.orderState >= 1&&orderInfo.orderState<5}">
+                    <b :class="{'weui-icon-success':orderInfo.orderState >= 2&&orderInfo.orderState<5}"></b>
+                    <i></i>
+                    <b :class="{'weui-icon-success':(orderInfo.orderState==4)}"></b>
+                    <i></i>
+                    <b :class="{'weui-icon-success':orderInfo.orderState==5}"></b>
+                </p>
+                <div class="order-text">
+                    <span>已接单</span>
+                    <span>已取货</span>
+                    <span>成功送达</span>
+                </div>
+            </div>
+        </section>
+        <!--订单配送-->
+        <p class="order-distribute">
+            <i class="iconfont icon-truck"></i> 订单配送
+        </p>
+        <div class="order-distribute-adress">
+            <div class="weui-flex flex-align">
+                <img src="/static/images/delivery/q.png" alt="">
+                <span>{{data.from}}</span>
+            </div>
+            <div class="weui-flex flex-align">
+                <img src="/static/images/delivery/jiantou.png" alt="" class="img-jt">
+                <span class="color-80">{{data.fromAddress}}</span>
+            </div>
+            <div class="weui-flex flex-align">
+                <img src="/static/images/delivery/s.png" alt="">
+                <span>{{data.to}}</span>
+            </div>
+            <div class="adress">{{data.toAddress}}</div>
+        </div>
+        <!--订单详情-->
+        <p class="order-distribute flex-detaile">
+            <img src="/static/images/delivery/xiangqing.png"> 订单详情
+        </p>
+        <div class="order-detail">
+            <div class="order-goods-list">
+                <div class="order-goods weui-flex">
+                    <span>商品名称</span>
+                    <span>x&nbsp;10</span>
+                    <span>¥1565</span>
+                </div>
+                <div class="order-goods weui-flex">
+                    <span>商品名称</span>
+                    <span>x&nbsp;10</span>
+                    <span>¥1565</span>
+                </div>
+            </div>
+            <div class="order-toatl weui-flex">
+                <div>总计：¥33</div>
+                <div>实付：
+                    <span class="prrce-red">¥16.2</span>
+                </div>
+            </div>
+        </div>
+        <!--订单信息-->
+        <p class="order-distribute flex-detaile">
+            <img src="/static/images/delivery/bianhao.png">订单信息
+        </p>
+        <div class="order-msg">
+            订单号码：1454545454554
+        </div>
+    </pull-refresh>
+    <footer>
+        <button class="primary" type="button" v-if="orderInfo.orderState==1">接单</button>
+        <div class="foot weui-flex" v-if="orderInfo.orderState>1&&orderInfo.orderState<5">
+            <div class="business">联系商家</div>
+            <div class="buyers" v-if="orderInfo.orderState>2">联系买家</div>
+            <div class="pickUp" v-if="orderInfo.orderState==2">我已取货</div>
+        </div>
+    </footer>
+    <!-- <div class="rob-box-ft">
+        <button class="primary" type="button">接单</button>
+    </div>
+ -->
+
+</div>

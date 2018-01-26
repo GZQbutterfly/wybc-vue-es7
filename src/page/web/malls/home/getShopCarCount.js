@@ -28,7 +28,7 @@ export default (_store) => {
                     if (res.data.data && res.data.data.length!=0){
                     res.data.data.forEach(lists => {
                         lists.shopCarts.forEach(item => {
-                            if (item.isValid === 1) {
+                            if (item.isSourceGoodsValid == 1 && item.isCampusGoodsValid==1) {
                                 validLists.push(item);
                             }
                         });

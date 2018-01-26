@@ -1,5 +1,5 @@
-import { Component} from 'vue-property-decorator';
-import  BaseVue  from 'base.vue';
+import { Component } from 'vue-property-decorator';
+import BaseVue from 'base.vue';
 import './classify.scss';
 import classifyService from './classify.service';
 import { isNotLogin, toLogin } from 'common.env';
@@ -28,9 +28,7 @@ export class CmsPurchaseClassify extends BaseVue {
     headImg = '/static/images/pic-nologin.png';
     shopkeeper = {};
     //private _getShopCarCount;
-    _classfyList;
     homeAd = [];
-    selfShopId;
     data() {
         return {
             // show: true
@@ -39,18 +37,15 @@ export class CmsPurchaseClassify extends BaseVue {
     mounted() {
         // 注册服务
         this._$service = classifyService(this.$store);
-        //this.getClassifyMsg();
-        this.$nextTick(() => {
-            this._classfyList = this._$service.classfyList();
-        });
     }
 
     activated() {
         document.title = "进货首页"
         // keep-alive 时 会执行activated
         let _this = this;
+        _this.flag = true;
         this.$nextTick(() => {
-            _this._classfyList.then((res) => {
+            _this._$service.classfyList().then((res) => {
                 _this.getClassifyMsg(res);
             });
         })
@@ -60,8 +55,9 @@ export class CmsPurchaseClassify extends BaseVue {
         let _this = this;
         let classify = this.$route.query.classify;
         _this.$refs._navScrollc.getQueryList(classify);
+        let _classfyList = this._$service.classfyList();
         setTimeout(() => {
-            this._classfyList.then((res) => {
+            _classfyList.then((res) => {
                 this.getClassifyMsg(res);
             });
             done();
@@ -70,24 +66,21 @@ export class CmsPurchaseClassify extends BaseVue {
     infinite(done) {
         let _this = this;
         this.page++;
-        console.log(this.page);
         setTimeout(() => {
             if (_this.page < 2) {
                 _this.page = 2
             }
             let opt = {
-                classifyId: this.$route.query.classify||this.classfyId[0],
+                classifyId: _this.show,
                 page: _this.page,
-                limit: 4
+                limit: 8
             };
             this._$service.getClassfyGoodsList(opt).then(res => {
                 console.log(res);
-                if (res.data.msg || res.data.data.length == 0) {
+                if (res.data.errorCode || res.data.data.length == 0) {
                     done(true);
-                    return;
                 } else {
                     _this.changePrice(res.data.data);
-
                     done(false);
                 }
             })
@@ -104,8 +97,6 @@ export class CmsPurchaseClassify extends BaseVue {
         }
         this._$service.getWdInfo(opt).then(shop => {
             //res.data.state =3;
-            _this.selfShopId = shop.data.shopId;
-            localStorage.selfShopId = shop.data.shopId;
             if (shop.data.state == 3 || shop.data.upWdInfo == 0) {
                 _this.shopkeeper = {
                     wdName: "学惠精选官方商城",
@@ -133,7 +124,7 @@ export class CmsPurchaseClassify extends BaseVue {
 
         //首页banner
         _this._$service.homeAd().then(res => {
-            if (res.data.errorCode || !res.data) {
+            if (!res.data || res.data.errorCode || !res.data.data || res.data.data.length==0) {
                 _this.homeAd = [];
                 return;
             }
@@ -147,16 +138,32 @@ export class CmsPurchaseClassify extends BaseVue {
 
         this.page = 1;
         let classify = _this.$route.query.classify;
+
+        if (!res.data || res.data.errorCode || res.data.data.length == 0) {
+            _this.classfyGoodsList = [];
+            _this.classifyAdImgPic = [];
+            return;
+        }
         _this.classfyList = res.data.data;
         _this.classfyId = [];
         _this.classfyList.forEach(item => {
             _this.classfyId.push(item.goodsClassifyId);
         });
         if (classify) {
-            _this.show = classify;
-            _this._$service.getClassifyAdImg(parseInt(classify)).then(res => {
-                console.log(res);
-                if (res.data.data.length == 0 || !res.data.data) {
+            let findClass = false;
+            for (let i = 0, len = _this.classfyList.length; i < len; i++) {
+                if (classify == _this.classfyList[i].goodsClassifyId) {
+                    findClass = true;
+                    break;
+                }
+            }
+            if (findClass) {
+                _this.show = classify;
+            } else {
+                _this.show = _this.classfyList[0].goodsClassifyId;
+            }
+            _this._$service.getClassifyAdImg(parseInt(_this.show)).then(res => {
+                if (!res.data.data || res.data.data.length == 0) {
                     _this.bannerShow = false;
                     return;
                 }
@@ -169,16 +176,15 @@ export class CmsPurchaseClassify extends BaseVue {
                 _this.classifyAdImgPic = classifyAd;
             });
             let opt = {
-                classifyId: classify,
+                classifyId: _this.show,
                 page: 1,
                 limit: 10
             }
             this.classfyGoodsList = [];
             this._$service.getClassfyGoodsList(opt).then(res => {
-
                 let _result = res.data;
                 if (!_result.errorCode) {
-                    if (_result.data.length == 0 || !_result.data) {
+                    if (!_result.data || _result.data.length == 0) {
                         return;
                     }
                     _this.changePrice(_result.data);
@@ -186,9 +192,9 @@ export class CmsPurchaseClassify extends BaseVue {
             })
         } else {
             _this.show = _this.classfyId[0];
-            _this._$service.getClassifyAdImg(_this.classfyId[0]).then(res => {
+            _this._$service.getClassifyAdImg(_this.show).then(res => {
                 let classifyAd = [];
-                if (res.data.data.length == 0 || !res.data.data) {
+                if (!res.data || res.data.errorCode || (res.data.data && res.data.data.length == 0)) {
                     _this.bannerShow = false;
                     return;
                 }
@@ -200,12 +206,15 @@ export class CmsPurchaseClassify extends BaseVue {
                 _this.classifyAdImgPic = classifyAd;
             });
             let opt = {
-                classifyId: _this.classfyId[0],
+                classifyId: _this.show,
                 page: 1,
                 limit: 10
             };
             _this.classfyGoodsList = [];
             this._$service.getClassfyGoodsList(opt).then(res => {
+                if (res.data.errorCode) {
+                    return;
+                }
                 _this.changePrice(res.data.data);
             })
         }
@@ -217,11 +226,7 @@ export class CmsPurchaseClassify extends BaseVue {
         this.show = classfyId;
         let _this = this;
         _this._$service.getClassifyAdImg(classfyId).then(res => {
-            if (res.data.errorCode) {
-                return;
-            }
-            _this.classifyAdImgPic = [];
-            if (res.data.data.length == 0) {
+            if (res.data.errorCode || !res.data || res.data.data.length == 0) {
                 _this.bannerShow = false;
                 return;
             }
@@ -249,11 +254,12 @@ export class CmsPurchaseClassify extends BaseVue {
 
     }
     //修改价格
-    changePrice(res, ) {
+    changePrice(res) {
         if (res.length == 0 || !res) {
             return;
         }
-        let shopId = this.selfShopId;
+        let _this = this;
+        let shopId = this.$store.state.workVO.user.userId;
         let goodsIds = []; let opt = { infoId: shopId, listStr: "" };
         res.forEach(ele => {
             goodsIds.push(ele.goodsId)
@@ -263,7 +269,7 @@ export class CmsPurchaseClassify extends BaseVue {
             for (let i = 0, len = res.length; i < len; i++) {
                 for (let j = 0, lenj = discount.data.length; j < lenj; j++) {
                     if (i == j) {
-                        res[i].moneyPrice =Math.ceil(res[i].moneyPrice * discount.data[j] / 100);
+                        res[i].moneyPrice = Math.ceil(res[i].moneyPrice * discount.data[j] / 100);
                         break;
                     }
                 }

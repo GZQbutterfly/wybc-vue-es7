@@ -43,7 +43,6 @@ export default (_store) => {
         **/
         pay(data) {
             let _pay = _state.$pay;
-            console.log(_pay);
             return _pay.pay('api/order/pay_order', data);
         },
         /**

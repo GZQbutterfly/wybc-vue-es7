@@ -1,0 +1,117 @@
+<div class="delivery-card-box">
+
+    <!-- 抢单 -->
+    <template v-if="cardType === 'rob'">
+        <div class="rob-box">
+            <div class="rob-box-hd">
+                <div class="money">￥<span>{{data.money}}</span></div>
+                <div class="info">本单收入</div>
+            </div>
+            <div class="rob-box-bd">
+                <div  class="weui-flex">
+                    <!-- <i class="i i-take">取</i>  -->
+                    <img :src="takeImgSrc" class="take-img">
+                    <div class="right">{{data.from}}</div>
+                </div>
+                <div class="weui-flex">
+                    <div class="pending">
+                        <!-- <i class="icon iconfont icon-zhankai"></i>
+                        <i class="icon iconfont icon-zhankai"></i>
+                        <i class="icon iconfont icon-zhankai"></i> -->
+                        <img :src="pointImgSrc" class="point-img">
+                    </div>
+                    <div class="right fromAddress">{{data.fromAddress}}</div>
+                </div>
+                <div class="weui-flex">
+                    <!-- <i class="i i-give">送</i> -->
+                    <img :src="giveImgSrc" class="give-img">
+                    <div class="right"><p>{{data.to}}</p><p>{{data.toAddress}}</p></div>
+                </div>
+            </div>
+            <div class="rob-box-ft">
+                <button class="primary" type="button" @click="mainClick">接单</button>
+            </div>
+
+        </div>
+    </template>
+
+    <!-- 取货 -->
+    <template v-else-if="cardType === 'pickup'">
+
+        <div class="pickup-box">
+            <div class="pickup-box-hd">
+                <div class="money">￥<span>{{data.money}}</span></div>
+                <div class="info">本单收入</div>
+            </div>
+            <div class="pickup-box-bd">
+                <div class="weui-flex">
+                    <!-- <i class="i i-take">取</i> -->
+                    <img :src="takeImgSrc" class="take-img">
+                    <div class="right">{{data.from}}</div>
+                </div>
+                <div class="weui-flex">
+                    <div class="pending">
+                        <!-- <i class="icon iconfont icon-zhankai"></i>
+                        <i class="icon iconfont icon-zhankai"></i>
+                        <i class="icon iconfont icon-zhankai"></i> -->
+                        <img :src="pointImgSrc" class="point-img">
+                    </div>
+                    <div class="right fromAddress">{{data.fromAddress}}</div>
+                </div>
+                <div class="weui-flex">
+                    <!-- <i class="i i-give">送</i> -->
+                    <img :src="giveImgSrc" class="give-img">
+                    <div class="right">
+                        <p>{{data.to}}</p>
+                        <p>{{data.toAddress}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="pickup-box-ft weui-flex">
+                <button class="default" type="button" @click="callClick">联系商家</button>
+                <button class="primary" type="button" @click="mainClick">我已取货</button>
+            </div>
+        </div>
+    </template>
+
+
+    <!-- 配送中 -->
+    <template v-else="cardType === 'delivering'">
+
+        <div class="delivering-box">
+            <div class="delivering-box-hd">
+                <div class="money">￥<span>{{data.money}}</span></div>
+                <div class="info">本单收入</div>
+            </div>
+            <div class="delivering-box-bd">
+                <div class="weui-flex">
+                    <!-- <i class="i i-take">取</i> -->
+                    <img :src="takeImgSrc" class="take-img">
+                    <div class="right">{{data.from}}</div>
+                </div>
+                <div class="weui-flex">
+                    <div class="pending">
+                        <!-- <i class="icon iconfont icon-zhankai"></i>
+                        <i class="icon iconfont icon-zhankai"></i>
+                        <i class="icon iconfont icon-zhankai"></i> -->
+                        <img :src="pointImgSrc" class="point-img">
+                    </div>
+                    <div class="right fromAddress">{{data.fromAddress}}</div>
+                </div>
+                <div class="weui-flex">
+                    <!-- <i class="i i-give">送</i> -->
+                    <img :src="giveImgSrc" class="give-img">
+                    <div class="right">
+                        <p>{{data.to}}</p>
+                        <p>{{data.toAddress}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="delivering-box-ft weui-flex">
+                <button class="default" type="button" @click="callClick">联系买家</button>
+                <!-- <button class="primary" type="button" @click="mainClick">我已送达</button> -->
+            </div>
+        </div>
+    </template>
+
+</div>

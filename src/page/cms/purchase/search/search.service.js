@@ -24,7 +24,10 @@ export default (_store) => {
          * 获取热门搜索
          */
         getKeyWord_hot() {
-            return q(keywordhoturl)
+            let data = {
+                channel: 'store'
+            }
+            return q(keywordhoturl, data)
         },
         /**
          * 获取关键词联想匹配

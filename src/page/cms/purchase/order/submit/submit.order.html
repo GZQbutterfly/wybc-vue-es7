@@ -1,36 +1,46 @@
-<!-- cms提交订单 -->
 <app-container>
     <div style="padding-bottom:0.05rem;" id="order-submit-container-import">
-        <!-- <app-nowifi :callBack="callBack" v-if="showNowifi"></app-nowifi> -->
-        <!-- <pull-refresh> -->
-        <div class="flex-satisfy" v-if="noShip">
-            <div class="weui-flex__item">
-                <i class="iconfont icon-remind red"></i>
-                <b>校外区域未满
-                    <span class="red">{{dissatisfyPrice | localMoney}}元</span>收取配送费
-                    <span class="red">{{shipFee | localMoney}}元</span>
-                </b>
-                <br />
-            </div>
-            <p class="red">(校外偏远地区订单运费另算)</p>
+        <div class="flex-satisfy">
+            <template v-if="chooseAddressState == 1">
+                <div class="weui-flex__item">
+                    <i class="iconfont icon-remind center red"></i>
+                    <b>校区配送区域内订单免运费</b>
+                </div>
+            </template>
+            <template v-else-if="chooseAddressState == 2">
+                <div class="weui-flex__item">
+                    <i class="iconfont icon-remind center red"></i>
+                    <b>
+                        校区配送区域外未满<span class="center red">{{dissatisfyPrice | localMoney}}元</span>
+                        将收取配送费<span class="red">{{shipFee | localMoney}}元</span>
+                    </b>
+                    <br />
+                </div>
+                <p class="center red">(校外偏远地区订单运费另算)</p>
+            </template>
+            <template v-else-if="chooseAddressState == 3">
+                <div class="weui-flex__item">
+                    <i class="iconfont icon-remind center red"></i>
+                    <b>
+                        校区配送区域外未满<span class="center red">{{dissatisfyPrice | localMoney}}元</span>
+                        将收取配送费<span class="red">{{shipFee | localMoney}}元</span>
+                    </b>
+                </div>
+            </template>
         </div>
         <section style="background-color:#fff;">
             <div class="stock-info">
-                <!-- <i>*</i> -->
                 <span class="stock-desc">进货仓储方式 </span>
-                <span class="float-r">{{stocktype}}</span>
+                <span class="float-r">{{stockType_Value}}</span>
             </div>
             <div class="info-link">
                 <u @click="stockInfo()">进货仓储说明</u>
             </div>
         </section>
-        <div class="order-detail-content" v-if="stockType==1">
-            <!-- 新增收货订单 -->
+        <div class="order-detail-content" v-if="stockType_State==1">
             <header class="order-submitting-header">
-                <!-- 实物购买 地址选择-->
                 <div>
                     <div class="weui-cell" @click="dialogSelectAddress()" v-if="!selectAddressFlag">
-                        <!-- @click="dialogCrateAddress()" -->
                         <div class="weui-cell__bd">
                             <i class="wybc-icon wybc-icon-plus"></i>
                             <span>新增收货地址</span>
@@ -71,44 +81,33 @@
                 </div>
             </header>
         </div>
-        <!-- 商品box list -->
         <section style="background-color:#fff;">
-            <!-- 商品box -->
             <div class="order-detail-list">
-                <div class="order-detail-item" v-for="item in orderList">
+                <div class="order-detail-item" v-for="item in goodsList">
                     <div class="order-detail-head">
                         <i class="icon iconfont icon-shop"></i>
                         <span>{{item.shopName}}</span>
                     </div>
-
                     <div class="order-content" v-for="v in item.res">
-
                         <div class="weui-cell order-box-detail">
                             <div class="weui-cell__hd">
-
                                 <img :src="v.coverImg" alt="商品图片" class="order-img">
                             </div>
                             <div class="weui-cell__bd">
                                 <div class="order-text">{{v.goodsName}}</div>
                             </div>
                             <div class="weui-cell__ft">
-
                                 <div class="label-money">{{v.moneyPrice | localMoney}}</div>
                                 <div class="order-num-tip">x{{v.number}}</div>
                             </div>
                         </div>
-                        <div class="order-detail-border" v-if="v.length!=1">
-                        </div>
+                        <div class="order-detail-border" v-if="v.length!=1"></div>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- 商品总计 -->
         <section class="order-total">
-            <!-- 实物结算明细 -->
             <div>
-
-                <!-- 进货价小计-->
                 <div class="weui-cell weui-noborder">
                     <div class="weui-cell__bd">进货价小计</div>
                     <div class="weui-cell__ft order-text">
@@ -116,15 +115,12 @@
                     </div>
                 </div>
             </div>
-            <!-- 邮费 -->
-            <div class="weui-cell" v-if="noShip">
+            <div class="weui-cell">
                 <div class="weui-cell__bd">配送费</div>
                 <div class="weui-cell__ft order-text">
-                    <!-- {{shipFee | localMoney}} -->
-                    {{(stockType==1&&isInsideSchool==0&&orderTotal.price < dissatisfyPrice)?shipFee : "0" | localMoney}}
+                    {{noShipFee ? 0 : shipFee | localMoney}}
                 </div>
             </div>
-            <!-- 合计 -->
             <div class="weui-cell">
                 <div class="weui-cell__bd">合计</div>
                 <div class="weui-cell__ft order-text">
@@ -133,7 +129,6 @@
             </div>
         </section>
     </div>
-    <!-- 提交订单 -->
     <div slot="footer">
         <footer class="order-submitting-footer weui-tabbar">
             <div class="weui-cell__bd text-right">
@@ -145,17 +140,8 @@
             </div>
         </footer>
         <div class="address-container">
-            <!-- 地址操作 -->
             <address-dialog :close="closeDialogAddess" v-if="showDialogAddress" :selectAddress="selectAddress" :selectId="orderAddress.addrId"></address-dialog>
-
-            <!-- 新增地址界面 -->
             <address-operation :close="closeCrateAddress" v-if="showAddAddress" :item="{}"></address-operation>
         </div>
     </div>
-    <!-- </pull-refresh> -->
-
-
-  
-
-
 </app-container>

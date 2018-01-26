@@ -149,12 +149,8 @@ export class ShopCar extends BaseVue {
 
         //推荐商品
         this._$service.getShopcarRecommend().then((res) => {
-            if (res.data.errCode) {
-                _this.toast(res.data.msg, false);
-                return;
-            }
             _this.recommendLists.length = 0;
-            if (res.data.data.length == 0) {
+            if (res.data.errorCode || (res.data.data && res.data.data.length == 0)) {
                 _this.recommendShow = true;
                 return;
             }
@@ -196,7 +192,7 @@ export class ShopCar extends BaseVue {
                         let list = [];
                         lists.wxShopCheck = false;
                         lists.shopCarts.forEach(item => {
-                            if (item.isValid == 1) {
+                            if (item.isSourceGoodsValid == 1 && item.isCampusGoodsValid==1) {
                                 list.push(item);
                             } else {
                                 _this.invalidLists.push(item);
@@ -249,7 +245,7 @@ export class ShopCar extends BaseVue {
             lists.wxShopCheck = false;
             lists.shopCarts.forEach(item => {
                 item.check = false;
-                if (item.isValid == 1) {
+                if (item.isSourceGoodsValid == 1 && item.isCampusGoodsValid) {
                     list.push(item);
                 } else {
                     _this.invalidLists.push(item);
@@ -636,13 +632,42 @@ export class ShopCar extends BaseVue {
         });
         this.$store.state.shopCar.count = num;
     }
+    //结算是否为同一个校区
+    checkSameSchool() {
+        let school = '';
+        this.validLists.forEach(lists => {
+            if (school) {
+                if (school != lists.school) {
+                    return true;
+                }
+            } else {
+                school = lists.school;
+            }
+        });
+        return false;
+    }
     //结算
     onSettle() {
         let flag = !isNotLogin();//判断用户有缓存登录
         let dialog = this.$store.state.$dialog;
         let _this = this;
         let cartId = [];
-
+        //多校区订单检测
+        if(_this.checkSameSchool()){
+            let dialogObj = {
+                title: '提示',
+                content: '多校区订单不能同时提交！',
+                assistBtn: '',
+                mainBtn: '确定',
+                type: 'info',
+                assistFn() {
+                },
+                mainFn() {
+                }
+            };
+            dialog({ dialogObj });
+            return;
+        }
         this.validLists.forEach(lists => {
             lists.data.forEach(item => {
                 if (item.check) {

@@ -9,7 +9,7 @@
                 <div class="weui-cell__bd">
                     <!-- {{ school }} -->
                     <input class="weui-input" tabindex=-1 type="text" placeholder="请选择您所在的学校" v-model="schoolList[schoolIndex].name">
-                    <select class="weui-select" v-model="schoolIndex">
+                    <select class="weui-select" v-model="schoolIndex" @blur="schoolBlur(1)">
                         <option v-for="(item,index) in schoolList" :value="index" v-text="item.name" v-if="index"></option>
                     </select>
                 </div>

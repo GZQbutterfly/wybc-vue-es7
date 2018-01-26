@@ -31,6 +31,27 @@ const routes = [
             }, 'cms/auth/realname');
         }
     },
+    //配送员实名认证
+    {
+        path: '/distributor_realname_form',
+        name: 'distributor_realname_form',
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('./distributorRealName/form/distributor.form')['DistributorRealNameForm']);
+            }, 'cms/auth/distributorRealName');
+        }
+    },
+    //配送员押金deposit
+    {
+        path: '/deposit',
+        name: 'deposit',
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('./deposit/deposit')['Deposit']);
+            }, 'cms/auth/deposit');
+        }
+    },
+
 ];
 
 export default routes;

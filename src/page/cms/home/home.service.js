@@ -59,7 +59,8 @@ export default (_store) => {
         //获取banner数据
         queryBannerData() {
             let data = {
-                posId: 2
+                posId: 2,
+                channel: 'store'
             }
             return q(querybannerdata, data);
         },

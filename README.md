@@ -85,3 +85,24 @@
   cnpm install --save-dev happypack
   cnpm install  babel-plugin-syntax-jsx babel-plugin-transform-vue-jsx babel-helper-vue-jsx-merge-props   --save-dev
   cnpm install minirefresh
+
+
+
+
+
+  <head>里面加上：
+
+
+   <meta name="format-detection" content="telephone=yes"/>
+　　
+
+   需要拨打电话的地方：
+
+
+   <a href="tel:400-0000-688">400-0000-688</a>
+　　
+
+   发短信：
+
+
+   <a href="sms:18688888888">发短信</a>

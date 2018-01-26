@@ -1,3 +1,4 @@
+import deliveryRoutes from './delivery/delivery.routes';
 const routes = [
     {
         path: '/order_layout ',
@@ -45,7 +46,18 @@ const routes = [
                 }
             }
         ]
-    }
+    },
+    //配送员详情
+    {
+        path: '/distributor_detail',
+        name: 'distributor_detail',
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('./distributorDetail/distributor_detail')['DistributorDetail']);
+            }, 'cms/order/order');
+        }
+    },
+    ...deliveryRoutes
 ];
 
 export default routes;

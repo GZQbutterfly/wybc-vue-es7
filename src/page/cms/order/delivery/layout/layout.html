@@ -1,0 +1,8 @@
+<div class="warp delivery-layout" ref="warpRef">
+    <div class="main-content views">
+        <keep-alive>
+            <router-view v-if="$route.meta.keepAlive"></router-view>
+        </keep-alive>
+        <router-view v-if="!$route.meta.keepAlive"></router-view>
+    </div>
+</div>

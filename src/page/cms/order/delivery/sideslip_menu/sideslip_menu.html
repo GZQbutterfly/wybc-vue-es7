@@ -1,0 +1,24 @@
+<div class="sideslip-menu-container" @touchmove="noTouchMove">
+    <div class="weui-mask" @click="closeSelf" :class="{'weui-mask-show': show}"></div>
+
+    <div class="sideslip-content" :class="{'content-show': show}">
+        <header class="sideslip-content-hd">
+            <div class="user-detail">
+                <img :src="user.headimgurl || defaultUserImg" alt="" @error="imgError">
+                <label>{{user.phone | fmtPhone}}</label>
+            </div>
+        </header>
+
+        <section class="sideslip-content-bd">
+            <div v-for="(item, index) in menuList" :key="index" class="weui-flex" @click="toPath($event, item)">
+                <img :src="item.imgSrc" alt="">
+                <label>{{item.label}}</label>
+            </div>
+        </section>
+
+        <footer class="sideslip-content-ft">
+
+        </footer>
+    </div>
+
+</div>

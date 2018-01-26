@@ -123,7 +123,7 @@ export class GoodsDetail extends BaseVue {
         }
         goodsService(_this.$store).goodsInfo(opt)
             .then(res => {
-                if ((res.data.data && res.data.data.state != 1) || res.data.errorCode) {
+                if (res.data.errorCode || (res.data.data && res.data.data.state != 1) ) {
                     let dialogObj = {
                         title: '',
                         content: '该商品已下架',

@@ -1,0 +1,46 @@
+<div class="delivery-notice-container" @touchmove="noTouchMove">
+    <div class="weui-mask" @click="closeSelf" :class="{'weui-mask-show': show}"></div>
+    <!--  -->
+    <div class="notice-content" :class="{'notice-content-show': show}">
+        <header class="notice-content-hd">
+            <span class="money">{{1880 | localMoney}}</span>
+        </header>
+        <section class="notice-content-bd">
+            <div class="notice-detail-hd">
+                <span class="money">{{1880 | localMoney}}</span>
+                <i class="icon iconfont icon-iconfontclose" @click="closeSelf"></i>
+            </div>
+            <div class="notice-detail-bd">
+                <div class="weui-flex">
+                    <img :src="takeImgSrc" class="take-img">
+                    <div class="right">{{data.from}}</div>
+                </div>
+                <div class="weui-flex">
+                    <div class="pending">
+                        <img :src="pointImgSrc" class="point-img">
+                    </div>
+                    <div class="right fromAddress">{{data.fromAddress}}</div>
+                </div>
+                <div class="weui-flex">
+                    <img :src="giveImgSrc" class="give-img">
+                    <div class="right">
+                        <p>{{data.to}}</p>
+                        <p>{{data.toAddress}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="notice-detail-ft">
+                <div class="line"></div>
+                <div class="order-detail">
+                    订单编号：12312312313123123
+                </div>
+            </div>
+        </section>
+        <footer class="notice-content-ft">
+            <div class="order-rob" @click="robOrder">
+                抢单
+                <div>{{timeNum}}</div>
+            </div>
+        </footer>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="deliver-finish-list">
+    <!-- <p class="content"></p>
+    <p class="counter"></p>
+    <p class="counter"></p> -->
+
+    <pull-refresh :refresh="refresh" :infinite="infinite">
+        <div>
+            <div v-for="(item, index) in list" :key="index" class="finish-list-content">
+                <div class="finish-list-content-hd weui-flex">
+                    <div class="weui-flex__item">
+                        <i class="icon iconfont icon-riqi"></i>
+                        {{item.time}}
+                        <span v-if="item.today" class="today">今天</span>
+                    </div>
+                    <div class="order-num">
+                        <span class="success-num">完成0订单</span>
+                        <span class="cancel-num"> 取消0订单</span>
+                    </div>
+                </div>
+                <div v-for="(data, d) in item.data" :key="d" class="finish-list-content-item">
+                    <card-box :data="data"></card-box>
+                </div>
+            </div>
+        </div>
+    </pull-refresh>
+</div>

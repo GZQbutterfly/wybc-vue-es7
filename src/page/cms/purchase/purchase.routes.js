@@ -1,5 +1,7 @@
 import { CmsLayout } from './layout/layout';
 
+//import deliveryRoutes from './delivery/delivery.routes';
+
 const routes = [
     // ===>
     // 我要进货
@@ -115,6 +117,8 @@ const routes = [
             }, 'sys/system');
         }
     },
+    // delivery
+    //...deliveryRoutes
 ];
 
 export default routes;

@@ -1,16 +1,15 @@
 .order-submitting-container {
     .flex-satisfy {
-        width: 100%; // position: absolute;
-        // bottom: 0.5rem;
+        width: 100%;
         background-color: #fefbee;
         .weui-flex__item {
-            height: 0.25rem;
+            min-height: 0.25rem;
             display: flex;
             justify-content: center;
             align-items: center;
             i {
                 font-size: 0.2rem!important;
-                margin-right: 0.05rem; //color: #ee893e;
+                margin-right: 0.05rem;
             }
             b {
                 font-weight: normal;
@@ -18,17 +17,19 @@
                 color: #ee893e;
             }
         }
-    } // position: relative;
-    .red {
-        color: #ff1c1c;
+    }
+    .center {
+        color: #ee893e;
         font-size: 12px;
         text-align: center;
         height: 0.2rem;
         line-height: 0.16rem;
     }
+    .red{
+        color: #ff1c1c;
+    }
     color: #333;
     .order-detail-content {
-        // padding-bottom: 50px;
         background-color: #fff;
     }
     .order-submitting-header {
@@ -48,8 +49,6 @@
                 font-size: 20px;
             }
             .address-sjr {
-                //position: relative;
-                //top: 0px;
                 margin-left: 4px;
                 width: 150px;
                 display: inline-block;

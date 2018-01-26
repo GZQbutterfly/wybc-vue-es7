@@ -1,0 +1,63 @@
+.realresult-container-distributor {
+    height: 100%;
+    background-color: #fff;
+    .realresult-hd {
+        text-align: center;
+        padding-top: 48px;
+        line-height: 33px;
+        font-size: 15px;
+        color: #333;
+        .realresult-title {
+            font-size: 21px;
+        }
+    }
+    .success {
+        color: #7ecc44;
+    }
+    .error {
+        color: #ff4014;
+    }
+    .warn {
+        color: #ffa914;
+    }
+    .realresult-bd {
+        .realresult-img {
+            width: 199px;
+            height: 181px;
+            margin-top: 76px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 90px;
+        }
+        .resolve {
+            background: url(../../../../../static/images/minishop/tongguo.png) center no-repeat;
+            background-size: 199px;
+        }
+        .reject {
+            background: url(../../../../../static/images/minishop/weitongguo.png) center no-repeat;
+            background-size: 199px;
+        }
+        .pending {
+            background: url(../../../../../static/images/minishop/shenhe.png) center no-repeat;
+            background-size: 199px;
+        }
+    }
+    .realresult-ft {
+        text-align: center;
+        button {
+            height: 50px;
+            width: 297px;
+            border-radius: 5px;
+            font-size: 21px;
+            color: #7ecc44;
+            background-color: #fff;
+            border: 1px solid #7ecc44;
+            margin-bottom: 14px;
+        }
+        .ok {
+            background-color: #7ecc44;
+            color: #fff;
+            border: none;
+        }
+    }
+}

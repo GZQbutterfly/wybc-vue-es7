@@ -68,26 +68,24 @@ export class Home extends BaseVue {
             self.homeBanner();
             //分类列表
             //self.classList();
-    
-            //活动banner
-            self.activitBanner();
         })
     }
     //判断进入的店是否是自己的
     ownShop() {
         let _self = this;
         let _query = this.$route.query.user;
-        let flag  = isNotLogin();
-        if (flag && _query=='own'){
-            toLogin(_self.$router, { toPath: "home", realTo:"home?user=own"});
+        let flag = isNotLogin();
+        if (flag && _query == 'own') {
+            toLogin(_self.$router, { toPath: "home", realTo: "home?user=own" });
         }
     }
     fetchRecommentData() {
         let self = this;
-        this._$service.recommendations().then(function (res) {
-            if (res.data && res.data.data && res.data.data.length == 3) {
+        let _query = self.setShopId();
+        this._$service.recommendations(_query).then(function (res) {
+            if (res.data && res.data.data && res.data.data.length != 0) {
                 self.recommendations = res.data.data;
-            }else{
+            } else {
                 self.recommendations = [];
             }
         });
@@ -112,8 +110,8 @@ export class Home extends BaseVue {
                 mainBtn: '确定',
                 type: 'info',
                 mainFn() {
-                    self.$router.push({ path:"apply_shop_campaign"});
-                 }
+                    self.$router.push({ path: "apply_shop_campaign" });
+                }
             };
             self.$store.state.$dialog({ dialogObj });
         })
@@ -134,11 +132,26 @@ export class Home extends BaseVue {
         });
     }
 
+    //修改店铺id
+    setShopId(){
+        let _query = this.$route.query.shopId;
+        if (!_query) {
+            let shopId = JSON.parse(localStorage.wdVipInfo).infoId;
+            _query = shopId;
+        }
+        return _query;
+    }
     //轮播
     homeBanner() {
         let self = this;
-        this._$service.homeAd(1).then(res => {
-            if (res.data.errorCode || !res.data) {
+        let _query = self.setShopId();
+        let _data = {
+            shopId: _query,
+            channel: 'wd',
+            posId: 1
+        }
+        this._$service.homeAd(_data).then(res => {
+            if (res.data.errorCode || !res.data || (res.data && res.data.data.length == 0)) {
                 self.homeAd = [];
             } else {
                 self.homeAd = [];
@@ -153,7 +166,8 @@ export class Home extends BaseVue {
     //小图标分类
     inconsList() {
         let self = this;
-        this._$service.iconsList().then(function (res) {
+        let _query = self.setShopId();
+        this._$service.iconsList(_query).then(function (res) {
             if (res.data.data.length == 0 || res.data.errorCode) {
                 self.iconsList = [];
             } else {
@@ -175,7 +189,8 @@ export class Home extends BaseVue {
     //分类导航
     classListAndFirstPage(done) {
         let self = this;
-        this._$service.classfyList().then(res => {
+        let _query = self.setShopId();
+        this._$service.classfyList(_query).then(res => {
             self.classfyList = [
                 {
                     classifyName: '学惠推荐',
@@ -193,173 +208,168 @@ export class Home extends BaseVue {
         })
     }
 
-    //活动banner
-    activitBanner() {
-        let self = this;
-        this._$service.homeAd(4).then(res => {
-            if (res.data.errorCode || !res.data) {
-                self.activeBanner = [];
+fetchGoodsData(page, done) {
+    let self = this;
+    let ids = '';
+    if (page <= 1) {
+        for (let i = 0; i < self.pageLimit; ++i) {
+            if (this.classfyList.length > i + 1) {
+                ids += '' + this.classfyList[i + 1].goodsClassifyId + ',';
             } else {
-                res.data.data.forEach(item => {
-                    item.url = item.imgUrl;
-                    self.activeBanner.push(item);
-                })
-            }
-        })
-    }
-
-    fetchGoodsData(page, done) {
-        let self = this;
-        let ids = '';
-        if (page <= 1) {
-            for (let i = 0; i < self.pageLimit; ++i) {
-                if (this.classfyList.length > i + 1) {
-                    ids += '' + this.classfyList[i + 1].goodsClassifyId + ',';
-                } else {
-                    break;
-                }
-            }
-        } else {
-            for (let i = 0; i < self.pageLimit; ++i) {
-                if (this.classfyList.length > (page - 1) * self.pageLimit + 1 + i) {
-                    ids += '' + this.classfyList[(page - 1) * self.pageLimit + 1 + i].goodsClassifyId + ',';
-                } else {
-                    break;
-                }
+                break;
             }
         }
-
-        this._$service.classfyShop(ids).then(res => {
-            if (res.data.errorCode || !res.data || res.data.data.length == 0) {
-                if (page <= 1) {
-                    self.classfyGoodses = [];
-                }
-                if (done) {
-                    done(true);
-                }
+    } else {
+        for (let i = 0; i < self.pageLimit; ++i) {
+            if (this.classfyList.length > (page - 1) * self.pageLimit + 1 + i) {
+                ids += '' + this.classfyList[(page - 1) * self.pageLimit + 1 + i].goodsClassifyId + ',';
             } else {
-                if (page <= 1) {
-                    res.data.data.forEach(element => {
-                        element.adList.forEach(ads => {
-                            ads.url = ads.imgUrl;
-                        });
-                    });
-                    self.classfyGoodses = res.data.data;
-                    self.page = 1;
-                } else {
-                    res.data.data.forEach(element => {
-                        element.adList.forEach(element => {
-                            element.url = element.imgUrl;
-                        });
-                        self.classfyGoodses.push(element);
-                    });
-                    self.page = page;
-                }
-                if (done) {
-                    done(true);
-                }
-            }
-        })
-            .catch((error) => {
-                if (done) {
-                    done();
-                }
-            })
-    }
-
-    goodsBannerClicked(ad) {
-        if (!ad.goodsId || ad.linkType == 1) {
-            location.href = ad.linkTarget;
-        } else {
-            let url = location.href;
-            if (url.indexOf('cms') == -1) {
-                this.$router.push({
-                    path: "goods_detail",
-                    query: {
-                        goodsId: ad.goodsId
-                    }
-                });
-            } else {
-                this.$router.push({
-                    path: "cms_purchase_goods_detail",
-                    query: {
-                        goodsId: ad.goodsId
-                    }
-                });
+                break;
             }
         }
     }
-
-    navSelected(index, data) {
-        this.$router.push({
-            path: 'classify',
-            query: {
-                classify: data.goodsClassifyId
-            }
-        });
+    let _query = self.setShopId();
+   let _data =  {
+        classifyId: ids,
+        channel: 'wd',
+        shopId:_query
     }
+    this._$service.classfyShop(_data).then(res => {
+        if (res.data.errorCode || !res.data || res.data.data.length == 0) {
+            if (page <= 1) {
+                self.classfyGoodses = [];
+            }
+            if (done) {
+                done(true);
+            }
+        } else {
+            if (page <= 1) {
+                res.data.data.forEach(element => {
+                    element.adList.forEach(ads => {
+                        ads.url = ads.imgUrl;
+                    });
+                });
+                self.classfyGoodses = res.data.data;
+                self.page = 1;
+            } else {
+                res.data.data.forEach(element => {
+                    element.adList.forEach(element => {
+                        element.url = element.imgUrl;
+                    });
+                    self.classfyGoodses.push(element);
+                });
+                self.page = page;
+            }
+            if (done) {
+                done(true);
+            }
+        }
+    })
+        .catch((error) => {
+            if (done) {
+                done();
+            }
+        })
+}
 
-    goPage(link, goodsId) {
-        if (link) {
-            location.href = link;
+goodsBannerClicked(ad) {
+    if (!ad.goodsId || ad.linkType == 1) {
+        location.href = ad.linkTarget;
+    } else {
+        let url = location.href;
+        if (url.indexOf('cms') == -1) {
+            this.$router.push({
+                path: "goods_detail",
+                query: {
+                    goodsId: ad.goodsId
+                }
+            });
         } else {
             this.$router.push({
-                path: 'goods_detail',
+                path: "cms_purchase_goods_detail",
                 query: {
-                    goodsId: goodsId
+                    goodsId: ad.goodsId
                 }
-            })
+            });
         }
     }
+}
 
-    refresh(done) {
-        let self = this;
-        setTimeout(() => {
-            //初始化三格数据
-            self.fetchRecommentData();
-            //banner
-            self.homeBanner();
-            self.classListAndFirstPage(done);
-            //活动banner
-            self.activitBanner();
-        }, 500)
-    }
+navSelected(index, data) {
+    this.$router.push({
+        path: 'classify',
+        query: {
+            classify: data.goodsClassifyId
+        }
+    });
+}
 
-    onSeeAll(classifyId) {
+goPage(link, goodsId) {
+    if (link) {
+        location.href = link;
+    } else {
         this.$router.push({
-            path: "classify",
+            path: 'goods_detail',
             query: {
-                classify: classifyId
+                goodsId: goodsId
             }
-        });
-    }
-
-    infinite(done) {
-        let self = this;
-        setTimeout(() => {
-            //第一页数据交给初始化
-            if (self.page == 0) {
-                if (!self.classfyList || self.classfyList.length < 2) {
-                    done(false);
-                } else {
-                    self.fetchGoodsData(1, done);
-                }
-            } else {
-                if (!self.classfyList || self.classfyList.length < 2) {
-                    done(true);
-                } else {
-                    self.fetchGoodsData(self.page + 1, done);
-                }
-            }
-        }, 1)
-    }
-
-    activated() {
-        document.title = "首页";
-        let self = this;
-        this.$nextTick(() => {
-            self.updateShop();
-            self.classListAndFirstPage(null);
         })
     }
+}
+
+refresh(done) {
+    let self = this;
+    setTimeout(() => {
+        //初始化三格数据
+        self.fetchRecommentData();
+        //banner
+        self.homeBanner();
+        self.classListAndFirstPage(done);
+        //活动banner
+        self.activitBanner();
+    }, 500)
+}
+
+onSeeAll(classifyId) {
+    this.$router.push({
+        path: "classify",
+        query: {
+            classify: classifyId
+        }
+    });
+}
+
+infinite(done) {
+    let self = this;
+    setTimeout(() => {
+        //第一页数据交给初始化
+        if (self.page == 0) {
+            if (!self.classfyList || self.classfyList.length < 2) {
+                done(false);
+            } else {
+                self.fetchGoodsData(1, done);
+            }
+        } else {
+            if (!self.classfyList || self.classfyList.length < 2) {
+                done(true);
+            } else {
+                self.fetchGoodsData(self.page + 1, done);
+            }
+        }
+    }, 1)
+}
+
+activated() {
+    document.title = "首页";
+    let self = this;
+    this.$nextTick(() => {
+        self.updateShop();
+        self.classListAndFirstPage(null);
+        self.ownShop();
+        //初始化三格数据
+        self.fetchRecommentData();
+        //banner
+        self.homeBanner();
+    })
+}
 }

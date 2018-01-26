@@ -20,32 +20,27 @@ export default (_store) => {
 
     return {
         //余额购模块
-        iconsList() {
+        iconsList(_query) {
             return q(q_icons, {
-
+                shopId: _query
             })
         },
         //爆款单品
-        recommendations() {
+        recommendations(_query) {
             return q(recommendations, {
-
+                shopId: _query
             })
         },
         //分类商品模块
-        classfyShop(ids) {
-            return q(classfyShop, {
-                classifyId: ids,
-                channel: 'wd'
-            });
+        classfyShop(data) {
+            return q(classfyShop, data);
         },
         //分类商品列表
-        classfyList() {
-            return q(classfyList, {});
+        classfyList(_query) {
+            return q(classfyList, { shopId: _query});
         },
-        homeAd(num) {
-            return q(adUrl, {
-                posId: num
-            })
+        homeAd(data) {
+            return q(adUrl,data)
         },
         getActiveImg() {
             return q(activeBanner, {})

@@ -1,6 +1,6 @@
 
 export default (store) => {
-    let q_goods = 'api/goods/q_goods';
+    let q_goods = 'api/q_goods';
     let _http = store.state.$http;
     let addGoods = 'api/wholecart/a_whole_cart_goods';
     let goodesList =  'api/cart/q_cart_goodses';

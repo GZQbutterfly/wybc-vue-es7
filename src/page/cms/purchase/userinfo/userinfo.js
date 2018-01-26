@@ -75,7 +75,7 @@ export class CmsPurchaseUserinfo extends BaseVue {
                 this.orderList[0].num = _result[1];
                 this.orderList[1].num = _result[2] + _result[3];
                 this.orderList[2].num = _result[4];
-                this.orderList[3].num = _result[5];
+                this.orderList[3].num = '';
             })
         }
     }

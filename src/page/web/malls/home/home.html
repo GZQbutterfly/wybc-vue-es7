@@ -32,17 +32,17 @@
 
             <iconsList :iconsList="iconsList" v-show="iconsList&&iconsList.length!=0"></iconsList>
             <!-- 商品类别 -->
-            <div class="shopList" v-if="recommendations&&recommendations.length==3">
+            <div class="shopList" v-if="recommendations&&recommendations.length!=0">
                 <!-- 爆款商品 -->
                 <div class="explosionShop">
-                    <div class="explosionShop_lef" @click="goPage(recommendations[0].linkTarget,recommendations[0].goodsId)">
+                    <div class="explosionShop_lef" @click="goPage(recommendations[0].linkTarget,recommendations[0].goodsId)" v-if="recommendations[0]">
                         <img :src="recommendations[0].imgUrl" />
                     </div>
                     <div class="explosionShop_rig">
-                        <div class="rig_t" @click="goPage(recommendations[1].linkTarget,recommendations[1].goodsId)">
+                        <div class="rig_t" @click="goPage(recommendations[1].linkTarget,recommendations[1].goodsId)" v-if="recommendations[1]">
                             <img :src="recommendations[1].imgUrl" />
                         </div>
-                        <div class="rig_t" @click="goPage(recommendations[2].linkTarget,recommendations[2].goodsId)">
+                        <div class="rig_t" @click="goPage(recommendations[2].linkTarget,recommendations[2].goodsId)" v-if="recommendations[2]">
                             <img :src="recommendations[2].imgUrl" />
                         </div>
                     </div>
@@ -58,11 +58,11 @@
                         </div>
                         <span id="seeAll" @click="onSeeAll(item.classifyId)">查看全部>></span>
                     </div>
-                    <div class="goodsList_carousel">
+                    <div class="goodsList_carousel" v-if="item.adList">
                         <app-banner :listImg="item.adList"> </app-banner>
                     </div>
 
-                    <div class="shopPic">
+                    <div class="shopPic"  v-if="item.goodsList">
                         <dl class="shopPic_gs" v-for="goods in item.goodsList">
                             <router-link :to="{path:'goods_detail',query:{goodsId:goods.goodsId}}">
                                 <dt>

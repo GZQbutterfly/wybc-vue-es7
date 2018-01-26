@@ -21,13 +21,13 @@ export function registerPaySign(_vm) {
         // 手机微信支付
         _pay = new WxPay(_vm);
         payEnv.isWx = true;
+    }else if(isNativeiOS()){
+        _pay = new NativeiOSPay();
     } else if (isApp()) {
         // 手机网页支付
         _pay = new AppPay(_vm);
         payEnv.isApp = true;
-    } else if(isNativeiOS()){
-        _pay = new NativeiOSPay();
-    } else {
+    }  else {
         // 手机支付宝支付 isAli()
         _pay = new AliPay(_vm);
         payEnv.isAli = true;

@@ -1,0 +1,71 @@
+.delivery-card-box {
+    padding: 12px 12px 12px 13px;
+    width: 100%;
+    height: auto;
+    background-color: #fff;
+    .rob-box, .pickup-box, .delivering-box {
+        &-hd {
+            text-align: center;
+            .money {
+                font-size: 15px;
+                color: #f41c1c;
+                margin-bottom: -10px;
+                span {
+                    font-size: 30px;
+                }
+            }
+            .info {
+                font-size: 11px;
+                color: #ffa914;
+            }
+        }
+        &-bd {
+            >div:nth-child(2) {
+                margin-top: 10px;
+                margin-bottom: 5px;
+            }
+            .right {
+                margin-left: 8px;
+                font-size: 15px;
+                color: #333;
+            }
+            .fromAddress {
+                font-size: 13px;
+                color: #808080;
+            }
+        }
+        &-ft {
+            margin: 15px 27px 0 27px;
+        }
+    }
+    // .i {
+    //     font-family: 楷体, STKaiti;
+    //     display: block;
+    //     width: 20px;
+    //     height: 20px;
+    //     text-align: left;
+    //     font-size: 12px;
+    //     border-radius: 50%;
+    //     padding-left: 2px;
+    // }
+    // .i-take {
+    //     border: 1px solid #3b8eff;
+    //     color: #3b8eff;
+    // }
+    // .i-give {
+    //     border: 1px solid #ff6f36;
+    //     color: #ff6f36;
+    // }
+    .pending {
+        //position: relative;
+        //top: -10px;
+        //margin-right: 4px;
+        // .icon {
+        //     font-size: 15px;
+        //     display: block;
+        //     font-weight: bolder;
+        //     color: #e6e6e6;
+        //     height: 6px;
+        // }
+    }  
+}

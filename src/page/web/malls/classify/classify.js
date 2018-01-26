@@ -107,7 +107,7 @@ export class Classify extends BaseVue {
         }
         this._$service.queryWdInfo(shopId).then((res) => {//获取店信息
             let _result = res.data;
-            if(!_result.errorCode){
+            if (!_result.errorCode) {
                 let _wdVipInfo = _result.wdVipInfo;
                 if (!_wdVipInfo.wdImg) {
                     _wdVipInfo.wdImg = "/static/images/newshop/touxiang.png"
@@ -119,7 +119,7 @@ export class Classify extends BaseVue {
                     school: _wdVipInfo.school,
                 }
             }
-          
+
         })
     }
     refresh(done) {
@@ -171,7 +171,7 @@ export class Classify extends BaseVue {
         _this._$service.getClassifyAdImg(parseInt(classify)).then(res => {
             _this.classifyAdImgPic = [];
             console.log(res);
-            if (res.data.data.length == 0 || !res.data.data) {
+            if (res.data.errorCode || !res.data.data || res.data.data.length == 0) {
                 _this.bannerShow = false;
                 return;
             }
@@ -204,7 +204,7 @@ export class Classify extends BaseVue {
         this.show = classfyId;
         let _this = this;
         _this.getImgs(classfyId);
-        
+
         this.fetchShopData()
             .then((res) => {
                 let config = {

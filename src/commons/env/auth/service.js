@@ -1,5 +1,5 @@
 // 服务权限监控
-import { isNotLogin, loginDialog, toLogin, cleanObject, match, qs, cleanLocalUserInfo, getCacheLoginFlag, closeDialog, timeout, isQQBrowser, hasOwn } from 'common.env';
+import { isNotLogin, loginDialog, toLogin, cleanObject, match, qs, cleanLocalUserInfo, getCacheLoginFlag, closeDialog, timeout, isQQBrowser, hasOwn, clientEnv } from 'common.env';
 import { merge, indexOf, set, get } from 'lodash';
 
 
@@ -45,22 +45,23 @@ export class ServiceAuth {
                 userId: get(this._$user, 'userId'),
                 token: get(this._$user, 'token')
             };
-            config.data = merge(config.data, _userData, true);
+            config.data = merge(config.data, _userData);
         }
+
+        // web 前端
+        if (clientEnv.web) {
+            // 为所有的服务请求都加载shopId
+            let localWdInfo = JSON.parse(localStorage.wdVipInfo || null) || {};
+            config.data = merge({ shopId: localWdInfo.infoId || localWdInfo.shopId }, config.data);
+        }else if (clientEnv.cms) {
+            // 为所有的服务请求都加载shopId
+            let _user = JSON.parse(localStorage._user || null) || {};
+            config.data = merge({ shopId: _user.userId}, config.data);
+        }
+
         // 默认序列化参数  isNotSer = true 不使用序列化
         if (!config.isNotSer) {
             cleanObject(config.data);
-            //console.log('_QQBrowserFlag: ', this._QQBrowserFlag);
-            // if (this._QQBrowserFlag) {
-            //     let _data = config.data;
-            //     let formData = new FormData();
-            //     for (let key in _data) {
-            //         hasOwn.call(_data, key) && formData.append(key, _data[key]);
-            //     }
-            //     set(config, 'data', formData);
-            // } else {
-            //     set(config, 'data', qs.stringify(config.data));
-            // }
             set(config, 'data', qs.stringify(config.data));
         }
         return config;
@@ -75,10 +76,9 @@ export class ServiceAuth {
         if (match(data.errorCode, [96, 94, 119])) {
             let _route = _self._$vm.$route;
             // 判断当前路由是否提示登录过期
-            if(get(_route, 'meta.noLoginTip') === false){
+            if (get(_route, 'meta.noLoginTip') === false) {
                 return response;
             }
-
             if (getCacheLoginFlag()) {
                 // 默认缓存本地登录的用户，缓存失效，直接跳转到登录首页
                 cleanLocalUserInfo();

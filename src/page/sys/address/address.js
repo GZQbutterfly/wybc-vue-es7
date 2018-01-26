@@ -19,7 +19,7 @@ export class Address extends Vue {
     item = {};
     title = '新增收货地址';//
     formstate = {};
-    formScope = { name: '', phone: '', address: '', zipCode: '', isDefault: 0, province: '', city: '', district: '', campus:'', dormitory:''  };
+    formScope = { name: '', phone: '', address: '', zipCode: '', isDefault: 0, province: '', city: '', district: '', campus:'', dormitory:'',schoolId:''  };
     proviceList = [];
     cityList = [];
     districtList = [];
@@ -68,6 +68,7 @@ export class Address extends Vue {
             }
             if (_item.campus){
                 this.isCampusAdress = true;
+                _scope.schoolId = _item.schoolId;
             }else{
                 this.isCampusAdress = false;
                 let _result = await getZoneData(_item);
@@ -157,6 +158,7 @@ export class Address extends Vue {
         let _index = _target.selectedIndex;
         if (_index) {
             let data = _self.schoolList[_index-1];
+            _form.schoolId = data.campusId;
             if(data && data.specialMsg){
                 _self.floorList = data.specialMsg
             }else{

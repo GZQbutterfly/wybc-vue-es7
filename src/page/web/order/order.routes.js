@@ -1,4 +1,4 @@
-import deliveryRoutes from './delivery/delivery.routes';
+
 
 const routes = [
     {
@@ -63,9 +63,7 @@ const routes = [
                 }
             }
         ]
-    },
-    // delivery
-    ...deliveryRoutes
+    }
 ];
 
 export default routes;

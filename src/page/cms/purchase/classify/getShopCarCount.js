@@ -24,7 +24,7 @@ export default (_store) => {
             }).then(res => {
                 if (res.data.data && res.data.data.length != 0) {
                     res.data.data.forEach(lists => {
-                        if (lists.isValid === 1) {
+                        if (lists.isSourceGoodsValid == 1 && lists.isCampusGoodsValid == 1) {
                             validLists.push(lists);
                             }
                     });

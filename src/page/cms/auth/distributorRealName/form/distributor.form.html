@@ -1,0 +1,202 @@
+<app-container class="distributor-container">
+    <vue-form :state="formstate" @submit.prevent="submitInfo">
+
+        <section class="realform-bd">
+            <!-- 真实姓名 -->
+            <validate class="weui-cell" tag="div" style="background:#fff;">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">真实姓名</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请如实填写" name="realName" maxlength="20" v-model="userInfo.realName" required>
+                </div>
+            </validate>
+            <transition name="fadeUp">
+                <field-messages name="realName" show="$submitted" class="text-danger  error-tip">
+                    <div slot="required" v-show="formstate.realName && formstate.realName.$invalid">
+                        请填写真实姓名
+                    </div>
+                </field-messages>
+            </transition>
+            <!-- 证件类型 -->
+            <!-- <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">证件类型</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="选择证件类型" value="身份证" readonly>
+                </div>
+            </div> -->
+            <!-- 证件号码 -->
+            <!-- <validate class="weui-cell" tag="div">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">证件号码</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请填写证件号码" maxlength="18" name="idcard" v-model="userInfo.idCard" required
+                        check-card>
+                </div>
+            </validate>
+            <transition name="fadeUp">
+                <field-messages name="idcard" show="$submitted" class="text-danger  error-tip">
+                    <div slot="required" v-show="formstate.idcard && formstate.idcard.$invalid">
+                        请填写证件号码
+                    </div>
+                    <div slot="check-card" v-show="formstate.idcard && formstate.idcard.$invalid">
+                        证件号码格式不对
+                    </div>
+                </field-messages>
+            </transition> -->
+            <!-- <div class="weui-cell">
+                            <div class="weui-cell__hd">
+                                <label class="weui-label">证件类型</label>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <input class="weui-input" type="text" placeholder="选择证件类型" value="身份证" readonly>
+                            </div>
+                        </div> -->
+            <!-- 学院/系-->
+            <validate class="weui-cell" tag="div">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">系别/学院</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入系别/学院" maxlength="12" name="institute" v-model="userInfo.institute" required
+                        check-institute>
+                </div>
+            </validate>
+            <transition name="fadeUp">
+                <field-messages name="institute" show="$submitted" class="text-danger  error-tip">
+                    <div slot="required" v-show="formstate.institute && formstate.institute.$invalid">
+                     系别/学院格式不对
+                    </div>
+                </field-messages>
+            </transition>
+            <!-- 专业-->
+            <validate class="weui-cell" tag="div">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">专业</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入专业名称" maxlength="12" name="major" v-model="userInfo.major"
+                        required check-major>
+                </div>
+            </validate>
+            <transition name="fadeUp">
+                <field-messages name="major" show="$submitted" class="text-danger  error-tip">
+                    <div slot="required" v-show="formstate.major && formstate.major.$invalid">
+                        专业格式不对
+                    </div>
+                </field-messages>
+            </transition>
+            <!-- 班级-->
+            <validate class="weui-cell" tag="div">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">班级</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入班级" maxlength="12" name="class" v-model="userInfo.class" required
+                        check-class>
+                </div>
+            </validate>
+            <transition name="fadeUp">
+                <field-messages name="class" show="$submitted" class="text-danger  error-tip">
+                    <div slot="required" v-show="formstate.class && formstate.class.$invalid">
+                        班级格式不对
+                    </div>
+                </field-messages>
+            </transition>
+            <!-- 学号-->
+            <validate class="weui-cell" tag="div">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">学号</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入学号" maxlength="12" name="studentId" v-model="userInfo.studentId" required check-studentId>
+                </div>
+            </validate>
+            <transition name="fadeUp">
+                <field-messages name="studentId" show="$submitted" class="text-danger  error-tip">
+                    <div slot="required" v-show="formstate.studentId && formstate.studentId.$invalid">
+                        学号格式不对
+                    </div>
+                </field-messages>
+            </transition>
+            <!-- 入学时间 -->
+            <validate class="weui-cell" tag="div">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">入学时间</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入入学时间" maxlength="16" name="enrolmentTime" v-model="userInfo.enrolmentTime" required
+                        check-enrolmentTime>
+                </div>
+            </validate>
+            <transition name="fadeUp">
+                <field-messages name="enrolmentTime" show="$submitted" class="text-danger  error-tip">
+                    <div slot="required" v-show="formstate.enrolmentTime && formstate.enrolmentTime.$invalid">
+                         入学时间格式不对
+                    </div>
+                </field-messages>
+            </transition>
+            <!-- 宿舍地址 -->
+            <validate class="weui-cell" tag="div">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">宿舍地址</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入宿舍地址" maxlength="16" name="hostelAddress" v-model="userInfo.hostelAddress"
+                        required check-enrolmentTime>
+                </div>
+            </validate>
+            <transition name="fadeUp">
+                <field-messages name="hostelAddress" show="$submitted" class="text-danger  error-tip">
+                    <div slot="required" v-show="formstate.hostelAddress && formstate.hostelAddress.$invalid">
+                        宿舍地址格式不对
+                    </div>
+                </field-messages>
+            </transition>
+            <!-- 手持身份证照片 -->
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">手持学生证照片</label>
+                </div>
+                <div class="weui-cell__bd"></div>
+            </div>
+            <div class="realform-upload">
+                <input type="file" style="display:none;" ref="fileBtn" @change="changeFile" accept="image/*">
+                <div class="upload-img">
+                    <div class="photo-img" @click="selectFile"></div>
+                    <div class="img-mode" v-show="upImg"></div>
+                    <img :src="upImg" alt="" v-show="upImg">
+                    <span class="photo-img-del" v-if="upImg" @click="removeFile"></span>
+                </div>
+            </div>
+            <!-- 示例 -->
+            <div class="realform-ex">
+                <div class="ex-hd">示例</div>
+                <div class="ex-bd ex-img"></div>
+                <div class="ex-ft">
+                    必须本人手持学生证，保持学生证上信息清晰可见[样例见左图]
+                </div>
+            </div>
+        </section>
+
+        <footer v-show="false">
+            <button type="submit" ref="submitBtn">
+                提交审核
+            </button>
+        </footer>
+
+    </vue-form>
+
+    <footer class="realform-ft" ref="footerRef" :style="footerStyle" slot="footer">
+        <button type="button" @click="$refs.submitBtn.click()" v-if="clickFlag">
+            提交审核
+        </button>
+        <button type="button" v-if="!clickFlag">
+            提交审核
+        </button>
+    </footer>
+
+</app-container>

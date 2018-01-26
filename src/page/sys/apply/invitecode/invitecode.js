@@ -228,6 +228,7 @@ export class ApplyShopInvitecode extends BaseVue {
                 let query = {
                     incode: _self.incode,
                     school: _self.school,
+                    campusId: _self.campusId
                 }
                 _self.$router.push({ path: 'apply_shop', query: query });
             }

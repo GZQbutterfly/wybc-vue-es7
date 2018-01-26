@@ -31,6 +31,10 @@ export class NavScrollc extends Vue {
     }
     async getQueryList(classify) {
         this.classfyList = (await this._$service.classfyList()).data.data;
+        if (this.classfyList.length==0){
+            this.classfyList = [];
+            return;
+        }
         if (classify) {
             let flag = findIndex(this.classfyList, { goodsClassifyId: Number(classify) });
             if (flag == -1) {

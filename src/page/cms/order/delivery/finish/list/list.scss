@@ -1,0 +1,42 @@
+// .counter { counter-reset: wangxiaoer ; counter-increment: wangxiaoer; }
+.counter {
+    counter-reset: wangxiaoer;
+    counter-increment: wangxiaoer 2;
+}
+
+.content:before {
+    content: counter(wangxiaoer);
+}
+
+.deliver-finish-list {
+    .finish-list-content {
+        padding-bottom: 10px;
+        &-hd {
+            padding-left: 12px;
+            padding-right: 12px;
+            height: 36px;
+            line-height: 36px;
+            background-color: #7ecc44;
+            color: #fff;
+            font-size: 13px;
+            .icon-riqi{
+                font-size: 20px;
+                position: relative;
+                top:2px;
+            }
+            .today{
+                background-color: #ff4800;
+                border-radius: 5px;
+                font-size: 12px;
+            }
+            .order-num{
+                font-size: 15px;
+            }
+        }
+        &-item {
+            &:first-child {
+                margin-top: 5px;
+            }
+        }
+    }
+}

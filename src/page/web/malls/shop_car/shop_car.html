@@ -104,7 +104,7 @@
                                 <b v-if="item.consuType==3">{{item.moneyPrice | localMoney}}+{{item.moneyRoll | localVolume}}券</b>
                                 <span v-if="item.consuType==3">原价:{{item.purchasePrice | localMoney}}</span>
                                 <span v-if="item.consuType==2" style="margin-bottom:0.13rem;"></span>
-                                <span>{{ item.isValid==0?'商品已下架':'' }}</span>
+                                <span>{{ (item.isSourceGoodsValid==0||item.isCampusGoodsValid==0) ?'商品已下架':'' }}</span>
                             </div>
                         </div>
                     </div>

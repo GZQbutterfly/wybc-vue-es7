@@ -1,0 +1,34 @@
+<div class="delivery-finish-card-container">
+    <div class="finish-box">
+        <header class="finish-box-hd weui-flex">
+            <div class="weui-flex__item">12:34送达</div>
+            <div><span :class="{'success':data.state===1}">{{data.state ? '已结算' : '已取消'}}</span><span class="money">5元</span></div>
+        </header>
+        <section class="finish-box-bd weui-flex">
+            <div class="weui-flex__item">
+                <div class="weui-flex">
+                    <img :src="takeImgSrc" class="take-img">
+                    <div class="right">{{data.from}}</div>
+                </div>
+                <div class="weui-flex">
+                    <img :src="giveImgSrc" class="give-img">
+                    <div class="right">
+                        <p>{{data.to}}</p>
+                        <p>{{data.toAddress}}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+               <i class="icon iconfont icon-mjiantou"></i>
+            </div>
+            
+        </section>
+        <footer class="finish-box-ft"></footer>
+    </div>
+    <div class="finish-order">
+        <div>
+            订单编号： 1231231231312123213123
+        </div>
+    </div>
+</div>

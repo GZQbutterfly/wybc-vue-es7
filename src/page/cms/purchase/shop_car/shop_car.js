@@ -83,7 +83,7 @@ export class CmsPurchaseShopCar extends BaseVue {
         _this.stockTypeShow = false;
         _this.validLists = []//购物车列表
         _this.invalidLists = [];//失效列表
-        _this._$service.getShopcarGoodsesList(1).then((res) => {
+        _this._$service.getShopcarGoodsesList(1).then( async (res) => {
             if (res.data.errCode) {
                 let dialogObj = {
                     title: '',
@@ -97,7 +97,7 @@ export class CmsPurchaseShopCar extends BaseVue {
 
                     }
                 };
-                this.$store.state.$this.$store.state.$dialog({ dialogObj });
+                _this.$store.state.$dialog({ dialogObj });
                 return;
             }
             if (res.data.data.length == 0) {
@@ -128,11 +128,11 @@ export class CmsPurchaseShopCar extends BaseVue {
             } else {
                 _this.wdName = res.data.data[0].wdName;
             }
-
+            let _result = await _this.changePrice(res.data.data);
             // _this.infoId = res.data.data[0].infoId;
-            res.data.data.forEach(item => {
+            _result.forEach(item => {
                 item.check = false;
-                if (item.isValid == 1) {
+                if (item.isSourceGoodsValid == 1 && item.isCampusGoodsValid == 1) {
                     _this.validLists.push(item);
                 } else {
                     _this.invalidLists.push(item);
@@ -160,16 +160,16 @@ export class CmsPurchaseShopCar extends BaseVue {
         //推荐商品
         this._$service.getShopcarRecommend().then((res) => {
             _this.recommendLists.length = 0;
-            if (res.data.data && res.data.data.length == 0 || !res.data) {
+            if (res.data.data && res.data.data.length == 0 || res.data.errorCode) {
                 _this.recommendShow = true;
                 return;
             }
             _this.recommendShow = false;
-            _this.changePrice(res.data.data);
+            _this.recommendLists = _this.changePrice(res.data.data);
         });
     }
 
-    changePrice(res) {
+    async changePrice(res) {
         let _this = this;
         let shopId = _this.$store.state.workVO.user.userId;
         let goodsIds = []; let opt = { infoId: shopId, listStr: "" };
@@ -177,18 +177,17 @@ export class CmsPurchaseShopCar extends BaseVue {
             goodsIds.push(ele.goodsId)
         });
         opt.listStr = goodsIds.join(",");
-        this._$service.getDiscountPrice(opt).then(discount => {
-            for (let i = 0, len = res.length; i < len; i++) {
-                for (let j = 0, lenj = discount.data.length; j < lenj; j++) {
-                    if (i == j) {
-                        res[i].moneyPrice = Math.ceil(res[i].moneyPrice * discount.data[j] / 100);
-                        break;
-                    }
+        let discount = await this._$service.getDiscountPrice(opt);
+        for (let i = 0, len = res.length; i < len; i++) {
+            for (let j = 0, lenj = discount.data.length; j < lenj; j++) {
+                if (i == j) {
+                    res[i].moneyPrice = Math.ceil(res[i].moneyPrice * discount.data[j] / 100);
+                    break;
                 }
             }
-            _this.recommendLists = res;
-            _this.qflag = false;
-        })
+        }
+        _this.qflag = false;
+        return res;
     }
     //刷新
     refresh(done) {
@@ -212,16 +211,17 @@ export class CmsPurchaseShopCar extends BaseVue {
                 if (_this.page < 2) {
                     _this.page = 2;
                 }
-                _this._$service.getShopcarGoodsesList(_this.page).then((res) => {
+                _this._$service.getShopcarGoodsesList(_this.page).then( async (res) => {
                     if (res.data.data.length == 0 || res.data.errCode) {
                         //    _this.flag = true;
                         done(true);
                         return;
                     }
                     console.log(res);
-                    res.data.data.forEach(item => {
+                    let _result = await _this.changePrice(res.data.data);
+                    _result.forEach(item => {
                         item.check = false;
-                        if (item.isValid == 1) {
+                        if (item.isSourceGoodsValid == 1 && item.isCampusGoodsValid == 1) {
                             _this.validLists.push(item);
                         } else {
                             _this.invalidLists.push(item);
@@ -520,7 +520,7 @@ export class CmsPurchaseShopCar extends BaseVue {
             return;
         }
         this.stockTypeShow = true;
-     
+
     }
 
     //清空
@@ -551,15 +551,15 @@ export class CmsPurchaseShopCar extends BaseVue {
         };
         this.$store.state.$dialog({ dialogObj });
     }
-   //进货方式
-    chooseStockTpe(index){
+    //进货方式
+    chooseStockTpe(index) {
         let _this = this;
-        for (let i = 0, len = _this.stockTypes.length;i<len;i++){
-             if(i==index){
-                 _this.stockTypes[i].stocktypeShow = true;
-             }else{
-                 _this.stockTypes[i].stocktypeShow = false;
-             }
+        for (let i = 0, len = _this.stockTypes.length; i < len; i++) {
+            if (i == index) {
+                _this.stockTypes[i].stocktypeShow = true;
+            } else {
+                _this.stockTypes[i].stocktypeShow = false;
+            }
         }
         let cartId = [];
         this.validLists.forEach(item => {
@@ -567,7 +567,7 @@ export class CmsPurchaseShopCar extends BaseVue {
                 cartId.push(item.id);
             }
         });
-         this.$router.push({ path: 'cms_purchase_submit_order', query: { cartId: cartId.join(','), orderSrouce: 'car',stockType:index } });
+        this.$router.push({ path: 'cms_purchase_submit_order', query: { cartId: cartId.join(','), orderSrouce: 'car', stockType: index } });
     }
     onClose() {
         this.stockTypeShow = false;

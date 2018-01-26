@@ -1,0 +1,50 @@
+.delivery-finish-card-container {
+    width: 100%;
+    height: auto;
+    background-color: #f2f2f2;
+    font-size: 15px;
+    color: #333;
+    .finish-box {
+        background-color: #fff;
+        padding: 12px 12px 12px 13px;
+        &-hd {
+            text-align: center;
+            padding-bottom: 10px;
+            .money {
+                color: #ff0000;
+                margin-left: 5px;
+            }
+            div {
+                &:first-child {
+                    text-align: left;
+                }
+            }
+            border-bottom: 1px solid #f2f2f2;
+        }
+        &-bd {
+            padding-top: 25px;
+            align-items: center;
+            .weui-flex__item>div:nth-child(2) {
+                margin-top: 10px;
+                margin-bottom: 5px;
+            }
+            .right {
+                margin-left: 8px;
+            }
+            .fromAddress {
+                font-size: 13px;
+                color: #808080;
+            }
+            .icon-mjiantou {
+                font-size: 20px;
+                color: #b3b3b3;
+                font-weight: bolder;
+            }
+        }
+    }
+    .finish-order {
+        margin-top: 2px;
+        background-color: #fff;
+        padding: 15px 0 15px 12px;
+    }
+}

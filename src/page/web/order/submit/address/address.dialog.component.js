@@ -3,11 +3,9 @@ import Vue from 'vue';
 import addressDialogService from './address.dialog.service';
 import {get, merge, find, orderBy} from 'lodash';
 import {getZoneData, timeout} from 'common.env';
-
 import Swiper from 'swiper';
-
 import './address.dialog.component.scss';
-// ==>
+
 @Component({
     props: {
         close: {
@@ -27,6 +25,7 @@ import './address.dialog.component.scss';
     },
     template: require('./address.dialog.component.html')
 })
+
 export class AddressDialogComponent extends Vue {
     showDialogMode = true;
     showAddressDiaogContent = false;
@@ -35,6 +34,7 @@ export class AddressDialogComponent extends Vue {
     addressList = [];
     activeItem = {};
     _$service;
+
     mounted() {
         this._$service = addressDialogService(this.$store);
         this.$nextTick(() => {
@@ -43,6 +43,7 @@ export class AddressDialogComponent extends Vue {
             this.showAddressDiaogContent = true;
         });
     }
+
     renderSwiper() {
         let _self = this;
         let _dialogRef = _self.$refs.dialogRef
@@ -57,6 +58,7 @@ export class AddressDialogComponent extends Vue {
             }
         });
     }
+
     async queryAddressList() {
         let _self = this;
         this._$service.queryAddressList().then(async function(res) {
@@ -91,6 +93,7 @@ export class AddressDialogComponent extends Vue {
             });
         });
     }
+
     closeDialog() {
         let _self = this;
         this.showDialogMode = false;
@@ -99,6 +102,7 @@ export class AddressDialogComponent extends Vue {
             _self.close();
         }, 500);
     }
+
     toCreate() {
         this.$router.push({
             path: 'address',
@@ -107,6 +111,7 @@ export class AddressDialogComponent extends Vue {
             }
         });
     }
+    
     toUpdate(item) {
         this.$router.push({
             path: 'address',

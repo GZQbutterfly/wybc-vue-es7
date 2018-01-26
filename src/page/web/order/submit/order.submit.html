@@ -1,24 +1,39 @@
-<!-- 提交订单 -->
 <div class="order-submitting-container">
+    <!-- 顶部邮费说明 -->
     <div class="flex-satisfy">
-        <div class="weui-flex__item">
-            <i class="iconfont icon-remind red"></i>
-            <b>校外区域未满<span class="red">{{dissatisfyPrice | localMoney}}元</span>收取配送费
-               <span class="red">{{shipFee | localMoney}}元</span>
-            </b>
-            <br />
-        </div>
-        <p class="red">(校外偏远地区订单运费另算)</p>
+        <template v-if="chooseAddressState == 1">
+            <div class="weui-flex__item">
+                <i class="iconfont icon-remind center red"></i>
+                <b>校区配送区域内订单免运费</b>
+            </div>
+        </template>
+        <template v-else-if="chooseAddressState == 2">
+            <div class="weui-flex__item">
+                <i class="iconfont icon-remind center red"></i>
+                <b>
+                    校区配送区域外未满<span class="center red">{{dissatisfyPrice | localMoney}}元</span>
+                    将收取配送费<span class="red">{{shipFee | localMoney}}元</span>
+                </b>
+                <br />
+            </div>
+            <p class="center red">(校外偏远地区订单运费另算)</p>
+        </template>
+        <template v-else-if="chooseAddressState == 3">
+            <div class="weui-flex__item">
+                <i class="iconfont icon-remind center red"></i>
+                <b>
+                    校区配送区域外未满<span class="center red">{{dissatisfyPrice | localMoney}}元</span>
+                    将收取配送费<span class="red">{{shipFee | localMoney}}元</span>
+                </b>
+            </div>
+        </template>
     </div>
-    <!-- <pull-refresh> -->
-    <!--  订单详情界面 -->
+    <!-- 订单信息汇总 -->
     <div class="order-detail-content">
-        <!-- 新增收货订单 -->
         <header class="order-submitting-header">
-            <!-- 实物购买 地址选择-->
-            <div v-if="entityModel">
+            <!-- 实物 -->
+            <div v-if="goodsType == 'entity'">
                 <div class="weui-cell" v-if="!selectAddressFlag" @click="dialogSelectAddress()">
-                    <!-- @click="dialogCrateAddress()" -->
                     <div class="weui-cell__bd">
                         <i class="wybc-icon wybc-icon-plus"></i>
                         <span>新增收货地址</span>
@@ -57,8 +72,8 @@
                     </div>
                 </div>
             </div>
-            <!-- 虚拟购买 后台返回格式 -->
-            <div v-if="!entityModel">
+            <!-- 虚拟 -->
+            <div v-else>
                 <div class="weui-cell" v-for="item in leaveMsg">
                     <div class="weui-cell__hd">
                         <label class="weui-label">
@@ -71,13 +86,10 @@
                 </div>
             </div>
         </header>
-
-        <!-- 商品box list -->
+        <!-- 商品 -->
         <section>
-
-            <!-- 商品box -->
             <div class="order-detail-list">
-                <div class="order-detail-item" v-for="(item, index) in orderList">
+                <div class="order-detail-item" v-for="(item, index) in goodsList">
                     <div class="order-detail-head">
                         <i class="icon iconfont icon-shop"></i>
                         <span>{{item.shopName}}</span>
@@ -89,7 +101,6 @@
                             </div>
                             <div class="weui-cell__bd">
                                 <div class="order-text">{{v.goodsName}}</div>
-                                <!-- <span class="order-cashroll" v-if="item.showRoll">{{item.moneyRoll | localVolume}}券 + {{item.moneyPrice| localMoney}}</span> -->
                             </div>
                             <div class="weui-cell__ft">
                                 <div class="label-money">{{v.purchasePrice | localMoney}}</div>
@@ -97,61 +108,33 @@
                             </div>
                         </div>
                         <div class="bg-white-5" v-if="item.shopCarts&&item.shopCarts.length-1>i"></div>
-                        <!-- 实物创建配送方式 -->
-                        <!-- <div class="bg-white" v-if="entityModel">
-                            <div class="weui-cell">
-                                <div class="weui-cell__bd">
-                                    <div>配送方式</div>
-                                </div>
-                                <div class="weui-cell__ft">
-                                    <div class="order-text order-ps-num">{{ 0 | localMoney}}
-                                    </div>
-                                    <div class="order-ps-tip">快递发货</div>
-                                </div>
-                            </div>
-                        </div> -->
                     </div>
                 </div>
             </div>
         </section>
-
-
-
-        <!-- 商品总计 -->
+        <!-- 总计 -->
         <section class="order-total">
-
-            <!-- 实物结算明细 -->
-            <div v-if="entityModel">
+            <!-- 实物 -->
+            <div v-if="goodsType == 'entity'">
                 <div class="weui-cell zero"></div>
-                <!-- 原计小价 -->
-                <!-- <div class="weui-cell">
-                    <div class="weui-cell__bd">原价小计</div>
-                    <div class="weui-cell__ft">
-                        <span class="label-money-volume">{{orderTotal.price | localMoney}}</span>
-                    </div>
-                </div> -->
-                <!-- 进货价小计-->
                 <div class="weui-cell weui-noborder">
                     <div class="weui-cell__bd">原价小计</div>
                     <div class="weui-cell__ft order-text">
                         {{orderTotal.price | localMoney}}
                     </div>
                 </div>
-                <!-- 配送费 -->
                 <div class="weui-cell">
                     <div class="weui-cell__bd">配送费</div>
-                    <div class="weui-cell__ft order-text">{{  noShipFee ? "0" : shipFee | localMoney}}</div>
+                    <div class="weui-cell__ft order-text">{{ noShipFee ? "0" : shipFee | localMoney}}</div>
                 </div>
-                <!-- 分销折扣 -->
                 <div class="weui-cell" v-if="orderTotal.discount">
                     <div class="weui-cell__bd">分销折扣</div>
                     <div class="weui-cell__ft  label-money-volume">-{{ orderTotal.discount | localMoney}}</div>
                 </div>
             </div>
-            <!-- 虚拟物品结算明细 -->
-            <div v-if="!entityModel">
+            <!-- 虚物 -->
+            <div v-else>
                 <div class="weui-cell zero"></div>
-                <!-- 进货价小计-->
                 <div class="weui-cell">
                     <div class="weui-cell__bd">原价小计</div>
                     <div class="weui-cell__ft order-text">
@@ -159,7 +142,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- 合计 -->
             <div class="weui-cell">
                 <div class="weui-cell__bd">合计</div>
@@ -168,10 +150,8 @@
                 </div>
             </div>
         </section>
-
     </div>
-    <!-- </pull-refresh> -->
-    <!-- 提交订单 -->
+    <!-- 提交 -->
     <footer class="order-submitting-footer weui-tabbar">
         <div class="weui-flex weui-cell__bd text-right flex-right">
             <span class="span-money label-money">{{orderTotal.pay | localMoney}}</span>
@@ -183,12 +163,9 @@
                 :disabled="minimumConsumption>orderTotal.pay" type="button" @click="submitOrder()">提交订单</button>
         </div>
     </footer>
-
+    <!-- 地址操作 -->
     <div class="address-container">
-        <!-- 地址操作 -->
         <address-dialog :close="closeDialogAddess" v-if="showDialogAddress" :selectAddress="selectAddress" :selectId="orderAddress.addrId"></address-dialog>
-
-        <!-- 新增地址界面 -->
         <address-operation :close="closeCrateAddress" v-if="showAddAddress" :item="{}"></address-operation>
     </div>
 </div>

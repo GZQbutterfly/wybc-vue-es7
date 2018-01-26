@@ -113,7 +113,7 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
 
         _this._$service.goodsInfo(_this.$route.query.goodsId)//获取商品信息
             .then(res => {
-                if (res.data.data.state != 1) {
+                if (res.data.errorCode || res.data.data.state != 1) {
                     let dialogObj = {
                         title: '',
                         content: '该商品已下架',

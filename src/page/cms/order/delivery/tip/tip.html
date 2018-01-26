@@ -1,0 +1,27 @@
+<div class="deliver-tip-container">
+    <div class="weui-mask" @click="closeSelf"></div>
+    <div class="tip-content" :class="{'tip-content-show': show}">
+        <img :src="data.success ? robSucceedImgSrc: robFaliedImgSrc" alt="">
+        <!-- 抢单成功 -->
+        <template v-if="data.success">
+            <div class="succeed">
+                恭喜您，接单成功啦!
+                <div class="weui-flex">
+                    <button type="button" class="primary" @click="closeSelf">再抢一波</button>
+                    <button type="button" class="info-btn">去配送</button>
+                </div>
+            </div>
+        </template>
+
+        <!-- 抢单失败 -->
+        <template v-if="!data.success">
+            <div class="falied">
+                非常遗憾，您的手速太慢
+                <div>订单溜走了...</div>
+                <div>
+                    <button type="button" class="info-btn" @click="closeSelf">我知道了！</button>
+                </div>
+            </div>
+        </template>
+    </div>
+</div>

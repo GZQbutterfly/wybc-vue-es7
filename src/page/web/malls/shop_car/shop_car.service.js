@@ -3,14 +3,13 @@ export default (_store) => {
     let _state = _store.state;
     let _http = _state.$http;
 
-
     let goodesList = 'api/shopcart/q_cart_goodses';
     let recommendGoodes = 'api/q_api_shopcar_recommend';
-
     let deleteGoodes = 'api/shopcart/d_cart_goodses';
     let changeNumber = 'api/shopcart/u_goods_number';
-    let synchronousShoppingCart = 'api/shopcart/a_cart_goodses';
+    let synchronousshoppingcart = 'api/shopcart/a_cart_goodses';
     let minimumConsution = 'api/goods/q_minimum_consumption';
+    let getgoodslists = 'api/goods/q_multi_goods';
 
     function q(url, data) {
         return _http({
@@ -21,59 +20,74 @@ export default (_store) => {
     }
 
     return {
-        //获取分类推荐商品
-        getShopcarRecommend() {
-            return q(recommendGoodes, {});
-        },
-        //获取购物车列表
-        getShopcarGoodsesList(pages) {
-            let user = _state.workVO.user;
-            return q(goodesList, {
-                // userId: user.userId,
-                // token: user.token,
-                page: pages,
-                limit: 5
-            })
-        },
-        //修改购物车商品数量
 
+        /**
+         * 获取分类推荐商品
+         */
+        getShopcarRecommend() {
+            return q(recommendGoodes);
+        },
+
+        /**
+         * 获取购物车列表
+         */
+        getShopcarGoodsesList(pages,limit = 5) {
+            let data = {
+                page: pages,
+                limit: limit
+            };
+            return q(goodesList, data);
+        },
+
+        /**
+         * 修改购物车商品数量
+         */
         changeShopcarNumber(opt) {
-            let user = _state.workVO.user;
-            return q(changeNumber, {
-                // userId: user.userId,
-                // token: user.token,
+            let data = {
                 number: opt.num,
                 shopCartId: opt.shopCartId,
                 goodsId: opt.goodsId
-            })
+            };
+            return q(changeNumber, data);
         },
-        //删除购物车商品
+
+        /**
+         * 删除购物车商品
+         */
         deleteShopcar(opt) {
-            let user = _state.workVO.user;
-            return q(deleteGoodes, {
-                // userId: user.userId,
-                // token: user.token,
+            let data = {
                 shopCartIds: opt.shopCartIds
-            })
+            };
+            return q(deleteGoodes, data);
         },
-        //同步购物车
+
+        /**
+         * 同步购物车
+         */
         synchronousShoppingCart(options) {
-            let user = _state.workVO.user;
-            return q(synchronousShoppingCart, {
-                // userId: user.userId,
-                // token: user.token,
+            let data = {
                 numbers: options.number,
                 goodsIds: options.goodsId,
                 shopIds: options.shopIds
+            };
+            return q(synchronousshoppingcart, data);
+        },
 
-            })
-        },
+        /**
+         * 获取最低购买金额
+         */
         getMinimumConsumption(){
-            return q(minimumConsution,null);
+            return q(minimumConsution);
         },
+
+        /**
+         * 批量获取商品信息
+         */
         getGoodsLists(goodsIds){
-            return q("api/goods/q_multi_goods", { goodsIds: goodsIds});
+            let data = {
+                goodsIds: goodsIds
+            };
+            return q(getgoodslists, data);
         }
     }
-
 };

@@ -35,7 +35,7 @@ export default (_store) => {
         },
         homeAd() {
             return q(adUrl, {
-                posId: 3,
+                posId: 1,
                 channel: 'store'
             })
         },

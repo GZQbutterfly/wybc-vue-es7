@@ -50,7 +50,6 @@ export class ApplyShopChooseSch extends BaseVue {
     queryUserHasShop(cb) {
         let _self = this;
         this._$service.queryUserHasShop().then((res) => {
-            console.log('用户开店信息', res);
             if (res.data.errorCode) {
                 _self._$dialog({
                     dialogObj: {
@@ -92,6 +91,13 @@ export class ApplyShopChooseSch extends BaseVue {
                 _self.schoolList.push(data[i]);
             }
         });
+    }
+
+    /**
+     * 失去焦点
+     */
+    schoolBlur(value){
+        this.schoolIndex = this.schoolIndex || value;
     }
 
     /**
