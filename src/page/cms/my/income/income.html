@@ -13,31 +13,34 @@
     </header>
 
     <section class="myincome-bd">
-        <pull-refresh :refresh="refresh" :infinite="infinite">
-            <template v-for="(goods, i) in dataList">
-                <div class="order-box">
-                    <div class="box-hd weui-flex">
-                        <div class="weui-flex__item">{{goods.title}}</div>
-                        <div class="weui-flex__item" :class="goods.isOrder?(goods.isUserOrder?'ud':'ch'):'hd'">{{goods.incomeInfo}}</div>
-                    </div>
-                    <div class="box-bd weui-flex">
-                        <img class="shop-img" src="../static/images/minishop/jia.png" v-if="goods.amount>=0">
-                        <img class="shop-img" src="../static/images/minishop/jian.png" v-else>
-                        <div class="shop-info weui-flex__item">
-                            <div class="shop-name" v-html="goods.descri"></div>
-                            <div class="shop-money">
-                                {{ goods.incomeType }}:
-                                <span :class="goods.amount>=0?'xs-money':'tc-money'">{{ goods.amount>=0?'+':'' }}{{goods.amount | localMoney}}</span>
+        <div class="weui-navbar">
+            <div class="weui-navbar__item" :class="{'weui-bar__item_on':showItemId == item.id}" @click="changeView(item.id)" v-for="item in dataList" v-text="item.value"></div>
+        </div>
+    </section>
+    <footer class="myincome-ft">
+        <div class="myincome-ft-view" v-for="item in dataList" v-if="showItemId == item.id" :key="item.id">
+            <pull-refresh :refresh="refresh" :infinite="infinite">
+                <template v-for="(goods, i) in item.data">
+                    <div class="order-box">
+                        <div class="box-hd weui-flex">
+                            <div class="weui-flex__item">{{goods.title}}</div>
+                            <div class="weui-flex__item" :class="goods.isOrder?(goods.isUserOrder?'ud':'ch'):'hd'">{{goods.incomeInfo}}</div>
+                        </div>
+                        <div class="box-bd weui-flex">
+                            <img class="shop-img" src="../static/images/minishop/jia.png" v-if="goods.amount>=0">
+                            <img class="shop-img" src="../static/images/minishop/jian.png" v-else>
+                            <div class="shop-info weui-flex__item">
+                                <div class="shop-name" v-html="goods.descri"></div>
+                                <div class="shop-money">
+                                    {{ goods.incomeType }}:
+                                    <span :class="goods.amount>=0?'xs-money':'tc-money'">{{ goods.amount>=0?'+':'' }}{{goods.amount | localMoney}}</span>
+                                </div>
+                                <div class="shop-date">{{ goods.createAt }}</div>
                             </div>
-                            <div class="shop-date">{{ goods.createAt }}</div>
                         </div>
                     </div>
-                </div>
-            </template>
-        </pull-refresh>
-    </section>
-
-    <footer class="myincome-ft">
-
+                </template>
+            </pull-refresh>
+        </div>
     </footer>
 </div>

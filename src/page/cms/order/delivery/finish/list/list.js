@@ -1,3 +1,5 @@
+// 已完成配送订单列表
+
 import { Component } from 'vue-property-decorator';
 import BaseVue from 'base.vue';
 
@@ -36,12 +38,22 @@ export class List extends BaseVue {
 
     ];
 
+    activeItem = {};
+
 
     mounted() {
 
+        this.$nextTick(() => {
+
+            this.initPage();
+
+        });
+
     }
 
+    initPage() {
 
+    }
 
 
     refresh(done) {

@@ -131,19 +131,21 @@ export class OrderSubmit extends BaseVue {
             if (_self.goodsType == 'entity') {
                 await _self.queryDefaultAddress();
             }
-            _self._$service.queryGoods(query).then((res) => {
-                let _result = res.data.data;
-                _result.number = _self.number;
-                let obj = {
-                    "shopId": _self.wdInfo.infoId,
-                    "shopName": _self.wdInfo.wdName,
-                    "school": _self.wdInfo.school,
-                    "shopCarts": [_result]
-                }
-                _self.goodsList.push(obj);
-                _self.parseGoodsList();
-                _result.leaveMsg && (_self.leaveMsg = JSON.parse(_result.leaveMsg));
-            });
+            let res = await _self._$service.queryGoods(query);
+            let res2 = await _self._$service.getWdInfo(_self.wdInfo.infoId);
+
+            let _result = res.data.data;
+            let _wdInfo = res2.data.wdVipInfo;
+            _result.number = _self.number;
+            let obj = {
+                "shopId": _wdInfo.infoId,
+                "shopName": _wdInfo.wdName,
+                "school": _wdInfo.school,
+                "shopCarts": [_result]
+            }
+            _self.goodsList.push(obj);
+            _self.parseGoodsList();
+            _result.leaveMsg && (_self.leaveMsg = JSON.parse(_result.leaveMsg));
         }
         // this.updateMinimumConsumption();
     }

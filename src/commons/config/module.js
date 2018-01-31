@@ -44,6 +44,8 @@ import BannerComponent  from '../vue_plugins/components/banner/banner.vue';
 // import minirefresh from 'components/minirefresh/minirefresh.vue';
 import scroller from 'components/scroller/scroller.vue';
 
+// import steps from 'components/steps/steps.vue';
+
 // 下拉刷新上拉加载
 Vue.component('scroller', scroller);
 
@@ -53,8 +55,11 @@ Vue.component('app-banner',BannerComponent);
 
 Vue.component('app-container', ContainerComponent);
 
-Vue.component('pull-refresh',PullRefresh);
+Vue.component('pull-refresh', PullRefresh);
 
+
+
+// Vue.component('app-steps', steps);
 
 
 

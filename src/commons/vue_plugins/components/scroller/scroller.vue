@@ -165,6 +165,12 @@ export default {
   props: {
     onRefresh: Function,
     onInfinite: Function,
+    monitoringMove: Function, // 监听移动
+    
+    LRShakeflag :{
+      type: Boolean,
+      default: false
+    },
 
     refreshText: {
       type: String,
@@ -286,6 +292,8 @@ export default {
   },
 
   mounted() {
+
+
     this.container = this.$refs.containerRef; //document.getElementById(this.containerId)
     this.container.style.width = this.w;
     this.container.style.height = this.h;
@@ -432,11 +440,40 @@ export default {
         return;
       }
       this.scroller.doTouchStart(e.touches, e.timeStamp);
+      let _touch = e.touches[0];
+      this.__pageX = _touch.pageX;
+      this.__pageY = _touch.pageY;
+      this.__notUp = false;
+      this.isJudge = false;
+      //console.log('1 ', this.__pageX);
     },
 
     touchMove(e) {
       e.preventDefault();
-      this.scroller.doTouchMove(e.touches, e.timeStamp);
+
+      let _touch = e.touches[0];
+      let _pageX = _touch.pageX;
+      let _pageY = _touch.pageY;
+      if(this.$props.LRShakeflag && !this.__notUp && !this.isJudge){
+        //console.log('2 ', this.__pageX);
+        // 左右滑动，不触发上下
+        // 第一次移动判断是左右移动，还是上下移动
+        let _x = Math.abs(_pageX - this.__pageX);
+        let _y = Math.abs(_pageY - this.__pageY);
+        if(_x > _y){
+          // 左右移动
+          this.__notUp = true;
+        }
+        // 已经判断处理过在没释放move时，不再处理
+        this.isJudge = true;
+      }
+
+      if(!this.__notUp){
+        this.scroller.doTouchMove(e.touches, e.timeStamp);
+      }
+
+      //console.log('2  ', _pageX);
+      this.$props.monitoringMove && this.$props.handlerMove(this.getPosition());
     },
 
     touchEnd(e) {
@@ -487,6 +524,7 @@ export default {
     // 获取位置
     getPosition() {
       let v = this.scroller.getValues();
+      
 
       return {
         left: parseInt(v.left),

@@ -3,7 +3,7 @@
 
     <!-- <card-box cardType="delivering"></card-box> -->
 
-    <pull-refresh ref="my_scroller" :refresh="refresh" :infinite="infinite">
+    <pull-refresh ref="my_scroller" :refresh="refresh" :infinite="infinite" :LRShakeflag="true">
         <div class="result_list">
             <card-box cardType="delivering" v-for="(item, index) in list" :key="index" :main="confirmArrive" :call="callUser"></card-box>
         </div>

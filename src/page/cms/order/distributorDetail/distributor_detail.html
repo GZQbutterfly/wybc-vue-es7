@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="order-wait" v-text="getOrderStateName()"></div>
-            <div class="order-red">该订单无法获得酬金！~</div>
+            <div class="order-red" v-if="orderInfo.orderState==6">该订单无法获得酬金！~</div>
             <!-- 订单状态流程 -->
             <div class="order-show" v-if="orderInfo.orderState > 1&&orderInfo.orderState <= 5">
                 <p :class="{'e6e6e6':orderInfo.orderState >= 1&&orderInfo.orderState<5}">

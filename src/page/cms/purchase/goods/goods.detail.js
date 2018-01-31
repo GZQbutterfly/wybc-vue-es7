@@ -116,7 +116,7 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
                 if (res.data.errorCode || res.data.data.state != 1) {
                     let dialogObj = {
                         title: '',
-                        content: '该商品已下架',
+                        content: '该商品已下架或停售',
                         assistBtn: '',
                         mainBtn: '知道了',
                         type: 'info',

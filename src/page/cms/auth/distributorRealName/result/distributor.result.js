@@ -6,7 +6,7 @@ import './distributor.result.scss';
 @Component({
     template: require('./distributor.result.html'),
 })
-export class RealNameResult extends BaseVue {
+export class DistributorRealNameResult extends BaseVue {
     types = ['default', 'pending', 'reject', 'error', 'resolve'];
     resultType = '';// 返回结果 认证通过（ resolve ）;认证不通过（ reject ）; 认证等待( pending )
     result = {};
@@ -14,7 +14,7 @@ export class RealNameResult extends BaseVue {
     mounted() {
         this._$dialog = this.$store.state.$dialog;
         this.$nextTick(() => {
-            document.title = '实名认证';
+            document.title = '配送员实名认证';
             this.renderResult();
         });
     }

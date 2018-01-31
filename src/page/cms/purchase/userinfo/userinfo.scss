@@ -53,29 +53,6 @@
     padding: .16rem .125rem;
 }
 
-.text-left{
-    float: left;
-    position: relative;
-    &:before{
-        content: attr(data-numb);
-        width: .15rem;
-        height: .15rem;
-        line-height: .15rem;
-        border-radius: 50%;
-        font-size: .1rem;
-        color: #ffffff;
-        text-align: center;
-        background: #ed1319;
-        position: absolute;
-        right: .025rem;
-        top: -.025rem;
-    }
-}
-
-.text-right{
-    text-align: right;
-}
-
 .fleft{
     float: left;
 }

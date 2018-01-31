@@ -22,7 +22,7 @@ export class DistributorRealNameForm extends BaseVue {
     mounted() {
         this._$service = service(this.$store);
         this.$nextTick(() => {
-            document.title = '配送员认证';
+            document.title = '配送员实名认证';
             window.addEventListener('resize', this.resizeWin);
         });
     }

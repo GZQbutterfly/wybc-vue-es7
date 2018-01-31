@@ -2,7 +2,8 @@ import { WxPay } from './wxpay';
 import { AliPay } from './alipay';
 import { AppPay } from './apppay';
 import {NativeiOSPay} from './nativeiOSPay';
-import { axiosConfig, isWeiXin, isApp,isNativeiOS } from 'common.env';
+import {NativeAndroidPay} from './nativeAndroidPay';
+import { axiosConfig, isWeiXin, isApp,isNativeiOS,isNativeAndroid } from 'common.env';
 
 let payEnv = {
     isWx: false,
@@ -23,6 +24,8 @@ export function registerPaySign(_vm) {
         payEnv.isWx = true;
     }else if(isNativeiOS()){
         _pay = new NativeiOSPay();
+    }else if(isNativeAndroid()){
+        _pay = new NativeAndroidPay(_vm);
     } else if (isApp()) {
         // 手机网页支付
         _pay = new AppPay(_vm);

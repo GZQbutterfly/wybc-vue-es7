@@ -1,3 +1,5 @@
+// 待取货 tab
+
 import { Component, Vue } from 'vue-property-decorator';
 
 import {Card} from '../../card/card';

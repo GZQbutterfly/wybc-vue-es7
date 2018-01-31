@@ -3,7 +3,6 @@ import { wxshare } from '../wxshare/share';
 import { isWeiXin } from '../common.env';
 import baseService from './base.vue.service';
 
-import {bridgeRegister} from '../../bridge/bridge';
 
 //config  will be complete with derived class
 @Component({

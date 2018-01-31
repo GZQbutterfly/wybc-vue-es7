@@ -68,16 +68,47 @@ export class Home extends BaseVue {
             self.homeBanner();
             //分类列表
             //self.classList();
+
         })
     }
     //判断进入的店是否是自己的
     ownShop() {
         let _self = this;
         let _query = this.$route.query.user;
+        let shopId = this.$route.query.shopId;
         let flag = isNotLogin();
         if (flag && _query == 'own') {
             toLogin(_self.$router, { toPath: "home", realTo: "home?user=own" });
+        } else {
+            if (_query && !shopId) {
+                let userId = _self.$store.state.workVO.user.userId;
+                _self.queryWdInfo(userId);
+            } else if (!_query && shopId) {
+                _self.queryWdInfo(shopId);
+            } else {
+                let wdInfo = JSON.parse(localStorage.wdVipInfo);
+                _self.queryWdInfo(wdInfo.infoId);
+            }
         }
+    }
+    //获取店信息
+    queryWdInfo(shopId) {
+        this._$service.queryWdInfo(shopId).then((res) => {
+            let _result = res.data;
+            if (!_result.errorCode) {
+                let _wdVipInfo = _result.wdVipInfo;
+                if (!_wdVipInfo.wdImg) {
+                    _wdVipInfo.wdImg = "/static/images/newshop/touxiang.png"
+                }
+                this.shopkeeper = {
+                    wdName: _wdVipInfo.wdName,
+                    wdImg: _wdVipInfo.wdImg,
+                    vipGrade: _wdVipInfo.wdVipGrade,
+                    school: _wdVipInfo.school,
+                }
+            }
+
+        })
     }
     fetchRecommentData() {
         let self = this;
@@ -101,7 +132,7 @@ export class Home extends BaseVue {
                 link: appendParams({ shopId: res.infoId }).replace('user=own', '')
             }
             self.updateWxShare(config);
-            self.shopkeeper = res;
+            // self.shopkeeper = res;
         }).catch(error => {
             let dialog = self.$store.state.$dialog;
             let dialogObj = {
@@ -133,7 +164,7 @@ export class Home extends BaseVue {
     }
 
     //修改店铺id
-    setShopId(){
+    setShopId() {
         let _query = this.$route.query.shopId;
         if (!_query) {
             let shopId = JSON.parse(localStorage.wdVipInfo).infoId;
@@ -208,168 +239,166 @@ export class Home extends BaseVue {
         })
     }
 
-fetchGoodsData(page, done) {
-    let self = this;
-    let ids = '';
-    if (page <= 1) {
-        for (let i = 0; i < self.pageLimit; ++i) {
-            if (this.classfyList.length > i + 1) {
-                ids += '' + this.classfyList[i + 1].goodsClassifyId + ',';
-            } else {
-                break;
-            }
-        }
-    } else {
-        for (let i = 0; i < self.pageLimit; ++i) {
-            if (this.classfyList.length > (page - 1) * self.pageLimit + 1 + i) {
-                ids += '' + this.classfyList[(page - 1) * self.pageLimit + 1 + i].goodsClassifyId + ',';
-            } else {
-                break;
-            }
-        }
-    }
-    let _query = self.setShopId();
-   let _data =  {
-        classifyId: ids,
-        channel: 'wd',
-        shopId:_query
-    }
-    this._$service.classfyShop(_data).then(res => {
-        if (res.data.errorCode || !res.data || res.data.data.length == 0) {
-            if (page <= 1) {
-                self.classfyGoodses = [];
-            }
-            if (done) {
-                done(true);
+    fetchGoodsData(page, done) {
+        let self = this;
+        let ids = '';
+        if (page <= 1) {
+            for (let i = 0; i < self.pageLimit; ++i) {
+                if (this.classfyList.length > i + 1) {
+                    ids += '' + this.classfyList[i + 1].goodsClassifyId + ',';
+                } else {
+                    break;
+                }
             }
         } else {
-            if (page <= 1) {
-                res.data.data.forEach(element => {
-                    element.adList.forEach(ads => {
-                        ads.url = ads.imgUrl;
-                    });
-                });
-                self.classfyGoodses = res.data.data;
-                self.page = 1;
-            } else {
-                res.data.data.forEach(element => {
-                    element.adList.forEach(element => {
-                        element.url = element.imgUrl;
-                    });
-                    self.classfyGoodses.push(element);
-                });
-                self.page = page;
-            }
-            if (done) {
-                done(true);
+            for (let i = 0; i < self.pageLimit; ++i) {
+                if (this.classfyList.length > (page - 1) * self.pageLimit + 1 + i) {
+                    ids += '' + this.classfyList[(page - 1) * self.pageLimit + 1 + i].goodsClassifyId + ',';
+                } else {
+                    break;
+                }
             }
         }
-    })
-        .catch((error) => {
-            if (done) {
-                done();
+        let _query = self.setShopId();
+        let _data = {
+            classifyId: ids,
+            channel: 'wd',
+            shopId: _query
+        }
+        this._$service.classfyShop(_data).then(res => {
+            if (res.data.errorCode || !res.data || res.data.data.length == 0) {
+                if (page <= 1) {
+                    self.classfyGoodses = [];
+                }
+                if (done) {
+                    done(true);
+                }
+            } else {
+                if (page <= 1) {
+                    res.data.data.forEach(element => {
+                        element.adList.forEach(ads => {
+                            ads.url = ads.imgUrl;
+                        });
+                    });
+                    self.classfyGoodses = res.data.data;
+                    self.page = 1;
+                } else {
+                    res.data.data.forEach(element => {
+                        element.adList.forEach(element => {
+                            element.url = element.imgUrl;
+                        });
+                        self.classfyGoodses.push(element);
+                    });
+                    self.page = page;
+                }
+                if (done) {
+                    done(true);
+                }
             }
         })
-}
+            .catch((error) => {
+                if (done) {
+                    done();
+                }
+            })
+    }
 
-goodsBannerClicked(ad) {
-    if (!ad.goodsId || ad.linkType == 1) {
-        location.href = ad.linkTarget;
-    } else {
-        let url = location.href;
-        if (url.indexOf('cms') == -1) {
-            this.$router.push({
-                path: "goods_detail",
-                query: {
-                    goodsId: ad.goodsId
-                }
-            });
+    goodsBannerClicked(ad) {
+        if (!ad.goodsId || ad.linkType == 1) {
+            location.href = ad.linkTarget;
         } else {
-            this.$router.push({
-                path: "cms_purchase_goods_detail",
-                query: {
-                    goodsId: ad.goodsId
-                }
-            });
+            let url = location.href;
+            if (url.indexOf('cms') == -1) {
+                this.$router.push({
+                    path: "goods_detail",
+                    query: {
+                        goodsId: ad.goodsId
+                    }
+                });
+            } else {
+                this.$router.push({
+                    path: "cms_purchase_goods_detail",
+                    query: {
+                        goodsId: ad.goodsId
+                    }
+                });
+            }
         }
     }
-}
 
-navSelected(index, data) {
-    this.$router.push({
-        path: 'classify',
-        query: {
-            classify: data.goodsClassifyId
-        }
-    });
-}
-
-goPage(link, goodsId) {
-    if (link) {
-        location.href = link;
-    } else {
+    navSelected(index, data) {
         this.$router.push({
-            path: 'goods_detail',
+            path: 'classify',
             query: {
-                goodsId: goodsId
+                classify: data.goodsClassifyId
             }
+        });
+    }
+
+    goPage(link, goodsId) {
+        if (link) {
+            location.href = link;
+        } else {
+            this.$router.push({
+                path: 'goods_detail',
+                query: {
+                    goodsId: goodsId
+                }
+            })
+        }
+    }
+
+    refresh(done) {
+        let self = this;
+        setTimeout(() => {
+            //初始化三格数据
+            self.fetchRecommentData();
+            //banner
+            self.homeBanner();
+            self.classListAndFirstPage(done);
+        }, 500)
+    }
+
+    onSeeAll(classifyId) {
+        this.$router.push({
+            path: "classify",
+            query: {
+                classify: classifyId
+            }
+        });
+    }
+
+    infinite(done) {
+        let self = this;
+        setTimeout(() => {
+            //第一页数据交给初始化
+            if (self.page == 0) {
+                if (!self.classfyList || self.classfyList.length < 2) {
+                    done(false);
+                } else {
+                    self.fetchGoodsData(1, done);
+                }
+            } else {
+                if (!self.classfyList || self.classfyList.length < 2) {
+                    done(true);
+                } else {
+                    self.fetchGoodsData(self.page + 1, done);
+                }
+            }
+        }, 1)
+    }
+
+    activated() {
+        document.title = "首页";
+        let self = this;
+        this.$nextTick(() => {
+            self.updateShop();
+            self.classListAndFirstPage(null);
+            self.ownShop();
+            //初始化三格数据
+            self.fetchRecommentData();
+            //banner
+            self.homeBanner();
         })
     }
-}
-
-refresh(done) {
-    let self = this;
-    setTimeout(() => {
-        //初始化三格数据
-        self.fetchRecommentData();
-        //banner
-        self.homeBanner();
-        self.classListAndFirstPage(done);
-        //活动banner
-        self.activitBanner();
-    }, 500)
-}
-
-onSeeAll(classifyId) {
-    this.$router.push({
-        path: "classify",
-        query: {
-            classify: classifyId
-        }
-    });
-}
-
-infinite(done) {
-    let self = this;
-    setTimeout(() => {
-        //第一页数据交给初始化
-        if (self.page == 0) {
-            if (!self.classfyList || self.classfyList.length < 2) {
-                done(false);
-            } else {
-                self.fetchGoodsData(1, done);
-            }
-        } else {
-            if (!self.classfyList || self.classfyList.length < 2) {
-                done(true);
-            } else {
-                self.fetchGoodsData(self.page + 1, done);
-            }
-        }
-    }, 1)
-}
-
-activated() {
-    document.title = "首页";
-    let self = this;
-    this.$nextTick(() => {
-        self.updateShop();
-        self.classListAndFirstPage(null);
-        self.ownShop();
-        //初始化三格数据
-        self.fetchRecommentData();
-        //banner
-        self.homeBanner();
-    })
-}
 }

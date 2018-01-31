@@ -8,11 +8,6 @@ let webpack = require('webpack'),
     baseConfig = require('./webpack.base.config');
 
 
-
-//baseConfig.output.publicPath = "http://qaservice.365bencao.cn/"; //   http://xhjx.365bencao.cn/
-
-
-
 baseConfig.entry = {
      'static/lib/vue_mode': ['vue', 'vue-property-decorator', 'vue-class-component'],
      'static/lib/lodash': ['lodash'],
@@ -31,8 +26,10 @@ baseConfig.plugins.push(
     new HtmlWebpackPlugin({
         template: path.join(__dirname, '../src/page/web/index.tpl.html'),
         minify: {
-            removeComments: true
+            removeComments: true,
+            collapseWhitespace: true
         },
+        cache: true,
         hash: true,
         favicon: path.join(__dirname, '../src/page/favicon.ico'),
         inject: 'body',
@@ -42,8 +39,10 @@ baseConfig.plugins.push(
         filename: path.join(__dirname, '../dist/cms/index.html'),
         template: path.join(__dirname, '../src/page/cms/index.tpl.html'),
         minify: {
-            removeComments: true
+            removeComments: true,
+            collapseWhitespace: true
         },
+        cache: true,
         hash: true,
         favicon: path.join(__dirname, '../src/page/favicon.ico'),
         inject: 'body',
@@ -65,9 +64,6 @@ baseConfig.plugins.push(
         cssProcessorOptions: { discardComments: { removeAll: true } },
         canPrint: true
     }),
-    // new UglifyJSPlugin({
-    //     test: /\.js$/i
-    // }),
     new ParallelUglifyPlugin({
         cacheDir: '.cache/',
         uglifyJS: {

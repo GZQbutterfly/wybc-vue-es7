@@ -4,9 +4,7 @@ import { wxAppid, getAuthUser } from 'common.env';
 import { PayComponent } from './pay.component';
 import { WxAuth } from '../auth/wx';
 
-//
 const wx = require('weixin-js-sdk');
-
 const appid = wxAppid;
 
 /**
@@ -175,7 +173,7 @@ export class WxPay  {
                     res(false);
                 },
                 error: errRes => {
-                    res(true);
+                    res(false);
                 }
             });
         });

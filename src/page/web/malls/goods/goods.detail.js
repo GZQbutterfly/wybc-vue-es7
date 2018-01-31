@@ -1,7 +1,7 @@
-import {Component} from 'vue-property-decorator';
-import  BaseVue  from 'base.vue';
+import { Component } from 'vue-property-decorator';
+import BaseVue from 'base.vue';
 
-import NavTop  from '../../../../commons/vue_plugins/components/nav_top/nav_top.vue';
+import NavTop from '../../../../commons/vue_plugins/components/nav_top/nav_top.vue';
 
 
 import getShopCarCount from '../home/getShopCarCount';
@@ -9,11 +9,11 @@ import getShopCarCount from '../home/getShopCarCount';
 import { NumberPicker } from './picker/num.picker';
 
 import { isNotLogin, toLogin, appendParams } from 'common.env';
-import VideoBanner  from '../../../../commons/vue_plugins/components/video/video.banner.vue';
-import VueVideo  from '../../../../commons/vue_plugins/components/video/video.vue';
+import VideoBanner from '../../../../commons/vue_plugins/components/video/video.banner.vue';
+import VueVideo from '../../../../commons/vue_plugins/components/video/video.vue';
 
 // 预加载订单页面数据
-require.ensure([], require => {}, 'web/order/order');
+require.ensure([], require => { }, 'web/order/order');
 
 import './goods.detail.scss';
 import goodsService from './goods.service';
@@ -72,61 +72,50 @@ export class GoodsDetail extends BaseVue {
             done();
         }, 2500)
     }
-
+    //获取店信息
+    queryWdInfo(shopId) {
+        let _this = this;   
+        goodsService(this.$store).queryWdInfo(shopId).then((res) => {
+            let _result = res.data;
+            if (!_result.errorCode) {
+                let _wdVipInfo = _result.wdVipInfo;
+                if (!_wdVipInfo.wdImg) {
+                    _wdVipInfo.wdImg = "/static/images/newshop/touxiang.png"
+                }
+                this.shopkeeper = {
+                    wdName: _wdVipInfo.wdName,
+                    wdImg: _wdVipInfo.wdImg,
+                    vipGrade: _wdVipInfo.wdVipGrade,
+                    school: _wdVipInfo.school,
+                }
+            }
+        })
+        let cartCache = JSON.parse(localStorage.getItem("shopcartCache"));
+        if (cartCache) {
+            if (cartCache[0].shopId != this.shopId) {
+                localStorage.removeItem("shopcartCache");
+                _this.$store.state.shopCar.count = 0;
+            }
+        }
+    }
     getGoodsMsg() {
         let _this = this;
-        if (localStorage.ownShop == 1) {
-            let opt = {
-                userId: this.$store.state.workVO.user.userId,
-                token: this.$store.state.workVO.user.token
-            }
-            goodsService(this.$store).getWdInfo(opt).then(res => {
-                if (!res.data.userImg) {
-                    res.data.userImg = "/static/images/newshop/touxiang.png"
-                }
-                _this.shopkeeper = {
-                    wdName: res.data.shopName,
-                    wdImg: res.data.userImg,
-                    vipGrade: res.data.vip,
-                    school: res.data.school,
-                }
-            })
-        } else {
-            this.shopId = this.$route.query.shopId;
-            let wdInfo = JSON.parse(localStorage.wdVipInfo);
-            if (!this.shopId) {
-                this.shopId = wdInfo.infoId;
-            }
-            let cartCache = JSON.parse(localStorage.getItem("shopcartCache"));
-            if (cartCache) {
-                if (cartCache[0].shopId != this.shopId) {
-                    localStorage.removeItem("shopcartCache");
-                    _this.$store.state.shopCar.count = 0;
-                }
-            }
-            this.fetchShopData().then((res) => {
-                console.log(res.wdImg);
-                if (!res.wdImg) {
-                    res.wdImg = "/static/images/newshop/touxiang.png"
-                }
-                _this.shopkeeper = {
-                    wdName: res.wdName,
-                    wdImg: res.wdImg,
-                    vipGrade: res.wdVipGrade,
-                    school: res.school,
-                }
-            })
+        _this.shopId = this.$route.query.shopId;
+        let wdInfo = JSON.parse(localStorage.wdVipInfo);
+        if (!_this.shopId ) {
+            _this.shopId  = wdInfo.infoId;
         }
-        let opt={
+        _this.queryWdInfo(_this.shopId);
+        let opt = {
             goodsId: _this.$route.query.goodsId,
             shopId: _this.shopId
         }
         goodsService(_this.$store).goodsInfo(opt)
             .then(res => {
-                if (res.data.errorCode || (res.data.data && res.data.data.state != 1) ) {
+                if (res.data.errorCode || (res.data.data && res.data.data.state != 1)) {
                     let dialogObj = {
                         title: '',
-                        content: '该商品已下架',
+                        content: '该商品已下架或停售',
                         assistBtn: '',
                         mainBtn: '知道了',
                         type: 'info',
@@ -141,8 +130,13 @@ export class GoodsDetail extends BaseVue {
                     return;
                 }
                 _this.goods = res.data.data;
+                if (!res.data.data.offTimestamp) {
+                    _this.showTime = false;
+                }else{
+                    _this.showTime = true;
+                    _this.countDown(res.data.data.offTimestamp);
+                }
                 let arr = res.data.data.bannerImg.split(",");
-
                 if (res.data.data.bannerVideo) {
                     _this.playerOptions = {
                         muted: true,
@@ -172,7 +166,7 @@ export class GoodsDetail extends BaseVue {
                             type: "video/mp4",
                             src: res.data.data.goodsVideo
                         }],
-                        poster: res.data.data.goodsVideoImg,                      
+                        poster: res.data.data.goodsVideoImg,
                     }
                 }
                 this.fetchShopData()
@@ -185,12 +179,7 @@ export class GoodsDetail extends BaseVue {
                         }
                         _this.updateWxShare(config);
                     })
-
-                if (!res.data.data.offTimestamp) {
-                    _this.showTime = false;
-                    return;
-                }
-                _this.countDown(res.data.data.offTimestamp);
+              
             }).catch(err => {
 
             });

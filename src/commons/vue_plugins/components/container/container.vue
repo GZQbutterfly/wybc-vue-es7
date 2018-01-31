@@ -2,7 +2,7 @@
     <div class="app-container" @touchstart="touchStart($event)" @touchmove="touchMove($event)" @touchend="touchEnd($event)" ref="containerRef">
         <slot name="header"></slot>
         <div class="app-container__bd" ref="contentRef">
-            <div class="app-container__main" v-show="showContent">
+            <div class="app-container__main" v-show="showContent" ref="mainRef">
                 <slot></slot>
             </div>
         </div>
@@ -59,6 +59,12 @@ export default {
                 _self.container.style.height = _self.height;
             }
             _self.content = _$refs.contentRef;
+            // 设置内容体的最小高度
+            _self.mainRef = _$refs.mainRef;
+            if(_self.mainRef.childElementCount == 1){
+                _self.mainRef.firstChild.style.minHeight = _self.content.offsetHeight + 'px';
+            }
+            // ==>
             let render = getContentRender(_self.content);
             _self.scroller = new Scroller(render, {
                 scrollingX: false,

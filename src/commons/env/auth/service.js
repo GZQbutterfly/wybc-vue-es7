@@ -38,11 +38,13 @@ export class ServiceAuth {
         let _baseUrl = get(this._$http, 'defaults.baseURL');
         let _apiUrl = config.url.replace(_baseUrl, '');
 
+        let _userId = get(this._$user, 'userId');
+
         // 匹配需要校验的服务并添加userId 和 token
         if (match(_apiUrl, serviceData)) {
             // 在发送请求之前做些什么
             let _userData = {
-                userId: get(this._$user, 'userId'),
+                userId: _userId,
                 token: get(this._$user, 'token')
             };
             config.data = merge(config.data, _userData);
@@ -54,9 +56,8 @@ export class ServiceAuth {
             let localWdInfo = JSON.parse(localStorage.wdVipInfo || null) || {};
             config.data = merge({ shopId: localWdInfo.infoId || localWdInfo.shopId }, config.data);
         }else if (clientEnv.cms) {
-            // 为所有的服务请求都加载shopId
-            let _user = JSON.parse(localStorage._user || null) || {};
-            config.data = merge({ shopId: _user.userId}, config.data);
+            //cms 为所有的服务请求都加载shopId
+            config.data = merge({ shopId: _userId}, config.data);
         }
 
         // 默认序列化参数  isNotSer = true 不使用序列化

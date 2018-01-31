@@ -9,7 +9,7 @@ export default (_store) => {
     let changeNumber = 'api/shopcart/u_goods_number';
     let synchronousshoppingcart = 'api/shopcart/a_cart_goodses';
     let minimumConsution = 'api/goods/q_minimum_consumption';
-    let getgoodslists = 'api/goods/q_multi_goods';
+    let getgoodslists = 'api/q_multi_goods';
 
     function q(url, data) {
         return _http({

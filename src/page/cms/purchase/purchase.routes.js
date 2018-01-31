@@ -1,6 +1,6 @@
 import { CmsLayout } from './layout/layout';
 
-//import deliveryRoutes from './delivery/delivery.routes';
+
 
 const routes = [
     // ===>
@@ -116,9 +116,7 @@ const routes = [
                 resolve(require('../../sys/address/address')['Address']);
             }, 'sys/system');
         }
-    },
-    // delivery
-    //...deliveryRoutes
+    }
 ];
 
 export default routes;

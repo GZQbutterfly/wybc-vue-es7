@@ -20,11 +20,11 @@ export default (store) => {
             let _list = null;
             let _result = (await q('api/q_ten_shop_history')).data;
             if (_result.errorCode) {
-                if(match(_result.errorCode, [96, 94, 119])){
-                    _list = [{}];
-                }else{
+                // if(match(_result.errorCode, [96, 94, 119])){
+                //     _list = [{}];
+                // }else{
                     _list = [];
-                }
+                //}
             } else {
                 _list = _result.data;
             }

@@ -1,5 +1,7 @@
 .myincome-container {
     height: 100%;
+    display: flex;
+    flex-direction: column;
     .myincome-hd {
         text-align: center;
         background-color: #fff; //height: 65px;
@@ -27,100 +29,107 @@
             }
         }
     }
-    .myincome-bd {
-        margin-top: 5px;
+
+    .myincome-bd{
+        width: 100%;
+        height: 50px;
         position: relative;
-        height: calc(100% - .82rem);
-        .tabs {
-            .tabs-hd {
-                height: 50px;
-                line-height: 50px;
-                text-align: center;
-            }
-            .tab-active {
-                position: relative;
-                display: inline-block;
-                &:after {
-                    content: ' ';
-                    position: absolute;
-                    width: 100%;
-                    height: 2px;
-                    background-color: #7ecc24;
-                    left: 0;
-                    bottom: 0px;
+        margin-top: 0.05rem;
+        .weui-navbar{
+            background: #fff;
+            color: #333;
+            .weui-navbar__item{
+                background: #fff!important;
+                &.weui-bar__item_on{
+                    position: relative;
+                    &:before{
+                        content: '';
+                        width: 50%;
+                        height: 2px;
+                        background: #7ecc44;
+                        position: absolute;
+                        bottom: 0;
+                        left: 25%;
+                    }
+                }
+                &:after{
+                    content: none;
                 }
             }
-            .tabs-bd {
-                .tab-item-content {
-                    position: absolute;
-                    height: 100%;
-                    width: 100%;
-                    overflow: hidden;
-                }
+            &:after{
+                content: none;
             }
         }
-        .order-box {
-            margin-top: 3px; // margin-bottom: 3px;
-            .box-hd {
-                padding: 0 12px;
-                height: 32px;
-                line-height: 32px;
-                background-color: #fff;
-                font-size: 13px;
-                color: #808080;
-                .weui-flex__item:last-child {
-                    text-align: right;
-                }
-            }
-            .ch {
-                color: #7ecc24;
-            }
-            .ud {
-                color: #ff902d;
-            }
-            .hd {
-                color: #ff2da9;
-            }
-            .box-bd {
-                margin-top: 1px;
-                background-color: #fff;
-                font-size: 15px;
-                color: #333;
-                .shop-img {
-                    height: 80px;
-                    width: 80px;
-                    margin: 8px 12px;
-                }
-                .shop-info {
-                    position: relative;
-                    margin-top: 8px;
-                    margin-bottom: 8px;
-                    .shop-name{
-                        width: 2.5rem;
-                        overflow: hidden;
-                        text-overflow:ellipsis;
-                        white-space: nowrap;
+    }
+
+    .myincome-ft {
+        margin-top: 5px;
+        position: relative;
+        flex: 1;
+        .myincome-ft-view{
+            .order-box {
+                margin-bottom: 3px;
+                .box-hd {
+                    padding: 0 12px;
+                    height: 32px;
+                    line-height: 32px;
+                    background-color: #fff;
+                    font-size: 13px;
+                    color: #808080;
+                    .weui-flex__item:last-child {
+                        text-align: right;
                     }
                 }
-                .shop-num {
+                .ch {
+                    color: #7ecc24;
+                }
+                .ud {
                     color: #ff902d;
                 }
-                .shop-money{
-                    span{
-                        font-size: 16px;
-                    }
-                    .xs-money {
-                        color: #7ecc44;
-                    }
-                    .tc-money {
-                        color: #ff1c1c;
-                    }
+                .hd {
+                    color: #ff2da9;
                 }
-                .shop-date {
-                    font-size: 12px;
-                    color: #808080;
-                    position: absolute;
-                    bottom: -5px;
+                .box-bd {
+                    margin-top: 1px;
+                    background-color: #fff;
+                    font-size: 15px;
+                    color: #333;
+                    .shop-img {
+                        height: 80px;
+                        width: 80px;
+                        margin: 8px 12px;
+                    }
+                    .shop-info {
+                        position: relative;
+                        margin-top: 8px;
+                        margin-bottom: 8px;
+                        .shop-name{
+                            width: 2.5rem;
+                            overflow: hidden;
+                            text-overflow:ellipsis;
+                            white-space: nowrap;
+                        }
+                    }
+                    .shop-num {
+                        color: #ff902d;
+                    }
+                    .shop-money{
+                        span{
+                            font-size: 16px;
+                        }
+                        .xs-money {
+                            color: #7ecc44;
+                        }
+                        .tc-money {
+                            color: #ff1c1c;
+                        }
+                    }
+                    .shop-date {
+                        font-size: 12px;
+                        color: #808080;
+                        position: absolute;
+                        bottom: -5px;
+                    }
                 }
             }
         }

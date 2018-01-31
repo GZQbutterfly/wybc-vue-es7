@@ -1,22 +1,16 @@
 import Vue from 'vue';
-import { merge } from 'lodash';
-
-
-import { PayComponent } from './pay.component';
 import {bridge, callNative} from '../../bridge/bridge';
 
-//
 /**
  * iOS 原生pay
  */
 export class NativeiOSPay   {
 
-
     sign(){
 
     }
+    
     /**
-     *
      * @param data  对象数据
      * @return  {boolean}  true 代表已支付， false 代表未支付
      */

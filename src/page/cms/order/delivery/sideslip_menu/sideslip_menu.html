@@ -2,21 +2,21 @@
     <div class="weui-mask" @click="closeSelf" :class="{'weui-mask-show': show}"></div>
 
     <div class="sideslip-content" :class="{'content-show': show}">
-        <header class="sideslip-content-hd">
+        <header class="sideslip-content_hd">
             <div class="user-detail">
                 <img :src="user.headimgurl || defaultUserImg" alt="" @error="imgError">
                 <label>{{user.phone | fmtPhone}}</label>
             </div>
         </header>
 
-        <section class="sideslip-content-bd">
+        <section class="sideslip-content_bd">
             <div v-for="(item, index) in menuList" :key="index" class="weui-flex" @click="toPath($event, item)">
                 <img :src="item.imgSrc" alt="">
                 <label>{{item.label}}</label>
             </div>
         </section>
 
-        <footer class="sideslip-content-ft">
+        <footer class="sideslip-content_ft">
 
         </footer>
     </div>

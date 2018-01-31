@@ -6,10 +6,11 @@
         top: 0;
         right: 0;
         height: 100%;
-        width: 300px;
+        //width: 300px;
+        width: 250px;
         transition: transform .5s;
         transform: translate(100%);
-        &-hd {
+        &_hd {
             height: 170px;
             background-color: #7ecc44;
             padding-top: 60px;
@@ -27,7 +28,7 @@
                 }
             }
         }
-        &-bd {
+        &_bd {
             padding: 19px 0 0 28px;
             div {
                 color: #333;

@@ -2,7 +2,7 @@
 import { Component } from 'vue-property-decorator';
 import BaseVue from 'base.vue';
 
-import { timeout, isNotLogin} from 'common.env';
+import { timeout, isNotLogin } from 'common.env';
 // isNotLogin
 import Swiper from 'swiper';
 
@@ -11,7 +11,7 @@ import ShopBox from 'components/shop_box/shop.box';
 import service from './layout.service';
 
 // 预加载web首页页面数据
-require.ensure([], require => {}, 'web/malls/malls');
+require.ensure([], require => { }, 'web/malls/malls');
 
 import './layout.scss';
 @Component({
@@ -46,9 +46,9 @@ export class Layout extends BaseVue {
 
         this._$service = service(this.$store);
         this.$nextTick(() => {
-            
-            this.updateWxShare({hideAllItem: true});
-            
+
+            this.updateWxShare({ hideAllItem: true });
+
             this.initPage();
         });
     }
@@ -61,7 +61,7 @@ export class Layout extends BaseVue {
         // 获取 推荐店铺
         await this.queryRecommendShop();
 
-        
+
 
     }
 
@@ -71,6 +71,7 @@ export class Layout extends BaseVue {
             slidesOffsetBefore: 12,
             slidesOffsetAfter: 12,
             slidesPerView: 1.4,
+            resistanceRatio: 0,
             //freeMode: true,
             direction: 'horizontal',
             observer: true,
@@ -88,10 +89,10 @@ export class Layout extends BaseVue {
                     timeout(() => {
                         _self.renderSwiper();
                     });
-                } else {                   
+                } else {
                     _self.toHome(_list[0]);
                 }
-            }else{
+            } else {
                 _self.showStr = 'visible';
             }
         });
@@ -109,11 +110,16 @@ export class Layout extends BaseVue {
     }
 
     toHome(item) {
+
         let shopId = item.infoId || item.shopId;
-        if(shopId){
-            this.$router.push({ path: 'home', query: { shopId } });
-        }else{
-            this.$router.push({ path: 'home'});
+         // 进入页面首页时，将该店铺信息写入缓存
+        let localWdInfo = localStorage.wdVipInfo ? JSON.parse(localStorage.wdVipInfo) : {};
+        localStorage.wdVipInfo = JSON.stringify(Object.assign(localWdInfo, item));
+        
+        if (shopId) {
+            this.$router.push({ path: 'home', query: { shopId, from: 'lead' } });
+        } else {
+            this.$router.push({ path: 'home', query: { from: 'lead' } });
         }
     }
 

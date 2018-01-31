@@ -9,7 +9,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, '../dist'),
         filename: '[name].js',
-        chunkFilename: '[name].js?[hash:20]',
+        chunkFilename: '[name].js?[chunkhash:20]',
         publicPath: '../'
     },
     module: {
@@ -17,7 +17,6 @@ module.exports = {
             {
                 test: /\.vue$/,
                 use: 'vue-loader',
-                //include: [path.join(__dirname, '../src/commons'), path.join(__dirname, '../node_modules/_vue-video-player')],
             }, {
                 test: /\.js$/,
                 use: 'happypack/loader?id=js', // 'happypack/loader?id=js', 
@@ -46,13 +45,12 @@ module.exports = {
                         }
                     }
                 ],
-                //include: [path.join(__dirname, '../src/page')],
                 exclude: /node_modules/
             }
         ]
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.vue'],
+        extensions: ['.js',  '.vue'],
         alias: {
             'vue$': path.join(__dirname, '../node_modules/vue/dist/vue.esm.js'),
             'common.env$': path.join(__dirname, '../src/commons/env/common.env.js'),

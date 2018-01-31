@@ -53,7 +53,7 @@
     padding: .16rem .125rem;
 }
 
-.text-left {
+.userinfo-msg {
     float: left;
     position: relative;
     &:before {
@@ -74,10 +74,6 @@
         left: 56%;
         padding: 0 4px;
     }
-}
-
-.text-right {
-    text-align: right;
 }
 
 .fleft {

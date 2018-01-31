@@ -42,6 +42,7 @@ baseConfig.plugins.push(
         minify: {
             removeComments: true
         },
+        cache: true,
         hash: true,
         favicon: path.join(__dirname, '../src/page/favicon.ico'),
         inject: 'body',
@@ -53,6 +54,7 @@ baseConfig.plugins.push(
         minify: {
             removeComments: true
         },
+        cache: true,
         hash: true,
         favicon: path.join(__dirname, '../src/page/favicon.ico'),
         inject: 'body',

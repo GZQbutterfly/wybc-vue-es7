@@ -12,15 +12,15 @@
             <div class="tabs-hd_line"></div>
         </header>
 
-        <section class="delivery-tabs-container_bd" ref="tabsCRef">
+        <section class="delivery-tabs-container_bd">
             <div class="tabs-bd" ref="tabsCbdRef">
-                <rob v-if="robShow" v-show="headerIndex === 0" :operation="robOperation"></rob>
+                <!-- <rob v-if="robShow" v-show="headerIndex === 0" :operation="robOperation"></rob>
                 <pickup v-if="pickupShow" v-show="headerIndex === 1"></pickup>
-                <delivering v-if="deliveringShow" v-show="headerIndex === 2"></delivering>
-                <!-- <div class="swiper-container" ref="bodyRef">
+                <delivering v-if="deliveringShow" v-show="headerIndex === 2"></delivering> -->
+                <div class="swiper-container" ref="bodyRef">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
-                            <rob v-if="robShow"></rob>
+                            <rob v-if="robShow" :operation="robOperation"></rob>
                         </div>
                         <div class="swiper-slide">
                             <pickup v-if="pickupShow"></pickup>
@@ -29,7 +29,7 @@
                             <delivering v-if="deliveringShow"></delivering>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
         </section>
 

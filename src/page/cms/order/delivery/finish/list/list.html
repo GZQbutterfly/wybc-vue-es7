@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div v-for="(data, d) in item.data" :key="d" class="finish-list-content-item">
-                    <card-box :data="data"></card-box>
+                    <card-box :data="data" @click="activeItem = item"></card-box>
                 </div>
             </div>
         </div>

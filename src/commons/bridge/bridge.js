@@ -2,14 +2,11 @@
 //TODO callback
 //TODO message queue
 
-export function bridgeRegister(name, selfDo) {
+export function bridgeRegister(name, rebackData) {
     let callback = function (bridge) {
         bridge.registerHandler(name, function (data, callback) {
-            if (selfDo) {
-                selfDo(data);
-            }
-            //暂时不做其他处理 返回原数据
-            callback(data);
+            console.log('register handler rebackData: ',rebackData(data));
+            callback(rebackData(data));
         })
     }
     setupWebViewJavascriptBridge(callback);

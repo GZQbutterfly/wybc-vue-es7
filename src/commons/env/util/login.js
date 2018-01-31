@@ -35,7 +35,6 @@ export function toLogin(router, query = {}) {
  */
 export function setLocalUserInfo(user, flag) {
     localStorage.setItem('_login', '1');
-    localStorage.setItem('_token', user.token);
     localStorage.setItem('_user', JSON.stringify(user));
     if (!flag) {
         cleanUserValid();
@@ -53,7 +52,6 @@ export function cleanLocalUserInfo() {
     let _storage = localStorage;
     _storage.removeItem('_user');
     _storage.removeItem('_login');
-    _storage.removeItem('_token');
     cleanFn && cleanFn();
 }
 

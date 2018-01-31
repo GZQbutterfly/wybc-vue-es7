@@ -1,3 +1,4 @@
+// 右侧滑出菜单
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 
 import { timeout, getLocalUserInfo } from 'common.env';

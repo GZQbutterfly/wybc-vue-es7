@@ -65,6 +65,7 @@ export class NavScrollc extends Vue {
                 slidesPerGroup: 1,
                 slidesPerView: 4.5,
                 observer: true,
+                freeMode: true,
                 on: {
                     transitionEnd() {
                         if (reactive) {

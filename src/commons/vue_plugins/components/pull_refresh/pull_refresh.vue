@@ -1,7 +1,7 @@
 <template lang="html">
-    <scroller :on-refresh="refreshC" ref="my_scroller" :on-infinite="infiniteC" class="scroller">
+    <scroller :on-refresh="onRefresh" ref="my_scroller" :on-infinite="onInfinite" class="scroller" v-if="show" :LRShakeflag="LRShakeflag">
         <div slot="refresh-spinner" style="height:160px;">
-            <img src="/static/images/newshop/pul.gif" alt="" style="height:0.3rem;width:0.2rem;">
+            <img :src="pulImgSrc" alt="" style="height:0.3rem;width:0.2rem;">
         </div>
         <slot></slot>
         <div id="main" class="spinner" slot="infinite-spinner">
@@ -20,9 +20,17 @@
 
 <script>
 export default {
-    props: ['refresh', 'infinite'],
+	props: ['refresh', 'infinite', 'LRShakeflag'],
+	data(){
+		return {show: false,onRefresh(){},onInfinite(){}, pulImgSrc: require('../../../../static/images/newshop/pul.gif') }
+	},
     mounted(){
-
+		let _self = this;
+		this.$nextTick(()=>{
+			_self.onRefresh = _self.$props.refresh ? _self.refreshC : null;
+			_self.onInfinite = _self.$props.infinite ? _self.infiniteC : null;
+			_self.show = true;
+		});
     },
     methods:{
         refreshC(done) {

@@ -1,7 +1,9 @@
+// 配送界面 tabs（待抢单，待取货，配送中）
+
 import { Component } from 'vue-property-decorator';
 import BaseVue from 'base.vue';
 
-//import Swiper from 'swiper';
+import Swiper from 'swiper';
 import { timeout, interval } from 'common.env';
 
 
@@ -66,11 +68,9 @@ export class DeliveryTabs extends BaseVue {
     _eventSource;
     mounted() {
         this.$nextTick(() => {
-            //this.$refs.tabsRef.style.minHeight = document.body.offsetHeight + 'px';
+            // this.$refs.tabsRef.style.minHeight = document.body.offsetHeight + 'px';
             this.preWithTabsBd();
             this.initPage();
-
-
 
         });
     }
@@ -80,25 +80,26 @@ export class DeliveryTabs extends BaseVue {
         timeout(() => {
             let _tabsCbdRef = this.$refs.tabsCbdRef;
             if (_tabsCbdRef && !_tabsCbdRef.offsetHeight) {
-                let _tabsCRef = this.$refs.tabsCRef;
-                if (_tabsCRef) {
-                    _tabsCbdRef.style.height = _tabsCRef.offsetHeight + 'px';
-                }
+                _tabsCbdRef.style.height = _tabsCbdRef.parentElement.offsetHeight + 'px';
             }
         }, 10);
     }
 
     initPage() {
         document.title = '配送单';
-        //this.renderSwiper();
+         this.renderSwiper();
         //this.alertNotice();
 
         // 消息链接启动
         this._eventSource = sse().sent('http://localhost:8844/stream', { shopId: 110 }, (res) => {
             console.log('sse data:', res);
-            // if(!this.noticeShow){
-            //     this.alertNotice();
-            // }
+            let _result = res.data;
+            if(_result.errorCode){
+                return;
+            }
+            if(!this.noticeShow){
+                this.alertNotice();
+            }
         });
     }
 
@@ -108,6 +109,8 @@ export class DeliveryTabs extends BaseVue {
         this.swiper = new Swiper(this.$refs.bodyRef, {
             slidesPerView: 'auto',
             direction: 'horizontal',
+            passiveListeners: false,
+            resistanceRatio: 0,
             on: {
                 slideChangeTransitionEnd() {
                     _self.swtichTab(null, this.activeIndex);
@@ -122,7 +125,7 @@ export class DeliveryTabs extends BaseVue {
             let item = this.tabs[index];
             this.headerIndex = index;
             this[item.attr] = true;
-            //this.swiper.slideTo(index);
+            this.swiper.slideTo(index);
         }
     }
 

@@ -8,6 +8,8 @@ export default (_store) => {
     let classfyGoodsList = 'api/q_claid_goods_by_fz';
     let classifyAdImg = 'api/goods/q_classifyAd_by_claid';
     let adUrl = 'api/q_store_ads';//首页广告
+
+    let shopId = _state.workVO.user.userId;
     function q(url, data) {
         return _http({
             data: data,
@@ -18,25 +20,28 @@ export default (_store) => {
     return {
         //分类商品列表
         classfyList() {
-            return q(classfyList, {});
+            return q(classfyList, { shopId: shopId});
         },
         getClassfyGoodsList(opt) {
             return q(classfyGoodsList, {
                 classifyId: opt.classifyId,
                 page: opt.page,
                 limit: opt.limit,
+                shopId: shopId
             })
         },
         getClassifyAdImg(id) {
             return q(classifyAdImg, {
                 classifyId: id,
-                channel: 'store'
+                channel: 'store',
+                shopId: shopId
             })
         },
         homeAd() {
             return q(adUrl, {
-                posId: 1,
-                channel: 'store'
+                posId: 3,
+                channel: 'store',
+                shopId: shopId
             })
         },
         getDiscountPrice(data) {

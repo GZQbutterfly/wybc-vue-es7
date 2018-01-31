@@ -10,7 +10,7 @@
     .cmsHomePic {
         width: 3.5rem;
         height: 1.83rem;
-        padding-top: .56rem;
+        padding-top: .41rem;
         position: relative;
         background: #fff;
         &:before,
@@ -75,10 +75,23 @@
             h4 {
                 font-size: .15rem;
             }
+            h5{
+                font-size: .1rem;
+                font-weight: 300;
+                margin-top: -5px;
+            }
             span {
                 font-size: .12rem;
                 padding: 0 .025rem;
                 border: 1px solid #333333;
+                &.realname_success{
+                    color: #f74cac;
+                    border: 1px solid #f74cac;
+                }
+                &.distributor_realname_success{
+                    color: #53a9fa;
+                    border: 1px solid #53a9fa;
+                }
             }
         }
         .cmsHomeLogOff {

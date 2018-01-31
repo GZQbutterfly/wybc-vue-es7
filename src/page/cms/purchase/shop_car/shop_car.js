@@ -46,13 +46,12 @@ export class CmsPurchaseShopCar extends BaseVue {
     stockTypeShow = false;
     _shopcartCache;
     data() {
-        return {
-
-        };
+        return {};
     }
     mounted() {
         // 注册服务
         this._$service = shopCarService(this.$store);
+        this.initPage();
     }
     activated() {
         document.title = "进货单";
@@ -60,12 +59,24 @@ export class CmsPurchaseShopCar extends BaseVue {
         this.$nextTick(() => {
             this.getShoppcarMsg();
             this.getLeastBuyMoney();
-        })
+        });
 
+    }
+    initPage(){
+        let _self = this;
+        _self.page = 1;
+        _self.edit = "编辑";
+        _self.isEdit = true;
+        _self.checkAll = false;
+        _self.recommendShow = false;
+        _self.isEmpty = true;
+        _self.stockTypeShow = false;
+        _self.validLists = []//购物车列表
+        _self.invalidLists = [];//失效列表
     }
     getShoppcarMsg() {
         this._shopcartCache = JSON.parse(localStorage.getItem("shopcartCache"));
-        let _this = this;
+        let _self = this;
         this.stockTypes = [{
             stocktype: "仓储中心代管",
             stocktypeShow: false
@@ -74,16 +85,8 @@ export class CmsPurchaseShopCar extends BaseVue {
             stocktypeShow: false
         }];
         //用户是否登录
-        _this.page = 1;
-        _this.edit = "编辑";
-        _this.isEdit = true;
-        _this.checkAll = false;
-        _this.recommendShow = false;
-        _this.isEmpty = true;
-        _this.stockTypeShow = false;
-        _this.validLists = []//购物车列表
-        _this.invalidLists = [];//失效列表
-        _this._$service.getShopcarGoodsesList(1).then( async (res) => {
+       
+        _self._$service.getShopcarGoodsesList(1).then( async (res) => {
             if (res.data.errCode) {
                 let dialogObj = {
                     title: '',
@@ -94,15 +97,14 @@ export class CmsPurchaseShopCar extends BaseVue {
                     assistFn() {
                     },
                     mainFn() {
-
                     }
                 };
-                _this.$store.state.$dialog({ dialogObj });
+                _self.$store.state.$dialog({ dialogObj });
                 return;
             }
             if (res.data.data.length == 0) {
-                _this.isEdit = true;
-                _this.isEmpty = true;
+                _self.isEdit = true;
+                _self.isEmpty = true;
                 return;
             }
             if (res.data.message) {
@@ -115,63 +117,73 @@ export class CmsPurchaseShopCar extends BaseVue {
                     assistFn() {
                     },
                     mainFn() {
-
                     }
                 };
-                _this.$store.state.$dialog({ dialogObj });
+                _self.$store.state.$dialog({ dialogObj });
             }
-
-            _this.validLists.length = 0;
-            _this.invalidLists.length = 0;
+            let _validLists = [];
+            let _invalidLists = [];
             if (res.data.data[0].shopId == 0) {
-                _this.wdName = "学惠精选官方商城";
+                _self.wdName = "学惠精选官方商城";
             } else {
-                _this.wdName = res.data.data[0].wdName;
+                _self.wdName = res.data.data[0].wdName;
             }
-            let _result = await _this.changePrice(res.data.data);
-            // _this.infoId = res.data.data[0].infoId;
+            let _result = await _self.changePrice(res.data.data);
+            // _self.infoId = res.data.data[0].infoId;
             _result.forEach(item => {
                 item.check = false;
                 if (item.isSourceGoodsValid == 1 && item.isCampusGoodsValid == 1) {
-                    _this.validLists.push(item);
+                    _validLists.push(item);
                 } else {
-                    _this.invalidLists.push(item);
+                    _invalidLists.push(item);
                 }
             });
-
-            _this.setGoods();
+            _self.validLists = _validLists;
+            _self.invalidLists = _invalidLists;
+            _self.setGoods();
             let num = 0;
-            _this.validLists.forEach(ele => {
+            _validLists.forEach(ele => {
                 num += Number(ele.number);
             });
-            _this.$store.state.shopCar.count = num;
-            if (_this.invalidLists.length == 0) {
-                _this.isShow = false;
+            _self.$store.state.shopCar.count = num;
+            if (_invalidLists.length == 0) {
+                _self.isShow = false;
             } else {
-                _this.isShow = true;
+                _self.isShow = true;
             }
-            if (_this.validLists.length != 0) {
-                _this.isEmpty = false;
+            if (_validLists.length != 0) {
+                _self.isEmpty = false;
             } else {
-                _this.isEmpty = true;
+                _self.isEmpty = true;
             }
 
-        })
+        });
+
+        if(_self.validLists.length){
+            if(!_self.isEdit){
+                _self.edit = "编辑";
+                _self.isEdit = true;
+                _self.checkAll = false;
+                _self.settlement = 0;
+            }
+        }
+
+
         //推荐商品
-        this._$service.getShopcarRecommend().then((res) => {
-            _this.recommendLists.length = 0;
+        this._$service.getShopcarRecommend().then(async (res) => {
             if (res.data.data && res.data.data.length == 0 || res.data.errorCode) {
-                _this.recommendShow = true;
+                _self.recommendLists.length = 0;
+                _self.recommendShow = true;
                 return;
             }
-            _this.recommendShow = false;
-            _this.recommendLists = _this.changePrice(res.data.data);
+            _self.recommendShow = false;
+            _self.recommendLists = await _self.changePrice(res.data.data);
         });
     }
 
     async changePrice(res) {
-        let _this = this;
-        let shopId = _this.$store.state.workVO.user.userId;
+        let _self = this;
+        let shopId = _self.$store.state.workVO.user.userId;
         let goodsIds = []; let opt = { infoId: shopId, listStr: "" };
         res.forEach(ele => {
             goodsIds.push(ele.goodsId)
@@ -186,14 +198,14 @@ export class CmsPurchaseShopCar extends BaseVue {
                 }
             }
         }
-        _this.qflag = false;
+        _self.qflag = false;
         return res;
     }
     //刷新
     refresh(done) {
-        let _this = this;
+        let _self = this;
         setTimeout(() => {
-            _this.getShoppcarMsg();
+            _self.getShoppcarMsg();
             done();
         }, 1500)
     }
@@ -206,37 +218,37 @@ export class CmsPurchaseShopCar extends BaseVue {
         let login = !isNotLogin();
         if (login) {
             this.page++;
-            let _this = this;
+            let _self = this;
             setTimeout(() => {
-                if (_this.page < 2) {
-                    _this.page = 2;
+                if (_self.page < 2) {
+                    _self.page = 2;
                 }
-                _this._$service.getShopcarGoodsesList(_this.page).then( async (res) => {
+                _self._$service.getShopcarGoodsesList(_self.page).then( async (res) => {
                     if (res.data.data.length == 0 || res.data.errCode) {
-                        //    _this.flag = true;
+                        //    _self.flag = true;
                         done(true);
                         return;
                     }
                     console.log(res);
-                    let _result = await _this.changePrice(res.data.data);
+                    let _result = await _self.changePrice(res.data.data);
                     _result.forEach(item => {
                         item.check = false;
                         if (item.isSourceGoodsValid == 1 && item.isCampusGoodsValid == 1) {
-                            _this.validLists.push(item);
+                            _self.validLists.push(item);
                         } else {
-                            _this.invalidLists.push(item);
+                            _self.invalidLists.push(item);
                         }
                     });
-                    _this.setGoods();
+                    _self.setGoods();
                     let num = 0;
-                    _this.validLists.forEach(ele => {
+                    _self.validLists.forEach(ele => {
                         num += Number(ele.number);
                     });
-                    _this.$store.state.shopCar.count = num;
-                    _this.qflag = false;
+                    _self.$store.state.shopCar.count = num;
+                    _self.qflag = false;
                     done(false);
                 });
-                //  done(_this.flag);
+                //  done(_self.flag);
             }, 1500)
         } else {
             setTimeout(() => {
@@ -247,7 +259,7 @@ export class CmsPurchaseShopCar extends BaseVue {
     //选中商品
     setGoods() {
         let goodsId = JSON.parse(localStorage.getItem("checkStateCms"));
-        let _this = this;
+        let _self = this;
         let flag = true;
         if (goodsId && goodsId.length != 0) {
             this.validLists.forEach(item => {
@@ -260,13 +272,13 @@ export class CmsPurchaseShopCar extends BaseVue {
                     flag = false;
                 }
             });
-            _this.checkAll = flag;
-            _this.calTotalMoney();
+            _self.checkAll = flag;
+            _self.calTotalMoney();
         }
     }
     //单选
     onRadio(e, index) {
-        let _this = this;
+        let _self = this;
         this.validLists[index].check = !this.validLists[index].check;
         let goodsId = [];
         let flag = true;
@@ -274,7 +286,7 @@ export class CmsPurchaseShopCar extends BaseVue {
             if (!item.check) {
                 flag = false;
             }
-            if (_this.edit === "编辑") {
+            if (_self.edit === "编辑") {
                 if (item.check) {
                     goodsId.push(item.goodsId);
                 }
@@ -282,14 +294,14 @@ export class CmsPurchaseShopCar extends BaseVue {
         });
         this.checkAll = flag;
         this.calTotalMoney();
-        if (_this.edit == "编辑") {
+        if (_self.edit == "编辑") {
             localStorage.setItem("checkStateCms", JSON.stringify(goodsId));
         }
 
     }
     //全选
     checkAllState(e) {
-        let _this = this;
+        let _self = this;
         let flag = true;
         let goodsId = [];
         if (this.checkAll) {
@@ -298,7 +310,7 @@ export class CmsPurchaseShopCar extends BaseVue {
 
         this.validLists.forEach(item => {
             item.check = flag;
-            if (_this.edit == "编辑") {
+            if (_self.edit == "编辑") {
                 if (item.check) {
                     goodsId.push(item.goodsId);
                 }
@@ -307,10 +319,10 @@ export class CmsPurchaseShopCar extends BaseVue {
         this.checkAll = !this.checkAll;
         this.calTotalMoney();
 
-        if (_this.edit == "编辑") {
+        if (_self.edit == "编辑") {
             localStorage.setItem("checkStateCms", JSON.stringify(goodsId));
         }
-        console.log(_this.edit);
+        console.log(_self.edit);
     }
     //减
     minus(index) {
@@ -340,7 +352,7 @@ export class CmsPurchaseShopCar extends BaseVue {
     }
     //修改购物车数量
     getCount(index) {
-        let _this = this;
+        let _self = this;
         let maxNum = this.validLists[index].maxBuyNum;
         if (maxNum && this.validLists[index].number > maxNum) {
             this.validLists[index].number = maxNum;
@@ -354,9 +366,9 @@ export class CmsPurchaseShopCar extends BaseVue {
         }
         this._$service.changeShopcarNumber(opt).then(res => {
             if (res.data.errorCode) {
-                let _toast = _this.$store.state.$toast;
+                let _toast = _self.$store.state.$toast;
                 _toast({ title: res.data.msg, success: false });
-                _this.validLists[index].number = 1;
+                _self.validLists[index].number = 1;
             }
 
         });
@@ -403,7 +415,7 @@ export class CmsPurchaseShopCar extends BaseVue {
     //删除购物车
     onDelete() {
         //弹出层
-        let _this = this;
+        let _self = this;
 
         if (this.settlement == 0) {
             let dialogObj = {
@@ -429,9 +441,9 @@ export class CmsPurchaseShopCar extends BaseVue {
             assistFn() {
             },
             mainFn() {
-                _this.delete();
-                if (_this.validLists.length === 0) {
-                    _this.isEmpty = true;
+                _self.delete();
+                if (_self.validLists.length === 0) {
+                    _self.isEmpty = true;
                 }
             }
         };
@@ -478,7 +490,7 @@ export class CmsPurchaseShopCar extends BaseVue {
     //结算
     onSettle() {
         let flag = !isNotLogin();//判断用户有缓存登录
-        let _this = this;
+        let _self = this;
         let cartId = [];
 
         this.validLists.forEach(item => {
@@ -513,7 +525,7 @@ export class CmsPurchaseShopCar extends BaseVue {
 
                 },
                 mainFn() {
-                    toLogin(_this.$router, { toPath: 'cms_purchase_shop_car', realTo: 'cms_purchase_shop_car' });
+                    toLogin(_self.$router, { toPath: 'cms_purchase_shop_car', realTo: 'cms_purchase_shop_car' });
                 }
             };
             this.$store.state.$dialog({ dialogObj });
@@ -525,7 +537,7 @@ export class CmsPurchaseShopCar extends BaseVue {
 
     //清空
     onClear() {
-        let _this = this;
+        let _self = this;
         let dialogObj = {
             title: '提示',
             content: '是否清空失效商品?',
@@ -536,29 +548,29 @@ export class CmsPurchaseShopCar extends BaseVue {
             },
             mainFn() {
                 let cartsId = [];
-                _this.invalidLists.forEach(ele => {
+                _self.invalidLists.forEach(ele => {
                     cartsId.push(ele.id);
                 });
                 let opt = {
                     cartId: cartsId.join(',')
                 }
-                _this._$service.deleteShopcar(opt).then(function (res) {
+                _self._$service.deleteShopcar(opt).then(function (res) {
                     console.log(res);
                 })
-                _this.invalidLists = [];
-                _this.isShow = false;
+                _self.invalidLists = [];
+                _self.isShow = false;
             }
         };
         this.$store.state.$dialog({ dialogObj });
     }
     //进货方式
     chooseStockTpe(index) {
-        let _this = this;
-        for (let i = 0, len = _this.stockTypes.length; i < len; i++) {
+        let _self = this;
+        for (let i = 0, len = _self.stockTypes.length; i < len; i++) {
             if (i == index) {
-                _this.stockTypes[i].stocktypeShow = true;
+                _self.stockTypes[i].stocktypeShow = true;
             } else {
-                _this.stockTypes[i].stocktypeShow = false;
+                _self.stockTypes[i].stocktypeShow = false;
             }
         }
         let cartId = [];

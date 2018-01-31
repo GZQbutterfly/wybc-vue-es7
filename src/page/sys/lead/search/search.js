@@ -51,7 +51,7 @@ export class Search extends BaseVue {
             _change();
         });
         this.data_history = this._$service.getShowHistory();
-        this.updateWxShare({hideAllItem: true});
+        this.updateWxShare({ hideAllItem: true });
         this.$nextTick(() => {
             //初始化
             this.initSearch();
@@ -206,7 +206,15 @@ export class Search extends BaseVue {
             page: this.search_page
         };
         sessionStorage.search_shop_cache = JSON.stringify(cache);
-        this.$router.push({ path: 'home', query: { shopId: item.infoId || item.shopId } })
+
+        // 进入页面首页时，将该店铺信息写入缓存
+
+        let localWdInfo = localStorage.wdVipInfo ? JSON.parse(localStorage.wdVipInfo) : {};
+
+        localStorage.wdVipInfo = JSON.stringify(Object.assign(localWdInfo, item));
+
+
+        this.$router.push({ path: 'home', query: { shopId: item.infoId || item.shopId, from: 'lead' } })
     }
 }
 

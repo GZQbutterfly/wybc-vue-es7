@@ -1,4 +1,4 @@
-import { getUrlParams, getLocalUserInfo ,getAuthUser, isNotLogin} from '../common.env';
+import { getUrlParams, getLocalUserInfo, getAuthUser, isNotLogin } from '../common.env';
 
 
 
@@ -29,26 +29,31 @@ export default (_store) => {
                             if (_result && !_result.errorCode) {
                                 localStorage.wdVipInfo = JSON.stringify(_result.wdVipInfo);
                                 resolve(_result.wdVipInfo);
-                            }else{
+                            } else {
                                 reject(_result);
                             }
                         });
                 } else if (params.shopId && localWdInfo) {
+
+                    // 写入浏览记录
+                    !isNotLogin() && q(wdrecodeUser, { shopId: params.shopId });
+
+                    // 来自前置页，无须重新写入数据
+                    if (params.from === 'lead') {
+                        return;
+                    }
+                    
                     q(wdInfo, { shopId: params.shopId })
                         .then(res => {
                             let _result = res.data;
                             if (_result && !_result.errorCode) {
                                 localStorage.wdVipInfo = JSON.stringify(_result.wdVipInfo);
                                 //记录当前浏览店铺
-                                if(isNotLogin()){
+                                if (isNotLogin()) {
                                     // q(wdrecode, {
                                     //     shopId: params.shopId,
                                     //     openId: getAuthUser().openid
                                     // })
-                                }else{
-                                    q(wdrecodeUser, {
-                                        shopId: params.shopId
-                                    })
                                 }
                             }
                             resolve(_result.wdVipInfo);
@@ -65,8 +70,7 @@ export default (_store) => {
                 } else {
                     return resolve(localWdInfo);
                 }
-            }
-            )
+            });
             return promsi;
         }
     }

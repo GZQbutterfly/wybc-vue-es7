@@ -4,6 +4,8 @@ export default (_store) => {
 
     //获取实名认证信息
     let queryrealname = 'api/q_real_name';
+    //获取配送员实名认证
+    let querydistributorrealname = 'api/q_real_name';
     //获取用户店铺信息
     let queryshopInfo = 'api/wd_vip/queryWdInfo';
     //获取用户钱包余额
@@ -28,6 +30,10 @@ export default (_store) => {
         //获取实名认证信息
         queryRealName() {
             return q(queryrealname, {});
+        },
+        //获取配送员认证信息
+        queryDistributorRealName(){
+            return q(querydistributorrealname, {});
         },
         //获取用户钱包余额
         queryUserMoney() {
@@ -92,6 +98,12 @@ export default (_store) => {
                     canVisit: true,
                 },
                 {
+                    href: 'delivery_order',
+                    icon: '/static/images/minishop/ps.png',
+                    title: '我的配送',
+                    canVisit: true,
+                },
+                {
                     href: 'my_spread',
                     icon: '/static/images/minishop/s5.png',
                     title: '我要推广',
@@ -109,32 +121,6 @@ export default (_store) => {
                     title: '联系客服',
                     canVisit: true,
                 },
-                /* -----华丽的分割线----- */
-                // {
-                //     href:'/cmsOrder',
-                //     icon:'/static/images/minishop/s2.png',
-                //     title:'用户订单',
-                // },
-                // {
-                //     href:'',
-                //     icon:'/static/images/minishop/s4.png',
-                //     title:'头条资讯',
-                // },
-                // {
-                //     href:'/withdraws_list',
-                //     icon:'/static/images/minishop/s6.png',
-                //     title:'提现',
-                // },
-                // {
-                //     href:'',
-                //     icon:'/static/images/minishop/s7.png',
-                //     title:'收益明细',
-                // },
-                // {
-                //     href:'',
-                //     icon:'/static/images/minishop/s9.png',
-                //     title:'进入微店',
-                // },
             ];
             return Promise.resolve(data);
         }

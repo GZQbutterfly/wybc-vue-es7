@@ -4,13 +4,13 @@
         <div class="indexBox_logo">
             <dl class="wdName">
                 <dt>
-                    <img :src="shopkeeper.wdImg?shopkeeper.wdImg:'/static/images/newshop/touxiang.png'">
+                    <img :src="shopkeeper.wdImg">
                 </dt>
                 <dd>
                     <h4>{{shopkeeper.wdName}}</h4>
                     <span>{{shopkeeper.school}}</span>
-                    <p v-if="shopkeeper.wdVipGrade">
-                        <span>{{'M'+shopkeeper.wdVipGrade}}</span>
+                    <p>
+                        <span>{{'M'+shopkeeper.vipGrade}}</span>
                     </p>
                 </dd>
             </dl>
@@ -52,7 +52,7 @@
             <!-- 精品兑换 -->
             <ul class="goodsList">
                 <li v-for="item in classfyGoodses">
-                    <div v-if="item.goodsList.length>0" class="li_top">
+                    <div v-if="item.goodsList&&item.goodsList.length>0" class="li_top">
                         <div class="img">
                             <img :src="item.goodsList[0].nameImgUrl" alt="">
                         </div>

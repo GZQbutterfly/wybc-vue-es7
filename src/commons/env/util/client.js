@@ -28,6 +28,10 @@ export function isNativeiOS(){
     return /Native_iOS/.test(_ua);
 }
 
+export function isNativeAndroid(){
+    return /Native_Android/.test(_ua);
+}
+
 //判断QQ浏览器
 export function isQQBrowser() {
     return /MQQbrowser/i.test(_ua);

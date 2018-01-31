@@ -2,7 +2,7 @@
     <div class="userinfo_web" ref="userinfo">
         <section class="box user" ref="user">
             <div class="box_bd">
-                <aside class="text-left" :data-numb=" userMsgNum ? userMsgNum : '' " v-if="userLogin">
+                <aside class="userinfo-msg" :data-numb=" userMsgNum ? userMsgNum : '' " v-if="userLogin">
                     <i class="iconfont icon-talk" @click="toUserMsg()">
                     </i>
                 </aside>

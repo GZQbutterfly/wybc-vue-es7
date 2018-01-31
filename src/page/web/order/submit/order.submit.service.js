@@ -16,6 +16,13 @@ export default (_store) => {
     return {
 
         /**
+         * 获取微店信息
+         */
+        getWdInfo(shopId) {
+            return q("api/wd_vip/queryWdInfo", { shopId: shopId });
+        }, 
+
+        /**
          * 查询购物车商品详情
          */
         queryCarOrders(data) {

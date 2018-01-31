@@ -12,7 +12,9 @@
                 <img :src="user_img" alt="" @error="imgError()">
             </figure>
             <h4>{{ shopData.wdName }}</h4>
-            <span @click="toAuthPage" v-text="realNameStateList[realNameInfo.data.state]"></span>
+            <h5>{{ shopData.school }}</h5>
+            <span :class="{'realname_success':realNameInfo.data.state == 4}" @click="toAuthPage" v-text="realNameStateList[realNameInfo.data.state]"></span>
+            <span :class="{'distributor_realname_success':realNameInfo.data.state == 4}" @click="toDistributorAuthPage" v-text="distributorRealNameStateList[realNameInfo.data.state]"></span>
         </div>
         <div class="cmsHomeLogOff">
             <i class="iconfont icon-xinfeng" :data-numb=" msgNum ? msgNum : '' " @click="toMessageNotice"></i>

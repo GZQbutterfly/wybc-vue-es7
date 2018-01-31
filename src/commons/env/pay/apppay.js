@@ -1,15 +1,11 @@
 import Vue from 'vue';
 import { merge } from 'lodash';
-
-
 import { PayComponent } from './pay.component';
-
 // 集成 微信， 支付宝  支付
 import { WxPay } from './wxpay';
 import { AliPay } from './alipay';
 import { resolve } from 'path';
 
-//
 /**
  * 移动端支付类
  */

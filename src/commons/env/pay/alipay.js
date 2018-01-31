@@ -1,11 +1,7 @@
 import Vue from 'vue';
 import { merge } from 'lodash';
-
 import { qs, baseURL, getLocalUserInfo } from 'common.env';
-
-
 import { PayComponent } from './pay.component';
-//
 
 let appid = process.env.NODE_ENV == 'development' ? '2017082208323174' : '2017082208323174';
 

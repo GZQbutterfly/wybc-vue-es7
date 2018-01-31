@@ -23,7 +23,8 @@
             }
         }
         .foot-history {
-            height: 210px;
+            min-height: 200px;
+            padding-bottom: 10px;
             background-color: #fff;
             align-items: center; // &_hd {}
             // &_bd {}

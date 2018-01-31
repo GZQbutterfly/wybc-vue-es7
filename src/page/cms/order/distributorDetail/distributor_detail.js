@@ -7,7 +7,7 @@ import './distributor_detail.scss';
 })
 export class DistributorDetail extends BaseVue {
     data = { money: 200, from: '北京', fromAddress: '北京天安门', to: '成都', toAddress: '成都天府广场' };
-    orderInfo = { orderState: 6 }
+    orderInfo = { orderState: 5 }
     mounted() {
 
     }

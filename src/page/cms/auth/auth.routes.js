@@ -31,7 +31,18 @@ const routes = [
             }, 'cms/auth/realname');
         }
     },
-    //配送员实名认证
+
+    // 配送员 实名认证
+    {
+        path: '/distributor_realname',
+        name: 'distributor_realname',
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('./distributorRealName/distributor.real.name')['DistributorRealName']);
+            }, 'cms/auth/distributorRealName');
+        }
+    },
+    // 配送员 实名认证填写
     {
         path: '/distributor_realname_form',
         name: 'distributor_realname_form',
@@ -41,14 +52,24 @@ const routes = [
             }, 'cms/auth/distributorRealName');
         }
     },
-    //配送员押金deposit
+    // 配送员 实名认证返回结果页
     {
-        path: '/deposit',
-        name: 'deposit',
+        path: '/distributor_realname_result',
+        name: 'distributor_realname_result',
         component: resolve => {
             require.ensure([], require => {
-                resolve(require('./deposit/deposit')['Deposit']);
-            }, 'cms/auth/deposit');
+                resolve(require('./distributorRealName/result/distributor.result')['DistributorRealNameResult']);
+            }, 'cms/auth/distributorRealName');
+        }
+    },
+    //配送员押金deposit
+    {
+        path: '/distributor_deposit',
+        name: 'distributor_deposit',
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('./distributorDeposit/distributor.deposit')['DistributorDeposit']);
+            }, 'cms/auth/distributorDeposit');
         }
     },
 

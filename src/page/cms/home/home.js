@@ -1,13 +1,8 @@
-// 微店管理端 首页
 import {Component} from 'vue-property-decorator';
-
 import  Swiper  from 'swiper';
 import BaseVue  from 'base.vue';
 import { isNotLogin, toLogin, pageNotAccess, interval } from 'common.env';
-
-
 import { TopNotice } from '../../sys/notice/top/top.notice';
-
 import homeServer from './home.service';
 import './home.scss';
 
@@ -17,6 +12,7 @@ import './home.scss';
         'app-topnotice': TopNotice
     }
 })
+
 export class CmsHome extends BaseVue {
     userLogin = false;
     //用户头像
@@ -31,39 +27,41 @@ export class CmsHome extends BaseVue {
     shopData = {
         vip: '0',
         wdName: '？？？',
-        vipName: '',
+        vipName: '？？？',
+        school: '？？？'
     };
     bannerData = [];
+    msgNum = 0;
     realNameInfo = {
         data: {state: 0}
     };
-
-    msgNum = 0;
     realNameStateList = [
         '未实名认证',
-        '认证审核中',
-        '实名认证未通过',
+        '实名认证审核中',
+        '实名认证失败',
         '实名认证异常',
-        '实名认证成功'
+        '已实名认证',
+    ];
+    distributorRealNameInfo = {
+        data: {state: 0}
+    };
+    distributorRealNameStateList = [
+        '未认证配送员',
+        '配送员认证审核中',
+        '配送员认证失败',
+        '配送员认证异常',
+        '已认证配送员',
     ];
      _$service;
-    // top notice  config
     msgOpts = {
         list: []
     };
+    pageLife = true;    //当前页面是否活动中(用于关闭消息的定时器)
 
-    //当前页面是否活动中(用于关闭消息的定时器)
-    pageLife = true;
-    data() {
-        return {};
-    }
     mounted() {
         document.title = "学惠店管理端";
         let _self = this;
-        // 注册服务
         _self._$service = homeServer(_self.$store);
-
-        // 页面执行
         _self.$nextTick(() => {
             _self.queryUserInfo();
         })
@@ -88,6 +86,8 @@ export class CmsHome extends BaseVue {
             _self.queryShopInfo().then(() => {
                 //实名
                 _self.queryRealName();
+                //配送员认证
+                _self.queryDistributorRealName();
                 //系统消息
                 _self.querySystemMsg();
             });
@@ -112,6 +112,17 @@ export class CmsHome extends BaseVue {
     }
 
     /**
+     * 获取用户实名认证
+     */
+    queryDistributorRealName() {
+        let _self = this;
+        this._$service.queryDistributorRealName().then((res) => {
+            console.log('用户实名认证信息', res.data);
+            _self.distributorRealNameInfo = res;
+        });
+    }
+
+    /**
      * 获取用户钱包余额
      */
     queryUserMoney() {
@@ -131,6 +142,7 @@ export class CmsHome extends BaseVue {
             _self.shopData.wdName = res.data.wdVipInfo.wdName || '？？？';
             _self.shopData.vip = res.data.wdVipInfo.wdVipGrade || '0';
             _self.shopData.vipName = res.data.gradeName || '';
+            _self.shopData.school = res.data.wdVipInfo.school || '';
         });
     }
 
@@ -318,12 +330,25 @@ export class CmsHome extends BaseVue {
     // 去 实名认证
     toAuthPage() {
         let _self = this;
-        if (_self.realNameInfo.data.state == 0 || _self.realNameInfo.data.state == 3) {
+        let result = _self.realNameInfo.data;
+        if (result.state == 0 || result.state == 3) {
             this.$router.push('realname');
         } else {
-            this.$router.push({ path: 'realname_result', query: { result: _self.realNameInfo.data } });
+            this.$router.push({ path: 'realname_result', query: { result: result } });
         }
     }
+    // 去 配送员 实名认证
+    toDistributorAuthPage(){
+        let _self = this;
+        let result = _self.distributorRealNameInfo.data;
+        // result.state = 0;
+        if (result.state == 0 || result.state == 3) {
+            this.$router.push('distributor_realname');
+        } else {
+            this.$router.push({ path: 'distributor_realname_result', query: { result: result } });
+        }
+    }
+
     // 去 我的钱包
     toWallet() {
         this.$router.push('my_wallet');

@@ -1,8 +1,10 @@
 export default (_store) => {
     let _state = _store.state;
     let _http = _state.$http;
-    let shopId = _state.workVO.user.userId;
-    let classfyList = 'api/goods/q_classifys_icon';  //分类图标列表
+
+    //获取实名认证信息
+    let queryrealname = 'api/q_real_name';
+
     function q(url, data) {
         return _http({
             data: data,
@@ -10,10 +12,12 @@ export default (_store) => {
             method: 'post'
         });
     }
+
     return {
-        //分类商品列表
-        classfyList() {
-            return q(classfyList, { shopId: shopId });
+
+        //获取实名认证信息
+        queryRealName() {
+            return q(queryrealname);
         }
     }
 }

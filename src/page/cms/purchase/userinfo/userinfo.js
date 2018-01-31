@@ -1,6 +1,6 @@
 import { Component} from 'vue-property-decorator';
 import  BaseVue from 'base.vue';
-import { isNotLogin, toLogin, loginDialog, setUserValid, getAuthUser, isWeiXin, setCleanLocalinfo, toWEB, pageNotAccess } from 'common.env';
+import { isNotLogin, toLogin, loginDialog, setUserValid, getAuthUser, isWeiXin, toWEB, pageNotAccess } from 'common.env';
 import userInfoService from './userinfo.service';
 import './userinfo.scss';
 
@@ -53,11 +53,6 @@ export class CmsPurchaseUserinfo extends BaseVue {
                 dom.addEventListener('touchmove', touchmove)
                 dom.addEventListener('touchend', touchend);
             });
-        });
-
-        //监听
-        setCleanLocalinfo(() => {
-            this.initUser();
         });
     }
 

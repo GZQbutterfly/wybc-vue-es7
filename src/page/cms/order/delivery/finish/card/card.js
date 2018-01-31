@@ -19,8 +19,15 @@ export class Card extends Vue {
 
     pointImgSrc = require('../../../../../../static/images/delivery/jiantou.png');
 
-    mounted () {
-        
+    mounted() {
+
+    }
+
+    toDetail() {
+
+
+        this.$router.push({ path: 'delivery_finish_detail', query: { id: '12312' } })
+
     }
 
 }
