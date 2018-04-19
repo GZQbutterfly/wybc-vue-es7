@@ -1,9 +1,10 @@
 .distributor {
     position: relative;
     height: 100%;
-    .loading-layer{
+    .loading-layer {
         display: none;
-    } section {
+    }
+    section {
         padding: 0 12px 10px 12px;
         width: 100%;
         overflow: hidden;
@@ -26,7 +27,7 @@
             }
         }
         .order-wait {
-            color: 333;
+            color: #333;
             font-size: 15px;
         }
         .order-red {
@@ -50,13 +51,12 @@
                 clear: both;
                 height: .16rem;
                 display: table;
-                margin: 0 auto;
-                &.e6e6e6 {
-                    b,
-                    i {
-                        background-color: #e6e6e6;
-                    }
-                }
+                margin: 0 auto; // &.e6e6e6 {
+                //     b,
+                //     i {
+                //         background-color: #e6e6e6;
+                //     }
+                // }
                 b {
                     position: relative;
                     font-size: .18rem;
@@ -80,10 +80,6 @@
                     z-index: 9999;
                     margin: 0
                 }
-                .weui-icon-success~b,
-                .weui-icon-success~i {
-                    background-color: #e6e6e6;
-                }
                 i {
                     display: inline-block;
                     vertical-align: middle;
@@ -91,6 +87,10 @@
                     width: 1.2rem;
                     height: .02rem;
                     background-color: #7ecc44;
+                }
+                .weui-icon-success~b,
+                .weui-icon-success~i {
+                    background-color: #e6e6e6;
                 }
             }
         }
@@ -106,7 +106,7 @@
         color: 333;
     }
     .order-distribute-adress {
-        height: 140px;
+        min-height: 120px;
         background: #fff;
         padding: 12px;
         .flex-align {
@@ -118,7 +118,7 @@
         .adress {
             font-size: 15px;
             margin-left: 28px;
-            color: 333;
+            color: #333;
         }
         img {
             height: 18px;
@@ -131,7 +131,7 @@
         span {
             margin-left: 10px;
             font-size: 15px;
-            color: 333;
+            color: #333;
         }
         .color-80 {
             color: #808080;
@@ -158,6 +158,23 @@
         .order-goods {
             justify-content: space-between;
             align-items: center;
+            span:nth-child(1) {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                display: block;
+                width: 150px;
+            }
+            span:nth-child(3) {
+                width: 160px;
+                display: block;
+                text-align: right;
+                line-height: 16px;
+                img{
+                    height: 16px;
+                    width: 16px;
+                }
+            }
         }
         .order-toatl {
             height: 41px;
@@ -175,6 +192,35 @@
         padding-left: 12px;
         background: #fff;
     }
+    .order-text {
+        margin-top: 4px;
+    }
+    button {
+        display: block;
+        width: 100%;
+        font-size: 17px;
+        height: 36px;
+        border-radius: 5px;
+        &.primary {
+            color: #fff;
+            background-color: #7ecc44;
+        }
+        &.default {
+            color: #333;
+            background-color: #fff;
+            border: 1px solid #808080;
+        }
+        &:nth-child(2) {
+            margin-left: 10px;
+        } // &[disabled]{
+        //     background-color: #F7F7F7;
+        //     color: #333;
+        //     // border: 1px solid #808080;
+        // }
+    }
+    .success {
+        color: #7ecc44;
+    }
     footer {
         position: fixed;
         bottom: 0;
@@ -190,6 +236,13 @@
         .primary {
             color: #fff;
             background-color: #7ecc44;
+        }
+        .color-white {
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            background-color: #fff;
+            color: #808080;
         }
         .foot {
             width: 100%;
@@ -213,5 +266,23 @@
                 background-color: #7ecc44;
             }
         }
+    }
+    .right {
+        margin-left: 10px;
+        font-size: 15px;
+        color: #333;
+    }
+    .icon-truck {
+        font-size: 20px;
+        margin-right: 8px;
+    }
+    .disabled-btn {
+        background-color: #F7F7F7!important;
+        color: rgba(0, 0, 0, 0.3)!important; // border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+    .sex-drom {
+        font-size: 12px;
+        color: #808080;
+        margin-left: 28px;
     }
 }

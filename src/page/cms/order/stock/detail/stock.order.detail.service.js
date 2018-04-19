@@ -21,9 +21,10 @@ export default (_store) => {
         /**
          * 查询订单详情
          */
-        getOrderInfo(orderId) {
+        getOrderInfo(orderId, combinOrderNo) {
             let data = {
-                orderId: orderId
+                orderId: orderId,
+                combinOrderNo
             }
             return q(orderinfourl, data);
         },

@@ -1,5 +1,6 @@
-<pull-refresh :refresh="refresh" :infinite="infinite">
-    <div class="msg-notice-container">
+<pull-refresh :refresh="refresh" :infinite="infinite" :pages="{page: page, total: list.length}">
+    <!--   -->
+    <div class="msg-notice-container" >
         <template v-for="item, index in list">
             <span class="msg-notice-date">{{item.maketime | date('yyyy-MM-dd hh:mm:ss')}}</span>
             <div class="msg-notice-box">
@@ -15,7 +16,11 @@
                     </div>
                 </div>
                 <div class="box-line"></div>
-                <div class="box-ft weui-flex" @click="toOrderDetail(item)">
+                <div class="box-ft weui-flex" @click="toOrderDetail(item)" v-if="item.msgType != 2 && item.msgType != 6 ">
+                    <div class="weui-flex__item">查看详情</div>
+                    <i class="icon iconfont icon-mjiantou"></i>
+                </div>
+                <div class="box-ft weui-flex" @click="toDayTask(item)" v-else-if="item.msgType == 6 ">
                     <div class="weui-flex__item">查看详情</div>
                     <i class="icon iconfont icon-mjiantou"></i>
                 </div>

@@ -43,11 +43,12 @@ export default (_store) => {
          * 获取搜索结果
          * @param keyword
          */
-        getGoods(keyword, page, limit) {
+        getGoods(keyword, page, limit, magType) {
             let data = {
                 keyword: keyword,
                 page: page,
-                limit: limit
+                limit: limit,
+                 magType: magType
             }
             return q(goodslisturl, data)
         },

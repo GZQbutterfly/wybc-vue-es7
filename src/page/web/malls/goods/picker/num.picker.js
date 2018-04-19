@@ -4,7 +4,7 @@ require('./num.picker.scss');
 
 @Component({
     template: require('./num.picker.html'),
-    props: ['goods', 'affirmFn', 'showIt', 'hideFn', 'closeFn','min']
+    props: ['goods', 'affirmFn', 'showIt', 'hideFn', 'closeFn',"fastStockObj"]
 })
 
 export class NumberPicker extends Vue {
@@ -38,8 +38,7 @@ export class NumberPicker extends Vue {
         //can't send data 2 parentNode
         //so try callback use parent's fucntion
         if (this.$props.hideFn) {
-            this.$props.hideFn();
-            
+            this.$props.hideFn();   
         }
     }
 
@@ -64,7 +63,7 @@ export class NumberPicker extends Vue {
             return;
         }
         if (this.$props.affirmFn) {
-            this.$props.affirmFn(this.num);
+            this.$props.affirmFn(this.num, this.$props.fastStockObj.deliveryType, this.$props.fastStockObj.amount);
         }
         this.cancel();
         this.num = 1;
@@ -87,8 +86,7 @@ export class NumberPicker extends Vue {
     }
     increase() {
         this.num++;
-        this.getCount();
-       
+        this.getCount(); 
     }
     getCount(){
         let _this = this;

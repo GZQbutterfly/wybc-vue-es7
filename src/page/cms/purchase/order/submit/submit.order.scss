@@ -1,4 +1,8 @@
 #order-submit-container-import {
+    .order-border {
+        background: #fff;
+        margin: 4px 0 5px;
+    }
     .flex-satisfy {
         width: 100%;
         background-color: #fefbee;
@@ -8,7 +12,7 @@
             justify-content: center;
             align-items: center;
             i {
-                font-size: 0.2rem!important;
+                font-size: 0.2rem !important;
                 margin-right: 0.05rem;
             }
             b {
@@ -25,7 +29,7 @@
         height: 0.2rem;
         line-height: 0.16rem;
     }
-    .red{
+    .red {
         color: #ff1c1c;
     }
     color: #333;
@@ -37,9 +41,18 @@
             margin-left: 28px;
             margin-bottom: 10px;
         }
+        .address-detail-sex {
+            font-size: 12px;
+            color: #808080;
+            margin-left: 5px;
+        }
         .pad {
             padding-bottom: 5px;
+            flex-wrap: wrap;
         }
+    }
+    .address-sjr {
+        width: 160px;
     }
     .loading-layer {
         display: none;
@@ -95,8 +108,7 @@
         select {
             border: 0;
             outline: 0;
-            color: #333;
-            appearance: none;
+            color: #333; // appearance: none;
             -moz-appearance: none;
             -webkit-appearance: none;
             box-sizing: border-box;
@@ -131,6 +143,9 @@
         color: #333;
         font-size: 16.5px;
     }
+    .orange {
+        color: #f9820d;
+    }
     .order-num-tip {
         font-size: 13px;
         color: #808080;
@@ -144,7 +159,8 @@
     }
     .order-img {
         padding-top: 5px;
-        height: 65px;
+        height: 65px !important;
+        width: 85px !important;
         padding-left: 5px;
         padding-right: 18px;
     }
@@ -193,7 +209,7 @@
             justify-content: center;
             align-items: center;
             i {
-                font-size: 0.2rem!important;
+                font-size: 0.2rem !important;
                 color: #7ecc44;
             }
             b {
@@ -207,7 +223,7 @@
             }
         }
     }
-     .order-show1 {
+    .order-show1 {
         color: #808080;
         font-size: .13rem;
         span {
@@ -294,6 +310,20 @@
         font-size: 17px;
         &:focus {
             background-color: transparentize($bgcolor, 0.3);
+        }
+    }
+}
+
+.fastdelivery-dialog {
+    // &_hd{
+    // }
+    &_bd {
+        margin-top: 10px;
+        span:last-child {
+            margin-left: 15px;
+        }
+        i {
+            margin-right: 5px;
         }
     }
 }

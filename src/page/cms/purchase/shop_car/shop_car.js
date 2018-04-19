@@ -39,7 +39,7 @@ export class CmsPurchaseShopCar extends BaseVue {
         stocktype: "仓储中心代管",
         stocktypeShow: false
     }, {
-        stocktype: "商品自行管理",
+        stocktype: "快速仓自储",
         stocktypeShow: false
     }];
 
@@ -58,6 +58,7 @@ export class CmsPurchaseShopCar extends BaseVue {
         // keep-alive 时 会执行activated
         this.$nextTick(() => {
             this.getShoppcarMsg();
+            this.queryRecommendGoods();
             this.getLeastBuyMoney();
         });
 
@@ -77,11 +78,12 @@ export class CmsPurchaseShopCar extends BaseVue {
     getShoppcarMsg() {
         this._shopcartCache = JSON.parse(localStorage.getItem("shopcartCache"));
         let _self = this;
+        _self.stockTypeShow = false;
         this.stockTypes = [{
             stocktype: "仓储中心代管",
             stocktypeShow: false
         }, {
-            stocktype: "商品自行管理",
+            stocktype: "快速仓自储",
             stocktypeShow: false
         }];
         //用户是否登录
@@ -128,8 +130,7 @@ export class CmsPurchaseShopCar extends BaseVue {
             } else {
                 _self.wdName = res.data.data[0].wdName;
             }
-            let _result = await _self.changePrice(res.data.data);
-            // _self.infoId = res.data.data[0].infoId;
+            let _result = res.data.data;
             _result.forEach(item => {
                 item.check = false;
                 if (item.isSourceGoodsValid == 1 && item.isCampusGoodsValid == 1) {
@@ -167,8 +168,9 @@ export class CmsPurchaseShopCar extends BaseVue {
                 _self.settlement = 0;
             }
         }
-
-
+    }
+    queryRecommendGoods(){
+        let _self = this;
         //推荐商品
         this._$service.getShopcarRecommend().then(async (res) => {
             if (res.data.data && res.data.data.length == 0 || res.data.errorCode) {
@@ -177,10 +179,9 @@ export class CmsPurchaseShopCar extends BaseVue {
                 return;
             }
             _self.recommendShow = false;
-            _self.recommendLists = await _self.changePrice(res.data.data);
+            _self.recommendLists = res.data.data;
         });
     }
-
     async changePrice(res) {
         let _self = this;
         let shopId = _self.$store.state.workVO.user.userId;
@@ -211,50 +212,7 @@ export class CmsPurchaseShopCar extends BaseVue {
     }
     //加载更多
     infinite(done) {
-        if (this.qflag) {
-            done(false);
-            return;
-        }
-        let login = !isNotLogin();
-        if (login) {
-            this.page++;
-            let _self = this;
-            setTimeout(() => {
-                if (_self.page < 2) {
-                    _self.page = 2;
-                }
-                _self._$service.getShopcarGoodsesList(_self.page).then( async (res) => {
-                    if (res.data.data.length == 0 || res.data.errCode) {
-                        //    _self.flag = true;
-                        done(true);
-                        return;
-                    }
-                    console.log(res);
-                    let _result = await _self.changePrice(res.data.data);
-                    _result.forEach(item => {
-                        item.check = false;
-                        if (item.isSourceGoodsValid == 1 && item.isCampusGoodsValid == 1) {
-                            _self.validLists.push(item);
-                        } else {
-                            _self.invalidLists.push(item);
-                        }
-                    });
-                    _self.setGoods();
-                    let num = 0;
-                    _self.validLists.forEach(ele => {
-                        num += Number(ele.number);
-                    });
-                    _self.$store.state.shopCar.count = num;
-                    _self.qflag = false;
-                    done(false);
-                });
-                //  done(_self.flag);
-            }, 1500)
-        } else {
-            setTimeout(() => {
-                done(true);
-            }, 1500);
-        }
+      done(true);
     }
     //选中商品
     setGoods() {
@@ -352,13 +310,13 @@ export class CmsPurchaseShopCar extends BaseVue {
     }
     //修改购物车数量
     getCount(index) {
-        let _self = this;
-        let maxNum = this.validLists[index].maxBuyNum;
-        if (maxNum && this.validLists[index].number > maxNum) {
-            this.validLists[index].number = maxNum;
-            let _toast = this.$store.state.$toast;
-            _toast({ title: '一次最多购买' + maxNum + '件', success: false });
-        }
+        // let _self = this;
+        // let maxNum = this.validLists[index].maxBuyNum;
+        // if (maxNum && this.validLists[index].number > maxNum) {
+        //     this.validLists[index].number = maxNum;
+        //     let _toast = this.$store.state.$toast;
+        //     _toast({ title: '一次最多购买' + maxNum + '件', success: false });
+        // }
         let opt = {
             cartId: this.validLists[index].id,
             num: this.validLists[index].number,
@@ -409,6 +367,7 @@ export class CmsPurchaseShopCar extends BaseVue {
             })
             this.checkAll = false;
             this.setGoods();
+            this.getShoppcarMsg();
         }
         this.calTotalMoney();
     }
@@ -492,11 +451,15 @@ export class CmsPurchaseShopCar extends BaseVue {
         let flag = !isNotLogin();//判断用户有缓存登录
         let _self = this;
         let cartId = [];
-
+        let stockFlag = false;
         this.validLists.forEach(item => {
             if (item.check) {
                 cartId.push(item.id);
+                if (!stockFlag&&item.maxBuyNum < item.number) {
+                    stockFlag = true;
+                }
             }
+           
         });
         if (cartId.length == 0) {
             let dialogObj = {
@@ -507,6 +470,22 @@ export class CmsPurchaseShopCar extends BaseVue {
                 type: 'info',
                 assistFn() {
                     console.log('ok');
+                },
+                mainFn() {
+                }
+            };
+            this.$store.state.$dialog({ dialogObj });
+            return;
+        }
+        if(stockFlag){
+            let dialogObj = {
+                title: '提示',
+                content: '部分商品库存不足',
+                assistBtn: '',
+                mainBtn: '确定',
+                type: 'info',
+                assistFn() {
+
                 },
                 mainFn() {
                 }
@@ -531,8 +510,8 @@ export class CmsPurchaseShopCar extends BaseVue {
             this.$store.state.$dialog({ dialogObj });
             return;
         }
-        this.stockTypeShow = true;
-
+        // this.stockTypeShow = true;
+        this.$router.push({ path: 'cms_purchase_submit_order', query: { cartId: cartId.join(','), orderSrouce: 'car', stockType: 1 } });
     }
 
     //清空
@@ -564,26 +543,26 @@ export class CmsPurchaseShopCar extends BaseVue {
         this.$store.state.$dialog({ dialogObj });
     }
     //进货方式
-    chooseStockTpe(index) {
-        let _self = this;
-        for (let i = 0, len = _self.stockTypes.length; i < len; i++) {
-            if (i == index) {
-                _self.stockTypes[i].stocktypeShow = true;
-            } else {
-                _self.stockTypes[i].stocktypeShow = false;
-            }
-        }
-        let cartId = [];
-        this.validLists.forEach(item => {
-            if (item.check) {
-                cartId.push(item.id);
-            }
-        });
-        this.$router.push({ path: 'cms_purchase_submit_order', query: { cartId: cartId.join(','), orderSrouce: 'car', stockType: index } });
-    }
-    onClose() {
-        this.stockTypeShow = false;
-    }
+    // chooseStockTpe(index) {
+    //     let _self = this;
+    //     for (let i = 0, len = _self.stockTypes.length; i < len; i++) {
+    //         if (i == index) {
+    //             _self.stockTypes[i].stocktypeShow = true;
+    //         } else {
+    //             _self.stockTypes[i].stocktypeShow = false;
+    //         }
+    //     }
+    //     let cartId = [];
+    //     this.validLists.forEach(item => {
+    //         if (item.check) {
+    //             cartId.push(item.id);
+    //         }
+    //     });
+    //     this.$router.push({ path: 'cms_purchase_submit_order', query: { cartId: cartId.join(','), orderSrouce: 'car', stockType: index } });
+    // }
+    // onClose() {
+    //     this.stockTypeShow = false;
+    // }
     //最低购买金额
     getLeastBuyMoney() {
         let _self = this;
@@ -591,5 +570,30 @@ export class CmsPurchaseShopCar extends BaseVue {
             _self.isFirst = res.data.flag;
             _self.leastMoney = res.data.leastBuy;
         });
+    }
+    QuicklyJoinTheShoppingCart(item){
+        event.stopPropagation(); 
+        let _self = this;
+        let opt = {
+            goodsId: item.goodsId,
+            number: 1
+        }
+        this._$service.addGoods(opt).then(res => {
+            if (res.data.errorCode) {
+                let _toast = _self.$store.state.$toast;
+                _toast({ title: res.data.msg, success: false });
+                return;
+            }
+            let _toast = _self.$store.state.$toast;
+            _toast({ title: '加入进货单成功' });
+            _self.getShoppcarMsg();
+        })
+       
+    }
+    toDetail(goodsId){
+        this.$router.push({ path:"cms_purchase_goods_detail",query:{goodsId:goodsId}})
+    }
+    goCouponList(){
+        this.$router.push({ path:"cms_mask_coupon"})
     }
 }

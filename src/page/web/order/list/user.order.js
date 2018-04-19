@@ -1,9 +1,10 @@
 import { Component } from 'vue-property-decorator';
-import  BaseVue  from 'base.vue';
+import BaseVue from 'base.vue';
 
-import  MultiTab  from '../../../../commons/vue_plugins/components/multitab/multitab.vue';
+import MultiTab from '../../../../commons/vue_plugins/components/multitab/multitab.vue';
 import orderListService from './user.order.service';
 import { OrderItem } from '../item/order.item';
+import { isNotLogin,toLogin } from 'common.env';
 // import { OrderBannerComponent } from '../orderBanner/order.banner.component';
 
 import './user.order.scss';
@@ -38,17 +39,39 @@ export class UserOrder extends BaseVue {
 	mounted() {
 		document.title = "我的订单";
 		this._$service = orderListService(this.$store);
+		let _self = this;
 		this.$nextTick(() => {
-			this.tableIndex = Number(this.$route.query.listValue) ? Number(this.$route.query.listValue) : 0;
-			// this._$service.getOrderBanner()
-			// 	.then((res) => {
-			// 		if (!res.errorCode) {
-			// 			this.orderBanners = res.data.data;
-			// 		}
-			// 	});
+			_self.tableIndex = Number(_self.$route.query.listValue) ? Number(_self.$route.query.listValue) : 0;
+			_self.getRebateGold();
 		});
 	}
-
+	/**
+	 * 下单的金币
+	 */ 
+	getRebateGold() {
+		let combinOrderNo = sessionStorage.getItem("combinOrderNo");
+		let _self = this;
+		if (combinOrderNo) {
+			let data = JSON.parse(combinOrderNo);
+			this._$service.getRebateGold(data).then(res => {
+				sessionStorage.removeItem("combinOrderNo");
+				if(res.data.gold==0){
+					return;
+				}
+				let dialogObj = {
+					title: '提示',
+					content: '恭喜您下单成功，获得'+res.data.gold+'金币',
+					assistBtn: '',
+					type: 'success',
+					mainBtn: '确定',
+					assistFn() { },
+					mainFn() {
+					}
+				};
+				_self.$store.state.$dialog({ dialogObj });
+			});
+		}
+	}
 	formatServerData(res) {
 		let data = res.data;
 		let orderList = [];
@@ -62,7 +85,7 @@ export class UserOrder extends BaseVue {
 				order.orders = new Array();
 				let combinOrderNo = order.combinOrderNo;
 				//组合订单
-				if (combinOrderNo && (order.orderState == 1 || order.orderState == 6)) {
+				if (combinOrderNo) {
 					while (orders[i] && (combinOrderNo == orders[i].combinOrderNo)) {
 						order.orders.push(orders[i]);
 						for (let k = 0; k < goodses.length; ++k) {
@@ -191,6 +214,7 @@ export class UserOrder extends BaseVue {
 		this.pageList = [0, 0, 0, 0, 0, 0];
 		this.ordersList = [[], [], [], [], [], []];
 		this.fetchOrdersData(this.tableIndex, 1, null);
+		this.getRebateGold();
 	}
 
 	// selectItem(index) {

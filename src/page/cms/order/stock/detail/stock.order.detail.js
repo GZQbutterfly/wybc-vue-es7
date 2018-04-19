@@ -1,5 +1,5 @@
 import { Component } from 'vue-property-decorator';
-import BaseVue  from 'base.vue';
+import BaseVue from 'base.vue';
 import orderDetailService from './stock.order.detail.service';
 import { getLocalUserInfo, toWEB } from 'common.env';
 
@@ -33,11 +33,14 @@ export class StockOrderDetail extends BaseVue {
 
     mounted() {
         //订单编号
+        let _query = this.$route.query || {};
+        this.orderId = _query.orderId || 0;
+        this.combinOrderNo = _query.combinOrderNo;
         this.orderId = this.$route.query.orderId || 0;
         let self = this;
         self._$service = orderDetailService(self.$store);
         self.$nextTick(() => {
-            self._$service.getOrderInfo(self.orderId)
+            self._$service.getOrderInfo(self.orderId, self.combinOrderNo)
                 .then(res => {
                     if (!res || res.errorCode) {
                         let dialogObj = {
@@ -71,7 +74,7 @@ export class StockOrderDetail extends BaseVue {
     orderState(type) {
         let userId = getLocalUserInfo().userId;
         if (type == 1) {
-            return  this.orderInfo && this.orderInfo.acceptStatus && (this.orderInfo.shopId == userId);
+            return this.orderInfo && this.orderInfo.acceptStatus && (this.orderInfo.shopId == userId);
         } else if (type == 2) {
             return this.orderInfo && this.orderInfo.acceptStatus && (this.orderInfo.shopId != userId);
         } else if (type == 3) {
@@ -85,33 +88,39 @@ export class StockOrderDetail extends BaseVue {
 
     toGoodsDetail(goodsId) {
         let self = this;
-		this._$service.upShopInfo(getLocalUserInfo().userId)
-		.then(res => {
-			if (res && !res.errorCode) {
-                if (res.data && res.data.infoId) {
-                    let dialogObj = {
-                        title: '',
-                        content: '即将进入您的当前进货店铺：' + res.data.wdName,
-                        assistBtn: '取消',
-                        mainBtn: '确定',
-                        type: 'info',
-                        assistFn() {
-
-                        },
-                        mainFn() {
-                            self.$router.push({
-                                path: 'cms_purchase_goods_detail',
-                                query: {
-                                    goodsId: goodsId,
-                                    shopId: res.data.infoId
-                                }
-                            });
-                        }
-                    };
-                    self.$store.state.$dialog({ dialogObj });
-                }
+        self.$router.push({
+            path: 'cms_purchase_goods_detail',
+            query: {
+                goodsId: goodsId,
             }
-		})
+        });
+        // this._$service.upShopInfo(getLocalUserInfo().userId)
+        // .then(res => {
+        // 	if (res && !res.errorCode) {
+        //         if (res.data && res.data.infoId) {
+        //             let dialogObj = {
+        //                 title: '',
+        //                 content: '即将进入您的当前进货店铺：' + res.data.wdName,
+        //                 assistBtn: '取消',
+        //                 mainBtn: '确定',
+        //                 type: 'info',
+        //                 assistFn() {
+
+        //                 },
+        //                 mainFn() {
+        //                     self.$router.push({
+        //                         path: 'cms_purchase_goods_detail',
+        //                         query: {
+        //                             goodsId: goodsId,
+        //                             shopId: res.data.infoId
+        //                         }
+        //                     });
+        //                 }
+        //             };
+        //             self.$store.state.$dialog({ dialogObj });
+        //         }
+        //     }
+        // })
     }
 
     isTichengOrder() {

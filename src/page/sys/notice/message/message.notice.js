@@ -16,15 +16,11 @@ import './message.notice.scss';
 export class MessageNotice extends Vue {
     list = [];
     page = 0;
-    data() {
-        return {
-
-        };
-    }
+    cms = false;
     mounted() {
         this._$service = service(this.$store);
-        this._isCMS = isCMS();
         this.$nextTick(() => {
+            this.cms = isCMS();
             // this.queryMessage().then((datas) => {
             //     this.setDatas(datas);
             // });
@@ -37,7 +33,7 @@ export class MessageNotice extends Vue {
             limit: 10
         };
         // console.log('Loade pagedata: ', _pageData);
-        if (this._isCMS) {
+        if (this.cms) {
             _result = this._$service.queryCMSOrderMessage(_pageData);
         } else {
             _result = this._$service.queryOrderMessage(_pageData);
@@ -96,20 +92,65 @@ export class MessageNotice extends Vue {
             })
         }, 500);
     }
-    toOrderDetail(item) {
-        // 去订单详情
-        let _toPath = 'order_detail';
+
+    //已阅
+    upLoadMessage(item) {
+        if (item.state) {
+            return;
+        }
         let _serverAttr = 'updOrderMessageStatus';
         let _param = { usermsgId: item.usermsgId };
-        if (this._isCMS) {
-            _toPath = 'cms_out_order_detail';
+        if (this.cms) {
             _serverAttr = 'updCMSOrderMessageStatus';
             _param = { wdmsgId: item.wdmsgId };
         }
-        if (!item.state) {
-            this._$service[_serverAttr](_param);
+        this._$service[_serverAttr](_param);
+    }
+    // "msgType":1			//1:订单详情页面，2：消息通知，3：我的配送, 4: 进货订单详情， 5： 配送单
+    toOrderDetail(item) {
+        this.upLoadMessage(item);
+        // 去订单详情
+        let _toPath = 'order_detail';
+        let _query = { orderId: item.orderNo, combinOrderNo: item.combinOrderNo };
+        if (this.cms) {
+            let _msgType = +item.msgType;
+            if (_msgType == 2) {
+                return;
+            }
+            switch (_msgType) {
+                case 1:
+                    _toPath = 'cms_out_order_detail';
+                    break;
+                case 2:
+                    _toPath = 'distributor_detail';
+                    break;
+                case 3:
+                    _toPath = 'delivery_order';
+                    break;
+                case 4:
+                    _toPath = 'cms_purchase_order_detail';
+                    break;
+                case 5:
+                    _toPath = 'distributor_detail';
+                    break;
+                case 7:
+                    _toPath = 'delivery_m_finish_detail';
+                    break;
+                default:
+                    _toPath = 'cms_out_order_detail';
+            }
+        } else {
+            if (item.limitGoods) {
+                _toPath = 'money_timelimit_detail';
+                let params = item.limitGoods.split('_')
+                _query = { goodsId: params[1], periodId: params[2], shopId: params[0] };
+            }
         }
-        this.$router.push({ path: _toPath, query: { orderId: item.orderNo } });
-
+        this.$router.push({ path: _toPath, query: _query });
+    }
+    //去每日任务
+    toDayTask(item) {
+        this.upLoadMessage(item);
+        this.$router.push('day_task');
     }
 }

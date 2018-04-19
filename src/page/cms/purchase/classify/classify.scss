@@ -5,16 +5,14 @@
     display: flex;
     flex-direction: column;
     .header {
-        overflow: hidden;
         background: #ffffff;
     }
     .home-content {
         position: relative; // height: 5.68rem
         flex: 1; // margin-top: 0.95rem;
         .carousels {
-             height: 1.43rem;
+            height: 1.43rem;
             width: 100%;
-           
         }
     }
     .indexBox_logo {
@@ -46,12 +44,12 @@
                 padding-left: 0.1rem;
                 line-height: 1;
                 overflow: hidden;
-                h4{
+                h4 {
                     font-size: 0.16rem;
                     max-height: .16rem;
                     font-weight: normal;
                 }
-                > span {
+                >span {
                     font-size: 0.12rem;
                     max-height: .12rem;
                     margin: 5px 0;
@@ -162,7 +160,7 @@
             .shopPic_gs {
                 float: left;
                 width: 1.865rem;
-                height: 2.4rem;
+                height: 2.49rem;
                 background: #ffffff; // border-bottom: 0.02rem solid #f2f2f2;
                 margin-bottom: 0.02rem;
                 &:nth-of-type(even) {
@@ -184,13 +182,8 @@
                     span:nth-of-type(1) {
                         position: absolute;
                         display: block;
-                        font-size: 0.12rem;
-                        width: 0.35rem;
-                        line-height: 0.16rem;
-                        height: 0.16rem;
-                        text-align: center;
-                        color: #ffffff;
-                        background: #ff1c1c;
+                        height: 0.5rem;
+                        width: 0.5rem;
                         top: 0;
                         left: 0;
                     }
@@ -246,13 +239,39 @@
                         height: 0.2rem;
                         line-height: 0.2rem;
                         color: #333;
+                        position: relative;
                         span {
                             color: #ff1c1c;
                             font-size: 0.16rem;
+                            &:nth-child(2) {
+                                position: absolute;
+                                display: block;
+                                height: 25px;
+                                width: 25px;
+                                border: 1px solid #7ecc44;
+                                border-radius: 2px 2px;
+                                top: 0;
+                                right: 10px;
+                                line-height: 25px;
+                                text-align: center;
+                                .icon-gouwuche {
+                                    color: #7ecc44;
+                                    font-size: 20px!important;
+                                }
+                            }
                         }
                     }
                 }
             }
         }
+    }
+    .topNav {
+        position: fixed;
+        top: 44px;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        background-color: #f2f2f2;
+        padding-top: 5px;
     }
 }

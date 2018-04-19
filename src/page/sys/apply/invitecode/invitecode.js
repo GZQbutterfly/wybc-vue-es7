@@ -204,6 +204,7 @@ export class ApplyShopInvitecode extends BaseVue {
             title: '确定邀请人信息',
             close: true,
             height: 0.37,
+            width: '268px',
             content: `<div class="invitecode-dialog">
                             <div class="weui-flex">
                                 <label class="weui-flex__item">用户头像:</label>
@@ -245,41 +246,78 @@ export class ApplyShopInvitecode extends BaseVue {
             campusId: _self.campusId
         }
         this._$service.queryRandomCode(query).then((res) => {
+            let data = res.data;
             if (res.data.errorCode) {
                 let _self = this;
                 _self._$dialog({
                     dialogObj: {
                         title: '提示',
                         type: 'error',
-                        content: '系统分配供货人失败,请稍后再试！',
+                        content: '系统分配邀请人失败,请稍后再试！',
                         assistBtn: '',
                         mainBtn: '确定',
                         mainFn() {
                         }
                     }
                 });
-            } else {
-                _self._$dialog({
-                    dialogObj: {
-                        title: '选定供货人',
-                        type: 'info',
-                        content: '系统已默认分配' + res.data.upUserName + '用户成为您的供货人',
-                        assistBtn: '我再想想',
-                        mainBtn: '填写开店信息',
-                        assistFn() {
-                        },
-                        mainFn() {
-                            let query = { 
-                                incode: res.data.invitationCode, 
-                                auto: 1,
-                                school: _self.school,
-                                campusId: _self.campusId
-                            };
-                            _self.$router.push({ path: 'apply_shop', query: query });
+            }else{
+                _self._$popup({
+                    title: '确定邀请人信息',
+                    close: true,
+                    height: 0.37,
+                    width: '268px',
+                    content: `<div class="invitecode-dialog">
+                            <div class="weui-flex">
+                                <label class="weui-flex__item">用户头像:</label>
+                                <div class="weui-flex__item"><img src="${data.headimgurl ? data.headimgurl : './static/images/pic-login.png'}"></div>
+                            </div>
+                            <div class="weui-flex">
+                                <div class="weui-flex__item">用户昵称:</div>
+                                <div class="weui-flex__item">${data.upUserName}</div>
+                            </div>
+                            <div class="weui-flex" >
+                                <div class="weui-flex__item">手机号码:</div>
+                                <div class="weui-flex__item">${data.upPhoneNum}</div>
+                            </div>
+                        </div>
+                       `,
+                    assistBtn: '',
+                    mainBtn: '确定',
+                    assistFn() {
+                       
+                    },
+                    mainFn() {
+                        let query = {
+                            incode: data.invitationCode,
+                            school: _self.school,
+                            campusId: _self.campusId
                         }
+                        _self.$router.push({ path: 'apply_shop', query: query });
                     }
-                });
-            }
+                }); 
+            } 
+            // else {
+            //     _self._$dialog({
+            //         dialogObj: {
+            //             title: '邀请人信息',
+            //             type: 'info',
+            //             content: '系统已默认分配' + res.data.upUserName + '用户成为您的供货人',
+            //             assistBtn: '我再想想',
+            //             mainBtn: '填写开店信息',
+            //             assistFn() {
+            //             },
+            //             mainFn() {
+            //                 let query = { 
+            //                     incode: res.data.invitationCode, 
+            //                     auto: 1,
+            //                     school: _self.school,
+            //                     campusId: _self.campusId
+            //                 };
+            //                 _self.$router.push({ path: 'apply_shop', query: query });
+            //             }
+            //         }
+            //     });
+            // }
         });
     }
 

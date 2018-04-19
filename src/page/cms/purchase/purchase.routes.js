@@ -1,5 +1,5 @@
 import { CmsLayout } from './layout/layout';
-
+import orderRouters from "./order/order.routes";
 
 
 const routes = [
@@ -54,16 +54,6 @@ const routes = [
                     }, 'cms/purchase/malls');
                 }
             },
-            //提交订单
-            {
-                path: '/cms_purchase_submit_order',
-                name: 'cms_purchase_submit_order',
-                component: resolve => {
-                    require.ensure([], require => {
-                        resolve(require('./order/submit/submit.order')['CmsPurchaseSubmitOrder']);
-                    }, 'cms/purchase/order');
-                }
-            },
             //订单详情
             {
                 path: '/cms_purchase_order_detail',
@@ -74,17 +64,17 @@ const routes = [
                     }, 'cms/purchase/order');
                 }
             },
-            //仓储说明
+            //商品详情优惠券
             {
-                path: '/cms_stock_info',
-                name: 'cms_stock_info',
+                path: '/cms_mask_coupon',
+                name: 'cms_mask_coupon',
                 component: resolve => {
                     require.ensure([], require => {
-                        resolve(require('./order/submit/stockinfo/stock.info')['StockInfo']);
-                    }, 'cms/purchase/order');
+                        resolve(require('./goods/mask_coupon/mask_coupon')['CmsMaskCoupon']);
+                    }, 'cms/purchase/malls');
                 }
-            }
-            
+            },
+           
         ]
     },
     //我要进货搜索页面
@@ -116,7 +106,8 @@ const routes = [
                 resolve(require('../../sys/address/address')['Address']);
             }, 'sys/system');
         }
-    }
+    },
+    ...orderRouters
 ];
 
 export default routes;

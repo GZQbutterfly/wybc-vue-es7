@@ -3,7 +3,7 @@
     <!-- :style="margin-bottom:.5rem;" -->
     <pull-refresh :infinite="infinite" :refresh="refresh">
         <!-- 顶部的状态 -->
-        <div class="order-title">
+        <div class="line order-title">
             <figure>
                 <img :src="'/static/images/' + (orderInfo.orderState==6?'ddguanbi.png':'shop.png')">
             </figure>
@@ -21,7 +21,7 @@
         </div>
 
         <!-- 订单状态流程 -->
-        <div class="order-show" v-if="orderInfo.orderState!=6&&!orderInfo.ownStore">
+        <div class="line order-show" v-if="orderInfo.orderState!=6&&!orderInfo.ownStore">
             <span>买家{{ orderInfo.orderState>1?'已':'' }}付款</span>
             <!--卖家付款-->
             <!-- <span>商家{{ orderInfo.orderState>3?'已':'' }}发货</span> -->
@@ -36,7 +36,7 @@
             </p>
         </div>
         <!-- 订单状态流程 -->
-        <div class="order-show1" v-if="orderInfo.orderState!=6&&orderInfo.ownStore">
+        <div class="line order-show1" v-if="orderInfo.orderState!=6&&orderInfo.ownStore">
             <span>买家{{ orderInfo.orderState>1?'已':'' }}付款</span>
             <!--卖家付款-->
             <span>商家{{ orderInfo.orderState>3?'已':'' }}发货</span>
@@ -51,19 +51,20 @@
             </p>
         </div>
         <!-- 收货地址 -->
-        <div class="order-address" v-if="orderInfo.ownStore">
+        <div class="line order-address" v-if="orderInfo.ownStore">
             <p>
                 <i class="iconfont icon-dizhi"></i>
                 <b>收货人：{{ orderInfo.name }}</b>
                 <span v-text="orderInfo.phone"></span>
             </p>
             <p class="shouhuo" v-text="'收货地址：' + orderInfo._address"></p>
+            <div class="address-detail-sex text-right" v-if="orderInfo.sex">{{orderInfo.sex == 1 ? '男生宿舍' : '女生宿舍'}}</div>
         </div>
 
         <!-- 单/多sku订单 -->
         <template v-for="(item,index) in orderInfo.goods">
             <!-- 订单编号 -->
-            <div class="order-number" v-if="showOrderNumber&&orderInfo.ownStore">
+            <div class="line order-number" v-if="showOrderNumber&&orderInfo.ownStore">
                 <template v-if="orderInfo.logis&&orderInfo.logis[index].logisNo">
                     <p>
                         <i class="iconfont icon-truck"></i> 运单编号：
@@ -77,16 +78,16 @@
                 </template>
             </div>
             <!-- 商品信息前的图标 -->
-            <div class="order-line" v-if="index==0">
+            <div class="line order-line" v-if="index==0">
                 <p class="sm">
-                    <!-- 多sku只有第一个商品有 -->
+                    <!-- 多sku只有第一个商品有 {{orderInfo.shopName}}-->
                     <i class="iconfont icon-shop"></i>
-                    <span>{{orderInfo.shopName}}</span>
+                    <span>学惠精选官方商城</span>
                 </p>
             </div>
-            <div class="order-line" v-if="index!=0" style="height:0.03rem;"></div>
+            <div class="line order-line" v-if="index!=0" style="height:0.03rem;"></div>
             <!-- 订单商品的信息 -->
-            <div class="order-goods" @click="toGoodsDetail(item.goodsId,orderInfo.shopId)">
+            <div class="line order-goods" @click="toGoodsDetail(item.goodsId,orderInfo.shopId)">
                 <figure>
                     <img :src="item.coverImg">
                 </figure>
@@ -112,34 +113,40 @@
 
 
         <!-- 进货价小计-->
-        <div class="order-line">
+        <div class="line order-line">
             <span class="fleft">进货价小计</span>
             <!-- RMB+ -->
             <span>{{ xprice | localMoney }}</span>
         </div>
-        <template>
-            <!-- 运费-->
-            <div class="order-line" v-if="shipFeeShow">
-                <span class="fleft">配送费</span>
-                <span class="color-yellow">{{shipFee | localMoney}}</span>
-            </div>
-            <!-- 合计 RMB+ -->
-            <div class="order-line">
-                <span class="fleft">合计</span>
-                <span>{{ totalPrice | localMoney }}</span>
-            </div>
-            <!-- 底部计价 RMB+ -->
-            <div class="order-line order-line-last">
-                <span class="fcenter">
-                    {{ showTypeAndRefund?'需付':'实付'}}
-                    <p class="color-red">{{totalPrice | localMoney }}</p>
-                </span>
-            </div>
-        </template>
+        <!-- 运费-->
+        <div class="line order-line" v-if="shipFeeShow">
+            <span class="fleft">配送费</span>
+            <span class="color-yellow">{{shipFee | localMoney}}</span>
+        </div>
+        <div class="line order-line" v-if="totalCouponMoney">
+            <span class="fleft">进货券</span>
+            <span class="color-yellow">-{{totalCouponMoney | localMoney}}</span>
+        </div>
+        <!-- 合计 RMB+ -->
+        <div class="line order-line">
+            <span class="fleft">合计</span>
+            <span>{{ totalPrice | localMoney }}</span>
+        </div>
+        <!-- 底部计价 RMB+ -->
+        <div class="line order-line order-line-last">
+            <span class="fcenter">
+                {{ showTypeAndRefund?'需付':'实付'}}
+                <p class="color-red">{{totalPrice | localMoney }}</p>
+            </span>
+        </div>
 
         <!--订单信息 -->
-        <div class="order-info">
-            <p>订单编号：{{ orderInfo.orderNo }}</p>
+        <div class="line order-info">
+            <p v-if="!combinOrderNo">支付订单号码：{{ orderInfo.combinOrderNo }}</p>
+            <!-- <p>订单号码：{{ combinOrderNo ? orderInfo.combinOrderNo:orderInfo.orderNo }}</p> -->
+            <p>订单号码：{{ orderInfo.combinOrderNo }}</p>
+            <p v-if="![1, 6].includes(orderInfo.orderState)">支付方式: {{orderInfo.payType}}</p>
+            <!-- <p>订单号码：{{ orderInfo.orderNo }}</p> -->
             <p>创建时间：{{ orderInfo.createAt | date('yyyy-MM-dd hh:mm:ss')}}</p>
             <p>进货仓储方式：{{stocktype}}</p>
             <!-- 买家留言 虚物 -->
@@ -159,8 +166,8 @@
 
 
     <!-- 底部弹出框 -->
-    <div class="confirm-receipt" v-if="showToast">
-        <template v-if="orderInfo.orderState==1">
+    <div class="confirm-receipt" v-if="orderInfo.orderState==1">
+        <template>
             <div class="box-price">
                 合计：
                 <p class="color-red">{{ totalPrice | localMoney }}&nbsp;</p>
@@ -168,6 +175,6 @@
             <div class="btn btn-red btn-sm" @click="goPay()">去支付</div>
         </template>
         <!-- <div class="btn btn-orange" v-if="showDelWithRefund" @click="delOrder()">删除并退款</div>-->
-        <div class="btn btn-green" v-if="orderInfo.orderState==4&&orderInfo.ownStore" @click="confirmReceipt()">确认收货</div> 
+        <!-- <div class="btn btn-green" v-if="orderInfo.orderState==4&&orderInfo.ownStore" @click="confirmReceipt()">确认收货</div>  -->
     </div>
 </div>

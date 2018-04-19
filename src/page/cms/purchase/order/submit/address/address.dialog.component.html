@@ -39,6 +39,9 @@
                                         <div class="address-default-tip" v-if="item.isDefault">默认</div>
                                         <i class="icon iconfont icon-icon-yxj-edit"></i>
                                     </div>
+                                    <div class="nocan-mark" v-if="ops.defaultWay == 1 && item.addressInfo.campus != ops.mySchool">
+                                            <img src="../static/images/fastdelivery/yinzhang.png" alt="">
+                                    </div>
                                 </div>
                             </div>
                         </div>

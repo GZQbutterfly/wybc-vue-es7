@@ -1,4 +1,7 @@
 <app-container>
+    <!-- <div v-if="showStr == 'hidden'" class="lead-poster-container" slot="header">
+        <img :src="posterImg" alt="">
+    </div> -->
     <!--  -->
     <div class="lead-container" :style="{'visibility': showStr}">
         <!-- 这是一张宣传图，包含学惠精选的宣传语，但不可点击 -->
@@ -25,7 +28,7 @@
                 <div class="foot-history_bd">
                     <div class="swiper-container" ref="foothistoryRef">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide" v-for="(item, index) in scope.historyList" :key="index" @click="toHome(item)">
+                            <div class="swiper-slide history-box" v-for="(item, index) in scope.historyList" :key="index" @click="toHome(item)">
                                 <shop-box :data="item" :style="{'background-color': index % 2 ? '#ebedff': '#ebf6ff'}"></shop-box>
                             </div>
                         </div>

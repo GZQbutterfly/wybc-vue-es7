@@ -70,6 +70,8 @@ export default (_store) => {
             }
             return q(refundurl, data);
         },
-
+       queryLimitPeriod(data){
+           return q("api/limited/q_closest_Period",data)
+       },  
     }
 }

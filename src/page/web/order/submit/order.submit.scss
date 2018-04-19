@@ -25,7 +25,7 @@
         height: 0.2rem;
         line-height: 0.16rem;
     }
-    .red{
+    .red {
         color: #ff1c1c;
     }
     color: #333;
@@ -61,6 +61,12 @@
             }
             .weui-cell__ft {
                 color: #333;
+                margin-top: -6px;
+            }
+            .address-detail-sex {
+                font-size: 12px;
+                color: #808080;
+                margin-left: 5px;
             }
         }
     }
@@ -147,6 +153,21 @@
     .order-text {
         color: #333;
         font-size: 16.5px;
+        img {
+            height: 14px;
+            width: 14px;
+        }
+    }
+    .orange {
+        color: #f9820d;
+    }
+    .order-text1 {
+        color: #333;
+        font-size: 15px;
+    }
+    .order-border {
+        border-top: 4px solid #f2f2f2;
+        border-bottom: 5px solid #f2f2f2;
     }
     .order-num-tip {
         font-size: 13px;
@@ -161,7 +182,8 @@
     }
     .order-img {
         padding-top: 5px;
-        height: 65px;
+        height: 65px!important;
+        width: 85px!important;
         padding-left: 5px;
         padding-right: 18px;
     }
@@ -196,12 +218,36 @@
     .weui-noborder:before {
         border: 0;
     }
-    .order-cashroll {
+    .order-border-bottom{
+        border-bottom: 1px solid #f2f2f2;
+    } .order-cashroll {
         font-size: 10px;
         background-color: #d8271c;
         color: #faeae9;
         padding: 0 2px;
         position: relative;
         top: -8px;
+    }
+    .order-money {
+        display: flex;
+        align-items: center;
+        font-size: 17px;
+        img {
+            height: 14px;
+            width: 14px;
+        }
+        .color-ff1c1c {
+            color: #ff1c1c;
+        }
+        .color-ee893e {
+            color: #ee893e;
+        }
+    }
+    .color-808080 {
+        color: #808080!important;
+        text-decoration: line-through;
+    }
+    .order-deliveryWay {
+        border-top: 5px solid #f2f2f2;
     }
 }

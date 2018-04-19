@@ -19,6 +19,9 @@ export default (_store) => {
     }
 
     return {
+        addGoods(data) {
+            return q('api/wholecart/a_whole_cart_goods', data)
+        },
         //最低购买金额
         getLeastBuyMoney(){
             let data = {
@@ -38,7 +41,7 @@ export default (_store) => {
                 // userId:user.userId,
                 // token:user.token,
                 page: pages,
-                limit: 10
+                limit: 10000
             })
         },
         //修改购物车商品数量

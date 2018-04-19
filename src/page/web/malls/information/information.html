@@ -8,6 +8,7 @@
     </div>
     <div class="page" v-for="(item,index) in dataList" v-if="showIndex == index" :key="index">
         <pull-refresh :refresh="refresh" :infinite="infinite">
+            <!--  :pages="{page: item.page, total: item.data.length}" -->
 
             <template v-for="news in item.data">
 

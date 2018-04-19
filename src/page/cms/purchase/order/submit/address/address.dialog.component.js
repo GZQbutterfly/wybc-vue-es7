@@ -23,6 +23,10 @@ import './address.dialog.component.scss';
                 String, Number
             ],
             default: ''
+        },
+        ops:{
+            type: Object,
+            default: ()=>{return {defaultWay: 0,mySchool: ''}}
         }
     },
     template: require('./address.dialog.component.html')
@@ -77,8 +81,11 @@ export class AddressDialogComponent extends Vue {
                     if (_self.selectId) {
                         _address._active = _self.selectId === _address.addrId;
                     } else {
-                        if (_address.isDefault === 1) {
-                            _address._active = true;
+                        if (_self.ops.mySchool == _address.campus) {
+                            // 快速订单 地址在该店铺所在校区地址 勾选   _deliveryWay == 1 &&
+                            if (_address.isDefault === 1) {
+                                _address._active = true;
+                            }
                         }
                     }
                 }

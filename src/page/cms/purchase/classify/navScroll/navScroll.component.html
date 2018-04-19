@@ -1,4 +1,4 @@
-<div id="navScrollc">
+<div class="navScrollc">
     <div class="swiper-container" ref="bannerSwiper">
       <div class="swiper-wrapper">
             <!-- <div class="swiper-slide">
@@ -9,11 +9,11 @@
                     </div>
                 </router-link>
             </div> -->
-            <div class="swiper-slide" v-for="(item,index) in classfyList" :key="index">
-                <div :class="{active:item.goodsClassifyId==classifyShow}" @click="changeShop($event,item.goodsClassifyId)">
-                    <img :src="item.unselectedImgUrl" v-show="item.goodsClassifyId!=classifyShow" />
-                    <img :src="item.selectedImgUrl" v-show="item.goodsClassifyId==classifyShow" />
-                    <b :class="{active:item.goodsClassifyId==classifyShow}">{{item.classifyName}}</b>
+            <div class="swiper-slide" v-for="(item,index) in classifyNav" :key="index">
+                <div :class="{active:item.goodsClassifyId==currentClassifyId}" @click="switchTab(item.goodsClassifyId,index)">
+                    <img :src="item.unselectedImgUrl" v-show="item.goodsClassifyId!=currentClassifyId" />
+                    <img :src="item.selectedImgUrl" v-show="item.goodsClassifyId==currentClassifyId" />
+                    <b :class="{active:item.goodsClassifyId==currentClassifyId}">{{item.classifyName}}</b>
                 </div>
             </div>
         </div>

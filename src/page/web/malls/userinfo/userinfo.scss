@@ -165,67 +165,102 @@ figure {
             }
         }
     }
-    .weui-flex {
+    .weui-flex{
         background: #fff;
-        .weui-flex__item {
-            text-align: center;
-            padding-top: .2rem;
-            /*绘制箭头*/
-            &:last-child{
+        &.pointList{
+            height: .75rem;
+            margin-bottom: .05rem;
+            .weui-flex__item {
+                padding-top: 10px;
+                text-align: center;
                 position: relative;
-                &:before,
-                &:after{
-                    content: '';
-                    position: absolute;
-                }
                 &:before{
+                    content: '';
                     width: .01rem;
-                    height: 80%;
-                    background: #e6e6e6;
-                    top: 10%;
+                    height: 100%;
+                    background: #f2f2f2;
+                    position: absolute;
+                    top: 0;
                     left: 0;
                 }
-                &:after{
-                    background: #FFF;
-                    width: .1rem;
-                    height: .1rem;
-                    transform:rotate(-45deg);
-                    color: #FFF;
-                    border: 1px solid;
-                    border-right-color: #DDD;
-                    border-bottom-color: #DDD;
-                    top: 43%;
-                    left: -.06rem;
+                h4{
+                    font-size: .17rem;
+                    font-weight: 300;
+                    color: #333;
+                }
+                p{
+                    height: .32rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 0;
+                    span{
+                        font-size: .2rem;
+                    }
                 }
             }
-            figure {
-                width: .25rem;
-                height: .2rem;
-                margin: 0 auto;
-                position: relative;
-                box-sizing: content-box;
-                &:after{
-                    content: attr(data-alert);
-                    position: absolute;
-                    right: -.1rem;
-                    top: -.1rem;
-                    width: .2rem;
-                    line-height: .2rem;
+        }
+        &.orderList{
+            .weui-flex__item {
+                text-align: center;
+                padding-top: .2rem;
+                /*绘制箭头*/
+                &:last-child{
+                    position: relative;
+                    &:before,
+                    &:after{
+                        content: '';
+                        position: absolute;
+                    }
+                    &:before{
+                        width: .01rem;
+                        height: 80%;
+                        background: #e6e6e6;
+                        top: 10%;
+                        left: 0;
+                    }
+                    &:after{
+                        background: #FFF;
+                        width: .1rem;
+                        height: .1rem;
+                        transform:rotate(-45deg);
+                        color: #FFF;
+                        border: 1px solid;
+                        border-right-color: #DDD;
+                        border-bottom-color: #DDD;
+                        top: 43%;
+                        left: -.06rem;
+                    }
+                }
+                figure {
+                    width: .25rem;
+                    height: .2rem;
+                    margin: 0 auto;
+                    position: relative;
+                    box-sizing: content-box;
+                    &:after{
+                        content: attr(data-alert);
+                        position: absolute;
+                        right: -.1rem;
+                        top: -.1rem;
+                        width: .2rem;
+                        line-height: .2rem;
+                        font-size: .12rem;
+                        border-radius: 50%;
+                        color: #fff;
+                        background: #ed1319;
+                        text-align: center;
+                    }
+                    img {
+                        overflow: hidden;
+                    }
+                }
+                p {
+                    height: .4rem;
+                    line-height: .4rem;
                     font-size: .12rem;
-                    border-radius: 50%;
-                    color: #fff;
-                    background: #ed1319;
-                    text-align: center;
+                    color: #333;
                 }
-                img {
-                    overflow: hidden;
-                }
-            }
-            p {
-                height: .4rem;
-                line-height: .4rem;
-                font-size: .12rem;
-                color: #333;
             }
         }
     }

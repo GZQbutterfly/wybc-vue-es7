@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
@@ -12,9 +13,15 @@
     <link rel="stylesheet" href="static/font/iconfont.css">
     <link rel="stylesheet" href="static/lib/vue2-animate/vue2-animate.min.css">
 </head>
+
 <body>
     <div id="app">
         <router-view></router-view>
+
+        <!-- 礼包， 优惠券dialog -->
+        <gift-pack :opts="$store.state.giftVO.opts" v-if="$store.state.giftVO.show"></gift-pack>
     </div>
+
 </body>
+
 </html>

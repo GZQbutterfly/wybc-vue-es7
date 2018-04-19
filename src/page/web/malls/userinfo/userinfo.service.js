@@ -69,10 +69,15 @@ export default (_store) => {
          * 查询用户是否已经开店
          */
         queryUserHasShop(){
-            return q(queryuserhasshop,{});
+            return q(queryuserhasshop, {shopId:null});
         },
+
         queryMessageNum(){
-            return q('api/wd_vip/q_user_msgnum', {});
+            return q('api/wd_vip/q_user_msgnum');
+        },
+
+        queryUserRoll(){
+            return q('api/wallet/q_gold_wallet');
         }
     }
 

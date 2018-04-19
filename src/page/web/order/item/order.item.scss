@@ -1,6 +1,24 @@
 .list_content {
 	background-color: white;
 	margin-bottom: 0.1rem;
+	.color-origin{
+		color:#ee893e;
+	}
+	.color-red{
+		color:#ff1c1c;
+	}
+	.color-green{
+		color:#7ecc44;
+	}
+	.color-gray{
+		color:#808080;
+	}
+	.color-black{
+		color:#333333;
+	}
+	.flex {
+		flex: 1;
+	}
 	.order-title{
 		height: .32rem;
 		margin-left: 0.125rem;
@@ -27,7 +45,11 @@
 		.goods-info {
 			height: .84rem;
 			padding: 0.09rem .12rem 0 .05rem;
-
+			position: relative;
+			.hasGold{
+				color: #808080;
+				text-decoration: line-through;
+			}
 			.price {
 				text-align: right;
 			}
@@ -40,6 +62,17 @@
 				line-height: 0.17rem;
 				text-align: right;
 				color: #808080;
+			}
+			.gold_coiney{
+				position: absolute;
+				top: 35px;
+				.price {
+					color: #ff1c1c;
+					font-size: .175rem;
+				}
+				.gold {
+					color: #ee893e;
+				}
 			}
 		}
 	}
@@ -57,6 +90,15 @@
 		padding-right: .125rem;
 		line-height: .36rem;
 		text-align: left;
+		align-items: center;
+
+		figure {
+			img{
+				display: block;
+				width: .145rem;
+				height: .145rem;
+			}
+		}
 
 		.desc-font {
 			line-height: .36rem;
@@ -83,9 +125,7 @@
 			border: 1px solid #ff3a80;
 		}
 	}
-   .postage{
-	   font-size: 14px!important;
-   }
+
 	.row-line {
 		border-top: 1px solid #F2F2f2;
 	}
@@ -93,26 +133,6 @@
 	.flex-right {
 		flex-direction: row-reverse;
 	}
-
-	.color-origin{
-		color:#ee893e;
-	}
-
-	.color-red{
-		color:#ff1c1c;
-	}
-
-	.color-green{
-		color: #7ecc44;
-	}
-	.color-gray{
-		color: #808080;
-	}
-	.color-black{
-		color: #333333;
-	}
 }
 
-.flex {
-	flex: 1;
-}
+

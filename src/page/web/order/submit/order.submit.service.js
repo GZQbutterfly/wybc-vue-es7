@@ -10,7 +10,7 @@ export default (_store) => {
             url: url,
             method: 'post'
         }).catch(() => {
-             nowifi && nowifi(true);
+            nowifi && nowifi(true);
         });
     }
     return {
@@ -19,8 +19,8 @@ export default (_store) => {
          * 获取微店信息
          */
         getWdInfo(shopId) {
-            return q("api/wd_vip/queryWdInfo", { shopId: shopId });
-        }, 
+            return _store.dispatch('CHECK_WD_INFO', shopId);
+        },
 
         /**
          * 查询购物车商品详情
@@ -61,18 +61,25 @@ export default (_store) => {
          * 提交订单
          */
         submitOrder(data) {
-            let _wxops = _state.wxops;
             return q('api/order/a_order', data);
+        },
+
+        /**
+         * 提交订单(金币购)
+         */
+        submitGoldOrder(data) {
+            return q('api/order/a_gold_order', data);
         },
 
         /**
          * 套餐提交订单
          */
         submitPackageOrder(data) {
-            let _wxops = _state.wxops;
             return q('api/order/a_package_order', data);
         },
-
+        submitTimeLimitBuyOrder(data) {
+            return q('api/order/a_limit_time_order', data);
+        },
         /**
          * 查询用户券
          */
@@ -93,16 +100,63 @@ export default (_store) => {
         /**
          * 支付
          */
-        pay(data){
+        pay(data) {
             let _pay = _state.$pay;
+            _pay._backUrl = '/user_order?listValue=0';
             return _pay.pay('api/order/pay_order', data);
         },
 
-        /*获取邮费*/
-        getFee(){
-            return q("api/q_delivery_config",{})
+        /*获取邮费_校外*/
+        getFee() {
+            return q("api/q_delivery_config")
         },
-        
+
+        /*获取邮费_校内地址*/
+        getFee_in() {
+            return q("api/q_inside_delivery_config")
+        },
+
+        /*获取邮费_金币购_校外地址*/
+        getFee_gold() {
+            return q("api/q_gold_delivery_config");
+        },
+
+        /*获取邮费_金币购_校内地址*/
+        getFee_in_gold() {
+            return q("api/q_inside_gold_delivery_config");
+        },
+          /*获取邮费_限时购_校外地址*/
+        getFee_timeLimitBuy() {
+            return q("api/q_limit_time_outside_delivery");
+        },
+          /*获取邮费_限时购_校内地址*/
+        getFee_in_timeLimitBuy() {
+            return q("api/q_limit_time_inside_delivery");
+        },
+        /*查询金币数*/
+        queryUserRoll() {
+            return q('api/wallet/q_gold_wallet');
+        },
+        async getCouponList(data) {
+            let _result = (await q("api/activites/q_order_coupons", data)).data;
+            return _result;
+        },
+        async getDisCouponMoney(data) {
+            return a;
+        },
+        queryGoodsStock(data) {
+            return q('api/stock/q_sg_goods_stock', data);
+        },
+        // 获取快速仓配送费
+        /**
+         * 
+         * "shipFee": "600",
+         * //校外地址邮费（单位为分）
+         * "freeShipFee": "6000"		//满减金额 （单位为分）
+         */
+        queryFastDeliveryShip() {
+            return q('api/q_ks_delivery_config');
+        },
         /**
          * 网路状态
          */

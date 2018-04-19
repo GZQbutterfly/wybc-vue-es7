@@ -10,7 +10,7 @@
 		<div v-for="(tab,tindex) in tabItemList">
 			<div v-show="tableIndex==tindex">
 				<pull-refresh :refresh="refresh" :infinite="infinite">
-					<div v-for="order in ordersList[tableIndex]">
+					<div v-for="order in ordersList[tableIndex]" v-if="tableIndex==tindex">
 						<oi :order="order" @removeItem="resetAllData"></oi>
 					</div>
 				</pull-refresh>

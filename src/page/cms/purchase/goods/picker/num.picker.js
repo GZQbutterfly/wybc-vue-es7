@@ -5,7 +5,7 @@ require('./num.picker.scss');
 
 @Component({
     template: require('./num.picker.html'),
-    props: ['goods', 'affirmFn', 'showIt', 'hideFn', 'closeFn','min']
+    props: ['goods', 'affirmFn', 'showIt', 'hideFn', 'closeFn', 'min', "fastStockState"]
 })
 
 export class NumberPicker extends Vue {
@@ -21,6 +21,7 @@ export class NumberPicker extends Vue {
     }
 
     mounted() {
+        console.log(this.$props.fastStockState);
         this.$watch('showIt', (newVal, oldVal) => {
             setTimeout(() => {
                 this.isShow = newVal
@@ -74,7 +75,7 @@ export class NumberPicker extends Vue {
         if (this.num > 1) {
             this.priceShow = true;
             this.num--;
-            this.total = this.$props.goods.moneyPrice * this.num;
+            this.total = this.$props.goods.stockPrice * this.num;
             return;
         }
         this.num = 1;
@@ -95,16 +96,16 @@ export class NumberPicker extends Vue {
     }
     getCount() {
         let _this = this;
-        let maxNum = this.$props.goods.wholeMaxBuyNum;
-        this.priceShow = true;
-        if (maxNum && this.num > maxNum) {
-            this.num = maxNum;
-            this.total = this.$props.goods.moneyPrice * this.num;   
-            let _toast = this.$store.state.$toast;
-            _toast({ title: '一次最多购买' + maxNum + '件', success: false });
-            return;
-        }
-        this.total = this.$props.goods.moneyPrice * this.num;   
+        // let maxNum = this.$props.goods.wholeMaxBuyNum;
+         this.priceShow = true;
+        // if (maxNum && this.num > maxNum) {
+        //     this.num = maxNum;
+        //     this.total = this.$props.goods.moneyPrice * this.num;   
+        //     let _toast = this.$store.state.$toast;
+        //     _toast({ title: '一次最多购买' + maxNum + '件', success: false });
+        //     return;
+        // }
+        this.total = this.$props.goods.stockPrice * this.num;   
     }
     onClose() {
         this.num = 1;

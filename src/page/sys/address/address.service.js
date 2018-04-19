@@ -15,14 +15,15 @@ export default (_store) => {
     }
     // ==>
     return {
-        // 添加物流地址
-        // url:api/a_address
+        /**
+         * 查询校区
+         */
         async querySchoolZone() {
             let _list = _cache[_key];
             let _result = null;
-            if (!_list) {
+            if (!_list || !_list.length) {
                 let _result = (await q('api/q_api_campus_msg')).data;
-                if (_result.errorCode) {
+                if (!_result || _result.errorCode) {
                     _list = [];
                 }
                 _list = _result.data;
@@ -30,6 +31,8 @@ export default (_store) => {
             }
             return _list;
         },
+        // 添加物流地址
+        // url:api/a_address
         createAddress(data) {
             return q('api/address/a_address', data);
         },

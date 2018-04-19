@@ -39,12 +39,27 @@ const routes = [
                 }
 
             },
+            // // 订单配送详情
+            {
+                path: '/web_order_delivery',
+                name: 'web_order_delivery',
+                meta: {
+                    noMenu: 1
+                },
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./delivery/order.delivery')['OrderDelivery']);
+                    }, 'web/order/order');
+                }
+
+            },
             // 提交订单页面流程 submit
             {
                 path: '/order_submit',
                 name: 'order_submit',
                 meta: {
-                    noMenu: true
+                    noMenu: true,
+                    keepAlive: true
                 },
                 component: resolve => {
                     require.ensure([], require => {
@@ -61,7 +76,17 @@ const routes = [
                         resolve(require('./package/package')['Package']);
                     }, 'web/order/order');
                 }
-            }
+            },
+            //提交订单使用优惠券
+            {
+                path: '/order_coupon',
+                name: 'order_coupon',
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./coupon/coupon')['Coupon']);
+                    }, 'web/order/order');
+                }
+            },
         ]
     }
 ];

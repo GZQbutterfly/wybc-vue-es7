@@ -20,11 +20,7 @@ export default (_store) => {
         /**
          * 查询订单详情
          */
-        getOrderInfo(orderId, outState) {
-            let data = {
-                orderId: orderId,
-                outState: outState,
-            }
+        getOrderInfo(data) {
             return q(orderinfourl, data);
         },
 

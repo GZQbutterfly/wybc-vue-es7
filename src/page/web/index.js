@@ -4,7 +4,7 @@
 import '../../commons/assets/weui/weui.min.css';
 
 
-import '../../commons/env/scss/icon.scss';
+import '../../commons/env/scss/index.scss';
 
 
 import './index.scss';

@@ -36,6 +36,7 @@ export class StockOrder extends BaseVue {
     }
 
     created() {
+        document.title = "我的订单";
         this._$service = stockOrderService(this.$store);
         this.tabIndex = Number(this.$route.query.listValue) ? Number(this.$route.query.listValue) : 0;
     }
@@ -63,12 +64,14 @@ export class StockOrder extends BaseVue {
     formatServerData(res) {
         let data = res.data;
         let orderList = [];
-        let orders = data.orderWhole;
+        let orders = data.orders;
         if (orders) {
             let goodses = data.orderGoods;
             let logis = data.logis;
             for (let i = 0; i < orders.length; ++i) {
                 let order = orders[i];
+                orders[i].number = goodses[i].number;
+                orders[i].moneyPrice = goodses[i].moneyPrice;
                 order.goodses = new Array();
                 order.orders = new Array();
                 let combinOrderNo = order.combinOrderNo;
@@ -86,6 +89,7 @@ export class StockOrder extends BaseVue {
                     }
                     --i;
                 } else {
+                  
                     order.orders.push(orders[i]);
                     for (let k = 0; k < goodses.length; ++k) {
                         let goods = goodses[k]

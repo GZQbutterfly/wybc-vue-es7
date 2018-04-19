@@ -18,7 +18,8 @@
             <div class="weui-cell__bd">
                 <div class="address-detail-user">
                     <span class="address-detail-name text-ellipsis">{{item.name}}</span>
-                    <span class="address-detail-phone">{{item.phone}}</span>
+                    <span class="address-detail-phone text-left">{{item.phone}}</span>
+                    <span class="address-detail-sex" v-if="item.sex">{{item.sex == 1 ? '男生宿舍' : '女生宿舍'}}</span>
                 </div>
                 <div class="address-detail text-ellipsis">收货地址：
                     <span class="address-info">
@@ -31,11 +32,14 @@
                     </span>
                 </div>
             </div>
-            <!-- 修改地址 -->
             <div class="weui-cell__ft" @click="toUpdate(item)">
                 <div class="address-default-tip" v-if="item.isDefault">默认</div>
                 <i class="icon iconfont icon-icon-yxj-edit"></i>
             </div>
         </div>
+        <template>
+            <div v-if="addressList.length" class="line"></div>
+            <div class="nomore-data text-center text-c-b3b3b3 text-s-15">没有更多</div>
+        </template>
     </section>
 </app-container>

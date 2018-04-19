@@ -1,33 +1,127 @@
-.layout-nav-footer {
-    position: absolute;
-    bottom: 0;
-    z-index: 500;
-    width: 100%;
-    height: 60px;
-    background-color: #fff;
-    .line {
-        height: 1px;
-        width: inherit;
-        background-color: #e5e4e4;
+.malls-layout {
+    overflow: hidden;
+    .header {
+        overflow: hidden;
+        background: #ffffff;
     }
-    .nav-boxs {
-        align-items: center;
-        height: inherit;
-        .nav-box {
-            position: relative;
-            text-align: center;
-            .weui-badge{
-                position: absolute;
+    .indexBox_logo {
+        height: 0.86rem;
+        padding: 0.13rem 0;
+        border-bottom: 5px solid #f2f2f2;
+        display: flex;
+        justify-content: space-around;
+        .wdName {
+            width: 80%;
+            height: 100%;
+            flex: 1;
+            padding-left: 0.1rem;
+            display: flex;
+            align-items: center;
+            dt {
+                height: 0.5rem;
+                width: 0.5rem;
+                overflow: hidden;
+                border-radius: 0.05rem;
+                img {
+                    height: 100%;
+                    width: 100%;
+                }
+            }
+            dd {
+                height: 100%;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                padding-left: 0.1rem;
+                line-height: 1;
+                overflow: hidden;
+                h4 {
+                    font-size: 0.16rem;
+                    max-height: .16rem;
+                    font-weight: normal;
+                    max-width: 120px;
+                    margin-right: 5px;
+                }
+                .wd-directsale {
+                    border: 1px solid #657bff;
+                    border-radius: 2px;
+                    padding: 1px;
+                }
+                .wd-directsale-red {
+                    border: 1px solid #ff6594;
+                    border-radius: 2px;
+                    padding: 1px;
+                    color: #ff6594;
+                }
+                .wd-school {
+                    max-height: .12rem;
+                    margin: 5px 0;
+                }
+                p {
+                    height: 0.14rem;
+                    width: 0.7rem;
+                    background: url("/static/images/newshop/vip.png") center center;
+                    background-size: 100% 100%; // line-height: 0.14rem;
+                    display: flex;
+                    align-items: center;
+                    span {
+                        display: inline-block;
+                        margin-left: 0.3rem;
+                        font-size: 0.12rem;
+                        color: #fff;
+                    }
+                }
             }
         }
-        .nav-label {
-            font-size: 13px;
-            color: #999
+        .wdName_ft {
+            .add-follow {
+                margin-right: 10px;
+                width: 58px;
+                border: 1px solid #333;
+                border-radius: 10px;
+                height: 22px;
+                line-height: 20px;
+            }
         }
-        .router-link-exact-active,
-        .router-link-active {
+        .serBox {
+            margin-right: 10px;
+        }
+        .sercher {
+            font-size: 0.2rem !important;
+            color: #808080;
+        }
+    }
+    .layout-nav-footer {
+        position: absolute;
+        bottom: 0;
+        z-index: 500;
+        width: 100%;
+        height: 60px;
+        background-color: #fff;
+        .line {
+            height: 1px;
+            width: inherit;
+            background-color: #e5e4e4;
+        }
+        .nav-boxs {
+            align-items: center;
+            height: inherit;
+            .nav-box {
+                position: relative;
+                text-align: center;
+                .weui-badge {
+                    position: absolute;
+                }
+            }
             .nav-label {
-                color: #7dcc43;
+                font-size: 13px;
+                color: #999
+            }
+            .router-link-exact-active,
+            .router-link-active {
+                .nav-label {
+                    color: #7dcc43;
+                }
             }
         }
     }

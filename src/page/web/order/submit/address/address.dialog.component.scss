@@ -20,6 +20,7 @@
         }
         .address-detial-name{
             font-size: 16px;
+            width: 120px;
         }
     }
     .address-dialog-footer {
@@ -41,6 +42,25 @@
         >.swiper-container{
             max-height: 400px;
             height:auto!important;
+        }
+    }
+    .address-detail-sex {
+        font-size: 12px;
+        color: #808080;
+        margin-right: 15px;
+    }
+    .address-list-item{
+        position: relative;
+    }
+    .nocan-mark{
+        position: absolute;
+        left: 155px;
+        top: 5px;
+        width: 130px;
+        height: 58px;
+        img{
+            width: 100%!important;
+            height: 100%!important;
         }
     }
 }

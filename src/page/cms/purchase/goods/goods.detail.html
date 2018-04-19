@@ -13,9 +13,17 @@
                 <div class="goods-content">
                     <h4 class=" goods-name">{{goods.goodsName}}</h4>
                     <div class="price">
-                        <span class="money-price" v-if="goods.consuType==2">
-                            <span>进货价:</span>{{ moneyPrice | localMoney}}
+                        <span class="money-price">
+                            <span>进货价:</span>{{ goods.stockPrice | localMoney}}
                         </span>
+                    </div>
+                    <div class="zeroPrice">
+                        <p>
+                            <span>零售价：</span>{{ goods.moneyPrice | localMoney}}
+                        </p>
+                        <p>
+                            <span>单件商品利润：</span>{{goods.moneyPrice - goods.stockPrice | localMoney}}
+                        </p>
                     </div>
                     <!-- 满赠 -->
                     <!-- <div class="fullOfGifts" v-show="isGradeShow">
@@ -35,7 +43,20 @@
                         <span>{{int_minute}}</span>分
                         <span>{{int_second}}</span>秒
                     </div>
-                  
+                    <!-- 促销 （rmb模式） -->
+                    <template v-if="counponObj && counponObj.moneyPrice">
+                        <div class="promotion">
+                            <span>促销</span>
+                            <span>进货券</span>
+                            <template v-if="counponObj.minOrderPrice">
+                                <span>满{{counponObj.minOrderPrice | localMoney}} 减{{counponObj.moneyPrice/100}}元</span>
+                            </template>
+                            <template v-else>
+                                <span>立减{{counponObj.moneyPrice/100}}元</span>
+                            </template>
+                            <span @click="toCounponDetail">...</span>
+                        </div>
+                    </template>
                 <!--  <div class="weui-flex goods-desc">
                         <span>运费:
                             <b>免运费</b>
@@ -66,7 +87,7 @@
                         </router-link>
                     </div>
                 </div>
-                <div class="rank">
+                <!-- <div class="rank">
                     <div class="line">
                         <b></b>
                         
@@ -75,7 +96,6 @@
                         <b></b>
                     </div>
                     <div class="memberlevel">
-                        <div class="stockName">仓储中心代管进货价</div>
                         <p :class="{redColor:item.show}" v-for="(item,index) in grade">
                             <span>{{item.vipName}}
                                 <i>(M{{item.id}})</i>
@@ -83,16 +103,7 @@
                             <b>{{item.vipdiscount | localMoney }}</b>
                         </p>
                     </div>
-                    <div class="memberlevel">
-                        <div class="stockName">商品自行管理进货价</div>
-                        <p :class="{redColor:item.show}" v-for="(item,index) in owngrade">
-                            <span>{{item.vipName}}
-                                <i>(M{{item.id}})</i>
-                            </span>
-                            <b>{{item.vipdiscount | localMoney }}</b>
-                        </p>
-                    </div>
-                </div>
+                </div> -->
                 <div class="detaileall">
                     <div v-if="goods.goodsVideo">
                         <div class="line">
@@ -117,11 +128,11 @@
                     </article>
                 </div>
 
-                <div class="backHome">
+                <!-- <div class="backHome">
                     <div class="backHome_box">
                         <span>没有更多</span>
                     </div>
-                </div>
+                </div> -->
             </scroller>
         </div>
         <!--遮罩 stockTypeShow-->
@@ -130,14 +141,13 @@
     </div>
    
     <footer slot="footer">
-        <div class="order-cover" v-show="stockTypeShow">
+        <!-- <div class="order-cover" v-show="stockTypeShow">
             <div class="order-cover-box"></div>
             <div class="order-cover-content">
                 <div class="weui-media-box weui-media-box_text">
                     <h4 class="weui-media-box__title title-h4 close">请选择进货仓储方式 <i class="iconfont icon-iconfontclose close1" @click="onClose"></i></h4>
                 </div>
                 <div class="weui-box" v-for="(v,i) in stockTypes" @click="chooseStockTpe(i)">
-        
                     <div class="radus">
                         <div class="radus-bg" v-show="v.stocktypeShow"></div>
                     </div>
@@ -145,12 +155,9 @@
                         {{v.stocktype}}
                     </div>
                 </div>
-                <!-- <div class="weuiBtn">
-                                 <div class="weui-btn1 color-f" @click="cancel">取消</div>
-                                 <div class="weui-btn1 color-c" @click="confirm">确定</div>
-                           </div> -->
+                <router-link to="/cms_stock_info" class="stock_info"><u >仓储方式说明</u></router-link>
             </div>
-        </div>
+        </div> -->
         <div class="buy-content weui-flex">
             <div class="shop-car" @click="goShopcart">
                     <i class="iconfont icon-gouwuche"></i>
@@ -160,7 +167,7 @@
             <div class="weui-flex-item buy-now" @click="buyNow(goods)"
             >立即购买</div>
         </div>
-        <numpicker :goods="goods" :affirmFn="finish2Car" :showIt="show2Car" :hideFn="numberpckerHide" :closeFn="changeShowIt" :min="minExport"></numpicker>
-        <numpicker :goods="goods" :affirmFn="finishgoPay" :showIt="showgoPay" :hideFn="numberpckerHide" :closeFn="changeShowIt" :min="minExport"></numpicker>
+        <numpicker :goods="goods" :affirmFn="finish2Car" :showIt="show2Car" :hideFn="numberpckerHide" :closeFn="changeShowIt" :min="minExport" :fastStockState="fastStockState"></numpicker>
+        <numpicker :goods="goods" :affirmFn="finishgoPay" :showIt="showgoPay" :hideFn="numberpckerHide" :closeFn="changeShowIt" :min="minExport" :fastStockState="fastStockState"></numpicker>
     </footer>
 </app-container>

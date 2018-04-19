@@ -1,11 +1,13 @@
-<transition name="topNotice">
-    <div class="topnotice-container" v-show="show">
-        <img :src="msgObj.img" v-if="msgObj.img">
-        <div class="notice-box" ref="boxRef">
-            <div class="msg" ref="msgRef" :class="{'msg-animation': showAnimation}">
-                <span class="txt">{{msgObj.msg}}</span>
-                <span class="flag">{{msgObj.flag}}</span>
+<div class="topnotice-container">
+    <transition name="topNotice">
+        <div class="topnotice-content" v-show="show">
+            <img :src="msgObj.img" v-if="msgObj.img">
+            <div class="notice-box" ref="boxRef">
+                <div class="msg" ref="msgRef" :class="{'msg-animation': showAnimation}">
+                    <span class="txt">{{msgObj.msg}}</span>
+                    <span class="flag">{{msgObj.flag}}</span>
+                </div>
             </div>
         </div>
-    </div>
-</transition>
+    </transition>
+</div>

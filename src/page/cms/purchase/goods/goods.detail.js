@@ -45,75 +45,66 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
        leastBuy:0,
        buy:1
     }
+    counponList = [];
+    counponObj = {};
     playerOptions = {
     }
-    shopkeeper = {};
+    shopkeeper =  {
+        wdName: "学惠精选官方商城",
+        wdImg: "/static/images/newshop/xuehui-fang.png",
+        id: 0
+    }
     stockType = '';
     stockTypes = [{
         stocktype: "仓储中心代管",
         stocktypeShow: false
     }, {
-        stocktype: "商品自行管理",
+        stocktype: "快速仓自储",
         stocktypeShow: false
     }];
     stockTypeShow = false;
     number = 0;
-    created() {
-        this.getGoodsMsg();
+    fastStockState = {
+        amount: 0,
+        buyType: 1
     }
+    // created() {
+    //     this.getGoodsMsg();
+    // }
 
     refresh(done) {
         let _this = this;
         setTimeout(() => {
             _this.getGoodsMsg();
-            done();
-
-        }, 2500)
+           _this.queryGoodsCoupons();
+            done(true);
+        }, 500)
     }
 
+    mounted(){
+        this._$service = goodsService(this.$store);
+        this.getGoodsMsg();
+        this.queryGoodsCoupons();
+    }
+    
     getGoodsMsg() {
         document.title = "商品详情";
         let _this = this;
         this.stockTypeShow = false;
-        _this._$service = goodsService(_this.$store);
         this._$service.getLeastBuyMoney().then(v => {
-           _this.minExport = {
-               flag:v.data.flag,
-               leastBuy: v.data.leastBuy
-           }
+            _this.minExport = {
+                flag: v.data.flag,
+                leastBuy: v.data.leastBuy
+            }
         });
         let opt = {
             userId: this.$store.state.workVO.user.userId,
             token: this.$store.state.workVO.user.token
         }
-        this._$service.getWdInfo(opt).then(res => {
-            if (res.data.state == 3 || res.data.upWdInfo == 0) {
-                _this.shopkeeper = {
-                    wdName: "学惠精选官方商城",
-                    wdImg: "/static/images/newshop/xuehui-fang.png",
-                    vipGrade: 1,
-                    school: '',
-                    id: 0
-                }
-                return;
-            }
-            this._$service.getUpWdInfo(res.data.upWdInfo).then(res => {
-                if (!res.data.wdVipInfo.wdImg) {
-                    res.data.wdVipInfo.wdImg = "/static/images/newshop/touxiang.png"
-                }
-                _this.shopkeeper = {
-                    wdName: res.data.wdVipInfo.wdName,
-                    wdImg: res.data.wdVipInfo.wdImg,
-                    vipGrade: res.data.wdVipInfo.wdVipGrade,
-                    school: res.data.wdVipInfo.school,
-                    id: 1
-                }
-            })
-        })
 
         _this._$service.goodsInfo(_this.$route.query.goodsId)//获取商品信息
             .then(res => {
-                if (res.data.errorCode || res.data.data.state != 1) {
+                if (res.data.errorCode || (res.data.data.state != 1 || res.data.data.onSaleState != 1)) {
                     let dialogObj = {
                         title: '',
                         content: '该商品已下架或停售',
@@ -136,70 +127,70 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
                     shopId: wdId, //微店id
                     goodsId: _this.$route.query.goodsId
                 }
-                _this._$service.getGradeMsg(opt).then(res => { //查询vip等级
+                // _this._$service.getGradeMsg(opt).then(res => { //查询vip等级
 
-                    console.log(res);
-                    if (res.data.flag) {
-                        _this.isGradeShow = true;
-                    } else {
-                        _this.isGradeShow = false;
-                    }
-                    let _result = res.data.discMap;
-                    let _result2 = res.data.ownStoreMap;
-                    _this.myGrade = res.data.myGrade;
-                    let arr = [],ownarr=[];
-                    for (let i in _result) {
-                        let indx = Number(i.substr(i.length - 1, 1));
-                        let obj= {
-                            id: indx,
-                            vip: i,
-                            vipName: _result[i][1],
-                            vipdiscount: Math.ceil((Number(_result[i][0]) / 100) * _this.goodsPrice),
-                            show: false
-                        };
-                        if (i == 'vip' + res.data.myGrade) {
-                            obj.show = true;
-                            _this.moneyPrice = obj.vipdiscount;
-                            _this.goods.moneyPrice = _this.moneyPrice;
-                        }
-                        arr.push(obj);
-                    }
-                    for (let i in _result2) {
-                        let indx = Number(i.substr(i.length - 1, 1));
-                        let obj = {
-                            id: indx,
-                            vip: i,
-                            vipName: _result2[i][1],
-                            vipdiscount: Math.ceil((Number(_result2[i][0]) / 100) * _this.goodsPrice),
-                            show: false
-                        };
-                        if (i == 'vip' + res.data.myGrade) {
-                            obj.show = true;
-                        }
-                        ownarr.push(obj);
-                    }
+                //     console.log(res);
+                //     if (res.data.flag) {
+                //         _this.isGradeShow = true;
+                //     } else {
+                //         _this.isGradeShow = false;
+                //     }
+                //     let _result = res.data.discMap;
+                //     let _result2 = res.data.ownStoreMap;
+                //     _this.myGrade = res.data.myGrade;
+                //     let arr = [],ownarr=[];
+                //     for (let i in _result) {
+                //         let indx = Number(i.substr(i.length - 1, 1));
+                //         let obj= {
+                //             id: indx,
+                //             vip: i,
+                //             vipName: _result[i][1],
+                //             vipdiscount: Math.ceil((Number(_result[i][0]) / 100) * _this.goodsPrice),
+                //             show: false
+                //         };
+                //         if (i == 'vip' + res.data.myGrade) {
+                //             obj.show = true;
+                //             _this.moneyPrice = obj.vipdiscount;
+                //             _this.goods.moneyPrice = _this.moneyPrice;
+                //         }
+                //         arr.push(obj);
+                //     }
+                //     for (let i in _result2) {
+                //         let indx = Number(i.substr(i.length - 1, 1));
+                //         let obj = {
+                //             id: indx,
+                //             vip: i,
+                //             vipName: _result2[i][1],
+                //             vipdiscount: Math.ceil((Number(_result2[i][0]) / 100) * _this.goodsPrice),
+                //             show: false
+                //         };
+                //         if (i == 'vip' + res.data.myGrade) {
+                //             obj.show = true;
+                //         }
+                //         ownarr.push(obj);
+                //     }
 
-                    for (let i = 0; i < arr.length - 1; i++) {
-                        for ( let j = 0; j < arr.length - 1 - i; j++) {
-                            if (arr[j].id < arr[j + 1].id) {
-                                let temp = arr[j];
-                                arr[j] = arr[j + 1];
-                                arr[j + 1] = temp;
-                            }
-                        }
-                    }
-                    for (let i = 0; i < ownarr.length - 1; i++) {
-                        for (let j = 0; j < ownarr.length - 1 - i; j++) {
-                            if (ownarr[j].id < ownarr[j + 1].id) {
-                                let temp = ownarr[j];
-                                ownarr[j] = ownarr[j + 1];
-                                ownarr[j + 1] = temp;
-                            }
-                        }
-                    }
-                 _this.grade=arr;
-                 _this.owngrade = ownarr;
-                })
+                //     for (let i = 0; i < arr.length - 1; i++) {
+                //         for ( let j = 0; j < arr.length - 1 - i; j++) {
+                //             if (arr[j].id < arr[j + 1].id) {
+                //                 let temp = arr[j];
+                //                 arr[j] = arr[j + 1];
+                //                 arr[j + 1] = temp;
+                //             }
+                //         }
+                //     }
+                //     for (let i = 0; i < ownarr.length - 1; i++) {
+                //         for (let j = 0; j < ownarr.length - 1 - i; j++) {
+                //             if (ownarr[j].id < ownarr[j + 1].id) {
+                //                 let temp = ownarr[j];
+                //                 ownarr[j] = ownarr[j + 1];
+                //                 ownarr[j + 1] = temp;
+                //             }
+                //         }
+                //     }
+                //  _this.grade=arr;
+                //  _this.owngrade = ownarr;
+                // })
                 _this.goods = res.data.data;
                 let arr = res.data.data.bannerImg.split(",");
 
@@ -240,7 +231,7 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
                     }
                 }
 
-                this.updateWxShare(config);
+                // this.updateWxShare(config);
                 if (!res.data.data.offTimestamp) {
                     _this.showTime = false;
                     return;
@@ -248,30 +239,16 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
                 _this.countDown(res.data.data.offTimestamp);
             });
     }
-
-    mounted(){
-        let self = this;
-        //获取上级微店信息
-        this._$service.upShopInfo(getLocalUserInfo().userId).then(res => {
-            //请求数据格式不对
-            if (!res||res.errorCode||!res.data) {
-                return;
-            }else{
-                let wdinfo = res.data;
-                self.fetchShopData()
-                .then((res)=>{
-                    //当前浏览的商品是自己的上级
-                    if (wdinfo.infoId==res.infoId) {
-                        return ;
-                    }else{
-                        localStorage.wdVipInfo = JSON.stringify(wdinfo);
-                        self.getGoodsMsg();
-                    }
-                })
-            }
-        })
+    queryGoodsCoupons() {
+        let _self = this;
+        this._$service.queryGoodsCoupons(this.$route.query.goodsId).then((data) => {
+            _self.counponObj = data;
+        });
     }
 
+    toCounponDetail() {
+        this.$router.push({ path: 'cms_mask_coupon', query: { goodsId: this.$route.query.goodsId } });
+    }
     goShopcart() {
         this.$router.push({ path: "cms_purchase_shop_car" });
     }
@@ -282,6 +259,7 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
             _toast({ title: '商品未上架,不能加入进货单', success: false });
             return;
         }
+        this.queryStock(0);
         this.show2Car = true;
         this.minExport.buy = 1;
     }
@@ -291,10 +269,10 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
 
     }
     buyNow(goodsId) {
-        if (this.goods.state == 0) {
+        if (!this.goods.state || !this.goods.onSaleState) {  
             let dialogObj = {
                 title: '',
-                content: '该商品已下架',
+                content: '该商品已下架或停售',
                 assistBtn: '',
                 mainBtn: '知道了',
                 assistFn() {
@@ -307,6 +285,7 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
             this.$store.state.$dialog({ dialogObj });
             return;
         }
+        this.queryStock(1);
         this.showgoPay = true;
         this.minExport.buy=0;
         // console.log(this.minExport);
@@ -339,26 +318,41 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
     }
 
     finishgoPay(num) {
-        this.stockTypeShow = true;
-        this.number = num;
-     
-    }
-    chooseStockTpe(index){
         let _this = this;
-        for (let i = 0, len = _this.stockTypes.length; i < len; i++) {
-            if (i == index) {
-                _this.stockTypes[i].stocktypeShow = true;
-            } else {
-                _this.stockTypes[i].stocktypeShow = false;
-            }
-        }
-        let gsType = this.goods.gsType, goodsType;
         let goodsId = this.goods.goodsId;
-        let num = this.number;
-        // TODO: goto gen order
-        gsType == 2 ? goodsType = 'empty' : goodsType = 'entity';
-        this.$router.push({ path: 'cms_purchase_submit_order', query: { goodsId: goodsId, goodsType: goodsType, number: num, orderSrouce: 'goods', stockType: index } });
+        this.$router.push({ path: 'cms_purchase_submit_order', query: { goodsId: goodsId, goodsType: "entity", number: num, orderSrouce: 'goods', stockType: 1 } });
     }
+  
+    //库存
+    async queryStock(buyType) {
+        let _self = this;
+        let _param = {
+            goodsId: _self.$route.query.goodsId,
+            deliveryType: 0
+        }
+        let ordinaryStockNum = (await this._$service.queryGoodsStock(_param)).data;
+        _self.fastStockState = {
+            amount: ordinaryStockNum,
+            buyType: buyType
+        }
+    }
+
+    // chooseStockTpe(index){
+    //     let _this = this;
+    //     for (let i = 0, len = _this.stockTypes.length; i < len; i++) {
+    //         if (i == index) {
+    //             _this.stockTypes[i].stocktypeShow = true;
+    //         } else {
+    //             _this.stockTypes[i].stocktypeShow = false;
+    //         }
+    //     }
+    //     let gsType = this.goods.gsType, goodsType;
+    //     let goodsId = this.goods.goodsId;
+    //     let num = this.number;
+    //     // TODO: goto gen order
+    //     gsType == 2 ? goodsType = 'empty' : goodsType = 'entity';
+    //     this.$router.push({ path: 'cms_purchase_submit_order', query: { goodsId: goodsId, goodsType: goodsType, number: num, orderSrouce: 'goods', stockType: index } });
+    // }
     //倒计时
     countDown(leftchektime) {
         this.timerID && clearInterval(this.timerID);

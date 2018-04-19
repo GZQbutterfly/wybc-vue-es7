@@ -10,59 +10,71 @@
                 <div class="txt_input" @click="goSearch">搜索商品</div>
             </li>
         </ul>
+        <!--  -->
+        <!-- <div  :style="{'visibility': topNavShow ? 'visible' : 'hidden'}" class="topNav">
+            <navScrollc :onchangeShop="changeShop" ></navScrollc>
+        </div> :monitoringMove="monitoringMove"-->
     </div>
-    <div class="home-content">
-        <pull-refresh :refresh="refresh" ref="my_scroller" :infinite="infinite">
-            <div class="carousels" v-show='homeAd&&homeAd.length!=0'>
-                <app-banner :listImg="homeAd" style="width:100%;height:100%;"></app-banner>
-            </div>
-            <div class="indexBox_logo">
-                <dl class="wdName">
-                    <dt>
-                        <img :src="shopkeeper.wdImg" alt="">
-                    </dt>
-                    <dd>
-                        <h4>{{shopkeeper.wdName}}</h4>
-                        <span>{{shopkeeper.school}}</span>
-                        <div v-if="shopkeeper.id==0">官方</div>
-                        <p v-if="shopkeeper.id==1">
-                            <span>{{'M'+shopkeeper.vipGrade}}</span>
-                        </p>
-                    </dd>
-                </dl>
-            </div>
+    <!-- <navScrollc :onchangeShop="changeShop" v-if="!navShow" style="margin-top:5px;"></navScrollc> -->
+    <div class="home-content"  @touchmove="touchMove($event)"
+    @touchend="touchEnd($event)" ref="homeContentRef">
+        <pull-refresh :refresh="refresh" ref="my_scroller" :infinite="infinite" >
+            <!-- :monitoringMove="monitoringMoveFn" -->
+            <div ref="bannerRef">
+                <div class="carousels" v-show='homeAd&&homeAd.length!=0'>
+                    <app-banner :listImg="homeAd" style="width:100%;height:100%;"></app-banner>
+                </div>
+                <div class="indexBox_logo">
+                    <dl class="wdName">
+                        <dt>
+                            <img :src="shopkeeper.wdImg" alt="">
+                        </dt>
+                        <dd>
+                            <h4>{{shopkeeper.wdName}}</h4>
+                            <span>{{shopkeeper.school}}</span>
+                            <div v-if="shopkeeper.id==0">官方</div>
+                            <p v-if="shopkeeper.id==1">
+                                <span>{{'M'+shopkeeper.vipGrade}}</span>
+                            </p>
+                        </dd>
+                    </dl>
+                </div>
 
-            <navScrollc :onchangeShop="changeShop" ref="_navScrollc"></navScrollc>
-
-
-
-            <!-- 轮播 -->
-            <div class="carousel" v-if='bannerShow'>
-                <app-banner :listImg="classifyAdImgPic" style="width:100%;height:100%;" :config="config"></app-banner>
+                <navScrollc ref="_navScrollc" :classifyNav="classifyNav" v-if="classifyNav.length!=0" @swichTab="setGoodsLists" :currentClassifyId="currentClassifyId"></navScrollc>
+                <!-- 分类广告 -->
+                <div class="carousel" v-if='classifyAdImgPic.length!=0'>
+                    <app-banner :listImg="classifyAdImgPic" style="width:100%;height:100%;"></app-banner>
+                </div>
             </div>
             <!-- 商品列表 -->
-            <ul class="goodsList">
+            <ul class="goodsList"  ref="goodsRef">
                 <li>
                     <div class="shopPic">
                         <dl class="shopPic_gs" v-for='item in classfyGoodsList'>
-                            <router-link :to="{path:'cms_purchase_goods_detail',query:{goodsId:item.goodsId}}">
-                                <dt>
-                                    <img :src="item.coverImg" alt="">
-                                    <!-- <span>返利</span> -->
-                                </dt>
-                                <dd>{{item.goodsName}}</dd>
-                                <dd>
-                                    <span>{{item.coverImgDescription}}</span>
-                                    <!-- <span {{itemdata.coverImgDescription}}v-if="itemdata.consuType==3">{{itemdata.moneyPrice | localMoney}}+{{itemdata.moneyRoll | localVolume}}券</span> -->
-                                </dd>
-                                <dd>
-                                    进货价:<span>{{item.moneyPrice | localMoney}}</span>
-                                </dd>
-                            </router-link>
+                            <dt @click="toDetail(item.goodsId)">
+                                <img :src="item.coverImg" alt="">
+                                <span v-if="item.couponCount">
+                                    <img src="/static/images/daysign/shangpin-biaozhi.png">
+                                </span>
+                            </dt>
+                            <dd @click="toDetail(item.goodsId)">{{item.goodsName}}</dd>
+                            <dd @click="toDetail(item.goodsId)">
+                                <span>{{item.coverImgDescription}}</span>
+                            </dd>
+                            <dd>
+                                进货价:
+                                <span>{{item.stockPrice | localMoney}}</span>
+                                <span @click="QuicklyJoinTheShoppingCart(item)">
+                                    <i class="iconfont icon-gouwuche"></i>
+                                </span>
+                            </dd>
                         </dl>
                     </div>
                 </li>
             </ul>
         </pull-refresh>
+        <!-- <div class="scroller-pages text-c-fff bg-c-b8b8b8 text-center text-s-15" :style="{bottom:'1.2rem'}" v-show="pageOp.page && showPage">
+            {{pageOp.page}}/{{pageOp.total}}
+        </div> -->
     </div>
 </div>

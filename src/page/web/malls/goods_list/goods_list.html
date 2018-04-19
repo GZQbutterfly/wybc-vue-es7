@@ -1,12 +1,34 @@
 <!-- 一行两个的商品列表组件 -->
 <div class="goodsList">
+    <!-- :data-roll="goodsItem.couponCount > 0?'券':''" -->
     <div class="goodsItem" v-for="goodsItem in goodsList.data">
-        <figure @click="toDetail(goodsItem.goodsId)">
-            <img :src="goodsItem.coverImg" alt="">
-        </figure>
-        <span class="txt_title" @click="toDetail(goodsItem.goodsId)">{{ goodsItem.goodsName }}</span>
-        <span class="txt_desc">{{ goodsItem.coverImgDescription }}</span>
-        <span class="txt_price">{{ goodsItem.purchasePrice | localMoney }}</span>
+        <div @click="toDetail(goodsItem.goodsId)" class="goodsImg">
+            <!-- <progressive-img :src="goodsItem.coverImg" :placeholder="goodsItem.coverImg" /> -->
+            <img :src="goodsItem.coverImg" />
+            <img src="./static/images/shop-4.6/youhuiquan.png" alt="" v-if="goodsItem.couponCount" class="yhqImg">
+            <template v-if="status == 'agentmalls' ">
+                <!-- 店长直营 -->
+                <div class="right-bottom text-s-12 text-c-fff bg-c-333">店长直营</div>
+            </template>
+            <template v-else-if="status == 'officialmalls'">
+                <!-- 店铺代理 -->
+                <div class="right-bottom text-s-12 text-c-fff bg-c-333">店铺代理</div>
+            </template>
+        </div>
+        <p class="txt_title text-ellipsis" @click="toDetail(goodsItem.goodsId)">{{ goodsItem.goodsName }}</p>
+        <p class="txt_desc text-ellipsis">{{ goodsItem.coverImgDescription }}</p>
+        <p class="txt_price">
+            <span>{{ goodsItem.moneyPrice | localMoney }}</span>
+            <!-- <template v-if="goodsItem.consuType == 3">
+                <span class="concat">&nbsp;+&nbsp;</span>
+                <img src="/static/images/money/icon.png" alt="">
+                <span class="label-money-volume">{{ goodsItem.goldPrice }}</span>
+            </template> -->
+            <span @click="QuicklyJoinTheShoppingCart(goodsItem)">
+                <i class="iconfont icon-gouwuche"></i>
+            </span>
+        </p>
+
     </div>
-    <div class="goodsItem" v-if="goodsList.data.length%2"></div>
+    <!-- <div class="goodsItem" v-if="goodsList.data.length%2" data-roll=""></div> -->
 </div>

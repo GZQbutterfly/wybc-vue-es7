@@ -2,8 +2,8 @@
 	<div v-if="true">
 		<div class="order-title weui-flex">
 			<i :class="['iconfont', order.userVipGrade==0?'icon-ID':'icon-shop']"></i>
-			<span>{{order.buyerName}}({{order.userVipGrade==0?' 用户订单':' 进货订单'}})</span>
-			<span class="flex title-rigth" style="color:#7ecc44">{{transOrderState()}}</span>
+			<span>{{order.buyerName}} (用户订单)</span>
+			<span class="flex title-rigth" style="color:#7ecc44">{{order.rebate.rebateState?'已返利':'待返利'}}</span>
 		</div>
 		<div class="row-line"></div>
 	</div>
@@ -16,13 +16,13 @@
 	</div>
 
 	<!-- 订单商品列表 -->
-	<div v-for="(goods,index) in order.goodses">
+	<div v-for="(goods,index) in order.goods">
 		<div class="weui-flex order-goods">
 			<img v-if="loadGoods(index)" class="goods-cover" :src=goods.coverImg alt="">
 			<div class="flex goods-info">
 				<div class="weui-flex">
 					<span>{{goods.goodsName}}</span>
-					<span class="flex price">{{goodsTotal(goods,order)|localMoney}}</span>
+					<span class="flex price">{{goods.purchasePrice|localMoney}}</span>
 				</div>
 				<p class="">x {{goods.number}}</p>
 			</div>
@@ -30,58 +30,28 @@
 	</div>
 
 	<!-- 商品列表展开选项 -->
-	<div v-if="expandAble(order.goodses.length)" class="expand-link">
-		<span>查看全部 {{order.goodses.length}} 件商品 </span>
+	<div v-if="expandAble(order.goods.length)" class="expand-link">
+		<span>查看全部 {{order.goods.length}} 件商品 </span>
 	</div>
 
 	<!-- 总计 -->
-	<div v-if="order.totalMoney>=0">
+	<div >
 		<div class="order-plus weui-flex flex-right">
-			<span class="desc-font color-red"> {{saleTotal() | localMoney}}</span>
+			<span class="desc-font color-red"> {{order.rebate.totalMoney | localMoney}}</span>
 			<span class="color-black">售价总计:&nbsp;&nbsp;</span>
 		</div>
 		<div class="row-line"></div>
 	</div>
-
-
-	<div v-if="order.outState==1">
-		<div class="weui-flex order-plus revalue-text">
-			<span class="flex-1">超时接单,订单将自动拒绝备货
-				<span class="value">{{timeLeft}}</span>
-			</span>
-		</div>
-		<div class="row-line"></div>
-	</div>
-	<!-- <div v-else-if="order.outState==2">
-		<div class="weui-flex order-plus revalue-text">
-			<span class="flex-1">订单完成 您已获得利润 :
-				<span class="value">{{((order.shopSaleDisct-order.shopBuyDisct)*order.punishDisct/100-order.shopBuyDisct)*order.number*order.purchasePrice/100|localMoney}}</span>
-			</span>
-		</div>
-		<div class="row-line"></div>
-	</div>
-	<div v-else-if="order.outState==3">
-		<div class="weui-flex order-plus revalue-text">
-			<span class="flex-1">订单完成 您将获得返利:
-				<span class="value">{{order.commi.commiTotalMoney|localMoney}}</span>
-			</span>
-		</div>
-		<div class="row-line"></div>
-	</div>
-	<div v-else-if="order.outState==4">
-		<div class="weui-flex order-plus revalue-text">
-			<span class="flex-1">订单完成 您已获得返利:
-				<span class="value">{{order.commi.commiTotalMoney|localMoney}}</span>
-			</span>
-		</div>
-		<div class="row-line"></div>
-	</div> -->
-
-	<!-- 已发货 -->
-	<div v-if="order.outState===1">
+	<div v-if="order.rebate.rebateState">
 		<div class="order-plus weui-flex flex-right">
-			<button @click.stop="stockNow(order.orderId)" class="item-button button-green">去进货</button>
-			<button @click.stop="refuse(order.orderId)" class="item-button button-pink">拒绝备货</button>
+			<span class="color-black">订单返利 <span class="rebate-money">{{order.rebate.rebateMoney | localMoney}}</span> , 已存入钱包</span>
 		</div>
+		<div class="row-line"></div>
+	</div>
+	<div v-else>
+		<div class="order-plus weui-flex flex-right">
+			<span class="color-black">订单待返利 <span class="rebate-money">{{order.rebate.rebateMoney | localMoney}}</span> , 等待交易完成</span>
+		</div>
+		<div class="row-line"></div>
 	</div>
 </div>

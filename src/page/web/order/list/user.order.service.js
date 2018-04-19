@@ -21,6 +21,9 @@ export default (store) => {
         },
         getOrderBanner() {
             return q(bannerUrl, { posId: 3 });
+        },
+        getRebateGold(data){
+            return q("api/wallet/q_gold_by_Order",data);
         }
     };
 }

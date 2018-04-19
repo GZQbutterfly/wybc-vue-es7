@@ -1,16 +1,23 @@
-import {Component} from 'vue-property-decorator';
+import {
+    Component
+} from 'vue-property-decorator';
 import BaseVue from 'base.vue';
 import orderDetailService from './order.detail.service';
-
-import {toLogin, getZoneData} from 'common.env';
-
+import {
+    toLogin,
+    getZoneData
+} from 'common.env';
 require('./order.detail.scss');
 
-@Component({template: require('./order.detail.html')})
+@Component({
+    template: require('./order.detail.html')
+})
 
 export class OrderDetail extends BaseVue {
     orderInfo = {
-        orders: {}
+        orders: {
+            address: ""
+        }
     };
     orderStateName = '';
     orderLeaveMsg = {};
@@ -25,14 +32,18 @@ export class OrderDetail extends BaseVue {
     showDelWithRefund = false;
     //底部toast
     showToast = false;
-    //你每个商品的退款按钮
-    // showRefund: boolean = false;
-    //商品显示物流
-    showOrderNumber = false;
     //底部显示实付还是需付
     showTypeAndRefund = false;
     totalPrice = 0;
     shipFee = 0;
+    totalCommonPrice = 0;
+    totalGold = 0;
+    totalRoll = 0;
+    totalDisCountMoney = 0;
+    useRoll = false;
+    timeLimit = false;
+    orderPayType = 0;
+
     mounted() {
         document.title = "我的订单";
         //注册服务
@@ -57,7 +68,6 @@ export class OrderDetail extends BaseVue {
             //加载数据
             this.page_reload();
         });
-
     }
 
     /**
@@ -87,6 +97,7 @@ export class OrderDetail extends BaseVue {
             })
         }
     }
+
     msg() {
         let _self = this;
         this.formatDate = '-- ';
@@ -105,56 +116,83 @@ export class OrderDetail extends BaseVue {
                 }
             }, 1000);
         }
+        let _orderAddress = this.orderInfo.orders.address;
         //获取收货地址
         let _address = {
-            province: this.orderInfo.orders.province,
-            city: this.orderInfo.orders.city,
-            district: this.orderInfo.orders.district,
-            campus: this.orderInfo.orders.campus,
-            dormitory: this.orderInfo.orders.dormitory
+            province: _orderAddress.province,
+            city: _orderAddress.city,
+            district: _orderAddress.district,
+            campus: _orderAddress.campus,
+            dormitory: _orderAddress.dormitory,
+            sex: _orderAddress.sex
         };
-        if (this.orderInfo.orders.campus != null) {
+        if (_orderAddress.campus != null) {
             // _address = getZoneData(_address);
-            this.orderInfo._address = _address.campus + _address.dormitory + this.orderInfo.orders.address;
-        } else if (this.orderInfo.orders.province != null) {
+            this.orderInfo._address = _address.campus + _address.dormitory + _orderAddress.address;
+        } else if (_orderAddress.province != null) {
             // _address = getZoneData(_address);
-            this.orderInfo._address = _address.province + _address.city + _address.district + this.orderInfo.orders.address;
+            this.orderInfo._address = _address.province + _address.city + _address.district + _orderAddress.address;
         }
+        this.orderInfo.sex = _address.sex;
         //虚物获取买家留言
         this.orderInfo.gsType === 2 && this.getUserLeaveMsg();
         //判断是否设置显示底部toast
-        this.showToast = ([1, 4].indexOf(_self.orderInfo.orders.orderState) !== -1);
-        this.showDelWithRefund = (this.orderInfo.orders.orderState === 2 && this.orderInfo.isDelete === 1);
+        this.showToast = ([1, 4].indexOf(_self.orderInfo.orders.orderState) != -1);
+        this.showDelWithRefund = (this.orderInfo.orders.orderState == 2 && this.orderInfo.isDelete == 1);
         this.showDelWithRefund && (this.showToast = true);
-        //判断是否显示退款按钮
-        // (this.orderInfo.orderState > 1 && this.orderInfo.orderState < 6) && (this.showRefund = true);
-        //判断是否显示物流信息
-        this.showOrderNumber = ((this.orderInfo.orders.orderState > 1 && this.orderInfo.orders.orderState != 6));
         //底部显示实付还是需付
-        this.showTypeAndRefund = (this.orderInfo.orders.orderState === 1 || (this.orderInfo.orders.orderState === 6 && this.orderInfo.orders.closeReason != 3));
+        this.showTypeAndRefund = (this.orderInfo.orders.orderState == 1 || (this.orderInfo.orders.orderState == 6 && this.orderInfo.orders.closeReason != 3));
     }
+
     /* 转换数据格式，为多店而生 */
     changeRes(res) {
-        if (this.orderId) {
+        let _self = this;
+        if (_self.orderId) {
             res = {
                 leftTime: res.leftTime,
                 leftDay: res.leftDays,
                 orderGoods: [res.orderGoods],
                 orders: [res.order],
-                logis: res.logis
+                logis: res.logis,
+                delivery: res.delivery
             }
         }
+        _self.useRoll = false;
+        _self.timeLimit = false;
+        _self.totalGold = 0;
+        _self.totalDisCountMoney = 0;
+        _self.orderPayType = 0; //金币购标识
         res.orders.forEach(v => {
-            this.totalPrice += Number(v.totalMoney);
-            this.shipFee += Number(v.shipFee);
-        })
+            _self.totalPrice += Number(v.totalMoney);
+            _self.shipFee += Number(v.shipFee);
+            if (v.consuType == 3 && v.periodId == 0) {
+                _self.totalGold += Number(v.totalGold);
+                _self.orderPayType = 1;
+            }
+            if (v.periodId > 0) {
+                _self.timeLimit = true;
+                _self.orderPayType = 2;
+            }
 
+            if (v.couponMoney != null) {
+                _self.useRoll = true;
+            }
+
+        })
+        _self.totalCommonPrice = 0;
+        _self.totalRoll = 0;
+        res.orderGoods.forEach(v => {
+            _self.totalCommonPrice += Number(v.purchasePrice * v.number);
+            _self.totalRoll += Number(v.purchasePrice * v.number - v.totalMoney) | 0;
+            _self.totalDisCountMoney += Number(v.purchasePrice * v.number - v.moneyPrice * v.number);
+        })
         let a = {
             leftTime: res.leftTime,
             orders: res.orders[0],
             leftDay: res.leftDay,
             shop: [],
-            logis: []
+            logis: [],
+            delivery: res.delivery
         };
         if (res.logis) {
             a.logis.push(res.logis);
@@ -166,7 +204,8 @@ export class OrderDetail extends BaseVue {
             let b = {
                 shopId: item.shopId,
                 shopName: item.shopName,
-                shopGoods: []
+                shopGoods: [],
+                periodId: item.periodId
             };
             if (c.length == 0) {
                 b.shopGoods.push(res.orderGoods[index]);
@@ -182,8 +221,8 @@ export class OrderDetail extends BaseVue {
             }
         });
         a.shop = c;
-        // console.log(a);
         return a;
+
         function find(a, b) {
             for (let i = 0; i < a.length; i++) {
                 if (a[i].shopId == b) {
@@ -201,24 +240,22 @@ export class OrderDetail extends BaseVue {
      * @param formatLen 格式位数
      */
     setFormatDate(time, formatLen = 4) {
-        let format = [
-            {
-                step: 1000,
-                mark: '秒',
-            }, {
-                step: 60,
-                mark: '分',
-            }, {
-                step: 60,
-                mark: '小时',
-            }, {
-                step: 24,
-                mark: '天',
-            }, {
-                step: 7,
-                mark: '周',
-            }
-        ];
+        let format = [{
+            step: 1000,
+            mark: '秒',
+        }, {
+            step: 60,
+            mark: '分',
+        }, {
+            step: 60,
+            mark: '小时',
+        }, {
+            step: 24,
+            mark: '天',
+        }, {
+            step: 7,
+            mark: '周',
+        }];
         let getFormat = (time, i = -1) => {
             time = Math.floor(time / format[++i].step);
             if (!time) {
@@ -246,9 +283,40 @@ export class OrderDetail extends BaseVue {
             '交易完成',
             '交易关闭'
         ][this.orderInfo.orders.orderState] + (
-            (this.orderInfo.orders.orderState === 6)
-            ? ' (' + ['', '买家取消', '支付超时', '订单异常'][this.orderInfo.orders.closeReason] + ')'
-            : '');
+            (this.orderInfo.orders.orderState === 6) ?
+            ' (' + ['', '买家取消', '支付超时', '订单异常'][this.orderInfo.orders.closeReason] + ')' :
+            '');
+    }
+
+    /**
+     * 物流状态
+     */
+    getOrderLogisState() {
+        let _state = this.orderInfo.delivery.deliveryState;
+        switch (_state) {
+            case 0:
+            case 1:
+            case 2:
+                return "用户完成支付,订单即将发货";
+            case 3:
+                return "订单发货，并由分仓配送";
+            case 4:
+                return "订单发货，并分配店长配送员为你配送";
+            case 5:
+                return "订单包裹分拣中";
+            case 6:
+                return "分拣完成，配送店长待取货";
+            case 7:
+                return "已取货，订单配送中";
+            case 9:
+                return "已经为您指派分仓配送员，分仓配送中";
+            case 8:
+            case 10:
+                return "配送店长取消本次配送，即将转交分仓配送";
+            case 11:
+                return "订单已送达，交易完成";
+
+        }
     }
 
     // /**
@@ -278,7 +346,6 @@ export class OrderDetail extends BaseVue {
      */
     confirmReceipt() {
         let _self = this;
-        
         new Promise((res, rej) => {
             let dialogObj = {
                 title: '确认收货',
@@ -295,12 +362,12 @@ export class OrderDetail extends BaseVue {
                             let dialogObj = {
                                 title: '确认收货',
                                 content: '确认收货' + (
-                                    confirm.data.success
-                                    ? '成功'
-                                    : '失败') + '!',
-                                type: confirm.data.success
-                                    ? 'success'
-                                    : 'error',
+                                    confirm.data.success ?
+                                    '成功' :
+                                    '失败') + '!',
+                                type: confirm.data.success ?
+                                    'success' :
+                                    'error',
                                 assistBtn: '',
                                 mainBtn: '确认',
                                 assistFn() {},
@@ -309,13 +376,17 @@ export class OrderDetail extends BaseVue {
                                     confirm.data.success && _self.page_reload();
                                 }
                             }
-                            _self.$store.state.$dialog({ dialogObj });
+                            _self.$store.state.$dialog({
+                                dialogObj
+                            });
                         });
                     });
                     res(true);
                 }
             };
-            _self.$store.state.$dialog({ dialogObj });
+            _self.$store.state.$dialog({
+                dialogObj
+            });
         });
     }
 
@@ -327,36 +398,35 @@ export class OrderDetail extends BaseVue {
             _this.page_reload();
             done();
         }, 500);
-
     }
+
     infinite(done) {
         setTimeout(() => {
             done(true);
         }, 500);
     }
+
     /**
      * 支付
      */
     goPay() {
         let _this = this;
-        let obj = this.$store.state.$loadding();
-        console.log(1111)
         let _parm = {
             combinOrderNo: this.orderInfo.orders.combinOrderNo,
             orderId: this.orderInfo.orders.orderId
         }
-        this._$service.pay(_parm).then(res => {
-            if (res) {
-                // this.page_reload();
-                _this.$router.push({
-                    path: 'user_order',
-                    query: {
-                        listValue: '0'
-                    }
-                });
-            }
-            obj.close();
-        })
+        let orderPayType = {
+            combinOrderNo: this.orderInfo.orders.combinOrderNo,
+            orderPayType: _this.orderPayType
+        }
+
+        let _param = {
+            combinOrderNo: this.orderInfo.orders.combinOrderNo,
+            orderId: this.orderInfo.orders.orderId,
+            totalMoney: this.orderInfo.orders.orderId.totalMoney,
+            orderPayType: this.orderPayType
+        }
+        this.$router.push({path:'pay_list',query:_param});
     }
 
     /**
@@ -383,12 +453,12 @@ export class OrderDetail extends BaseVue {
                 let dialogObj = {
                     title: '退款提示',
                     content: '删除并退款' + (
-                        ress.data.success
-                        ? '成功'
-                        : '失败') + '!',
-                    type: ress.data.success
-                        ? 'success'
-                        : 'error',
+                        ress.data.success ?
+                        '成功' :
+                        '失败') + '!',
+                    type: ress.data.success ?
+                        'success' :
+                        'error',
                     assistBtn: '',
                     mainBtn: '确认',
                     assistFn() {},
@@ -397,15 +467,75 @@ export class OrderDetail extends BaseVue {
                         ress.data.success && _self.page_reload();
                     }
                 }
-                _self.$store.state.$dialog({ dialogObj });
+                _self.$store.state.$dialog({
+                    dialogObj
+                });
             });
         });
     }
+
     goShop(shopId) {
         this.$router.push({
             path: "home",
             query: {
                 shopId: shopId
+            }
+        });
+    }
+    toDetail(item, shopId, periodId) {
+        let _self = this;
+        if (periodId) {
+            let _data = {
+                goodsId: item.goodsId,
+                periodId: periodId
+            }
+            this._$service.queryLimitPeriod(_data).then(res => {
+                if (res.data.errorCode || !res.data) {
+                    let dialogObj = {
+                        title: '提示',
+                        content: '当前商品限时购活动已结束！',
+                        assistBtn: '',
+                        mainBtn: '确定',
+                        type: "info",
+                        assistFn() {},
+                        mainFn() {}
+                    }
+                    _self.$store.state.$dialog({
+                        dialogObj
+                    });
+                } else {
+                    this.$router.push({
+                        path: "money_timelimit_detail",
+                        query: {
+                            goodsId: item.goodsId,
+                            shopId: shopId,
+                            periodId: res.data.periodId
+                        }
+                    });
+                }
+            })
+        } else {
+            let flag = this.orderInfo.orders.deliveryType == 1 ? true : false;
+            this.$router.push({
+                path: "goods_detail",
+                query: {
+                    goodsId: item.goodsId,
+                    shopId: shopId,
+                    from: item.consuType == 3 ? "money_gold_buy" : "",
+                    isAgent: flag
+                }
+            });
+        }
+    }
+    /**
+     * 查看配送详情
+     */
+    toDelivery() {
+        this.$router.push({
+            path: 'web_order_delivery',
+            query: {
+                combinOrderNo: this.combinOrderNo,
+                orderId: this.orderId
             }
         });
     }

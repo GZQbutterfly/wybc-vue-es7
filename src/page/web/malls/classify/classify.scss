@@ -1,102 +1,51 @@
 #indexBox {
     overflow: hidden;
     margin-bottom: 0.5rem;
-    height: 100%;
+    height: calc(100% - 86px);
     display: flex;
     flex-direction: column;
-    .header {
-        overflow: hidden;
+    .header1 {
         background: #ffffff;
     }
     .home-content {
         position: relative; // height: 5.68rem
         flex: 1; // margin-top: 0.95rem;
     }
-    .indexBox_logo {
-        height: 0.86rem;
-        padding: 0.13rem 0;
-        border-bottom: 0.08rem solid #f2f2f2;
-        display: flex;
-        justify-content: space-around;
-        .wdName {
-            width: 80%;
-            height: 100%;
-            flex: 1;
-            padding-left: 0.1rem;
-            display: flex;
-            align-items: center;
-            dt {
-                height: 0.5rem;
-                width: 0.5rem;
-                border-radius: 0.05rem;
-                overflow: hidden;
-                img {
-                    height: 100%;
-                    width: 100%;
-                }
-            }
-            dd {
-                height: 100%;
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                padding-left: 0.1rem;
-                line-height: 1;
-                overflow: hidden;
-                h4{
-                    font-size: 0.16rem;
-                    max-height: .16rem;
-                    font-weight: normal;
-                }
-                > span {
-                    font-size: 0.12rem;
-                    max-height: .12rem;
-                    margin: 5px 0;
-                }
-                h4,
-                >span {
-                    color: #333;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                    display: block;
-                    width: 100%;
-                }
-                p {
-                    height: 0.14rem;
-                    width: 0.7rem;
-                    background: url("/static/images/newshop/vip.png") center center;
-                    background-size: 100% 100%;
-                    display: flex;
-                    align-items: center;
-                    span {
-                        display: inline-block;
-                        margin-left: 0.3rem;
-                        font-size: 0.12rem;
-                        color: #fff;
-                    }
-                }
-            }
-        }
-        .serBox {
-            height: 0.5rem;
-            width: 0.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .sercher {
-            font-size: 0.2rem!important;
-            color: #808080;
-        }
-    }
     .carousel {
         height: 1.43rem;
-        width: 100%;
-        // img {
+        width: 100%; // img {
         //     width: 100%;
         //     height: 100%;
         // }
+    }
+    .classifyEmpty {
+        background: #ffffff;
+        flex: 1;
+        border-bottom: 0.06rem solid #f2f2f2;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 50px;
+        img {
+            height: 1.08rem;
+            width: 1.08rem;
+        }
+        h3,
+        h4 {
+            color: #b3b3b3;
+            font-weight: normal;
+        }
+        p {
+            height: 0.3rem;
+            width: 1rem;
+            border: 0.01rem solid #7ecc44;
+            color: #7ecc44;
+            text-align: center;
+            line-height: 0.3rem;
+            border-radius: 0.05rem;
+            margin-top: 10px;
+        }
     }
     .goodsList li {
         overflow: hidden;
@@ -104,9 +53,10 @@
             border-top: 0.02rem solid #f2f2f2;
             overflow: hidden;
             .shopPic_gs {
+                position: relative;
                 float: left;
                 width: 1.865rem;
-                height: 2.4rem;
+                height: 2.49rem;
                 background: #ffffff;
                 border-bottom: 0.02rem solid #f2f2f2;
                 &:nth-of-type(even) {
@@ -117,6 +67,25 @@
                 a {
                     display: block;
                     height: 100%;
+                }
+                .right-bottom {
+                    position: absolute;
+                    right: 0.02rem;
+                    bottom: 0.75rem;
+                    z-index: 1;
+                    border-radius: 0.02rem;
+                    padding: 0 0.01rem;
+                }
+                .coupon-img-roll {
+                    height: 50px;
+                    width: 50px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    img {
+                        height: 100%;
+                        width: 100%;
+                    }
                 }
                 dt {
                     height: 1.72rem;
@@ -129,14 +98,15 @@
                         position: absolute;
                         display: block;
                         font-size: 0.12rem;
-                        width: 0.35rem;
+                        width: 0.16rem;
                         line-height: 0.16rem;
                         height: 0.16rem;
+                        border-radius: 2px 2px;
                         text-align: center;
                         color: #ffffff;
                         background: #ff1c1c;
                         top: 0;
-                        left: 0;
+                        left: 2px;
                     }
                     span:nth-of-type(2) {
                         position: absolute;
@@ -190,8 +160,25 @@
                         height: 0.2rem;
                         line-height: 0.2rem;
                         color: #ff1c1c;
+                        position: relative;
                         span {
                             font-size: 0.15rem;
+                            &:nth-child(2) {
+                                position: absolute;
+                                display: block;
+                                height: 25px;
+                                width: 25px;
+                                border: 1px solid #7ecc44;
+                                border-radius: 2px 2px;
+                                top: 0;
+                                right: 10px;
+                                line-height: 25px;
+                                text-align: center;
+                                .icon-gouwuche {
+                                    color: #7ecc44;
+                                    font-size: 20px !important;
+                                }
+                            }
                         }
                     }
                 }

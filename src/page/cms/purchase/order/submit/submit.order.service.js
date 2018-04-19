@@ -59,7 +59,6 @@ export default (_store) => {
          * 套餐提交订单
          */
         submitPackageOrder(data) {
-            let _wxops = _state.wxops;
             return q('api/order/a_package_order', data);
         },
 
@@ -76,7 +75,7 @@ export default (_store) => {
         pay(data) {
             let _pay = _state.$pay;
             _pay._backUrl = '/cms#/cms_stock_order?listValue=0';
-            return _pay.pay('api/order_whole/pay_order', data);
+            return q('api/order_whole/pay_order', data);
         },
 
         /**
@@ -108,7 +107,7 @@ export default (_store) => {
          * 获取微店信息
          */
         getWdInfo(shopId) {
-            return q("api/wd_vip/queryWdInfo", { shopId: shopId });
+            return  _store.dispatch('CHECK_UP_WD_INFO', shopId);
         }, 
 
         /**
@@ -116,6 +115,16 @@ export default (_store) => {
          */
         getFee() {
             return q("api/q_whole_delivery_config", {})
+        },
+    
+        /**
+         * 快速仓订单未开启快速仓自动开启
+         */
+        openAndSetFastDelivery(data){
+            return q("api/u_fastDeliInfo_order", data);
+        },
+        getCouponList(data) {
+            return q("api/activites/q_wd_order_coupons", data);
         }
     };
 }

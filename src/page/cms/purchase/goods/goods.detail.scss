@@ -94,7 +94,7 @@
             }
             .sercher {
                 margin-left: 0.02rem;
-                font-size: 0.16rem!important;
+                font-size: 0.16rem !important;
                 color: #b3b3b3;
             }
         }
@@ -120,7 +120,7 @@
                 color: #ff2d00;
             }
             i {
-                font-size: 0.16rem!important;
+                font-size: 0.16rem !important;
                 color: #ff2d00;
             }
         }
@@ -138,7 +138,7 @@
         color: #333333;
         font-size: 0.13rem;
         padding-left: 0.13rem;
-        padding-bottom: 0.1rem;
+        padding-bottom: 0.02rem;
         .money-price {
             margin-top: 10px;
             color: #ff1c1c;
@@ -151,8 +151,31 @@
         }
         .purchase {
             font-size: 0.14rem;
-            color: #808080;
-            text-decoration: line-through;
+        }
+    }
+    .zeroPrice {
+        display: flex;
+        align-items: center;
+        height: 0.33rem;
+        padding-left: 0.13rem;
+        p {
+            height: 18px;
+            padding: 0 2px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            span {
+                font-size: 13px;
+            }
+            &:nth-of-type(2){
+                margin-left: 10px;
+                 color: #ee893e;
+                span{
+                     color: #333;
+                }
+            }
+            
         }
     }
     .count_down {
@@ -211,6 +234,16 @@
                 text-align: center;
                 margin-left: 0.04rem;
             }
+            &:nth-of-type(4) {
+                margin-left: 4px;
+                background-color: #f2f2f2;
+                height: 16px;
+                width: 20px;
+                text-align: center;
+                display: inline-flex;
+                align-items: flex-end;
+                padding-left: 4px;
+            }
         }
     }
     .rank {
@@ -261,7 +294,7 @@
         justify-content: center;
         margin: 0.08rem 0;
         .iconfont {
-            font-size: 0.2rem!important;
+            font-size: 0.2rem !important;
             color: #b3b3b3;
         }
         span {
@@ -347,7 +380,7 @@
             width: 50px;
             position: relative;
             .iconfont {
-                font-size: 0.28rem!important;
+                font-size: 0.28rem !important;
                 color: #7ecc44;
             }
             p {
@@ -378,7 +411,7 @@
             font-size: 0.15rem;
         }
     }
-    .stockName{
+    .stockName {
         text-align: center;
     }
     .order-cover {
@@ -387,15 +420,16 @@
         position: fixed;
         top: 0;
         z-index: 1777;
-        .close{
+        .close {
             position: relative;
-            .close1{
+            .close1 {
                 position: absolute;
                 top: -3px;
                 right: 0;
-                font-size: 20px!important;
+                font-size: 20px !important;
             }
-        } .order-cover-box {
+        }
+        .order-cover-box {
             opacity: 0.6;
             height: 100%;
             width: 100%;
@@ -416,6 +450,13 @@
             .weui-media-box_text {
                 border-bottom: 0.01rem solid #f2f2f2;
             }
+            .stock_info {
+                text-align: center;
+                margin-top: .1rem;
+                margin-bottom: .1rem;
+                color: #3b8eff;
+                font-size: .14rem;
+            }
             .btn {
                 margin: 0;
                 border-radius: 0;
@@ -425,10 +466,11 @@
                 text-align: center;
             }
             .weui-box {
+                width: 125px;
                 height: 0.5rem;
+                margin: 0 auto;
                 display: flex;
-                align-items: center;
-                justify-content: center;
+                align-items: center; // justify-content: center;
             }
             .weuiBtn {
                 height: 0.4rem;

@@ -27,7 +27,11 @@
             padding-bottom: 10px;
             background-color: #fff;
             align-items: center; // &_hd {}
-            // &_bd {}
+            &_bd {
+                .history-box {
+                    height: 170px;
+                }
+            }
         }
     }
     .lead-container_ft {
@@ -51,22 +55,22 @@
                     &_bd {
                         color: #333;
                         text-align: left;
-                        .shopname{
+                        .shopname {
                             display: flex;
                             align-items: center;
                             font-size: 15px;
-                            span{
+                            span {
                                 max-width: 120px;
                             }
                         }
-                        img{
+                        img {
                             width: 26px;
                             height: 26px;
                             margin-bottom: 5px;
                             margin-right: 5px;
                             border-radius: 50%;
                         }
-                        .schoolname{
+                        .schoolname {
                             font-size: 12px;
                         }
                     }
@@ -85,4 +89,13 @@
             height: 20px;
         }
     }
+}
+.lead-poster-container {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    height: 100%;
+    width: 100%;
 }

@@ -115,7 +115,7 @@ const routes = [
         }
     },
     // 引导页面
-    ...leadRoutes
+    ...leadRoutes,
 ];
 
 export default routes;

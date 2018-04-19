@@ -160,4 +160,10 @@ export class Information extends BaseVue {
         location.href = url + '?contentId=' + id;
     }
 
+    activated() {
+        let _self = this;
+        this.$nextTick(() => {
+            _self.updateWxShare();
+        })
+    }
 }

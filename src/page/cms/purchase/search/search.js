@@ -1,5 +1,5 @@
-import { Component} from 'vue-property-decorator';
-import BaseVue  from 'base.vue';
+import { Component } from 'vue-property-decorator';
+import BaseVue from 'base.vue';
 
 import searchService from './search.service';
 import { GoodsList } from '../goods_list/goods_list';
@@ -13,7 +13,7 @@ import './search.scss';
 export class Search extends BaseVue {
     ipt_search = '';
     frm_push = false;
-    data_hot= [];
+    data_hot = [];
     data_history = [];
     data_keyword = [];
     data_goods = { 'data': [] };
@@ -22,7 +22,7 @@ export class Search extends BaseVue {
     search_limit = 10;
 
     search_flag = true;
-     _$service;
+    _$service;
 
     created() {
 
@@ -79,10 +79,11 @@ export class Search extends BaseVue {
             this.search_init(null);
             this.frm_push = true;
             //保存到历史记录
-            this._$service.setHistory(this.ipt_format);
+           // this._$service.setHistory(this.ipt_format);
         } else {
             //初始化输入框聚焦
             document.getElementById('ipt-search').focus();
+            this.frm_push = false;
         }
     }
 
@@ -169,33 +170,19 @@ export class Search extends BaseVue {
         let _self = this;
         //TODO page++ and  showpage
         this.search_page++;
-        this._$service.getGoods(this.ipt_format, this.search_page, this.search_limit).then((res) => {
-            res = res.data.data;
-            if (res.length == 0 || !res) {
+        this._$service.getGoods(this.ipt_format, this.search_page, this.search_limit,0).then((res) => {
+            res = res.data;
+            if (res.errorCode) {
                 return;
             }
-            let infoId = this.$store.state.workVO.user.userId;
-            let goodsIds = [];
-            let opt = { infoId: infoId, listStr: "" };
-            res.forEach(ele => {
-                goodsIds.push(ele.goodsId)
-            });
-            opt.listStr = goodsIds.join(",");
-
-            this._$service.getDiscountPrice(opt).then((discount) => {
-                for (let i = 0, len = res.length; i < len; i++) {
-                    for (let j = 0, lenj = discount.data.length; j < lenj; j++) {
-                        if (i == j) {
-                            res[i].purchasePrice = res[i].purchasePrice * discount.data[j] / 100;
-                            break;
-                        }
-                    }
-                }
-                _self.data_goods.data.push.apply(_self.data_goods.data, res);
-                //检查是否有下一页
-                this.search_flag = res && (_self.search_limit == res.length);
-                callBack && callBack();
-            })
+            _self.data_goods.data.push.apply(_self.data_goods.data, res.agent);
+            if (_self.data_goods.data.length != 0 && _self.search_page==1){
+                //保存到历史记录
+                this._$service.setHistory(this.ipt_format);
+            }
+            //检查是否有下一页
+            this.search_flag = res && (_self.search_limit == res.agent.length);
+            callBack && callBack();
         });
         return true;
     }
@@ -218,6 +205,21 @@ export class Search extends BaseVue {
             done(true);
         }
     }
-
+    joinCar(item) {
+        let _self = this;
+        let opt = {
+            goodsId: item.goodsId,
+            number: 1
+        }
+        this._$service.addGoods(opt).then(res => {
+            if (res.data.errorCode) {
+                let _toast = _self.$store.state.$toast;
+                _toast({ title: res.data.msg, success: false });
+                return;
+            }
+            let _toast = _self.$store.state.$toast;
+            _toast({ title: '加入进货单成功' });
+        })
+    }
 }
 // done(!(_self.search_flag && _self.search_next()));

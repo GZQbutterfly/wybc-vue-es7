@@ -31,6 +31,11 @@ export class CacheLogin extends Vue {
     doOk() {
         setCacheLoginFlag();
         cacheLogin();
+        
+        let localWdInfo = sessionStorage.wdVipInfo ? JSON.parse(sessionStorage.wdVipInfo) : {};
+        if (localWdInfo.infoId != null) {
+            this._$service.addShopHistory({shopId:localWdInfo.infoId});
+        }
         this.$router.push({path:'login_back', query: this.$route.query});
     }
     setUser(user) {

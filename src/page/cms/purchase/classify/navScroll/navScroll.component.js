@@ -14,44 +14,16 @@ import navScrollComponentService from "./navScroll.component.service";
 import './navScroll.component.scss';
 
 @Component({
-    props: ['config', 'onchangeShop'],
+    props: ['classifyNav', "currentClassifyId"],
     template: require('./navScroll.component.html')
 })
 export class NavScrollc extends Vue {
-    classifyShow = '';//图片显示
     _$service;
-    classfyList = [];//分类数据
-    classfyId = [];//分类id
     swiper;
+    classifyShow=21;
     data() {
         return {}
     }
-    created() {
-        this._$service = navScrollComponentService(this.$store);
-    }
-    async getQueryList(classify) {
-        this.classfyList = (await this._$service.classfyList()).data.data;
-        if (this.classfyList.length==0){
-            this.classfyList = [];
-            return;
-        }
-        if (classify) {
-            let flag = findIndex(this.classfyList, { goodsClassifyId: Number(classify) });
-            if (flag == -1) {
-                this.classifyShow = this.classfyList[0].goodsClassifyId;
-            } else {
-                this.classifyShow = classify;
-            }
-        } else {
-            this.classifyShow = this.classfyList[0].goodsClassifyId;
-        }
-        let activeIndex = findIndex(this.classfyList, { goodsClassifyId: Number(this.classifyShow) });
-        if (this.swiper) {
-            this.swiper.slideTo(activeIndex)
-        }
-        return this.classifyShow;
-    }
-
     mounted() {
         let _self = this;
         let _route = _self.$route;
@@ -75,17 +47,11 @@ export class NavScrollc extends Vue {
                     }
                 }
             });
-            _self.getQueryList(classify);
         });
+        this.classifyShow = this.$props.classifyNav[0].goodsClassifyId;
     }
-    activated() {
-        let classify = this.$route.query.classify;
-        this.getQueryList(classify);
-    }
-    async changeShop(e, id) {
-        let _this = this;
-        let  classify = await _this.getQueryList(id);
-        this.$props.onchangeShop(e, classify);
-        this.$router.replace({ path: "cms_purchase_classify", query: { classify: classify } });
+    switchTab(id,index){
+        this.classifyShow = id;
+        this.$emit("swichTab",id,index);
     }
 }

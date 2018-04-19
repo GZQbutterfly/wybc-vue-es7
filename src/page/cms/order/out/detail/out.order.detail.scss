@@ -16,6 +16,9 @@
                 margin-top: .2rem;
                 font-size: .15rem;
                 padding-bottom: .115rem;
+                .rebate-money{
+                    color: #ff973a;
+                }
             }
             .title-desc {
                 margin-top: .25rem;
@@ -84,6 +87,7 @@
                 background-color: white;
                 line-height: .32rem;
                 font-size: .13rem;
+                
             }
             .goods-item {
                 overflow: hidden;
@@ -102,6 +106,7 @@
                         color: #333333;
                         .title-price {
                             text-align: right;
+                            color: #ff1c1c;
                         }
                     }
                     .number {
@@ -191,6 +196,14 @@
             height: 100%;
         }
     }
+}
+
+.text-rigth{
+    text-align: right;                   
+}
+
+.text-color-green{
+    color: #7ecc44;
 }
 
 .flex-1 {

@@ -1,76 +1,95 @@
 // 出貨訂單
-import BaseVue  from 'base.vue';
-import { Component } from 'vue-property-decorator';
-import  MultiTab  from '../../../../commons/vue_plugins/components/multitab/multitab.vue';
+import BaseVue from 'base.vue';
+import {
+    Component
+} from 'vue-property-decorator';
 import shipOrderListService from './out.order.service';
-import { OutOrderItem } from './item/out.order.item';
+import {
+    OutOrderItem
+} from './item/out.order.item';
+
+import {
+    QuickOrderItem
+} from './item/quick.order.item';
+
 
 
 import './out.order.scss';
 @Component({
     template: require('./out.order.html'),
     components: {
-        multitab: MultiTab,
-        oi: OutOrderItem
+        oi: OutOrderItem,
+        qoi: QuickOrderItem,
     }
 })
 export class OutOrder extends BaseVue {
 
     _$service;
 
+    //正常出货订单数据(用户订单&&出货订单)
+    dataShipmentList = [{
+        index: 0,
+        state: 0, //0 待返利;1已返利
+        page: 0,
+        data: []
+    }, {
+        index: 1,
+        state: 1, //0 待返利;1已返利
+        page: 0,
+        data: []
+    }];
+
+    //快速订单
+    dataQuickList = [
+        {
+            index:0,
+            state:4,
+            data:[],
+            page:0
+        },{
+            index:1,
+            state:5,
+            data:[],
+            page:0
+        }
+    ];
+
+    tabs = ['普通订单', '快速订单']
+
+    custStyle = {
+        lineColor: '#f2f2f2',
+        itemColor: '#FFFFFF',
+        lineOnColor: '#7ecc44',
+        itemOnColor: '#7ecc44',
+        textColor: '#333333',
+        textOnColor: '#FFFFFF'
+    }
+
+    nomalTabs = ['待返利', '已返利'];
+
+    quickTabs = ['待配送', '交易完成'];
+
     tabIndex = 0;
 
-    subTableIndex = 0;
+    userSubIndex = 0;
 
-    dataShipmentList = [[], [], [], []];
-
-    noDataList = [false, false, false, false];
-
-    pageList = [0, 0, 0, 0];
-
-    data() {
-        if (Number(this.$route.query.listValue) && Number(this.$route.query.listValue) >= 2) {
-            this.tabIndex = 2;
-        } else {
-            this.tabIndex = Number(this.$route.query.listValue) ? Number(this.$route.query.listValue) : 0;
-        }
-        this.subTableIndex = Number(this.$route.query.listValue) >= 2 ? Number(this.$route.query.listValue) - 2 : 0;
-
-        return {
-            tabs: ['待进货', '交易完成', '返利订单'],
-            custStyle: {
-                lineColor: '#f2f2f2',
-                itemColor: '#FFFFFF',
-                lineOnColor: '#7ecc44',
-                itemOnColor: '#7ecc44',
-                textColor: '#333333',
-                textOnColor: '#FFFFFF'
-            },
-            tabIndex: this.tabIndex,
-            subTableIndex: this.subTableIndex,
-            subTabs: ['进行中', '已返利'],
-        }
-    }
+    quickSubIndex = 0;
 
     mounted() {
         this._$service = shipOrderListService(this.$store);
-
         let self = this;
         this.$nextTick(() => {
-            if (Number(self.$route.query.listValue) && Number(self.$route.query.listValue) >= 2) {
-                self.tabIndex = 2;
-            } else {
-                self.tabIndex = Number(self.$route.query.listValue) ? Number(self.$route.query.listValue) : 0;
+            if (Number(self.$route.query.listValue)) {
+                let listValue = Number(self.$route.query.listValue);
+                if (listValue >= 2) {
+                    self.tabIndex = 1;
+                    self.quickSubIndex = listValue % 2;
+                } else  {
+                    self.tabIndex = 0;
+                    self.userSubIndex = listValue % 2;
+                }
             }
-            self.subTableIndex = Number(self.$route.query.listValue) >= 2 ? Number(self.$route.query.listValue) - 2 : 0;
         })
-    }
-
-    resetAllData() {
-        this.dataShipmentList = [[], [], [], []];
-        this.noDataList = [false, false, false, false];
-        this.pageList = [0, 0, 0, 0];
-        this.fetchOrdersData('', this.currentOrderState(), 1, null);
     }
 
     onTabChange(index) {
@@ -78,87 +97,81 @@ export class OutOrder extends BaseVue {
         this.$router.replace({
             path: 'cms_out_order',
             query: {
-                listValue: this.tabIndex + this.subTableIndex,
+                listValue: this.transIndex()
             }
-        })
-
-        if (this.pageList[this.currentOrderState() - 1] == 0) {
-            this.fetchOrdersData('', this.currentOrderState(), 1, null);
-        }
+        });
     }
 
-    onSubTabChange(index) {
-        this.subTableIndex = index;
-        this.$router.replace({
-            path: 'cms_out_order',
-            query: {
-                listValue: this.tabIndex + this.subTableIndex,
-            }
-        })
-        if (this.pageList[this.currentOrderState() - 1] == 0) {
-            this.fetchOrdersData('', this.currentOrderState(), 1, null);
+    transIndex() {
+        let listValue;
+        if (this.tabIndex == 0) {
+            listValue = this.userSubIndex;
+        } else if (this.tabIndex == 1) {
+            listValue = 2 + this.quickSubIndex;
         }
+        return listValue;
     }
 
-    formatServerData(res, outState) {
+    formatServerData(res) {
         let data = res.data;
         let orderList = [];
-        let orders = data.orderWhole;
+        let orders = data.orders;
         if (orders) {
             //商品列表
             let goodses = data.orderGoods;
             //提成信息
-            let commi = data.orderCommi;
+            let rebate = data.rebate;
             for (let i = 0; i < orders.length; ++i) {
                 let order = orders[i];
-                order.goodses = new Array();
+                order.goods = new Array();
                 for (let k = 0; k < goodses.length; ++k) {
                     let goods = goodses[k]
                     if (goods.orderId == order.orderId) {
                         goods.moneyPrice = order.moneyPrice;
-                        order.goodses.push(goods);
+                        order.goods.push(goods);
                     }
                 }
 
-                if (commi && commi.length > 0) {
-                    for (var index = 0; index < commi.length; index++) {
-                        var element = commi[index];
-                        if (element.orderId == order.orderId) {
-                            order.commi = element;
+                order.rebate = {};
+                if (rebate && rebate.length > 0) {
+                    for (var index = 0; index < rebate.length; index++) {
+                        var element = rebate[index];
+                        if (element.orderNo == order.orderNo) {
+                            order.rebate = element;
                             break;
                         }
                     }
                 }
-                order.outState = outState;
                 orderList.push(order);
             }
         }
         return orderList;
     }
 
-    fetchOrdersData(keyword, state, page, done) {
-        let self = this;
-        this._$service.shipOrderListIndex(keyword, state, page)
+    fetchOrdersData(index, state, page, done) {
+        let _self = this;
+        this._$service.shipOrderListIndex(state, page)
             .then((res) => {
-                let _toast = self.$store.state.$toast;
+                let _toast = _self.$store.state.$toast;
                 if (res.errorCode) {
-                    _toast({ title: '获取数据失败', success: false });
+                    _toast({
+                        title: '获取数据失败',
+                        success: false
+                    });
                     if (done) {
                         done(false);
                     }
                 } else {
-                    let orders = self.formatServerData(res, state);
-                    if (orders.length < 10) {
-                        self.noDataList[state - 1] = true;
-                    } else {
-                        self.noDataList[state - 1] = false;
-                    }
+                    let orders = _self.formatServerData(res, state);
+                    let _tab = _self.dataShipmentList[index];
                     if (page == 1) {
-                        self.$set(self.dataShipmentList, state - 1, orders);
+                        _tab.data = orders;
                     } else {
-                        self.$set(self.dataShipmentList, state - 1, self.dataShipmentList[state - 1].concat(orders));
+                        _tab.data.push(...orders);
                     }
-                    self.pageList[state - 1] = page;
+                    if (orders && orders.length > 0) {
+                        _tab.page = page;
+                    }
                     if (done) {
                         done(true);
                     }
@@ -168,30 +181,98 @@ export class OutOrder extends BaseVue {
             });
     }
 
-    currentOrderState() {
-        if (this.tabIndex == 2) {
-            return this.tabIndex + 1 + this.subTableIndex;
-        } else {
-            return this.tabIndex + 1;
-        }
+    fetchQuickOrdersData(index,state, page, done) {
+        console.log('快速订单参数',index,state,page);
+        let _self = this;
+        this._$service.queryQuickOrdersData({
+                orderState: state,
+                page: page,
+                limit: 10
+            })
+            .then(res => {
+                if (!res.data || res.data.errorCode) {
+                    let _toast = _self.$store.state.$toast;
+                    _toast({
+                        title: '获取数据失败',
+                        success: false
+                    });
+                    if (done) {
+                        done(false);
+                    }
+                } else {
+                    let orders = res.data.orders;
+                    if (orders && orders.length > 0) {
+                        if (page == 1) {
+                            _self.dataQuickList[index].data = orders;
+                        } else {
+                            _self.dataQuickList[index].data.push(...orders);
+                        }
+                        _self.dataQuickList[index].page = page;
+                    }
+
+                    if (done) {
+                        done(true);
+                    }
+                }
+            })
     }
 
     refresh(done) {
-        let self = this;
+        let _self = this;
         setTimeout(() => {
-            self.$set(self.dataShipmentList,self.currentOrderState()-1,[]);
-            self.fetchOrdersData('', self.currentOrderState(), 1, done);
+            if (_self.tabIndex == 0) { //用户单数据
+                let index = _self.tabIndex * 2 + _self.userSubIndex;
+                let _tab = _self.dataShipmentList[_self.userSubIndex];
+                _self.fetchOrdersData(_tab.index, _tab.state, 1, done);
+            } else if (_self.tabIndex == 1) { //快速订单
+                let _tab = _self.dataQuickList[_self.quickSubIndex];
+                _self.fetchQuickOrdersData(_tab.index,_tab.state, 1, done);
+            }
         }, 500)
     }
 
+
     infinite(done) {
-        let self = this;
+        let _self = this;
         setTimeout(() => {
-            if (self.noDataList[self.currentOrderState() - 1]) {
-                done(true);
-            } else {
-                self.fetchOrdersData('', self.currentOrderState(), self.pageList[self.currentOrderState() - 1] + 1, done);
+            if (_self.tabIndex == 0) { //用户单数据
+                let index = _self.tabIndex * 2 + _self.userSubIndex;
+                let _tab = _self.dataShipmentList[_self.userSubIndex];
+                _self.fetchOrdersData(_tab.index, _tab.state, _tab.page + 1, done);
+            } else if (_self.tabIndex == 1) { //快速订单
+                let _tab = _self.dataQuickList[_self.quickSubIndex];
+                _self.fetchQuickOrdersData(_tab.index, _tab.state, _tab.page + 1, done);
             }
         }, 500)
+    }
+
+    onUserTabChange(index) {
+        this.userSubIndex = index;
+        this.$router.replace({
+            path: 'cms_out_order',
+            query: {
+                listValue: this.transIndex()
+            }
+        });
+    }
+
+    onOutTabChange(index) {
+        this.outSubIndex = index;
+        this.$router.replace({
+            path: 'cms_out_order',
+            query: {
+                listValue: this.transIndex()
+            }
+        });
+    }
+
+    onQuickTabChange(index) {
+        this.quickSubIndex = index;
+        this.$router.replace({
+            path: 'cms_out_order',
+            query: {
+                listValue: this.transIndex()
+            }
+        });
     }
 }

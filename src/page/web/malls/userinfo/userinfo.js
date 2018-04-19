@@ -1,5 +1,5 @@
-import { Component} from 'vue-property-decorator';
-import  BaseVue  from 'base.vue';
+import { Component } from 'vue-property-decorator';
+import BaseVue from 'base.vue';
 import userInfoService from './userinfo.service';
 //import getShopCarCount from '../home/getShopCarCount';
 //import dialog from '../../components/popup/dialog';
@@ -14,18 +14,37 @@ import './userinfo.scss';
 })
 export class UserInfo extends BaseVue {
     user_img = '/static/images/pic-nologin.png';
-    userInfo =  {};
-    userScore =  {};
-    userLogin =  false;
+    userInfo = {};
+    userScore = {
+        amountGold: '0', // 默认为0 就行
+        amountCoupon: '0'
+    };
+    userLogin = false;
     orderList = [];
-    pointData =   [];
+    pointData = [
+        {
+            name: '金币',
+            value: 'amountGold',
+            img: '/static/images/money/icon-big.png',
+            style: { color: '#ee893e' },
+            imgStyle: { width: '.19rem', height: '.195rem' },
+            path: "money_gold_detail",
+        }, {
+            name: '优惠券',
+            value: 'amountCoupon',
+            img: '/static/images/money/coupon.png',
+            style: { color: '#ff586c' },
+            imgStyle: { width: '.22rem', height: '.14rem' },
+            path: "coupon_list",
+        }
+    ];
 
-    hasShop =  false
+    hasShop = false
     userMsgNum = 0;
-    //查询是否有点失败 隐藏入口
-    hasShopError= true;
+    //查询是否有店失败 隐藏入口
+    hasShopError = true;
     _$service;
-    data(){
+    data() {
         return {
 
         }
@@ -77,11 +96,27 @@ export class UserInfo extends BaseVue {
 
     }
 
+    queryUserRoll() {
+        let _self = this;
+        _self._$service.queryUserRoll().then((res) => {
+            if (!res.data.errorCode) {
+                _self.userScore.amountGold = res.data.amountGold;
+                _self.userScore.amountCoupon = res.data.amountCoupon;
+                if(_self.userScore.amountGold > 9999999){
+                    _self.userScore.amountGold = '9999999+';
+                }
+                if(_self.userScore.amountCoupon > 9999999){
+                    _self.userScore.amountCoupon = '9999999+';
+                }
+            }
+        });
+    }
+
     queryUserHasShop() {
         let _self = this;
         this._$service.queryUserHasShop().then((res) => {
             console.log('用户开店信息', res)
-            if(!res.data.errorCode){
+            if (!res.data.errorCode) {
                 _self.hasShopError = false;
             }
             if (!res.data.errorCode && !isEmpty(res.data)) {
@@ -109,6 +144,9 @@ export class UserInfo extends BaseVue {
                 this.orderList[3].num = '';
             })
             this.queryUserHasShop();
+
+
+            this.queryUserRoll();
 
             this._$service.queryMessageNum().then((res) => {
                 let _result = res.data;
@@ -140,6 +178,10 @@ export class UserInfo extends BaseVue {
     }
     toShop() {
         toCMS('cms_home');
+    }
+
+    toRouter(path) {
+        path && this.$router.push(path);
     }
 
     toApply() {
@@ -189,7 +231,7 @@ export class UserInfo extends BaseVue {
      * 点击跳转到消息
      */
     toUserMsg() {
-        this.$router.push({path: 'message_notice'});
+        this.$router.push({ path: 'message_notice' });
     }
 
 }

@@ -15,4 +15,10 @@ export class GoodsList extends Vue {
     toDetail(id) {
         this.$router.push({ path: "cms_purchase_goods_detail", query: { goodsId: id } });
     }
+
+    QuicklyJoinTheShoppingCart(item){
+       event.stopPropagation(); 
+       this.$emit("joinCar",item);
+    }
+    
 }

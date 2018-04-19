@@ -20,7 +20,16 @@
                 </article>
             </div>
         </section>
-        <div class="weui-flex">
+        <div class="weui-flex pointList" v-if="userLogin">
+            <div class="weui-flex__item" v-for="item in pointData" @click="toRouter(item.path)" :style="item.style">
+                <h4 v-text="item.name"></h4>
+                <p>
+                    <img :src="item.img" :style="item.imgStyle">
+                    <span>&nbsp;{{ userScore[item.value] }}</span>
+                </p>
+            </div>
+        </div>
+        <div class="weui-flex orderList">
             <div class="weui-flex__item" @click="toOrderList(order.index)" v-for="order in orderList">
                 <figure :data-alert="order.num">
                     <img :src="'/static/images/newshop/' + order.pic + '.png'">
@@ -28,7 +37,7 @@
                 <p v-text="order.type"></p>
             </div>
         </div>
-        <div class="weui-cells" v-if="!hasShopError">
+        <div class="weui-cells" v-if="userLogin&&!hasShopError">
             <div class="weui-cell userinfo_pic">
                 <div class="weui-cell__bd">
                     <figure>
@@ -39,6 +48,12 @@
             </div>
         </div>
         <div class="weui-cells">
+            <router-link class="weui-cell weui-cell_access" :to="{path:'information'}">
+                <div class="weui-cell__bd">
+                    <p>资讯</p>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </router-link>
             <router-link class="weui-cell weui-cell_access" :to="'user_address'">
                 <div class="weui-cell__bd">
                     <p>收货地址管理</p>
@@ -48,6 +63,13 @@
             <router-link class="weui-cell weui-cell_access" :to="{path:'lead',query:{valid:true}}">
                 <div class="weui-cell__bd">
                     <p>切换店铺</p>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </router-link>
+           
+            <router-link class="weui-cell weui-cell_access" :to="{path:'about'}">
+                <div class="weui-cell__bd">
+                    <p>关于我们</p>
                 </div>
                 <div class="weui-cell__ft"></div>
             </router-link>

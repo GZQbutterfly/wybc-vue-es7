@@ -18,17 +18,30 @@
                         <input class="weui-input" type="tel" placeholder="请输入手机号" v-model="loginScope.phone" @input="inputPhone" maxlength="11" @blur="blurPhone">
                     </div>
                     <div class="weui-cell__ft">
-                        <button class="weui-btn weui-btn_plain-default weui-btn_mini btn-code" @click="queryCode()" :class="{'weui-btn_disabled': disbtn}"
+                        <button class="weui-btn weui-btn_plain-default weui-btn_mini btn-code" @click="clickToQueryImgCode()" :class="{'weui-btn_disabled': disbtn}"
                             :disabled="disbtn">{{btnMsg}}</button>
                     </div>
                 </div>
+                 <!-- 图形码 -->
+                 <div class="weui-cell weui-cell_vcode" v-show="imgcode">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">图形码</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="text" placeholder="请输入图形码" v-model="loginScope.imgcode" :disabled="!imgcode" @input="inputImgCode()"
+                            maxlength="4">
+                    </div>
+                    <div class="weui-cell__ft" @click="queryImgCode">
+                        <img class="weui-vcode-img" :src="imgsrc" v-if="imgsrc">
+                    </div>
+                </div>
                 <!-- 验证码 -->
-                <div class="weui-cell">
+                <div class="weui-cell" v-show="!imgcode">
                     <div class="weui-cell__hd">
                         <label class="weui-label">验证码</label>
                     </div>
                     <div class="weui-cell__bd">
-                        <input class="weui-input" type="tel" placeholder="请输入验证码" v-model="loginScope.code" :disabled="!encode" @input="inputCode()"
+                        <input class="weui-input" type="tel" :disabled="!encode" placeholder="请输入验证码" v-model="loginScope.code" @input="inputCode()"
                             maxlength="6">
                     </div>
                 </div>
@@ -41,7 +54,7 @@
                 </button>
             </div>
             <div class="weui-cells__tips login-info">登录即为同意
-                <span @click="toProtocol">《无忧本草用户协议》</span>
+                <span @click="toProtocol">《学惠精选用户协议》</span>
             </div>
         </div>
         <!-- 快捷登录 -->

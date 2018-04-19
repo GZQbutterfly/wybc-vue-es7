@@ -1,8 +1,9 @@
 node_modules/
 dist/
-.cache
+cache/
+buildCache/
 npm-debug.log.?**
 npm-debug.log
 *.dll
 .idea
-#server.sse.js
+

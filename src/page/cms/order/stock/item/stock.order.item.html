@@ -1,7 +1,8 @@
 <div class="list_content" @click="toOrderDetail()">
 	<!-- 订单号&&交易状态 -->
 	<div class="weui-flex order-title">
-		<span class="color-gray">订单号:{{order.orders[0].orderState==1?order.orders[0].combinOrderNo:order.orders[0].orderNo}}</span>
+		<!-- <span class="color-gray">订单号:{{(order.orders[0].orderState==1||order.orders[0].orderState==6)?order.orders[0].combinOrderNo:order.orders[0].orderNo}}</span> -->
+		<span class="color-gray">订单号:{{order.orders[0].combinOrderNo}}</span>
 		<span class="weui-flex-item flex title-state color-green">{{transOrderState()}}</span>
 	</div>
 
@@ -41,6 +42,14 @@
 		</div>
 		<div class="row-line"></div>
 	</div>
+	<!-- 总计 -->
+	<div v-if="getCouponMoney()">
+		<div class="order-plus weui-flex flex-right">
+			<span class="desc-font color-red"> -{{getCouponMoney() | localMoney}}</span>
+			<span class="desc-font color-black">进货券:&nbsp;&nbsp;</span>
+		</div>
+		<div class="row-line"></div>
+	</div>
 
 	<!-- 总计 -->
 	<div v-if="true">
@@ -50,7 +59,13 @@
 		</div>
 		<div class="row-line"></div>
 	</div>
-
+	<!-- 已发货 -->
+	<!-- <div v-if="order.orderState==4 && order.orderType==3">
+		<div class="order-plus weui-flex flex-right">
+			<button class="item-button button-green" @click.stop="confirmRecive(order.orders[0].orderId)">确认收货</button>
+		</div>
+		<div class="row-line"></div>
+	</div> -->
 	<!-- 功能 -->
 	<div v-if="order.orderState===1">
 		<div class="order-plus weui-flex flex-right">

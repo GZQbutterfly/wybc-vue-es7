@@ -19,7 +19,7 @@ export class Address extends Vue {
     item = {};
     title = '新增收货地址';//
     formstate = {};
-    formScope = { name: '', phone: '', address: '', zipCode: '', isDefault: 0, province: '', city: '', district: '', campus:'', dormitory:'',schoolId:''  };
+    formScope = { name: '', sex:'', phone: '', address: '', zipCode: '', isDefault: 0, province: '', city: '', district: '', campus:'', dormitory:'',schoolId:''  };
     proviceList = [];
     cityList = [];
     districtList = [];
@@ -28,6 +28,15 @@ export class Address extends Vue {
     isCampusAdress = true;
     _$service;
     swiper;
+    dormList = [
+        {
+            name: '男生宿舍',
+            value: 1
+        }, {
+            name: '女生宿舍',
+            value: 2
+        }
+    ]
     data() {
         return {};
     }
@@ -81,19 +90,19 @@ export class Address extends Vue {
             this.title = '修改收货地址';
             _scope.addrId = _item.addrId;
             _scope.name = _item.name;
+            _scope.sex = _item.sex || '';
             _scope.phone = _item.phone;
             _scope.address = _item.address;
             _scope.zipCode = _item.zipCode;
             _scope.isDefault = _item.isDefault;
             _scope.campus = _item.campus || '';
             _scope.dormitory = _item.dormitory || '';
-            // 修正详细地址文本域的默认值高度不凸显
             let _data = find(this.schoolList, { name: _item.campus });
-      
             if (_data) {
                 this.floorList = _data.specialMsg;
             }
             timeout(() => {
+                 // 修正详细地址文本域的默认值高度不凸显
                 let _arearef = this.$refs.textareaRef;
                 _arearef.style.height = _arearef.scrollTop + _arearef.scrollHeight + "px";
             });

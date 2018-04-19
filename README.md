@@ -36,6 +36,8 @@
  cnpm install  babel-plugin-transform-decorators              --save-dev
  cnpm install  babel-plugin-add-module-exports                --save-dev
  cnpm install --save-dev babel-plugin-transform-class-properties
+ cnpm i -D  babel-plugin-transform-object-rest-spread
+
 ###loader
  cnpm install  raw-loader css-loader  style-loader           --save-dev
  cnpm install  file-loader                        --save-dev
@@ -58,6 +60,7 @@
  cnpm install  vue-template-compiler                         --save-dev
  cnpm install  vue-typescript                                --save-dev
  cnpm insatll  vue-loader                                    --save-dev
+ cnpm i -S vuex-router-sync
 ###vue-plugins
  cnpm install  vue-form                                       --save
  cnpm install  vue-ydui                                       --save

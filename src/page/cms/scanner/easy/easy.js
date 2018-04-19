@@ -87,7 +87,7 @@ export class EasyScanner extends BaseVue {
                     height: height,
                     colorDark: '#000000',
                     colorLight: '#ffffff',
-                    correctLevel: QRCode.CorrectLevel.H
+                    correctLevel: QRCode.CorrectLevel.L
                 });
             }
         }, 50);

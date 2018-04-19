@@ -33,9 +33,7 @@
                 <span class="stock-desc">进货仓储方式 </span>
                 <span class="float-r">{{stockType_Value}}</span>
             </div>
-            <div class="info-link">
-                <u @click="stockInfo()">进货仓储说明</u>
-            </div>
+            <div class="info-link" @click="stockInfo"><u >仓储方式说明</u></div>
         </section>
         <div class="order-detail-content" v-if="stockType_State==1">
             <header class="order-submitting-header">
@@ -55,10 +53,11 @@
                                 <i class="icon iconfont icon-shouhuodizhi"></i>
                             </div>
                             <div class="weui-cell__bd">
-                                <span class="address-sjr text-ellipsis">收件人： {{orderAddress.name}}</span>
+                                <div class="address-sjr text-ellipsis">收件人： {{orderAddress.name}}</div>
                             </div>
                             <div class="weui-cell__ft">
                                 <span class="phone-fl-right">{{orderAddress.phone}}</span>
+                                <span class="address-detail-sex" v-if="orderAddress.sex">{{orderAddress.sex == 1 ? '男生宿舍' : '女生宿舍'}}</span>
                             </div>
                         </div>
                         <div class="address-detail text-ellipsis">
@@ -97,7 +96,7 @@
                                 <div class="order-text">{{v.goodsName}}</div>
                             </div>
                             <div class="weui-cell__ft">
-                                <div class="label-money">{{v.moneyPrice | localMoney}}</div>
+                                <div class="label-money">{{v.stockPrice | localMoney}}</div>
                                 <div class="order-num-tip">x{{v.number}}</div>
                             </div>
                         </div>
@@ -106,6 +105,18 @@
                 </div>
             </div>
         </section>
+        <!-- 使用抵扣券 -->
+        <div class="weui-cell order-border" v-if="1">
+            <div class="weui-cell__bd">进货券</div>
+            <!-- @click="useCoupon" -->
+            <div class="weui-cell__ft order-text1">
+                <span class="orange" v-show="!couponShow&&userCouponShow">无可使用进货券</span>
+                <span class="orange" v-show="!couponShow&&!userCouponShow" @click="goCouponDetail">点击使用进货券</span>
+                <span class="orange" v-show="couponShow&&!userCouponShow" @click="goCouponDetail">-{{couponMoney | localMoney}}</span>
+                <i class="iconfont icon-mjiantou"></i>
+            </div>
+        </div>
+
         <section class="order-total">
             <div>
                 <div class="weui-cell weui-noborder">
@@ -120,6 +131,11 @@
                 <div class="weui-cell__ft order-text">
                     {{noShipFee ? 0 : shipFee | localMoney}}
                 </div>
+            </div>
+            <!-- 优惠券 -->
+            <div class="weui-cell" v-if='couponShow&&!userCouponShow'>
+                <div class="weui-cell__bd">进货券</div>
+                <div class="weui-cell__ft order-text orange">-{{disCouponMoney | localMoney}}</div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">合计</div>
@@ -140,7 +156,7 @@
             </div>
         </footer>
         <div class="address-container">
-            <address-dialog :close="closeDialogAddess" v-if="showDialogAddress" :selectAddress="selectAddress" :selectId="orderAddress.addrId"></address-dialog>
+            <address-dialog :close="closeDialogAddess" v-if="showDialogAddress" :selectAddress="selectAddress" :selectId="orderAddress.addrId" :ops="{defaultWay:stockType_State,mySchool:mySchool}"></address-dialog>
             <address-operation :close="closeCrateAddress" v-if="showAddAddress" :item="{}"></address-operation>
         </div>
     </div>

@@ -19,6 +19,7 @@
                             </div>
                         </field-messages>
                     </transition>
+                    
                     <!-- 联系电话 -->
                     <validate class="weui-cell" tag="div">
                         <div class="weui-cell__hd">
@@ -84,7 +85,7 @@
                     </div>
 
                     <!-- 选择学校 -->
-                    <div v-if="isCampusAdress">
+                    <div v-else-if="isCampusAdress">
                         <div class="weui-cell flex-align-t select-school" tag="div">
                             <div class="weui-cell__hd">
                                 <label class="weui-label">选择学校</label>
@@ -118,6 +119,25 @@
                             </div>
                             <div slot="required" v-else-if="formstate.dormitory && formstate.dormitory.$invalid">
                                 请选择楼栋
+                            </div>
+                        </field-messages>
+                        <!-- 宿舍类型 -->
+                        <div class="weui-cell select-zone">
+                            <div class="weui-cell__hd">
+                                <label class="weui-label">宿舍类型</label>
+                            </div>
+                            <validate class="weui-cell__bd" tag="div">
+                                <select class="weui-input" name="sex" v-model="formScope.sex" required>
+                                    <option value="" disabled selected>请选择宿舍类型</option>
+                                    <template v-for="item,index in dormList">
+                                        <option :value="item.value" :data-index="index">{{item.name}}</option>
+                                    </template>
+                                </select>
+                            </validate>
+                        </div>
+                        <field-messages name="sex" show="$submitted" class="text-danger error-tip">
+                            <div slot="required" v-if="formstate.sex && formstate.sex.$invalid">
+                                请选择宿舍类型
                             </div>
                         </field-messages>
                     </div>

@@ -20,7 +20,7 @@ export default (_store) => {
                 // userId: user.userId,
                 // token: user.token,
                 page: 1,
-                limit: 10
+                limit: 10000
             }).then(res => {
                 if (res.data.data && res.data.data.length != 0) {
                     res.data.data.forEach(lists => {

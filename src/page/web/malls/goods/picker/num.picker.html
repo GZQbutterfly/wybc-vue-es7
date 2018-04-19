@@ -2,7 +2,6 @@
     <div class="mask">
         <section>
             <div class="flex">
-
                 <div class="flex_name">
                     <figure style=" height: 0.36rem;">
                         <img :src="goods.coverImg">
@@ -18,11 +17,10 @@
             </div>
             <div class="flex">
                 <div class="flex_item">
-                    <div>
-                         <!-- style="color:#ee893e;" -->
-                        <p>购买数量</p>
-                        <p v-if="!goods.limitByUserOrder&&min.buy==0">最低消费金额:<span>{{min.minimumConsumption | localMoney}}</span>
-                        </p>       
+                    <div class="store">
+                        <p v-if="fastStockObj.deliveryType==0">仓库库存：<span>{{fastStockObj.amount}}</span></p>                      
+                        <p v-else>快速仓库存：<span>{{fastStockObj.amount}}</span></p>
+                        <!-- <p style="color:#ff1c1c;" v-if="fastStockObj.amount<num&&fastStockObj.buyType==1&&fastStockObj.amount>0&&fastStockObj.deliveryType==1">购买更多可以在普通配送中继续下单</p> -->
                     </div>
                     <div id="countControl">
                         <span v-if = "num==1||!num" style="background:#f2f2f2;color:#cccccc;">-</span>
@@ -32,10 +30,9 @@
                     </div>
                 </div>
             </div>
-            <div id="next" @click="nextStep()" v-show="min.buy!=0">下一步</div>
-            <div id="next" @click="nextStep()" v-show="(min.buy==0&&goods.moneyPrice*num>=min.minimumConsumption)&&!goods.limitByUserOrder">下一步</div>
-            <div id="next" v-show="min.buy==0&&goods.moneyPrice*num<min.minimumConsumption&&!goods.limitByUserOrder" style="background-color:#ccc;">未达到最低消费金额</div>
-            <div id="next" @click="nextStep()" v-show="min.buy==0&&goods.limitByUserOrder">下一步</div>
+            <div id="next" v-if="fastStockObj.deliveryType==1&&fastStockObj.fastStoreState==2" style="background-color:#ccc;">快速仓未开启</div>
+            <div id="next" v-else-if="fastStockObj.amount<num&&fastStockObj.buyType==1" style="background-color:#ccc;">库存不足</div>
+            <div id="next" @click="nextStep()" v-else>下一步</div>
         </section>
     </div>
 </div>

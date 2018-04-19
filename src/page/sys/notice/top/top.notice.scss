@@ -1,85 +1,85 @@
 .topnotice-container {
-    position: relative;
-    z-index: 100;
-    top: 2px;
-    display: inline-flex;
-    height: 20px;
-    background-color: #4c4c4c;
-    border-radius: 10px;
-    width: 65%;
-    max-width: 65%;
-    font-size: 12px;
-    padding-right: 3px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-align: center;
-    img {
-        position: relative;
-        z-index: 3;
-        width: 20px;
-    }
-    .notice-box{
-        flex: 1;
-        max-width: calc(100% - 22px);
-    }
-    .msg {
-        position: relative;
-        z-index: 1;
-        padding-left: 2px;
-        display: inline-block;
-    }
-    .msg-animation{
-        animation-name: marque-anim;
-        animation-iteration-count: 1;
-        animation-delay: 500ms;
-        animation-timing-function: linear;
-    }
-    @keyframes marque-anim {
-        0% {
-            transform: translateX(0);
+    .topnotice-content {
+        position: absolute;
+        z-index: 100;
+        left: 0;
+        right: 0;
+        top: 2px;
+        margin: auto;
+        display: inline-flex;
+        height: 20px;
+        background-color: #4c4c4c;
+        border-radius: 10px;
+        width: 65%;
+        max-width: 65%;
+        font-size: 12px;
+        padding-right: 3px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: center;
+        img {
+            position: relative;
+            z-index: 3;
+            width: 20px;
         }
-        100% {
-            transform: translateX(-100%);
+        .notice-box {
+            flex: 1;
+            max-width: calc(100% - 22px);
+        }
+        .msg {
+            position: relative;
+            z-index: 1;
+            padding-left: 2px;
+            display: inline-block;
+        }
+        .msg-animation {
+            animation-name: marque-anim;
+            animation-iteration-count: 1;
+            animation-delay: 500ms;
+            animation-timing-function: linear;
+        }
+        @keyframes marque-anim {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+        .txt {
+            color: #fff;
+        }
+        .flag {
+            color: #f00;
         }
     }
-    .txt {
-        color: #fff;
+    @keyframes msgIn {
+        from {
+            transform: translateY(-10px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
-    .flag {
-        color: #f00;
+    @keyframes msgOut {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
     }
-}
-
-@keyframes msgIn {
-    from {
-        transform: translateY(-10px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
+    .topNotice-enter-active {
+        animation: msgIn .3s;
         opacity: 1;
     }
-}
-
-@keyframes msgOut {
-    from {
-        opacity: 1;
+    .topNotice-leave-active {
+        animation: msgOut .4s;
     }
-    to {
+    .topNotice-enter,
+    .topNotice-leave-to {
         opacity: 0;
     }
-}
-
-.topNotice-enter-active {
-    animation: msgIn .3s;
-    opacity: 1;
-}
-
-.topNotice-leave-active {
-    animation: msgOut .4s;
-}
-
-.topNotice-enter,
-.topNotice-leave-to {
-    opacity: 0;
 }

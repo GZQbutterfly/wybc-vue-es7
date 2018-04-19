@@ -1,4 +1,40 @@
-<div class="warp" ref="warpRef">
+<div class="malls-layout warp" ref="warpRef">
+
+    <!-- 头部  店铺信息 -->
+    <header class="header" v-show="isHead">
+        <!-- 搜索 -->
+        <div class="indexBox_logo">
+            <dl class="wdName">
+                <dt>
+                    <img :src="$store.state.env_state.cache.currentShop.wdImg || '/static/images/newshop/touxiang.png'">
+                </dt>
+                <dd>
+                    <div class="weui-flex flex-align-m">
+                        <h4 class="text-ellipsis">{{$store.state.env_state.cache.currentShop.wdName}}</h4>
+                        <div class="wd-directsale text-s-12 text-c-657bff" v-show="$route.name === 'classify'">店长直营</div>
+                        <div class="wd-directsale-red text-s-12" v-show="$route.name === 'shop_chief'">店铺代理</div>
+                    </div>
+                    <div class="wd-school text-ellipsis text-c-333 text-s-12">{{$store.state.env_state.cache.currentShop.school}}</div>
+                    <p>
+                        <span>{{'M' + $store.state.env_state.cache.currentShop.wdVipGrade}}</span>
+                    </p>
+                </dd>
+            </dl>
+            <div class="wdName_ft weui-flex flex-align-m">
+                <!-- 4.6.3 -->
+                <!-- <div class="add-follow text-c-333 text-center" v-show="$route.name === 'new_home'" @click="$store.commit('ADD_FOLLOW_SHOP')">
+                    <span class="text-s-15">+</span>
+                    <span class="text-s-13 ">关注</span>
+                </div> -->
+                <div class="serBox " @click='goSearch($route.name)' v-show="isHeadSearch">
+                    <i class="iconfont icon-sousuo sercher"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- 内容区域 -->
     <div class="main-content views">
         <keep-alive>
             <router-view v-if="$route.meta.keepAlive"></router-view>
@@ -6,6 +42,7 @@
         <router-view v-if="!$route.meta.keepAlive"></router-view>
     </div>
 
+    <!-- 底部菜单 -->
     <footer class="layout-nav-footer" v-if="isCreatedMenu">
         <div class="line"></div>
         <div class="weui-flex nav-boxs">

@@ -1,3 +1,13 @@
+import {
+    moneyGoldRoutes,
+    timelimitRoutes
+} from './money/money.routes';
+import couponRoutes from './coupon/coupon.routes';
+import dayTaskRoutes from './day_task/day_task.routes';
+
+import dayRoutes from './day/day.routes';
+
+
 
 const routes = [
     {
@@ -8,20 +18,35 @@ const routes = [
                 resolve(require('./layout/layout')['Layout']);
             }, 'web/malls/malls');
         },
-        redirect: { name: 'home' },
+        redirect: { name: 'lead' },
         children: [
             // 首页
+            // {
+            //     path: '/home',
+            //     name: 'home',
+            //     meta: {
+            //         keepAlive: true,
+            //         title: '首页',
+            //         head: 1
+            //     },
+            //     component: resolve => {
+            //         require.ensure([], require => {
+            //             resolve(require('./home/home')['Home']);
+            //         }, 'web/malls/malls');
+            //     }
+            // },
             {
                 path: '/home',
                 name: 'home',
                 meta: {
                     keepAlive: true,
-                    title: '首页'
+                    title: '首页',
+                    head: 1
                 },
                 component: resolve => {
                     require.ensure([], require => {
-                        resolve(require('./home/home')['Home']);
-                    }, 'web/malls/malls');
+                        resolve(require('./new_home/list/list')['MallsList']);
+                    }, 'web/malls/new_malls');
                 }
             },
             // 分类
@@ -30,11 +55,28 @@ const routes = [
                 name: 'classify',
                 meta: {
                     keepAlive: true,
-                    title: '分类'
+                    title: '分类',
+                    head: 1,
                 },
                 component: resolve => {
                     require.ensure([], require => {
                         resolve(require('./classify/classify')['Classify']);
+                    }, 'web/malls/malls');
+                }
+            },
+            // 店长代理
+            {
+                path: '/shop_chief',
+                name: 'shop_chief',
+                meta: {
+                    keepAlive: true,
+                    title: '店长代理',
+                    head: 1,
+                    noMenu:1
+                },
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./shop_chief/shop_chief')['ShopChief']);
                     }, 'web/malls/malls');
                 }
             },
@@ -44,7 +86,8 @@ const routes = [
                 name: 'information',
                 meta: {
                     keepAlive: true,
-                    title: '资讯'
+                    title: '资讯',
+                    noMenu: 1
                 },
                 component: resolve => {
                     require.ensure([], require => {
@@ -67,7 +110,7 @@ const routes = [
             {
                 path: '/userinfo',
                 name: 'userinfo',
-                meta: { keepAlive: true, title: '我的'  },
+                meta: { keepAlive: true, title: '我的' },
                 component: resolve => {
                     require.ensure([], require => {
                         resolve(require('./userinfo/userinfo')['UserInfo']);
@@ -78,7 +121,7 @@ const routes = [
             {
                 path: '/goods_detail',
                 name: 'goods_detail',
-                meta: { noMenu: 1 },
+                meta: { noMenu: 1, noLoginTip:false},
                 component: resolve => {
                     require.ensure([], require => {
                         resolve(require('./goods/goods.detail')['GoodsDetail']);
@@ -94,20 +137,52 @@ const routes = [
                         resolve(require('./goods_list/goods_list')['GoodsList']);
                     }, 'web/malls/goods');
                 }
-            }
+            },
+            // 金币
+            ...moneyGoldRoutes,
         ]
     },
     // 地址
     {
         path: '/user_address',
         name: 'user_address',
-        meta: {  title:'地址' },
+        meta: { title: '地址' },
         component: resolve => {
             require.ensure([], require => {
                 resolve(require('../../sys/user_address/user.address')['UserAddress']);
             }, 'web/malls/malls');
         }
-    }
+    },
+    //关于我们
+    {
+        path: '/about',
+        name: 'about',
+        meta: { title: '关于我们' },
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('./about/about')['About']);
+            }, 'web/malls/malls');
+        }
+    },
+    {
+        path: '/mask_coupon',
+        name: 'mask_coupon',
+        meta: { keepAlive: true, title: '购物车' },
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('./shop_car/mask_coupon/mask_coupon')['maskCoupon']);
+            }, 'web/malls/malls');
+        }
+    },
+    // 金币maskCoupon
+    // ...moneyRoutes
+    //优惠券
+    ...couponRoutes,
+    ...dayTaskRoutes,
+    // 限时购
+    ...timelimitRoutes,
+    // day  route
+    ...dayRoutes
 ];
 
 export default routes;

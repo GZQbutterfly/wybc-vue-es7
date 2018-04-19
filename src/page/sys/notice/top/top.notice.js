@@ -1,27 +1,25 @@
-import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
-import {timeout} from 'common.env';
-import {merge} from 'lodash';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { timeout } from 'common.env';
+import { merge } from 'lodash';
 
 import './top.notice.scss';
-@Component({template: require('./top.notice.html')})
+@Component({ template: require('./top.notice.html') })
 export class TopNotice extends Vue {
 
-    @Prop({type:Object, default:{}})
+    @Prop({ type: Object, default: {} })
     msgOpts;
-    msgConfig = {list: [] ,delay: 3000, speed: 0};
+    msgConfig = { list: [], delay: 3000, speed: 0 };
     msgList = [];
-    msgObj = {img: '/static/images/pic-login.png', msg: '', flag: ''};
+    msgObj = { img: '/static/images/pic-login.png', msg: '', flag: '' };
     show = false;
     showAnimation = false;
     stopRunFlag = false;
 
-    data() {
-        return {}
-    }
-
     mounted() {
         this.$nextTick(() => {
-            this.initPage();
+            timeout(() => {
+                this.initPage();
+            }, 500);
         });
     }
 
@@ -36,7 +34,7 @@ export class TopNotice extends Vue {
         }, _self.msgConfig.delay);
     }
 
-    @Watch('msgOpts.list', {immediate: false})
+    @Watch('msgOpts.list', { immediate: false })
     watchMsg(newVal, oldVal) {
         this.msgList.push(...newVal);
         if (!this.stopRunFlag) {

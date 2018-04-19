@@ -1,4 +1,4 @@
-import {match} from 'common.env';
+import { match } from 'common.env';
 
 export default (store) => {
 
@@ -17,13 +17,14 @@ export default (store) => {
 
     return {
         async queryHistory() {
+            let user = _state.workVO.user;
             let _list = null;
-            let _result = (await q('api/q_ten_shop_history')).data;
+            let _result = (await q('api/q_ten_shop_history', { userId: user.userId, token: user.token })).data;
             if (_result.errorCode) {
                 // if(match(_result.errorCode, [96, 94, 119])){
                 //     _list = [{}];
                 // }else{
-                    _list = [];
+                _list = [];
                 //}
             } else {
                 _list = _result.data;

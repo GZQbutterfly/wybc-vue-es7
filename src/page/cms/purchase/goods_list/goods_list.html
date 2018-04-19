@@ -3,10 +3,15 @@
     <div class="goodsItem" v-for="goodsItem in goodsList.data">
         <figure @click="toDetail(goodsItem.goodsId)">
             <img :src="goodsItem.coverImg" alt="">
+            <span v-if="goodsItem.couponCount"><img src="/static/images/daysign/shangpin-biaozhi.png"></span>
         </figure>
         <span class="txt_title" @click="toDetail(goodsItem.goodsId)">{{ goodsItem.goodsName }}</span>
-        <span class="txt_desc">{{ goodsItem.coverImgDescription }}</span>
-        <span class="txt_price">{{ goodsItem.purchasePrice | localMoney }}</span>
+        <span class="txt_desc" @click="toDetail(goodsItem.goodsId)">{{ goodsItem.coverImgDescription }}</span>
+        <span class="txt_price">{{ goodsItem.stockPrice | localMoney }}
+            <span @click="QuicklyJoinTheShoppingCart(goodsItem)">
+                <i class="iconfont icon-gouwuche"></i>
+            </span>
+        </span>
     </div>
-    <div class="goodsItem" v-if="goodsList.data.length%2"></div>
+    <!-- <div class="goodsItem" v-if="goodsList.data.length%2"></div> -->
 </div>

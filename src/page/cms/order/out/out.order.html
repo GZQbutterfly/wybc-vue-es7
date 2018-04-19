@@ -1,26 +1,23 @@
 <div class="user-orders weui-flex flex-v ">
-	<multitab :tabs="tabs" @on-change="onTabChange" :custStyle="custStyle" :index="tabIndex"></multitab>
-	<multitab v-if="tabIndex==2" style="padding : 0 1rem;" :tabs="subTabs" @on-change="onSubTabChange" :index="subTableIndex"></multitab>
+	<ul class="main-tab">
+		<li :class="{active:i==tabIndex}" v-for="(v,i) in tabs" @click="onTabChange(i)">{{v}}</li>
+	</ul> 
+	<ul v-show="tabIndex==0" class="sub-tab">
+		<li :class="{active:i==userSubIndex}" v-for="(v,i) in nomalTabs" @click="onUserTabChange(i)">{{v}}</li>
+	</ul>
+	<ul v-show="tabIndex==1" class="sub-tab">
+		<li :class="{active:i==quickSubIndex}" v-for="(v,i) in quickTabs" @click="onQuickTabChange(i)">{{v}}</li>
+	</ul>
 	<div class="order-list-content flex-1">
-		<pull-refresh v-show="tabIndex==0" :refresh="refresh" :infinite="infinite">
-			<div v-for="(order,key) in dataShipmentList[0]">
-				<oi :order="order" @removeItem="resetAllData"></oi>
+		<pull-refresh v-if="tabIndex==0 && userSubIndex==i" :refresh="refresh" :infinite="infinite" v-for="(v,i) in nomalTabs" >
+			<div v-for="(order,key) in dataShipmentList[userSubIndex].data">
+				<oi :order="order"></oi>
 			</div>
 		</pull-refresh>
-		<pull-refresh v-show="tabIndex==1" :refresh="refresh" :infinite="infinite">
-			<div v-for="(order,key) in dataShipmentList[1]">
-				<oi :order="order" @removeItem="resetAllData"></oi>
+		<pull-refresh v-if="tabIndex==1&&quickSubIndex==i" :refresh="refresh" :infinite="infinite" v-for="(v,i) in quickTabs" >
+			<div v-for="(order,key) in dataQuickList[quickSubIndex].data">
+				<qoi :order="order"></qoi>
 			</div>
 		</pull-refresh>
-		<pull-refresh v-show="subTableIndex==0 && tabIndex==2" :refresh="refresh" :infinite="infinite">
-			<div v-for="(order,key) in dataShipmentList[2]">
-				<oi :order="order" @removeItem="resetAllData"></oi>
-			</div>
-		</pull-refresh>
-		<pull-refresh v-show="subTableIndex==1 && tabIndex==2 " :refresh="refresh" :infinite="infinite">
-			<div v-for="(order,key) in dataShipmentList[3]">
-				<oi :order="order" @removeItem="resetAllData"></oi>
-			</div>
-		</pull-refresh>
-	</div>
+	</div> 
 </div>

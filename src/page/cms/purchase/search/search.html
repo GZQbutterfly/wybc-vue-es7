@@ -60,7 +60,7 @@
         </section>
         <div id="goodspullrefresh" v-else>
             <pull-refresh ref="my_scroller" :refresh="refresh" :infinite="infinite">
-                <list-goods :dataList="data_goods"></list-goods>
+                <list-goods :dataList="data_goods" @joinCar="joinCar"></list-goods>
             </pull-refresh>
         </div>
     </div>

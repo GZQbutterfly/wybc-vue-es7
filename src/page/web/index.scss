@@ -1,1 +1,11 @@
 // web 商城端 common  css
+
+.coupon-flag-img{
+    position: absolute;
+    top: -2px;
+    z-index: 2;
+    img{
+        height: 16px!important;
+        width: 16px!important;
+    }
+}

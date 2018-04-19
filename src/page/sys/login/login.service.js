@@ -2,7 +2,6 @@
 export default (_store) => {
     let _state = _store.state;
     let _http = _state.$http;
-
     function q(url, data) {
         return _http({
             data: data,
@@ -37,6 +36,21 @@ export default (_store) => {
         },
         setWxBind(data) {
             return q('api/wx_bind', data);
+        },
+        addShopHistory(){
+            return q('api/a_ten_shop_history');
+        },
+        /**
+         * 获取图形码
+         */
+        checkImgCode(data){
+            return q('api/c_img_code', data);
+        },
+        /**
+         * 查询绑定前获取
+         */
+        queryGoldbeforeBind(data){
+            return q('api/wx/q_wx_bind_get_gold_text',data);
         }
     };
 };

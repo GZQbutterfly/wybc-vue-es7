@@ -14,105 +14,120 @@
                     <p>去逛逛</p>
                 </router-link>
             </div>
-            <!-- 购物车列表区域 -->
-            <ul class="shoppingCart_list" v-show="!isEmpty">
-                <div class="wxShop-wrap" v-for="(lists,index1) in validLists">
-                    <div class="wxShop">
-                        <div class="shopCheck weui-icon-circle" @click="wxShopCheckAll(index1)">
-                            <i class="weui-icon-success" v-show="lists.wxShopCheck"></i>
+            <!-- 快速配送 -->
+            <template v-for="(validLists1,i) in shopCars" v-if="validLists1.data.length!=0">
+                <div class="speed"><img :src="i==0?'/static/images/shop-4.6/gwc-dzzy.png':'/static/images/shop-4.6/gwc-dpdl.png'" alt=""><span v-if="0">30分钟送达</span></div>
+                <!-- 购物车列表区域 v-show="!isEmpty"-->
+                <ul class="shoppingCart_list">
+                    <div class="wxShop-wrap" v-for="(lists,index1) in validLists1.data">
+                        <div class="wxShop">
+                            <div class="shopCheck weui-icon-circle" @click="wxShopCheckAll(i,index1)">
+                                <i class="weui-icon-success" v-show="lists.wxShopCheck"></i>
+                            </div>
+                            <div class="shopName" @click="goWdShop(lists.shopId)">
+                                <i class="icon iconfont icon-shop"></i>
+                                <span>{{lists.shopName}}</span>
+                            </div>
+                            <div class="arrow iconfont icon-xiangyoujiantou" @click="goWdShop(lists.shopId)" v-if="lists.hasShopCoupon==0"></div>
+                            <div class="arrow size-16" @click="goCouponList(lists.shopId)" v-else>优惠券
+                                <i class="iconfont icon-xiangyoujiantou"></i>
+                            </div>
                         </div>
-                        <div class="shopName" @click="goWdShop(lists.shopId)">
-                            <i class="icon iconfont icon-shop"></i>
-                            <span>{{lists.shopName}}</span>
-                        </div>
-                        <div class="arrow iconfont icon-xiangyoujiantou" @click="goWdShop(lists.shopId)"></div>
+                        <!-- 购物车列表 -->
+                        <li v-for="(item,index2) in lists.data" v-if="isEdit">
+                
+                            <div class="checkbx weui-icon-circle" @click="onRadio(i,index1,index2)">
+                                <i class="weui-icon-success" v-show="item.check"></i>
+                            </div>
+                            <router-link :to="{ path: '/goods_detail',query: { shopId:lists.shopId,goodsId:item.goodsId,isAgent:i == 0}}">
+                                <div class="pic_img">
+                                    <img :src="item.coverImg" alt="">
+                                </div>
+                            </router-link>
+                            <div class="goodName">
+                                <p class="goodName_name">{{item.goodsName}}</p>
+                                <div class="goodName_pir">
+                                    <!-- <p v-if="item.consuType==3">{{item.moneyPrice | localMoney}}+{{item.moneyRoll | localVolume}}券</p> -->
+                                    <p>{{item.moneyPrice | localMoney}}
+                                        <span>x{{item.number}}</span>
+                                    </p>
+                                    <p v-if="item.number<=item.maxBuyNum"><img src="/static/images/newshop/gou.png" alt=""><span>{{i==0?"快速库存":"仓库库存"}}:<b>{{item.maxBuyNum}}</b></span></p>
+                                    <p v-else><img src="/static/images/newshop/cha.png" alt=""><span>{{i==0?"快速库存":"仓库库存"}}:<b>{{item.maxBuyNum}}</b></span></p>                                                                                                                                                                                                                                                                                                
+                                </div>
+                                <!-- :'/static/images/newshop/cha.png' -->
+                                <!-- <div class="purchase" v-if="item.consuType==3">
+                                    <span class="purchase_y">原价:{{item.purchasePrice | localMoney}}</span>
+                                    <span class="purchase_num">x{{item.number}}</span>
+                                </div> -->
+                            </div>
+                        </li>
+                        <!-- 物车编辑状态 -->
+                        <li v-for="(item,index2) in lists.data" v-if="!isEdit">
+                
+                            <div class="checkbx weui-icon-circle" @click="onRadio(i,index1,index2)">
+                                <i class="weui-icon-success" v-show="item.check"></i>
+                            </div>
+                            <router-link :to="{ path: '/goods_detail',query: { goodsId: item.goodsId }}">
+                                <div class="pic_img">
+                                    <img :src="item.coverImg" alt="">
+                                </div>
+                            </router-link>
+                            <div class="goodName">
+                                <p class="goodName_name">{{item.goodsName}}</p>
+                                <div class="goodName_pir">
+                                    <!-- <p v-if="item.consuType==3">{{item.moneyPrice | localMoney}}+{{item.moneyRoll | localVolume}}券</p> -->
+                                    <p>{{item.moneyPrice | localMoney}}
+                                    </p>
+                                    <p v-if="item.number<=item.maxBuyNum">
+                                        <img src="/static/images/newshop/gou.png" alt=""><span>{{i==0?"快速库存":"仓库库存"}}:<b>{{item.maxBuyNum}}</b></span>
+                                    </p>
+                                    <p v-else><img src="/static/images/newshop/cha.png" alt=""><span>{{i==0?"快速库存":"仓库库存"}}:<b>{{item.maxBuyNum}}</b></span></p>
+                                </div>
+                                <!-- <div class="purchase" v-if="item.consuType==3" cha.png>
+                                    <span class="purchase_y">原价:{{item.purchasePrice | localMoney}}</span>
+                                    <span class="purchase_num"></span>
+                                </div> -->
+                                <div class="goodName_num">
+                                    <span id="minus" @click="minus(i,index1,index2)">-</span>
+                                    <input type="number" class="amount" v-model='item.number' @blur="changeNum(i,index1,index2,item.maxBuyNum)" />
+                                    <span id="add" @click="add(i,index1,index2,item.maxBuyNum)">+</span>
+                                </div>
+                            </div>
+                
+                        </li>
                     </div>
-                    <!-- 购物车列表 -->
-                    <li v-for="(item,index2) in lists.data" v-if="isEdit">
-
-                        <div class="checkbx weui-icon-circle" @click="onRadio($event,index1,index2)">
-                            <i class="weui-icon-success" v-show="item.check"></i>
+                </ul>
+                </template>
+                <!-- 失效物品区域 -->
+                <ul class="invalid" v-if="isShow">
+                    <div class="titl">
+                        <img src="/static/images/newshop/bukaixin.png" />
+                        <span>以下商品无法购买</span>
+                    </div>
+                    <li v-for="(item,index) in invalidLists">
+                
+                        <div class="pic_img">
+                            <img :src="item.coverImg" alt="">
                         </div>
-                        <router-link :to="{ path: '/goods_detail',query: { shopId:lists.shopId,goodsId:item.goodsId }}">
-                            <div class="pic_img">
-                                <img :src="item.coverImg" alt="">
-                            </div>
-                        </router-link>
                         <div class="goodName">
-                            <p class="goodName_name">{{item.goodsName}}</p>
-                            <div class="goodName_pir">
-                                <p v-if="item.consuType==3">{{item.moneyPrice | localMoney}}+{{item.moneyRoll | localVolume}}券</p>
-                                <p v-if="item.consuType==2">{{item.moneyPrice | localMoney}}
-                                    <span>x{{item.number}}</span>
-                                </p>
-                            </div>
-                            <div class="purchase" v-if="item.consuType==3">
-                                <span class="purchase_y">原价:{{item.purchasePrice | localMoney}}</span>
-                                <span class="purchase_num">x{{item.number}}</span>
+                            <p class="goodName_name">{{item.goodsName}}
+                            </p>
+                            <div class="goodName_price">
+                                <div class="goodName_pir">
+                                    <b>{{item.moneyPrice | localMoney}}</b>
+                                    <!-- <b v-if="item.consuType==3">{{item.moneyPrice | localMoney}}+{{item.moneyRoll | localVolume}}券</b> -->
+                                    <!-- <span v-if="item.consuType==3">原价:{{item.purchasePrice | localMoney}}</span> -->
+                                    <span style="margin-bottom:0.13rem;"></span>
+                                    <span>{{ !item.ksOpen ?'商品已下架或停售':'快速仓关闭' }}</span>
+                                </div>
                             </div>
                         </div>
                     </li>
-                    <!-- 物车编辑状态 -->
-                    <li v-for="(item,index2) in lists.data" v-if="!isEdit">
-
-                        <div class="checkbx weui-icon-circle" @click="onRadio($event,index1,index2)">
-                            <i class="weui-icon-success" v-show="item.check"></i>
-                        </div>
-                        <router-link :to="{ path: '/goods_detail',query: { goodsId: item.goodsId }}">
-                            <div class="pic_img">
-                                <img :src="item.coverImg" alt="">
-                            </div>
-                        </router-link>
-                        <div class="goodName">
-                            <p class="goodName_name">{{item.goodsName}}</p>
-                            <div class="goodName_pir">
-                                <p v-if="item.consuType==3">{{item.moneyPrice | localMoney}}+{{item.moneyRoll | localVolume}}券</p>
-                                <p v-if="item.consuType==2">{{item.moneyPrice | localMoney}}
-                                </p>
-                            </div>
-                            <div class="purchase" v-if="item.consuType==3">
-                                <span class="purchase_y">原价:{{item.purchasePrice | localMoney}}</span>
-                                <span class="purchase_num"></span>
-                            </div>
-                            <div class="goodName_num">
-                                <span id="minus" @click="minus(index1,index2)">-</span>
-                                <input type="number" class="amount" v-model='item.number' @blur="changeNum($event,index1,index2)" />
-                                <span id="add" @click="add(index1,index2)">+</span>
-                            </div>
-                        </div>
-
-                    </li>
-                </div>
-            </ul>
-            <!-- 失效物品区域 -->
-            <ul class="invalid" v-show="isShow">
-                <div class="titl">
-                    <img src="/static/images/newshop/bukaixin.png" />
-                    <span>以下商品无法购买</span>
-                </div>
-                <li v-for="(item,index) in invalidLists">
-
-                    <div class="pic_img">
-                        <img :src="item.coverImg" alt="">
+                    <div class="delete" @click="onClear">
+                        <p>清空失效物品</p>
                     </div>
-                    <div class="goodName">
-                        <p class="goodName_name">{{item.goodsName}}
-                        </p>
-                        <div class="goodName_price">
-                            <div class="goodName_pir">
-                                <b v-if="item.consuType==2">{{item.moneyPrice | localMoney}}</b>
-                                <b v-if="item.consuType==3">{{item.moneyPrice | localMoney}}+{{item.moneyRoll | localVolume}}券</b>
-                                <span v-if="item.consuType==3">原价:{{item.purchasePrice | localMoney}}</span>
-                                <span v-if="item.consuType==2" style="margin-bottom:0.13rem;"></span>
-                                <span>{{ (item.isSourceGoodsValid==0||item.isCampusGoodsValid==0) ?'商品已下架或停售':'' }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <div class="delete" @click="onClear">
-                    <p>清空失效物品</p>
-                </div>
-            </ul>
+                </ul>
+           
             <!-- 为你推荐图标 -->
             <div class="recommend">
                 <img src="/static/images/newshop/weinituijian.png" alt="">
@@ -125,25 +140,28 @@
                         <span>很遗憾，暂无推荐商品给您</span>
                     </div>
                     <div class="shopPic" v-else>
+                        <!-- <list-goods :dataList="{data:recommendLists}" v-if="recommendLists.length" @joinCar="joinCar"></list-goods> -->
                         <dl class="shopPic_gs" v-for="(item,index) in recommendLists">
-                            <router-link :to="{ path: '/goods_detail',query: { goodsId: item.goodsId }}">
-                                <dt>
+                         
+                                <dt  @click="toDetaile(item)">
                                     <img :src="item.coverImg" alt="">
-                                    <!-- <span v-show="item.consuType !== 1">返利</span> -->
                                 </dt>
-                                <dd>{{item.goodsName}}</dd>
-                                <dd>
+                                <dd  @click="toDetaile(item)">{{item.goodsName}}</dd>
+                                <dd  @click="toDetaile(item)">
                                     <span>{{item.coverImgDescription}}</span>
-                                    <!-- <span {{itemdata.coverImgDescription}}v-if="itemdata.consuType==3">{{itemdata.moneyPrice | localMoney}}+{{itemdata.moneyRoll | localVolume}}券</span> -->
                                 </dd>
                                 <dd>
                                     <span>{{item.purchasePrice | localMoney}}</span>
+                                    <span @click="joinCar(item)">
+                                        <i class="iconfont icon-gouwuche"></i>
+                                    </span>
                                 </dd>
-                            </router-link>
+                            <div v-if="item.couponCount>0" class="coupon-img-roll">
+                                <img src="static/images/shop-4.6/youhuiquan.png" alt="">
+                            </div>
+                            <div class="right-bottom text-s-12 text-c-fff bg-c-333">{{item.warehouseFlag==1?"店长直营":"店铺代理"}}</div>
                         </dl>
-                        <!-- <dl class="shopPic_gs" v-if="recommendLists&&recommendLists.length%2!=0" style="border:0"></dl> -->
                     </div>
-
                 </li>
             </ul>
         </pull-refresh>
@@ -152,21 +170,16 @@
     <div class="total" v-if="isEdit" v-show="!isEmpty">
         <div class="total_left">
             <p class="txt1">
-                <em class="checkAllState weui-icon-circle" @click="checkAllState">
+                <!-- <em class="checkAllState weui-icon-circle" @click="checkAllState">
                     <i class="weui-icon-success" v-show="checkAll"></i>
                 </em>
-                <b @click="checkAllState">全选</b>
+                <b @click="checkAllState">全选</b> -->
                 <span>合计:
                     <b>{{total | localMoney}}</b>
                 </span>
             </p>
-            <p class="txt2 weui-flex">
-                <!-- <span class="lo" v-if="minimumConsumption>=0 && minimumConsumption>total">不含运费</span> -->
-                <span class="min-cost" v-if="(minimumConsumption>=0 && minimumConsumption>total)&&!isLimit">最低消费金额: {{ minimumConsumption |localMoney}}</span>
-            </p>
         </div>
-        <button :class="['total_right',(minimumConsumption>=0 && minimumConsumption>total)&&!isLimit?'button_disable':'button_able']" :disabled="(minimumConsumption>=0 && minimumConsumption>total)&&!isLimit"
-            @click="onSettle" >
+        <button class="total_right button_able" @click="onSettle">
             结算({{settlement}})
         </button>
         <!-- <button :class="total_right button_able" @click="onSettle">

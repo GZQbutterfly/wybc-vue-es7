@@ -24,6 +24,7 @@
     }
     .order-list-content {
         position: relative;
+        height: calc(100% - 90px);
     }
     .orderNo-text {
         color: #FF0000;
@@ -35,6 +36,51 @@
     .button-text:active {
         position: relative;
         top: 1px;
+    }
+
+    .main-tab{
+        height: 45px;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        z-index: 999;
+        color: #333333;
+        border-bottom:1px solid #f2f2f2;
+        li {
+            height: 45px;
+            line-height: 45px;
+            width: 50%;
+            text-align: center;
+            color: #333333;
+            font-size: 15px;
+        }
+        .active {
+            border-bottom: 2px solid #7ecc44;
+            color: #ffffff;
+            background-color: #7ecc44;
+        }
+    }
+    .sub-tab{
+        padding: 0 10%;
+        height: 45px;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        z-index: 999;
+        color: #333333;
+        li {
+            height: 45px;
+            line-height: 45px;
+            width: 135px;
+            text-align: center;
+            color: #333333;
+            font-size: 15px;
+        }
+        .active {
+            border-bottom: 2px solid #7ecc44;
+        }
     }
 }
 

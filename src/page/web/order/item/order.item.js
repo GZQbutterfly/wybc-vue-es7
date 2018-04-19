@@ -1,9 +1,10 @@
-import {Component} from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import Vue from 'vue';
 
 
 import itemService from './order.item.service';
 import './order.item.scss';
+import { debug } from 'util';
 
 @Component({
 	template: require('./order.item.html'),
@@ -12,10 +13,15 @@ import './order.item.scss';
 export class OrderItem extends Vue {
 	_$service;
 	expand = false;
-
+	totalGold = 0;
+	totalRoll = 0;
+	disCountMoney = 0;
+	useRoll = false;
+    timeLimit = false;
 	mounted() {
 		//注册服务
 		this._$service = itemService(this.$store);
+		this.parseData();
 	}
 
 	expanded(expand) {
@@ -30,13 +36,29 @@ export class OrderItem extends Vue {
 		return index == 0 || this.expand;
 	}
 
+	parseData(){
+		let _self = this;
+		let orders = this.$props.order.orders;
+		_self.totalGold = 0;
+		_self.totalRoll = 0;
+		_self.disCountMoney = 0;
+		for (var i = 0; i < orders.length; ++i) {
+			_self.totalGold += orders[i].totalGold || 0;
+			_self.totalRoll += orders[i].couponMoney || 0;
+			if(orders[i].couponMoney != null){
+				_self.useRoll = true;
+			}
+			if (orders[i].periodId) {
+				this.timeLimit = true;
+				_self.disCountMoney += (orders[i].goodses[0].purchasePrice - orders[i].goodses[0].moneyPrice) * orders[i].goodses[0].number || 0;
+			}
+		}
+	}
+
 	toOrderDetail() {
 		let query = {};
-		if (this.$props.order.orderState == 1 ||this.$props.order.orderState == 6 ) {//待支付
-			query.combinOrderNo = this.$props.order.combinOrderNo;
-		} else {
-			query.orderId = this.$props.order.orderId;
-		}
+		query.combinOrderNo = this.$props.order.combinOrderNo;
+		query.orderId = this.$props.order.orderId;
 		this.$router.push({
 			path: 'order_detail',
 			query: query
@@ -45,18 +67,25 @@ export class OrderItem extends Vue {
 
 	//支付订单
 	payOrder(orderId) {
-		let obj = this.$store.state.$loadding();
 		let self = this;
 		let order = self.$props.order;
-
-		let params = {
-			combinOrderNo: order.combinOrderNo,
+		let orderPayType = 0;
+		if (order.consuType == 3 && order.periodId==0){
+			orderPayType = 1;
+		} else if (order.periodId > 0){
+			orderPayType = 2
 		}
-		self._$service.pay(params).then(res => {
-			obj.close();
-			self.updateItem();
-		});
+		else{
+			orderPayType = 0;
+		}
+	
+		let _param = {
+			combinOrderNo: order.combinOrderNo,
+			totalMoney:order.totalMoney,
+			orderPayType:orderPayType
+		};
 
+		this.$router.push({path:'pay_list',query:_param});
 	}
 
 
@@ -94,10 +123,10 @@ export class OrderItem extends Vue {
 	}
 
 	confirmCancel() {
-		let params= {};
-		if (this.$props.order.orders[0].orderState==1) {//待付款
+		let params = {};
+		if (this.$props.order.orders[0].orderState == 1) {//待付款
 			params.combinOrderNo = this.$props.order.orders[0].combinOrderNo;
-		}else{
+		} else {
 			params.orderId = this.$props.order.orders[0].orderId;
 		}
 
@@ -114,10 +143,10 @@ export class OrderItem extends Vue {
 	}
 
 	sureRecive() {
-		let params ={};
-		if (this.$props.order.orders[0].orderState==1) {
+		let params = {};
+		if (this.$props.order.orders[0].orderState == 1) {
 			params.combinOrderNo = this.$props.order.orders[0].combinOrderNo;
-		}else{
+		} else {
 			params.orderId = this.$props.order.orders[0].orderId;
 		}
 		this._$service.sureRecive(params).then((res) => {
@@ -133,7 +162,7 @@ export class OrderItem extends Vue {
 	}
 
 	confirmRecive() {
-		
+
 		let _this = this;
 		let dialogObj = {
 			title: '',
@@ -152,7 +181,7 @@ export class OrderItem extends Vue {
 
 	// 取消订单
 	cancelOrder() {
-		
+
 		let _this = this;
 		let dialogObj = {
 			title: '',
@@ -168,18 +197,18 @@ export class OrderItem extends Vue {
 		};
 		this.$store.state.$dialog({ dialogObj });
 	}
-   getShipFee(){
-	   let orders = this.$props.order.orders;
-	   if (orders) {
-		   let shipFee = 0;
-		   for (var i = 0; i < orders.length; ++i) {
-			   shipFee += orders[i].shipFee;
-		   }
-		   return shipFee;
-	   } else {
-		   return 0;
-	   }  
-   }
+	getShipFee() {
+		let orders = this.$props.order.orders;
+		if (orders) {
+			let shipFee = 0;
+			for (var i = 0; i < orders.length; ++i) {
+				shipFee += orders[i].shipFee;
+			}
+			return shipFee;
+		} else {
+			return 0;
+		}
+	}
 	orderTotalMoney() {
 		let orders = this.$props.order.orders;
 		if (orders) {

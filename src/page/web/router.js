@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import sysRoutes from '../sys/sys.routes';
 import mallsRoutes from './malls/malls.routes';
 import orderRoutes from './order/order.routes';
+import payRoutes from './syspay/pay.routes';
 
 const routes = [
     {
@@ -15,6 +16,7 @@ const routes = [
     ...mallsRoutes,
     // 订单order
     ...orderRoutes,
+    ...payRoutes,
     {
         path: '**',
         name: 'not_found',

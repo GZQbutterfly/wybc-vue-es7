@@ -1,59 +1,88 @@
-.goodsList{
+.goodsList {
     width: 100%;
     overflow: hidden;
-    .goodsItem{
+    .goodsItem {
         width: calc(50% - 0.01rem);
         height: 2.46rem;
         position: relative;
         display: block;
         float: left;
-        box-sizing: border-box;
-        // padding: .1175rem;
+        box-sizing: border-box; // padding: .1175rem;
         background: #fff;
         font-size: 0;
         border-bottom: .025rem solid #f2f2f2;
         box-sizing: content-box;
-        &:nth-of-type(even) {                  
-            border-left:0.02rem solid #f2f2f2;
+        &:nth-of-type(even) {
+            border-left: 0.02rem solid #f2f2f2;
         }
         &:nth-child(1),
-        &:nth-child(2){
+        &:nth-child(2) {
             border-top: .0125rem solid #f2f2f2;
         }
-        figure{
+        figure {
             width: 1.865rem;
             height: 1.72rem;
-            img{
+            position: relative;
+            img {
                 width: 1.865rem;
                 height: 1.72rem;
             }
+            span:nth-of-type(1) {
+                position: absolute;
+                display: block;
+                height: 0.5rem;
+                width: 0.5rem;
+                top: 0;
+                left: 0;
+                img{
+                    height: 100%;
+                    width: 100%;
+                }
+            }
         }
-        > span {
+        >span {
             width: 100%;
             display: block;
             padding: 0 0.1rem;
         }
-        .txt_title{
+        .txt_title {
             height: .24rem;
             line-height: .24rem;
             font-size: 0.15rem;
             color: #333333;
             overflow: hidden;
-            text-overflow:ellipsis;
+            text-overflow: ellipsis;
             white-space: nowrap;
             font-weight: 600;
         }
-        .txt_desc{
+        .txt_desc {
             height: .14rem;
             line-height: .14rem;
             color: #808080;
             font-size: 0.12rem;
         }
-        .txt_price{
+        .txt_price {
             height: .26rem;
             line-height: .35rem;
             color: #ff1c1c;
             font-size: 0.17rem;
+            position: relative;
+            span {
+                position: absolute;
+                display: block;
+                height: 25px;
+                width: 25px;
+                border: 1px solid #7ecc44;
+                border-radius: 2px 2px;
+                top: 0;
+                right: 10px;
+                line-height: 25px;
+                text-align: center;
+                .icon-gouwuche {
+                    color: #7ecc44;
+                    font-size: 20px !important;
+                }
+            }
         }
     }
 }

@@ -1,18 +1,43 @@
 // 申请开店
-import { Component } from 'vue-property-decorator';
-import  BaseVue  from 'base.vue';
-import { isEmpty } from 'lodash';
-import { getLocalUserInfo, toCMS, isNotLogin, toLogin } from 'common.env';
-import { ApplyShopInvitecode } from '../invitecode/invitecode';
+import {
+    Component
+} from 'vue-property-decorator';
+import BaseVue from 'base.vue';
+import {
+    isEmpty
+} from 'lodash';
+import {
+    getLocalUserInfo,
+    toCMS,
+    isNotLogin,
+    toLogin
+} from 'common.env';
+import {
+    ApplyShopInvitecode
+} from '../invitecode/invitecode';
+import {
+    GiftDetail
+} from '../../../web/malls/coupon/gift_pack/detail/detail';
+
 import shopService from './shop.service';
 import './shop.scss';
 
 @Component({
     template: require('./shop.html'),
+    components: {
+        'gift-detail': GiftDetail
+    }
 })
 
 export class ApplyShop extends BaseVue {
     formstate = {};
+
+    giftShow = false;
+
+    opts = {
+        giftType : 'applay_shop',
+        data : []
+    }
 
     //申请开店填写的信息
     shopInfo = {
@@ -21,8 +46,8 @@ export class ApplyShop extends BaseVue {
         school: '',
         campusId: '',
         wxNum: '',
-        upUserId: '',//upperUSERID
-        inviteId: '',//upUserId
+        upUserId: '', //upperUSERID
+        inviteId: '', //upUserId
         wdImg: '',
     };
     //通过邀请码得到的供货人的信息
@@ -68,7 +93,7 @@ export class ApplyShop extends BaseVue {
         let _school = this.$route.query.school;
         let _campusId = this.$route.query.campusId;
         let _auto = this.$route.query.auto;
-        if(!_incode || !_school || !_campusId){
+        if (!_incode || !_school || !_campusId) {
             //无邀请码获学校名  到开店首页
             _self.errorNoSchoolOrIncode();
             return;
@@ -79,7 +104,10 @@ export class ApplyShop extends BaseVue {
             //to login
             let _url = _incode ? ('?incode=' + _incode) : '';
             _url += _auto ? ('?auto=' + _auto) : '';
-            toLogin(this.$router, { toPath: 'apply_shop', realTo: 'apply_shop' + _url });
+            toLogin(this.$router, {
+                toPath: 'apply_shop',
+                realTo: 'apply_shop' + _url
+            });
         } else {
             //check hasWd
             this.queryUserHasShop(() => {
@@ -99,8 +127,7 @@ export class ApplyShop extends BaseVue {
                 type: 'error',
                 content: '系统错误',
                 mainBtn: '确定',
-                assistFn() {
-                },
+                assistFn() {},
                 mainFn() {
                     _self.$router.push('apply_shop_campaign');
                 }
@@ -179,11 +206,11 @@ export class ApplyShop extends BaseVue {
                         //自动获取的邀请码一定是正确的 ../反正不弹窗
                         let msg = '';
                         if (flag) {
-                            msg = '根据您的邀请码信息，你的邀请人' + res.upUserName + '已成为您的进货人！';
+                            msg = '根据您的邀请码信息，你的邀请人' + res.upUserName + '已成为您的邀请人！';
                         } else {
-                            msg = '根据您的邀请码信息，邀请人' + res.upUserName + '的等级不够，不能成为您的进货人，系统已自动选择 ' + res.upperUserName + ' 用户成为您的进货人';
+                            msg = '根据您的邀请码信息，邀请人' + res.upUserName + '的等级不够，不能成为您的邀请人，系统已自动选择 ' + res.upperUserName + ' 用户成为您的邀请人';
                         }
-                        _self.dialogPopup(msg);
+                       // _self.dialogPopup(msg);
                     }
                 }
             });
@@ -212,13 +239,12 @@ export class ApplyShop extends BaseVue {
         let _self = this;
         _self._$dialog({
             dialogObj: {
-                title: '选定进货人',
+                title: '选定邀请人',
                 type: 'info',
                 content: msg,
                 assistBtn: '',
                 mainBtn: '填写开店信息',
-                mainFn() {
-                }
+                mainFn() {}
             }
         });
     }
@@ -228,7 +254,7 @@ export class ApplyShop extends BaseVue {
     }
 
     saveData() {
-        if(this.doRegWd){
+        if (this.doRegWd) {
             return;
         }
         this.doRegWd = true;
@@ -246,15 +272,14 @@ export class ApplyShop extends BaseVue {
                     type: 'info',
                     content: '注册微店前需同意并签订《开店入驻及用户使用协议》！',
                     mainBtn: '我知道啦',
-                    mainFn() {
-                    }
+                    mainFn() {}
                 }
             });
             this.doRegWd = false;
         } else {
             console.log('开店信息', _self.shopInfo)
             this._$service.wdRegister(_self.shopInfo).then((res) => {
-                if (res.data.success) {
+                if (res.data.state==0) {//注册成功 无优惠券信息
                     _self.registerSuccess = true;
                     let arr = _self.$refs.applyshop.querySelectorAll('.applyshop_ipt');
                     for (let i = 0, len = arr.length; i < len; i++) {
@@ -271,6 +296,9 @@ export class ApplyShop extends BaseVue {
                             }
                         }
                     });
+                }else if(res.data.state==1){
+                    _self.giftShow = true;
+                    _self.opts.data = res.data.gifts;
                 } else {
                     let _self = this;
                     let _$dialog = _self.$store.state.$dialog;
@@ -281,8 +309,7 @@ export class ApplyShop extends BaseVue {
                             assistBtn: '',
                             mainBtn: '确定',
                             type: 'error',
-                            mainFn() {
-                            }
+                            mainFn() {}
                         }
                     });
                 }
@@ -293,7 +320,12 @@ export class ApplyShop extends BaseVue {
 
     toWiki() {
         sessionStorage.setItem("regShopInfo", JSON.stringify(this.shopInfo));
-        this.$router.push({ path: 'apply_shop_wiki', query: { type: 'rule' } });
+        this.$router.push({
+            path: 'apply_shop_wiki',
+            query: {
+                type: 'rule'
+            }
+        });
     }
 
     sexBlur(value) {
@@ -302,6 +334,12 @@ export class ApplyShop extends BaseVue {
 
     schoolBlur(value) {
         this.shopInfo.school = this.shopInfo.school || value;
+    }
+
+    blur_checkNbsp(val) {
+        let _self = this;
+        let reg = /^\s*(.*?)\s*$/;
+        _self.shopInfo[val] = _self.shopInfo[val].replace(reg, '$1');
     }
 
 }

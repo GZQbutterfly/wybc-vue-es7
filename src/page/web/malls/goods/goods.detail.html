@@ -1,102 +1,40 @@
 <div id="goods-detail" class="goods-detail-content">
-    <!-- <navtop style="background: #ffffff;"></navtop> -->
+    <!-- <navtop style="background: #ffffff;"></navtop> --><!-- @goShopcart="goShopcart" @joinCar="joinCar"
+                @buyNow ="buyNow" -->
     <div class="home-content">
         <scroller :on-refresh="refresh" ref="my_scroller">
             <div slot="refresh-spinner" style="position:relative;top:0.1rem;">
                 <img src="/static/images/newshop/pul.gif" alt="" style="height:0.35rem;width:0.25rem;">
             </div>
-            <!-- <img class="goods-cover" :src="goods.bannerImg" alt=""> -->
-            <div class="goods-cover">
-                <gsbanner :dataList="bannerImg" :playerOptions="playerOptions" :hasVideo="hasBannerVideo" style="height:100%"></gsbanner>
-            </div>
-
-            <div class="goods-content">
-                <h4 class=" goods-name">{{goods.goodsName}}</h4>
-                <div class="price">
-                    <span class="money-price" v-if="goods.consuType==2">
-                        <!-- <span>进货价:</span>-->{{goods.purchasePrice | localMoney}}
-                    </span>
-                    <span class="money-price" v-if="goods.consuType==3">
-                        <span v-if="goods.consuType==3">进货价:</span>{{goods.moneyPrice | localMoney}}+{{goods.moneyRoll | localVolume}}券
-                    </span>
-                    <div class="purchase" v-if="goods.consuType==3">原价：{{goods.purchasePrice | localMoney}}</div>
-                </div>
-                <!-- 倒计时 -->
-                <div class="count_down" v-show="showTime">
-                    <img src="/static/images/newshop/time.png" />
-                    <b>距商品下架时间:</b>
-                    <span>{{int_day}}</span>天
-                    <span>{{int_hour}}</span>小时
-                    <span>{{int_minute}}</span>分
-                    <span>{{int_second}}</span>秒
-                </div>
-            <!-- 
-            <div class="weui-flex goods-desc">
-                    <span>运费:
-                        <b>免运费</b>
-                    </span>
-                    <span class="desc-right">库存:
-                        <b :style="{color:goods.amount==0?'pink':'#808080'}">{{goods.amount}}</b>
-                    </span> 
-                </div>-->
-            </div>
-            <div class="indexBox_logo">
-                <dl class="wdName">
-                    <dt>
-                        <img :src="shopkeeper.wdImg" alt="">
-                    </dt>
-                    <dd>
-                        <h4>{{shopkeeper.wdName}}</h4>
-                        <span>{{shopkeeper.school}}</span>
-                        <p>
-                            <span>{{'M'+shopkeeper.vipGrade}}</span>
-                        </p>
-                    </dd>
-                </dl>
-                <div class="serBox" @click="goHome">
-                    <span>
-                        回到店铺首页
-                        <i class="iconfont icon-mjiantou sercher"></i>
-                    </span>
-                </div>
-            </div>
-            <div class="detaileall">
-                <div v-if="goods.goodsVideo">
-                    <div class="line">
-                        <b></b>
-                        <i class="iconfont icon-shipin2"></i>
-                        <span class="line-font">视频</span>
-                        <b></b>
-                    </div>
-                    <fsvideo :playerOptions="coverVideoOptions"></fsvideo>
-                </div>
-
-                <div class="line">
-                    <b></b>
-                    <i class="iconfont icon-tupian"></i>
-                    <span class="line-font">详情</span>
-                    <b></b>
-                </div>
-                <article>
-                    <p v-html="goods.textDes"></p>
-                </article>
-            </div>
-            <div class="backHome">
-                <div class="backHome_box">
-                    <span>没有更多</span>
-                </div>
-            </div>
+            <goods-component v-if="goods" 
+            :goods = "goods" 
+            @toCounponDetail = "toCounponDetail" 
+            @goHome = "goHome"
+            :consumptionType = "consumptionType"
+            :timeObj = "timeObj"
+            :counponObj = "counponObj"
+            :hasBannerVideo = "hasBannerVideo"
+            :playerOptions = "playerOptions"
+            :shopkeeper = "shopkeeper"
+            :bannerImg = "bannerImg"
+            :isLimitBuy="!moneyBuyFlag">
+            </goods-component>
         </scroller>
     </div>
-    <div class="buy-content weui-flex">
-        <div class="shop-car" @click="goShopcart">
-            <i class="iconfont icon-gouwuche"></i>
-            <p v-if="$store.state.shopCar.count != 0">{{$store.state.shopCar.count}}</p>
-        </div>
-        <div class="weui-flex-item join-car" @click="joinCar(goods)" v-show="goods.gsType==1">加入购物车</div>
-        <div class="weui-flex-item buy-now" @click="buyNow(goods)">立即购买</div>
+    <div class="buy-content weui-flex" >
+        <template v-if="!moneyBuyFlag">
+            <div class="shop-car" @click="goShopcart">
+                <i class="iconfont icon-gouwuche"></i>
+                <p v-if="$store.state.shopCar.count != 0">{{$store.state.shopCar.count}}</p>
+            </div>
+            <div class="weui-flex-item join-car" @click="joinCar(goods)" v-show="goods.gsType==1">加入购物车</div>
+            <div class="weui-flex-item buy-now" @click="buyNow(goods)">立即购买</div>
+        </template>
+        <template v-else>
+            <div class="weui-flex-item buy-now" @click="buyNow(goods)">立即购买</div>
+        </template>
     </div>
-    <numpicker :goods="goods" :affirmFn="finish2Car" :showIt="show2Car" :hideFn="numberpckerHide" :closeFn="changeShowIt" :min="minLimit"></numpicker>
-    <numpicker :goods="goods" :affirmFn="finishgoPay" :showIt="showgoPay" :hideFn="numberpckerHide" :closeFn="changeShowIt" :min="minLimit"></numpicker>
-
+    <numpicker :goods="goods" :affirmFn="finish2Car" :showIt="show2Car" :hideFn="numberpckerHide" :closeFn="changeShowIt" :fastStockObj="fastStockObj"></numpicker>
+    <numpicker :goods="goods" :affirmFn="finishgoPay" :showIt="showgoPay" :hideFn="numberpckerHide" :closeFn="changeShowIt" :fastStockObj="fastStockObj"></numpicker>
+    <MoneyPicker :goods="goods" v-show="showMoneyBuyNum" :affirmFn="finishgoPay" :closeFn="closeMoneyDialog" :amountGold="amountGold"></MoneyPicker>
 </div>

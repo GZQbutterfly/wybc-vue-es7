@@ -21,7 +21,10 @@
                                         <i class="weui-icon-checked"></i>
                                     </div>
                                     <div class="weui-cell__bd" @click="selectAddress(item)">
-                                        <div class="address-detial-name text-ellipsis">{{item.name}}</div>
+                                        <div class="weui-flex flex-align-m">
+                                            <div class="address-detial-name text-ellipsis">{{item.name}}</div>                                  
+                                            <div class="weui-flex__item address-detail-sex text-right" v-if="item.sex">{{item.sex == 1 ? '男生宿舍' : '女生宿舍'}}</div>
+                                        </div>
                                         <div class="address-detial text-ellipsis" v-if="item.addressInfo">收货地址：
                                             <span class="address-info">
                                                 <span v-if="item.addressInfo.campus">{{item.addressInfo.campus}}</span>
@@ -37,6 +40,9 @@
                                     <div class="weui-cell__ft" @click="toUpdate(item)">
                                         <div class="address-default-tip" v-if="item.isDefault">默认</div>
                                         <i class="icon iconfont icon-icon-yxj-edit"></i>
+                                    </div>
+                                    <div class="nocan-mark" v-if="!goldShow &&ops.defaultWay == 1 && item.addressInfo.campus != ops.wdInfo.school">
+                                        <img src="static/images/fastdelivery/yinzhang.png" alt="">
                                     </div>
                                 </div>
                             </div>

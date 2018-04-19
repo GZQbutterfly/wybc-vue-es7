@@ -3,7 +3,7 @@ import { Component, Vue } from 'vue-property-decorator';
 
 import './stock.order.item.scss';
 import itemService from './stock.order.item.service';
-import { getLocalUserInfo, } from 'common.env';
+import { getLocalUserInfo, toWEB} from 'common.env';
 
 
 
@@ -53,13 +53,10 @@ export class StockOrderItem extends Vue {
 		let obj = this.$store.state.$loadding();
 		let data = {
 			combinOrderNo: combinOrderNo,
-			ownStore: ownStore
+			totalMoney:this.orderTotalMoney(),
+			submitType:2
 		}
-		let self = this;
-		this._$service.pay(data).then(res => {
-			obj.close();
-			self.updateItem();
-		});
+		toWEB("sys_pay_list",data);
 	}
 
 
@@ -180,6 +177,20 @@ export class StockOrderItem extends Vue {
 		}  
 	}
 
+	getCouponMoney(){
+		let orders = this.$props.order.orders;
+		if (orders) {
+			let couponMoney = 0;
+			for (var i = 0; i < orders.length; ++i) {
+				if (orders[i].couponMoney){
+					couponMoney += orders[i].couponMoney;
+				}	
+			}
+			return couponMoney;
+		} else {
+			return 0;
+		}
+	} 
 	orderTotalMoney() {
 		let orders = this.$props.order.orders;
 		if (orders) {

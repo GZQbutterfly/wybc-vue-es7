@@ -1,7 +1,12 @@
+/**
+ * RMB订单 支持配送方式 快速仓配送
+ * 
+ * 金币购 不支持配送方式  
+ */
 import { Component } from 'vue-property-decorator';
 import BaseVue from 'base.vue';
-import { get } from 'lodash';
-import { getZoneData } from 'common.env';
+import { get, isEmpty } from 'lodash';
+import { getZoneData, timeout } from 'common.env';
 import { AddressDialogComponent } from './address/address.dialog.component';
 import { Address } from '../../../sys/address/address';
 import submitService from './order.submit.service';
@@ -31,14 +36,16 @@ export class OrderSubmit extends BaseVue {
         roll: 0,                //总现金卷
         transportPrice: 0,      //总配送费
         discount: 0,            //总折扣
-        pay: 0                  //支付总价
+        pay: 0,                 //支付总价
+        goldPrice: 0,            // 金币
+        goldShow: false
     };
-
+    userGoldNum = 0;                //用户拥有金币数
     //地址相关
     selectAddressFlag = false;  //是否选择收货地址
     showDialogAddress = false;  //是否显示地址
     showAddAddress = false;     //是否显示增加地址
-    chooseAddressState = 4;     //选择地址的状态(1.未选择 2.选择校外地址 3.选择校内非微店所属校区地址 4.选择校内地址，即微店所属校区内地址)
+    chooseAddressState = 1;     //选择地址的状态(1.未选择 2.选择校外地址 3.选择校内非微店所属校区地址 4.选择校内地址，即微店所属校区内地址)
     isInsideSchool = 1;         //是否为学校地址(1.是 0.否)
     schoolName = '';            //校区名
     orderAddress = {            //收货地址汇总
@@ -49,9 +56,12 @@ export class OrderSubmit extends BaseVue {
     };
 
     //运费相关
-    noShipFee = false;          //是否需要支付运费
-    shipFee = 0;                //运费金额
-    dissatisfyPrice = 0;        //包邮金额(配送范围外的包邮金额)
+    shipFee = 0;                //实际支付运费
+    showShipFeeFlag = true;     //跟邮费和免邮金额是否都以为零有关
+    shipFee_outArea = 0;        //运费金额(运送区域外)
+    dissatisfyPrice_outArea = 0;//包邮金额(配送范围外的包邮金额)
+    shipFee_inArea = 0;         //运费金额(运送区域内)
+    dissatisfyPrice_inArea = 0; //包邮金额(配送范围内的包邮金额)
 
     //直接购买相关
     goodsId;                    //商品ID
@@ -64,56 +74,173 @@ export class OrderSubmit extends BaseVue {
     packageData;                //套餐商品ID数组
     packageNumb;                //套餐商品数量
 
+    goodsLoadOverFlag = false;  //防止订单信息未加载完 前就点击提交订单
+    orderSubmitFlag = false;    //防止多次提交  
+    //优惠券显示
+    couponShow = false;
+    //优惠券价格
+    couponMoney = 0;
+    disCouponMoney = 0;
+    userCouponId = 0;
+    //标识 0rmb  1rmb+金币
+    orderPayType = 0;
+    userCouponShow = false;
+
+    deliveryWays = ['', '快速仓配送', '普通配送', '第三方快递']; //配送状态 0 ：非快速仓（分仓），1：快速仓 ，（2：众包，3：物流，查询的时候不用它俩）
+    deliveryWay = '普通配送';
+    deliveryArrives = ['', '预计30分钟送达', '预计2小时送达', '预计2-5天送达',];
+    deliveryArrive = '预计2小时送达';
+
+
+    currentShop = {};
+
+    deliveryNum = 0; // 配送库存
+
+    moneyBuyFlag = false;
+    periodId = 0; //限时购分场Id
+    periodIdBuyFlag = false;//限时购商品显示
+    dicCountTimeMoney = 0;
     mounted() {
         let _self = this;
-        _self.wdInfo = JSON.parse(localStorage.wdVipInfo);
+      
         document.title = "提交订单";
-        _self.$nextTick(() => {
-            _self.getFee();
-            _self.initPage();
+        // 注册服务
+        _self._$service = submitService(_self.$store);
+        _self.$nextTick(async () => {
+            _self.wdInfo = await this.$store.dispatch('CHECK_WD_INFO');
+            // _self.getFee();
+            _self.initPage(); 
         })
     }
 
     destroyed() {
-        sessionStorage.removeItem('____addressBack');
+        // sessionStorage.removeItem('____addressBack');
     }
 
     /**
      * 获取运费相关信息
      */
-    async getFee() {
+    async getFee(cb) {
         let _self = this;
-        let _result = await submitService(_self.$store).getFee();
-        _self.dissatisfyPrice = _result.data.freeShipFee;
-        _self.shipFee = _result.data.outSchoolShipFee;
+        let _result = (await _self._$service.getFee()).data;
+        _self.dissatisfyPrice_outArea = _result.freeShipFee;
+        _self.defaultPrice_outArea = _self.dissatisfyPrice_outArea;
+        _self.shipFee_outArea = _result.shipFee;
+        let _result_in = (await _self._$service.getFee_in()).data;
+        _self.dissatisfyPrice_inArea = _result_in.freeShipFee;
+        _self.defaultPrice_inArea = _self.dissatisfyPrice_inArea;
+        _self.shipFee_inArea = _result_in.shipFee;
+        // let goldNum = await _self._$service.queryUserRoll();
+        // this.userGoldNum = goldNum.data.amountGold;
+        this.getCouponMoney();
+        cb && cb();
     }
 
+    /**
+     * 获取运费相关信息(金币购)
+     */
+    async getFee_gold(cb) {
+        let _self = this;
+        let _result = (await _self._$service.getFee_gold()).data;
+        _self.dissatisfyPrice_outArea = _result.freeShipFee;
+        _self.defaultPrice_outArea = _self.dissatisfyPrice_outArea;
+        _self.shipFee_outArea = _result.shipFee;
+        let _result_in = (await _self._$service.getFee_in_gold()).data;
+        _self.dissatisfyPrice_inArea = _result_in.freeShipFee;
+        _self.defaultPrice_inArea = _self.dissatisfyPrice_inArea;
+        _self.shipFee_inArea = _result_in.shipFee;
+        let goldNum = await _self._$service.queryUserRoll();
+        this.userGoldNum = goldNum.data.amountGold;
+        cb && cb();
+    }
+    /**
+     * 获取限时购运费
+     */
+    async getFee_timeLimitBuy(cb){
+        let _self = this;
+        let _result = (await _self._$service.getFee_timeLimitBuy()).data;
+        _self.dissatisfyPrice_outArea = _result.freeShipFee;
+        _self.defaultPrice_outArea = _self.dissatisfyPrice_outArea;
+        _self.shipFee_outArea = _result.shipFee;
+        let _result_in = (await _self._$service.getFee_in_timeLimitBuy()).data;
+        _self.dissatisfyPrice_inArea = _result_in.freeShipFee;
+        _self.defaultPrice_inArea = _self.dissatisfyPrice_inArea;
+        _self.shipFee_inArea = _result_in.shipFee;
+        // let goldNum = await _self._$service.queryUserRoll();
+        // this.userGoldNum = goldNum.data.amountGold;
+        cb && cb();
+    }
+    /**
+     * 获取优惠券价格
+     */
+    getCouponMoney() {
+        let id = this.$route.query.id;
+        if (id) {
+            let couponDetail = JSON.parse(sessionStorage.getItem("couponDetail"));
+            this.couponShow = true;
+            this.userCouponId = id;
+            this.couponMoney = couponDetail.moneyPrice;
+            this.disCouponMoney = couponDetail.deductionMoney
+        } else {
+            this.couponShow = false;
+            this.couponMoney = 0;
+            this.disCouponMoney = 0;
+        }
+    }
+    firstParseGoods = true;
+    activated() {
+        // debugger;
+        this.getCouponMoney();
+        !this.firstParseGoods && this.parseGoodsList();
+    }
     /**
      * 初始化
      */
     async initPage() {
+        let isGoldBuy = false;
         let _self = this;
-        if (sessionStorage.____addressBack) {
-            sessionStorage.removeItem('____addressBack');
-            _self.dialogSelectAddress();
-        }
-        _self.orderSrouce = _self.$route.query.orderSrouce;
-        let cartIds = _self.$route.query.cartId;
-        _self.goodsType = _self.$route.query.goodsType;
-        _self.goodsId = _self.$route.query.goodsId;
-        _self.number = _self.$route.query.number;
+        let _query = _self.$route.query;
+        _self.orderSrouce = _query.orderSrouce;
+        let cartIds = _query.cartId;
+        _self.goodsType = _query.goodsType;
+        _self.goodsId = _query.goodsId;
+        _self.number = _query.number;
+        _self.periodId = _query.periodId;
         _self.goodsList = [];
-        // 注册服务
-        _self._$service = submitService(_self.$store);
-        _self._$service.nowifi((flag) => {
-            _self.showNowifi = true;
-        });
+        // _self._$service.nowifi((flag) => {
+        //     _self.showNowifi = true;
+        // });
+        if (_query.from == 'money_gold_buy') {
+            this.moneyBuyFlag = true;
+        }
+        else if (_query.periodId) {
+            this.periodIdBuyFlag = true;
+        }
+
+        this.initDeliveryWay();
+
+        if (this.defaultWay == 1) {
+            this.fastShipFeeObj = (await this._$service.queryFastDeliveryShip()).data;
+        }
+
+        // 请求商品信息
         if (_self.orderSrouce === 'car') {
             //for 购物车
             _self.goodsType = 'entity';
-            _self._$service.queryCarOrders({ shopCartIds: cartIds }).then(async (res) => {
-                _self.goodsList = get(res, 'data.data') || {};
-                await _self.queryDefaultAddress();
+            let _result = (await _self._$service.queryCarOrders({ shopCartIds: cartIds })).data;
+
+            _self.wdInfo = await _self._$service.getWdInfo(_result.data[0].shopId);
+            // _self.wdInfo = res2.wdVipInfo;
+            _result.data.forEach(item => {
+                if (item.commonShopCarts.length) {
+                    item.shopCarts = item.commonShopCarts;
+                }
+                if (item.fastShopCarts.length) {
+                    item.shopCarts = item.fastShopCarts;
+                }
+            })
+            _self.goodsList = get(_result, 'data') || {};
+            await _self.getFee(function () {
                 _self.parseGoodsList();
             });
         } else if (_self.orderSrouce === 'package') {
@@ -121,35 +248,68 @@ export class OrderSubmit extends BaseVue {
             _self.packageId = _self.$route.query.packageId;
             _self.packageNumb = _self.$route.query.packageNumb.split(",");
             _self.goodsType = 'entity';
-            _self.doPackageEverything();
-            await _self.queryDefaultAddress();
+            await _self.getFee(function () {
+                _self.doPackageEverything();
+            });
         } else {
             //for 直接购买
             let query = {
                 goodsId: _self.goodsId
             };
-            if (_self.goodsType == 'entity') {
-                await _self.queryDefaultAddress();
-            }
-            let res = await _self._$service.queryGoods(query);
-            let res2 = await _self._$service.getWdInfo(_self.wdInfo.infoId);
+            let res = (await _self._$service.queryGoods(query)).data;
+            let wdInfo= await _self._$service.getWdInfo(_self.wdInfo.infoId);
 
-            let _result = res.data.data;
-            let _wdInfo = res2.data.wdVipInfo;
-            _result.number = _self.number;
-            let obj = {
-                "shopId": _wdInfo.infoId,
-                "shopName": _wdInfo.wdName,
-                "school": _wdInfo.school,
-                "shopCarts": [_result]
+            let cb = function () {
+                let _result = res.data;
+                let _wdInfo = wdInfo;
+                _result.number = _self.number;
+                let obj = {
+                    "shopId": _wdInfo.infoId,
+                    "shopName": _wdInfo.wdName,
+                    "school": _wdInfo.school,
+                    "shopCarts": [_result]
+                }
+                _self.goodsList.push(obj);
+                _self.parseGoodsList();
+                _result.leaveMsg && (_self.leaveMsg = JSON.parse(_result.leaveMsg));
             }
-            _self.goodsList.push(obj);
-            _self.parseGoodsList();
-            _result.leaveMsg && (_self.leaveMsg = JSON.parse(_result.leaveMsg));
+            //邮费
+            if (_self.goodsType == 'entity') {
+                if (res.data.consuType == 3 && !_self.periodIdBuyFlag) {
+                    await _self.getFee_gold(cb);
+                } else if (_self.periodIdBuyFlag){
+                    await _self.getFee_timeLimitBuy(cb);
+                } else {
+                    await _self.getFee(cb);
+                }
+            }
+
+            this.deliveryNum = _query.deliveryNum || 0;
         }
-        // this.updateMinimumConsumption();
+
+        // 请求默认地址
+        if (['car', 'package'].includes(_self.orderSrouce) || _self.goodsType == 'entity') {
+            await _self.queryDefaultAddress();
+        }
+
+
     }
 
+    /**
+     * 初始化配送方式
+     */
+    initDeliveryWay() {
+        let _query = this.$route.query;
+
+        // console.log('fastFlag: ', _query); 
+        if (_query.fastFlag && !['false', '0'].includes(_query.fastFlag)) {
+            // 快速仓标识 -> 快速仓配送
+            this.defaultWay = 1;
+        } else {
+            this.defaultWay = 2;
+        }
+    }
+    addressObj = {};
     /**
      * 实物商品进入商品默认加载该用户的默认的地址
      */
@@ -159,12 +319,19 @@ export class OrderSubmit extends BaseVue {
         let _result = (await _self._$service.queryDefaultAddress(addrId)).data;
         if (!_result.errorCode) {
             _self.isInsideSchool = _result.isInsideSchool;
+            // TODO  快速订单
+            if (!this.moneyBuyFlag) {
+                if ([1, 2].includes(this.defaultWay) && _result && _result.campus != this.wdInfo.school) {
+                    // 众包配送 快速仓配送时，默认地址不在该店铺所在校区地址时，清除默认地址显示
+                    return;
+                }
+            }
             if (_result) {
                 _orderAddress.address = _result.address;
                 _orderAddress.name = _result.name;
                 _orderAddress.phone = _result.phone;
                 _orderAddress.addrId = _result.addrId;
-                _self.selectAddressFlag = true;
+                _orderAddress.sex = _result.sex;
                 if (_result.campus) {
                     _orderAddress.addressInfo = {
                         campus: _result.campus,
@@ -174,10 +341,14 @@ export class OrderSubmit extends BaseVue {
                     _orderAddress.addressInfo = await getZoneData(_result);
                 }
                 _self.orderAddress = _orderAddress;
+                _self.orderAddress.__result = _result;
             } else {
                 _self.orderAddress = {};
-                _self.selectAddressFlag = false;
             }
+            
+            _self.checkDeliveryWay();
+            // 计算邮费
+            _self.diffDeliveryMoney();
         }
     }
 
@@ -276,6 +447,7 @@ export class OrderSubmit extends BaseVue {
             _orderTotal.transportPrice = 0; //配送费
             _orderTotal.pay = _orderTotal.price - _orderTotal.diffPrice - _orderTotal.transportPrice - _orderTotal.discount;
             this.checkPackageCanBuy();      //检查
+            _self.goodsLoadOverFlag = true;
         });
     }
 
@@ -302,7 +474,9 @@ export class OrderSubmit extends BaseVue {
      * 弹出选择地址
      */
     dialogSelectAddress() {
-        this.showDialogAddress = true;
+        if (this.wdInfo) {
+            this.showDialogAddress = true;
+        }
     }
 
     /**
@@ -312,7 +486,8 @@ export class OrderSubmit extends BaseVue {
         let _orderAddress = this.orderAddress;
         this.showDialogAddress = false;
         sessionStorage.removeItem('____addressBack');
-        this.queryDefaultAddress(_orderAddress.addrId);
+        this.checkDeliveryWay();
+      //  this.queryDefaultAddress(_orderAddress.addrId);
     }
 
     /**
@@ -327,16 +502,38 @@ export class OrderSubmit extends BaseVue {
      */
     submitOrder() {
         let _self = this;
+        let id = this.$route.query.id;
+        if (!_self.goodsLoadOverFlag) {
+            setTimeout(function () {
+                _self.submitOrder();
+            });
+            return;
+        }
+        if (_self.orderSubmitFlag) {
+            return;
+        }
+        _self.orderSubmitFlag = true;
         let _data = {
             addrId: _self.orderAddress.addrId,
             leaveMsg: 'null',
             numbers: [],
             goods: [],
-            shopId: _self.wdInfo.infoId
+            shopId: _self.wdInfo.infoId,
         };
+        if (!this.orderTotal.goldShow && !_self.periodId) {
+            _data.deliveryType = this.defaultWay == 1 ? 1 : 0  //配送状态 0 ：非快速仓（分仓），1：快速仓 ，（2：众包，3：物流，查询的时候不用它俩）
+        }
+        if (_self.periodId) {
+            _data.periodId = _self.periodId;
+        }
+        //是否用券
+        if (id) {
+            _data.userCouponId = id;
+        }
         if (_self.orderSrouce == 'package') {
             //订单失效检测
             if (!_self.checkPackageCanBuy()) {
+                _self.orderSubmitFlag = false;
                 return;
             }
         }
@@ -347,6 +544,7 @@ export class OrderSubmit extends BaseVue {
             if (_self.orderSrouce == 'car') {
                 // 购物车
                 _data.shopCartIds = _self.$route.query.cartId;
+                // _data.hasShopCoupon = _self.goodsList.hasShopCoupon;
                 _result = _self._$service.submitMutiOrder(_data);
             } else if (_self.orderSrouce === 'package') {
                 // 套餐
@@ -368,7 +566,17 @@ export class OrderSubmit extends BaseVue {
                 if (_self.goodsType === 'entity') {
                     // 实物
                     _data.goodsId = _self.goodsList[0].shopCarts[0].goodsId;
-                    _result = _self._$service.submitOrder(_data);
+                    // console.log(_self.goodsList[0].shopCarts[0])
+                    if (_self.goodsList[0].shopCarts[0].consuType == 3) {
+                        //抵扣的金币
+                        _data.gold = _self.orderTotal.goldPrice;
+                        _result = _self._$service.submitGoldOrder(_data);
+                    } else if (_self.periodId) {  //限时购
+                        _result = _self._$service.submitTimeLimitBuyOrder(_data);
+                    }
+                    else {
+                        _result = _self._$service.submitOrder(_data);
+                    }
                 } else {
                     // 虚拟
                     let _leaveMsg = {};
@@ -384,7 +592,18 @@ export class OrderSubmit extends BaseVue {
                     if (_check) {
                         _data.leaveMsg = JSON.stringify(_leaveMsg);
                         _data.goodsId = _self.goodsList[0].id;
-                        _result = _self._$service.submitOrder(_data);
+
+                        if (_self.goodsList[0].consuType == 3) {
+                            //抵扣的金币
+                            _data.gold = _self.orderTotal.goldPrice;
+
+                            _result = _self._$service.submitGoldOrder(_data);
+
+                        } else {
+
+                            _result = _self._$service.submitOrder(_data);
+
+                        }
                     } else {
                         let dialogObj = {
                             title: '',
@@ -405,45 +624,147 @@ export class OrderSubmit extends BaseVue {
                 _result.then((res) => {
                     let _result = res.data;
                     if (_result.errorCode) {
-                        let dialogObj = {
-                            title: '提示',
-                            content: _result.msg,
-                            type: 'info',
-                            assistBtn: '',
-                            mainBtn: '知道啦',
-                            assistFn() { },
-                            mainFn() { }
-                        };
-                        _self.$store.state.$dialog({ dialogObj });
+                        if (_self.periodId) {     //限时购
+                            _self.timeLimitBuyError(_result);
+                        } else {
+                            _self.pareSubmittedBackError(_result).then((msg) => {  //非限时购
+                                let dialogObj = {
+                                    title: '提示',
+                                    content: msg,
+                                    type: 'info',
+                                    assistBtn: '',
+                                    mainBtn: '知道啦',
+                                    assistFn() { },
+                                    mainFn() {
+                                        _self.submittedBackSureAlter(_result);
+                                    }
+                                };
+                                _self.$store.state.$dialog({ dialogObj });
+                            });
+                        }
                         obj.close();
                     } else {
                         let _param = {
                             combinOrderNo: _result.combinOrderNo,
-                            orderId: _result.orderId
+                            orderId: _result.orderId,
+                            totalMoney:_result.totalMoney,
+                            orderPayType:_self.orderPayType
                         };
-                        _self._$service.pay(_param).then((res) => {
-                            if (res !== null) {
-                                _self.payCallBack(res);
-                            }
-                            obj.close();
-                        }).catch(() => {
-                            obj.close();
-                        });
+                        _self.$router.push({path:'pay_list',query:_param});
+
+                        // let orderPayType = {
+                        //     combinOrderNo: _result.combinOrderNo,
+                        //     orderPayType: _self.orderPayType
+                        // }
+                        // _self._$service.pay(_param).then((res) => {
+                        //     if (res !== null) {
+                        //         _self.payCallBack(res, orderPayType);
+                        //     }
+                        //     obj.close();
+                        // }).catch(() => {
+                        //     obj.close();
+                        // });
                     }
                 });
             }
         }
+        _self.orderSubmitFlag = false;
+    }
+    /**
+     * 订单提交后限时购 报错 信息 处理
+     * @param {*} result 
+     */
+    timeLimitBuyError(result) {
+        let _self = this;
+        let dialogObj = {
+            title: '提示',
+            content: result.msg,
+            type: 'info',
+            assistBtn: '',
+            mainBtn: '知道啦',
+            assistFn() { },
+            mainFn() {
+                if (result.errorCode == 230) {   //230活动结束 231卖完 232库存不足
+                    _self.$router.push({ path: "home" });
+                } else if (result.errorCode == 231 ) {
+                    _self.$router.push({ path: "money_timelimit_list" });
+                }
+                else {
+                   _self.$router.back();
+                }
+            }
+        };
+        _self.$store.state.$dialog({ dialogObj });
+    }
+    /**
+     * 订单提交后 报错 信息 处理
+     * @param {*} result 
+     */
+    submittedBackSureAlter(result) {
+        let _self = this;
+        // 库存不足时， 给与提示后，用户点击后 返回商品
+        // 143		分仓库存不足
+        // 144		快速仓库存不足
+        // 145      快速仓未开启
+        if (!this.moneyBuyFlag && [143, 144, 145].includes(result.errorCode)) {
+            if (_self.orderSrouce == "goods" && [145].includes(result.errorCode)){
+                _self.$router.push({path:"home"});
+            }else{
+                _self.$router.back();
+            }    
+        }
+    }
+
+    /**
+     * 提交订单后错误信息 预处理
+     */
+    async pareSubmittedBackError(result) {
+        let _msg = result.msg || '';
+        if (this.moneyBuyFlag || ![143, 144].includes(result.errorCode)) {
+            return _msg;
+        }
+        switch (this.orderSrouce) {
+            case 'car':
+                // 多sku
+                // console.log('多sku 配送方式 ');
+                if (this.defaultWay == 1) {
+                    //快速订单
+                    _msg = '部分商品快速仓库存不足，如果需购买更多商品，可以继续在普通订单中下单!';
+                } else {
+                    _msg = '部分商品库存不足，请重新提交!';
+                }
+                break;
+            case 'goods':
+                // 单sku
+                // console.log('单sku 配送方式 ');
+                if (this.defaultWay == 1) {
+                    let _res = (await this._$service.queryGoodsStock({ goodsId: this.goodsList[0].goodsId, deliveryType: 0 })).data || 0;
+                    //快速订单  单个商品快速仓不足时，返回其分仓库存数量 
+                    if (_res) {
+                        _msg = '当前商品快速仓库存不足，如果需购买更多商品，可以继续在普通订单中下单，当前分仓库存：' + _res + '件!';
+                    } else {
+                        _msg = '当前商品快速仓库存不足，请重新提交!';
+                    }
+                } else {
+                    _msg = '当前商品库存不足，请重新提交!';
+                }
+                break;
+            default:
+        }
+        return _msg;
     }
 
     /**
      * 支付结束回调
      */
-    payCallBack(res) {
+    payCallBack(res, _param) {
         // 取消支付 => 待支付订单 , 支付成功 => 所有订单
         let _self = this;
         if (res) {
+            sessionStorage.setItem("combinOrderNo", JSON.stringify(_param));
             this.$router.replace({ path: 'user_order' });
         } else {
+            // sessionStorage.setItem("combinOrderNo", JSON.stringify(_param));
             let query = {
                 listValue: '1'
             };
@@ -475,70 +796,54 @@ export class OrderSubmit extends BaseVue {
     /**
      * 处理订单数据
      */
-    parseGoodsList() {
+    async parseGoodsList() {
+
         let _self = this;
+
         let list = _self.goodsList;
         let _orderTotal = _self.orderTotal;
         _orderTotal.price = 0;
         _orderTotal.pay = 0;
+        _orderTotal.goldPrice = 0;
+        _self.dicCountTimeMoney = 0;
+        let disMoney = 0;
+        // _self.userGoldNum = 666; //test
         if (_self.goodsType == 'entity') {
             //实物
             for (let i = 0, len = list.length; i < len; i++) {
+
                 for (let j = 0, len1 = list[i].shopCarts.length; j < len1; j++) {
                     let item = list[i].shopCarts[j];
                     let _num = item.number;
                     _orderTotal.price += (item.purchasePrice * _num) || 0;
+                    if (item.consuType == 3 && !_self.periodIdBuyFlag) {
+                        _self.orderPayType = 1;
+                        _orderTotal.goldShow = true;
+                        // console.log(111, _self.userGoldNum);
+                        if (_self.userGoldNum >= item.goldPrice * item.number) {
+                            _orderTotal.goldPrice += (item.goldPrice * item.number) || 0;
+                            disMoney += item.number * (item.purchasePrice - item.moneyPrice) || 0;
+                        } else {
+                            let disNum = 0;
+                            disNum = Math.floor(_self.userGoldNum / item.goldPrice);
+                            _orderTotal.goldPrice += (item.goldPrice * disNum) || 0;
+                            disMoney += disNum * (item.purchasePrice - item.moneyPrice) || 0;
+                        }
+                    } else if (_self.periodIdBuyFlag) {
+                        _self.dicCountTimeMoney += (item.purchasePrice - item.moneyPrice) * _num;
+                        disMoney += _self.dicCountTimeMoney;
+                        _self.orderPayType = 2;
+                    } else {
+                        _self.orderPayType = 0;
+                    }
                 }
             }
-            _orderTotal.pay = _orderTotal.price;
-            if(_self.selectAddressFlag){
-                //选择地址
-                if (_self.isInsideSchool == 1) {
-                    //校内地址
-                    let inSameSchool = true;
-                    let value = _self.orderAddress.addressInfo.campus;
-                    _self.goodsList.forEach(item => {
-                        _self.schoolName = item.school;
-                        if(value != item.school){
-                            inSameSchool = false;
-                        }
-                    });
-                    if(inSameSchool){
-                        //相同校区
-                        _self.chooseAddressState = 4;
-                        //免运费
-                        _self.noShipFee = true;
-                    }else{
-                        //不同校区
-                        _self.chooseAddressState = 3;
-                        if (_orderTotal.price >= _self.dissatisfyPrice) {
-                            //免运费
-                            _self.noShipFee = true;
-                        }
-                        else {
-                            //收运费
-                            _self.noShipFee = false;
-                            _orderTotal.pay += Number(_self.shipFee);
-                        }
-                    }
-                }else {
-                    //校外地址
-                    _self.chooseAddressState = 2;
-                    if (_orderTotal.price >= _self.dissatisfyPrice) {
-                        //免运费
-                        _self.noShipFee = true;
-                    }
-                    else {
-                        //收运费
-                        _self.noShipFee = false;
-                        _orderTotal.pay += Number(_self.shipFee);
-                    }
-                }
-            }else{
-                //未选择收货地址
-                _self.chooseAddressState = 1;
-                //界面显示免运费
-                _self.noShipFee = true;
+            //优惠券抵扣
+            if (_orderTotal.price - _self.disCouponMoney == 0) {
+                _self.disCouponMoney = _self.disCouponMoney - 1;
+                _orderTotal.pay = 1;
+            } else {
+                _orderTotal.pay = _orderTotal.price - disMoney - _self.disCouponMoney;
             }
         } else {
             //虚物
@@ -550,18 +855,234 @@ export class OrderSubmit extends BaseVue {
             }
             _orderTotal.pay = _orderTotal.purchasePrice;
         }
+        _self.goodsLoadOverFlag = true;
+        if (_self.periodId) {
+            _self.userCouponShow = true;
+        } else {
+            _self.setCouponShow(list);
+        }
+
+        _self.diffDeliveryMoney();
+        // 第一次执行后设置为false；
+        _self.firstParseGoods = false;
     }
 
     /**
+     * 计算配送费
+     */
+    diffDeliveryMoney() {
+        let _self = this;
+        let _orderTotal = _self.orderTotal;
+        console.log('diffDeliveryMoney orderTotal: ', _orderTotal);
+        //初始化设置为免运费
+        _self.shipFee = 0;
+        //初始化设置为未选择收货地址
+        _self.chooseAddressState = 1;
+        //初始化设置为显示邮费提示
+        // _self.showShipFeeFlag = true;
+        if (_self.orderAddress && _self.orderAddress.addressInfo) {
+            //选择地址
+            if (_self.isInsideSchool == 1) {
+                //校内地址
+                let inSameSchool = true;
+                let _schoolName = get(_self.orderAddress, 'addressInfo.campus');
+                let _goodsList = _self.goodsList;
+                for (let i = 0, len = _goodsList.length; i < len; i++) {
+                    let _item = _goodsList[i];
+                    _self.schoolName = _item.school;
+                    if (_schoolName != _item.school) {
+                        inSameSchool = false;
+                        break;
+                    }
+                }
+                // debugger;
+                if (inSameSchool) {
+                    //相同校区
+                    _self.chooseAddressState = 4;
+                    //收运费
+                    if (_self.defaultWay == 1) {
+                        // 快速订单
+                        _self.shipFee_inArea = _self.fastShipFeeObj.shipFee;
+                        _self.dissatisfyPrice_inArea = _self.fastShipFeeObj.freeShipFee;
+                        if (_orderTotal.price < _self.fastShipFeeObj.freeShipFee) {
+                            _self.shipFee = _self.shipFee_inArea;
+                        }
+                    } else {
+                        // 重置默认配送费
+                        _self.dissatisfyPrice_inArea = _self.defaultPrice_inArea;
+                        if (_orderTotal.price < _self.dissatisfyPrice_inArea) {
+                            _self.shipFee = _self.shipFee_inArea;
+                        }
+                    }
+                } else {
+                    //不同校区
+                    _self.chooseAddressState = 3;
+                    if (_self.defaultWay == 1) {
+                        // 快速订单                         
+                        _self.shipFee_outArea = _self.fastShipFeeObj.shipFee;
+                        _self.dissatisfyPrice_outArea = _self.fastShipFeeObj.freeShipFee;
+                        if (_orderTotal.price < _self.fastShipFeeObj.freeShipFee) {
+                            _self.shipFee = _self.shipFee_outArea;
+                        }
+                    } else {
+                        // 重置默认配送费
+                        _self.dissatisfyPrice_outArea = _self.defaultPrice_outArea;
+                        if (_orderTotal.price < _self.dissatisfyPrice_outArea) {
+                            _self.shipFee = _self.shipFee_outArea;
+                        }
+                    }
+                }
+            } else {
+                //校外地址
+                _self.chooseAddressState = 2;
+                if (_self.defaultWay == 1) {
+                    // 快速订单
+                    _self.shipFee_outArea = _self.fastShipFeeObj.shipFee;
+                    _self.dissatisfyPrice_outArea = _self.fastShipFeeObj.freeShipFee;
+                    if (_orderTotal.price < _self.fastShipFeeObj.freeShipFee) {
+                        _self.shipFee = _self.shipFee_outArea;
+                    }
+                } else {
+                    // 重置默认配送费
+                    _self.dissatisfyPrice_inArea = _self.defaultPrice_outArea;
+                    if (_orderTotal.price < _self.dissatisfyPrice_outArea) {
+                        _self.shipFee = _self.shipFee_outArea;
+                    }
+                }
+            }
+            if (_self.shipFee) {
+                _orderTotal.pay += (+_self.shipFee) || 0;
+            }
+        }
+    }
+
+
+    defaultWay = 0;
+    checkDeliveryWay() {
+
+        if (this.moneyBuyFlag) {
+            this.checkAddressInfo();
+            return;
+        }
+
+
+        // console.log('路由信息： ', this.$route, this.$router);
+        if (sessionStorage.____addressBack) {
+            sessionStorage.removeItem('____addressBack');
+            this.dialogSelectAddress();
+        }
+
+        let result = this.orderAddress.__result;
+
+        // console.log('地址信息： ', result);
+
+        if (this.defaultWay == 1) {
+            // 快速订单  配送
+            if (result && result.campus != this.wdInfo.school) {
+                this.selectAddressFlag = false;
+                this.orderAddress = {};
+                this.chooseAddressState = 1;
+                // return;
+            }
+        } else {
+            if (result && result.campus != this.wdInfo.school) {
+                // 校外地址 或 其他校区
+                this.defaultWay = 3;
+            } else {
+                this.defaultWay = 2;
+            }
+        }
+        this.deliveryWay = this.deliveryWays[this.defaultWay];
+        this.deliveryArrive = this.deliveryArrives[this.defaultWay];
+        this.checkAddressInfo();
+    }
+
+
+    checkAddressInfo() {
+        if (this.orderAddress && this.orderAddress.addressInfo) {
+            this.selectAddressFlag = true;
+            this.addressObj = this.orderAddress;
+        } else {
+            this.selectAddressFlag = false;
+            this.addressObj = {};
+        }
+    }
+
+
+    /**
+     * 优惠券显示
+     */
+    async setCouponShow(goodsList) {
+        let _self = this;
+        let _data = {
+            totalPrice: 0,
+            goodsIdList: [],
+            priceList: [],
+            shopIdStr: []
+        }
+        goodsList.forEach(item => {
+            _data.shopIdStr.push(item.shopId);
+            item.shopCarts.forEach(v => {
+                _data.goodsIdList.push(v.goodsId);
+                _data.priceList.push(v.purchasePrice * v.number);
+                _data.totalPrice += v.purchasePrice * v.number
+            })
+        });
+        let _query = {
+            totalPrice: _data.totalPrice,
+            goodsIdListStr: _data.goodsIdList.join(","),
+            priceListStr: _data.priceList.join(","),
+            shopIdStr: _data.shopIdStr.join(","),
+            couponState: 0,
+            limit: 10,
+            page: 1
+        }
+        let _result = await this._$service.getCouponList(_query);
+        if (!_result.errorCode) {
+            if (_result.data && _result.data.length != 0) {
+                _self.userCouponShow = false;
+            } else {
+                _self.userCouponShow = true;
+            }
+        }else{
+            _self.userCouponShow = true;
+        }
+        // console.log(_result,1111111)
+    }
+    /**
      * 地址选择回调
      */
-    selectAddress(item) {
+    async selectAddress(item) {
+        if (!this.orderTotal.goldShow) {
+            if (item.isInsideSchool != 1 || item.campus != this.wdInfo.school) {
+                if (this.defaultWay == 1) {
+                    // 快速仓配送 不能切换其他非店铺所在校区地址                
+                    return;
+                } else {
+                    // 校外地址
+                    let flag = await this.alertDialog({
+                        content: '您所填写的地址不在' + this.wdInfo.school + '校区配送范围以内，商品将通过第三方快递发货，预计1天后发货',
+                        type: 'info',
+                        assistBtn: '我再想想',
+                        mainBtn: '确认'
+                    });
+                    if (!flag) {
+                        return;
+                    }
+                }
+            }
+        }
         let _self = this;
         _self.selectAddressFlag = true;
         _self.orderAddress = item;
+        _self.orderAddress.__result = item;
+        _self.addressObj = _self.orderAddress;
         _self.isInsideSchool = item.isInsideSchool;
-        _self.parseGoodsList();
         _self.closeDialogAddess();
+        _self.parseGoodsList();
+      //  _self.diffDeliveryMoney();
+       
+     
     }
 
     /**
@@ -569,6 +1090,45 @@ export class OrderSubmit extends BaseVue {
      */
     changeInput(item, event) {
         item.value = event.target.value;
+    }
+    /**
+     * 使用优惠券
+     */
+    goCouponDetail() {
+        let _self = this;
+        let _data = {
+            totalPrice: 0,
+            goodsIdList: [],
+            priceList: [],
+            shopIdStr: []
+        }
+        this.goodsList.forEach(item => {
+            _data.shopIdStr.push(item.shopId);
+            item.shopCarts.forEach(v => {
+                _data.goodsIdList.push(v.goodsId);
+                _data.priceList.push(v.purchasePrice * v.number);
+                _data.totalPrice += v.purchasePrice * v.number
+            })
+        })
+        sessionStorage.setItem("couponParam", JSON.stringify(_data));
+        // console.log(_data,11111111);
+        let _query = {}, _param = this.$route.query;
+        if (this.orderSrouce == "goods") {
+            _query = {
+                goodsId: _param.goodsId,
+                goodsType: _param.goodsType,
+                number: _param.number,
+                orderSrouce: _param.orderSrouce,
+                id: _param.id
+            }
+        } else {
+            _query = {
+                cartId: _param.cartId,
+                orderSrouce: _param.orderSrouce,
+                id: _param.id
+            }
+        }
+        this.$router.push({ path: "order_coupon", query: _query });
     }
 
     /**
@@ -578,20 +1138,25 @@ export class OrderSubmit extends BaseVue {
         this.showNowifi = false;
     }
 
-    /**
-     * 更新最低消费额
-     */
-    updateMinimumConsumption() {
-        if (this.minimumConsumption != -1) {
-            return;
-        } else {
-            let self = this;
-            this._$service.getMinimumConsumption()
-                .then(res => {
-                    if (res && !res.errCode && res.data) {
-                        self.minimumConsumption = res.data.minimumConsumption;
-                    }
-                })
-        }
+    alertDialog(opts) {
+        return new Promise((reslove) => {
+            this._$dialog({
+                dialogObj: {
+                    title: '提示',
+                    content: '',
+                    type: 'info',
+                    assistBtn: '',
+                    mainBtn: 'ok',
+                    assistFn() {
+                        reslove(false);
+                    },
+                    mainFn() {
+                        reslove(true);
+                    },
+                    ...opts
+                }
+            })
+        });
     }
+
 }

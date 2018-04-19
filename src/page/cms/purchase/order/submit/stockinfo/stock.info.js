@@ -10,8 +10,10 @@ import './stock.info.scss';
 })
 export class StockInfo extends BaseVue {
     mounted () {
+        let _self = this;
         this.$nextTick(()=>{
             document.title = '进货仓储说明';
+            _self.updateWxShare();
         })
     }
 }

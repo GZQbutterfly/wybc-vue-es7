@@ -1,7 +1,8 @@
 <div class="list_content" @click="toOrderDetail()">
 	<!-- 订单号&&交易状态 -->
 	<div class="weui-flex order-title">
-		<span class="color-gray">订单号:{{order.orders[0].orderState==1||order.orders[0].orderState==6?order.orders[0].combinOrderNo:order.orders[0].orderNo}}</span>
+		<!-- <span class="color-gray">订单号:{{order.orders[0].orderState==1||order.orders[0].orderState==6?order.orders[0].combinOrderNo:order.orders[0].orderNo}}</span> -->
+		<span class="color-gray">订单号:{{order.orders[0].combinOrderNo}}</span>
 		<span class="weui-flex-item flex title-state color-green">{{transOrderState()}}</span>
 	</div>
 
@@ -12,16 +13,25 @@
 			<div class="flex goods-info">
 				<div class="weui-flex">
 					<span>{{order.goodses[index].goodsName}}</span>
-					<span class="flex price">{{subOrder.purchasePrice|localMoney}}</span>
+					<span class="flex price" :class="{'hasGold':order.goodses[index].consuType == 3 || timeLimit}">{{order.goodses[index].purchasePrice|localMoney}}</span>
 				</div>
-				<p class="">x {{order.goodses[index].number}}</p>
+				<p>x {{order.goodses[index].number}}</p>
+				<div class="gold_coiney" v-if="order.goodses[index].consuType == 3&&!timeLimit">
+					<span class="price">{{order.goodses[index].moneyPrice|localMoney}}</span>
+					&nbsp;+&nbsp;
+					<img src="/static/images/money/icon.png" alt="" style="width: 0.145rem; height: 0.145rem;">
+					<span class="gold">{{order.goodses[index].goldPrice}}</span>
+				</div>
+				<div class="gold_coiney" v-if="timeLimit">
+					<span class="price">{{order.goodses[index].moneyPrice|localMoney}}</span>
+				</div>
 			</div>
 		</div>
 	</div>
 
 	<!-- 商品列表展开选项 -->
 	<div v-if="order.orders.length>1" class="expand-link">
-		<span >查看全部 {{order.goodses.length}} 件商品 </span>
+		<span>查看全部 {{order.goodses.length}} 件商品 </span>
 	</div>
 
 	<!-- 已发货 -->
@@ -34,10 +44,37 @@
 	</div>
 	<!--配送费-->
 	<div class="order-plus weui-flex flex-right">
-		<span class="desc-font postage"> {{getShipFee()| localMoney}}</span>
-		<span class="desc-font color-black postage">配送费:&nbsp;&nbsp;</span>
+		<span class="desc-font color-red"> {{getShipFee()| localMoney}}</span>
+		<span class="desc-font color-black">配送费:&nbsp;&nbsp;</span>
 	</div>
 	<div class="row-line"></div>
+	<!--抵扣金币-->
+	<template v-if="order.consuType == 3">
+		<div class="order-plus weui-flex flex-right">
+			<span class="desc-font color-origin"> {{ totalGold }}</span>
+			<figure class="desc-font">
+				<img src="/static/images/money/icon.png" alt="">
+			</figure>
+			<span class="desc-font color-black">抵扣金币:&nbsp;&nbsp;</span>
+		</div>
+		<div class="row-line"></div>
+	</template>
+	<!--抵扣优惠券-->
+	<template v-if="useRoll">
+		<div class="order-plus weui-flex flex-right">
+			<span class="desc-font color-origin">- {{ totalRoll | localMoney }}</span>
+			<span class="desc-font color-black">优惠券:&nbsp;&nbsp;</span>
+		</div>
+		<div class="row-line"></div>
+	</template>
+	<!--限时购优惠券-->
+	<template v-if="timeLimit">
+		<div class="order-plus weui-flex flex-right">
+			<span class="desc-font color-origin">- {{ disCountMoney | localMoney }}</span>
+			<span class="desc-font color-black">限时购优惠:&nbsp;&nbsp;</span>
+		</div>
+		<div class="row-line"></div>
+	</template>
 	<!-- 总计 -->
 	<div class="order-plus weui-flex flex-right">
 		<span class="desc-font color-red"> {{orderTotalMoney()| localMoney}}</span>
@@ -46,12 +83,12 @@
 	<div class="row-line"></div>
 
 	<!-- 已发货 -->
-	<div v-if="order.orderState===4">
+	<!-- <div v-if="order.orderState===4 && order.orderType!=1 && order.deliveryType!=1">
 		<div class="order-plus weui-flex flex-right">
 			<button class="item-button button-green" @click.stop="confirmRecive()">确认收货</button>
 		</div>
 		<div class="row-line"></div>
-	</div>
+	</div> -->
 
 	<!-- 功能 -->
 	<div v-if="order.orderState===1">

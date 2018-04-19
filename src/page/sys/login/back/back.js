@@ -13,6 +13,8 @@ export class LoginBack extends Vue {
         let _authUser = getAuthUser();
         if (result && !result.openid && !_authUser.userId) {
             this.bindUser(result, _authUser);
+        } else if(result && result.openid && result.openid != _authUser.openid && this.$route.query.bind){
+            this.dialogWX("当前账号已经绑定其他公众号，领取失败");
         } else {
             this.toPath();
         }
@@ -22,7 +24,7 @@ export class LoginBack extends Vue {
         if (isWeiXin()) {
             _self.dialog().then((flag) => {
                 if (flag) {
-                    this._$service.setWxBind({
+                    _self._$service.setWxBind({
                         userId: result.userId,
                         token: result.token,
                         openid: _authUser.openid
@@ -33,19 +35,44 @@ export class LoginBack extends Vue {
                             _self.$store.state.workVO.user = _result;
                             _authUser.userId = result.userId;
                             setAuthUser(_authUser);
-                            _self.dialogWX();
+                            if (_self.$route.query.bind) {
+                                _self.queryBindGold(_authUser.openid);
+                            }else{
+                                _self.dialogWX();
+                            }
                         } else {
-                            _self.dialogWX(_result.msg);
+                            if (_self.$route.query.bind) {
+                                _self.dialogWX('绑定失败，无法领取金币');
+                            }else{
+                                _self.dialogWX(_result.msg);
+                            }
                         }
                     });
                 } else {
-                    this.toPath();
+                    if (_self.$route.query.bind) {
+                        _self.dialogWX('当前账号未绑定公众号，领取失败');
+                    }else{
+                        this.toPath();
+                    }
                 }
             });
         } else {
             this.toPath();
         }
     }
+
+    queryBindGold(openId){
+        let _self = this;
+        this._$service.queryGoldbeforeBind({openId:openId})
+        .then(res=>{
+            if (res && res.data && res.data.wxBindGetGoldText) {
+                _self.dialogWX(res.data.wxBindGetGoldText);
+            }else{
+                _self.dialogWX();
+            }
+        });
+    }
+
     dialog() {
         let self = this;
         return new Promise((reslove, reject) => {

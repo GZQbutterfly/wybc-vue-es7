@@ -16,7 +16,7 @@ export class CmsPurchaseOrderDetail extends BaseVue {
     orderStateName = '';
     orderLeaveMsg = {};
     orderId;
-    combinOrderNo;
+    combinOrderNo = "";
     _$service;
     //设置和格式化后的事件字符串
     formatDate = '';
@@ -36,6 +36,7 @@ export class CmsPurchaseOrderDetail extends BaseVue {
     shipFee = 0;
     shipFeeShow = false;
     xprice = 0;
+    totalCouponMoney = 0;
     ownStore = false;
     stocktype = "";
     mounted() {
@@ -67,6 +68,7 @@ export class CmsPurchaseOrderDetail extends BaseVue {
         _self.totalPrice = 0;
         _self.shipFee = 0;
         _self.xprice = 0;
+        _self.totalCouponMoney = 0;
         if (this.orderId) {
             this._$service.getOrderInfo(this.orderId).then((res) => {
                 this.msg(res);
@@ -84,30 +86,39 @@ export class CmsPurchaseOrderDetail extends BaseVue {
         // if (!res.data.orderWhole || !res.data.orderGoods) {
         //     return;
         // }
-        let ownStore = res.data.ownStore;
-        this.shipFeeShow = ownStore ? 1 : 0;
-        this.stocktype = ownStore ? "商品自行管理" : "仓储中心代管";
-        this.ownStore = res.data.ownStore;
+       
         if (_self.orderId) {
-            let orderWhole = res.data.orderWhole;
-            let o = res.data.order;
-            if ((o && o.province) || (o && o.campus)) {
-                let _address = {
-                    province: o.province,
-                    city: o.city,
-                    district: o.district,
-                    campus: o.campus,
-                    dormitory: o.dormitory,
-                    address: o.address,
-                    name: o.name,
-                    phone: o.phone
-                };
-                Object.assign(orderWhole, _address);
+            let ownStore = res.data.order.ownStore;
+            this.shipFeeShow = ownStore ? 1 : 0;
+            this.stocktype = ownStore ? "快速仓自储" : "仓储中心代管";
+            this.ownStore = res.data.ownStore;
+            let orderWhole = res.data.order;
+            if (ownStore){
+                let o = res.data.order.address;
+                    let address = {
+                        province: o.province,
+                        city: o.city,
+                        district: o.district,
+                        campus: o.campus,
+                        dormitory: o.dormitory,
+                        address: o.address,
+                        name: o.name,
+                        phone: o.phone,
+                        sex: o.sex
+                    };
+                    Object.assign(orderWhole, address);
             }
-            // orderWhole.orderState = 4;//test
+            
+            if (orderWhole.couponMoney){
+                _self.totalCouponMoney = orderWhole.couponMoney;
+            }else{
+                _self.totalCouponMoney = 0;
+            }
+            orderWhole.moneyPrice = res.data.orderGoods.moneyPrice;
+            orderWhole.number = res.data.orderGoods.number;
             _self.shipFee = orderWhole.shipFee;
-            res.data.orderGoods.moneyPrice = orderWhole.moneyPrice;
-            _self.xprice = orderWhole.totalMoney
+           // _self.xprice = orderWhole.totalMoney
+            _self.xprice += orderWhole.moneyPrice * orderWhole.number;
             _self.totalPrice = orderWhole.totalMoney + orderWhole.shipFee;
             obj = orderWhole;
             if (res.data.logis) {
@@ -118,17 +129,28 @@ export class CmsPurchaseOrderDetail extends BaseVue {
             obj.goods = [];
             obj.goods.push(res.data.orderGoods);
         } else {
-            let orderWhole = res.data.orderWhole;
+            let ownStore = res.data.orders[0].ownStore;
+            this.shipFeeShow = ownStore ? 1 : 0;
+            this.stocktype = ownStore ? "快速仓自储" : "仓储中心代管";
+            this.ownStore = res.data.ownStore;
+            let orderWhole = res.data.orders;
             for (let i = 0, len = orderWhole.length; i < len; i++) {
-                res.data.orderGoods[i].moneyPrice = orderWhole[i].moneyPrice;
+                if (orderWhole[i].couponMoney) {
+                    _self.totalCouponMoney += orderWhole[i].couponMoney;
+                } else {
+                    _self.totalCouponMoney += 0;
+                }
+                orderWhole[i].moneyPrice = res.data.orderGoods[i].moneyPrice;
+                orderWhole[i].number = res.data.orderGoods[i].number;
                 _self.shipFee += orderWhole[i].shipFee;
-                _self.xprice += orderWhole[i].totalMoney;
+              //  _self.xprice += orderWhole[i].totalMoney;
+                _self.xprice += orderWhole[i].moneyPrice * orderWhole[i].number;
                 _self.totalPrice += orderWhole[i].totalMoney + orderWhole[i].shipFee;
             }
             obj = orderWhole[0];
-            let o = res.data.orders[0];
-            if (o && o.length != 0) {
-                let _address = {
+            if (ownStore) {
+                let o = res.data.orders[0].address;
+                let address = {
                     province: o.province,
                     city: o.city,
                     district: o.district,
@@ -136,10 +158,12 @@ export class CmsPurchaseOrderDetail extends BaseVue {
                     dormitory: o.dormitory,
                     address: o.address,
                     name: o.name,
-                    phone: o.phone
+                    phone: o.phone,
+                    sex: o.sex
                 };
-                Object.assign(obj, _address);
+                Object.assign(obj, address);
             }
+
             // obj.orderState=2;//test
             obj.leftTime = res.data.leftTime;
             obj.leftDay = res.data.leftDays || 0;
@@ -338,13 +362,8 @@ export class CmsPurchaseOrderDetail extends BaseVue {
             orderId: this.orderInfo.orderId,
             ownStore: _this.ownStore
         }
-        this._$service.pay(_parm).then(res => {
-            if (res) {
-                // this.page_reload();
-                _this.$router.push({ path: 'cms_stock_order', query: { listValue: '0' } });
-            }
-            obj.close();
-        })
+
+        this.$router.push({path:"sys_pay_list",query:_param});
     }
 
     /**
@@ -380,34 +399,11 @@ export class CmsPurchaseOrderDetail extends BaseVue {
         });
     }
 
-    toGoodsDetail(goodsId, shopId) {
-
-        let self = this;
-        this._$service.upShopInfo(getLocalUserInfo().userId)
-            .then(res => {
-                if (res && !res.errorCode) {
-                        let dialogObj = {
-                            title: '',
-                            content: '即将进入您的当前进货店铺：' + res.data.wdName,
-                            assistBtn: '取消',
-                            mainBtn: '确定',
-                            type: 'info',
-                            assistFn() {
-
-                            },
-                            mainFn() {
-                                self.$router.push({
-                                    path: 'cms_purchase_goods_detail',
-                                    query: {
-                                        goodsId: goodsId,
-                                        shopId: res.data.infoId
-                                    }
-                                });
-                            }
-                        };
-                        self.$store.state.$dialog({ dialogObj });
-                    } 
-            })
-    }
-
+    toGoodsDetail(goodsId) {
+        this.$router.push({
+            path: 'cms_purchase_goods_detail',
+            query: {
+                goodsId: goodsId
+            }})
+        }
 }

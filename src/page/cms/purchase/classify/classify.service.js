@@ -18,6 +18,9 @@ export default (_store) => {
         });
     }
     return {
+        addGoods(data) {
+            return q('api/wholecart/a_whole_cart_goods', data)
+        },
         //分类商品列表
         classfyList() {
             return q(classfyList, { shopId: shopId});
@@ -51,7 +54,7 @@ export default (_store) => {
             return q("api/q_wdInfo_by_userId", data);
         },
         getUpWdInfo(shopId) {
-            return q("api/wd_vip/queryWdInfo", { shopId: shopId });
+            return  _store.dispatch('CHECK_UP_WD_INFO', shopId);
         }
     }
 };
