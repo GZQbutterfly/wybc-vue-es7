@@ -1,0 +1,19 @@
+<div class="gift_detail-container bg-c-fb4767">
+    <header class="gift_detail__hd" ref="hdRef" @touchmove="noTouchMove">
+        <img :src="'static/images/money/' + (giftType == 'newGift' ?   'xinshou.jpg' : 'dianpuzhuanxiang.jpg')" alt="">
+    </header>
+    <section class="gift_detail__bd bg-c-fe8299" :style="{height:bdHeight}">
+        <div v-for="(item, index) in list" :key="index" class="gift-crad bg-c-d42f1c">
+            <!-- 开店奖励优惠券 -->
+            <coupon-item v-if="giftType=='applay_shop'" :coupon="item"></coupon-item>
+            <!-- 新手大礼包 -->
+            <gift-crad v-else :data="item" :giftType="giftType"></gift-crad>
+        </div>
+    </section>
+    <div class="hx bg-c-fe8299" @touchmove="noTouchMove"></div>
+    <footer class="gift_detail__ft weui-flex flex-align-m " ref="ftRef" @touchmove="noTouchMove">
+        <div class="weui-flex__item">
+            <img src="static/images/money/qushiy.png" alt="" class="go-img" @click="closeSelf">
+        </div>
+    </footer>
+</div>

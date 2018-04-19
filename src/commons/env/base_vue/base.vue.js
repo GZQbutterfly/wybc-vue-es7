@@ -1,6 +1,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { wxshare } from '../wxshare/share';
 import { isWeiXin } from '../common.env';
+import wxStore from '../store/wxstore';
 import baseService from './base.vue.service';
 
 
@@ -19,6 +20,11 @@ export default class BaseVue extends Vue {
     // success: 成功回调
     // cancel: 取消回调
 
+    mounted () {
+        this._$dialog = this.$store.state.$dialog;
+        this._$toast = this.$store.state.$toast;
+    }
+
     updateWxShare(config) {
         if (isWeiXin()) {
             let tempKey = this.$route.fullPath;
@@ -27,8 +33,8 @@ export default class BaseVue extends Vue {
     }
 
     //这个不好看吧.
-    fetchShopData(){
-        return baseService(this.$store).shopInfo();
+    fetchShopData(data){
+        return baseService(this.$store).shopInfo(data);
     }
 
 }

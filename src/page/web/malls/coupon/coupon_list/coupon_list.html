@@ -1,0 +1,15 @@
+<div class="coupon-list">
+    <div class="weui-flex flex-head">
+        <div class="weui-flex__item" v-for="(v,i) in headNav" :class="{'active':i==headIndex}" @click="changeHeadNav(i)">{{v}}</div>
+    </div>
+    <!-- <template v-for="(v,i) in headNav" v-if="headIndex==i"> -->
+        <div class="weui-flex flex-nav">
+            <div class="weui-flex__item" :class="{'nav-active':i==useIndex}" v-for="(v,i) in useNav" @click="changeUseNav(i)">{{v}}</div>
+        </div>
+        <first-coupon v-if="firstShow" :state="couponState"></first-coupon>
+        <available-coupon v-if="availableShow" :state="couponState"></available-coupon>
+        
+        <used-coupon v-if="usedShow" :state="couponState"></used-coupon>
+        <invalid-coupon v-if="invalidShow" :state="couponState"></invalid-coupon>
+    <!-- </template> -->
+</div>

@@ -35,37 +35,23 @@
             }
         }
         &-ft {
-            margin: 15px 27px 0 27px;
+            margin: 12px 27px 0 27px;
         }
     }
-    // .i {
-    //     font-family: 楷体, STKaiti;
-    //     display: block;
-    //     width: 20px;
-    //     height: 20px;
-    //     text-align: left;
-    //     font-size: 12px;
-    //     border-radius: 50%;
-    //     padding-left: 2px;
-    // }
-    // .i-take {
-    //     border: 1px solid #3b8eff;
-    //     color: #3b8eff;
-    // }
-    // .i-give {
-    //     border: 1px solid #ff6f36;
-    //     color: #ff6f36;
-    // }
-    .pending {
-        //position: relative;
-        //top: -10px;
-        //margin-right: 4px;
-        // .icon {
-        //     font-size: 15px;
-        //     display: block;
-        //     font-weight: bolder;
-        //     color: #e6e6e6;
-        //     height: 6px;
-        // }
+    a{
+        color: #333;
+        display: inline-block;
+        width: 100%;
     }  
+    .take-img,
+    .give-img {
+        height: 16px;
+        width: 16px;
+        margin-top: 5px;
+    }
+    .point-img {
+        height: 20px;
+        width: 16px;
+        margin-top: 1px;
+    }
 }

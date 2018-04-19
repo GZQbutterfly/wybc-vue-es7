@@ -24,11 +24,11 @@ export function isiOS() {
 }
 
 //原生iOS
-export function isNativeiOS(){
+export function isNativeiOS() {
     return /Native_iOS/.test(_ua);
 }
 
-export function isNativeAndroid(){
+export function isNativeAndroid() {
     return /Native_Android/.test(_ua);
 }
 
@@ -40,15 +40,15 @@ export function isQQBrowser() {
 /**
  * 
  */
-export function isCMS(){
+export function isCMS() {
     return /cms/.test(location.pathname);
 }
 
 /**
  * 
  */
-export function isWEB(){
-    return !/#/.test(location.href);
+export function isWEB() {
+    return !(/#/.test(location.href) || isCMS());
 }
 
 
@@ -58,7 +58,8 @@ let clientEnv = {
     ios: isiOS(),
     QQBrowser: isQQBrowser(),
     web: isWEB(),
-    cms: isCMS()
+    cms: isCMS(),
+    tmp: Date.now()
 }
 
-export {clientEnv};
+export { clientEnv };

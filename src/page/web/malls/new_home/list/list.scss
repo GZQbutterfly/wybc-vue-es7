@@ -1,0 +1,12 @@
+.malls-list-container {
+    width: 100%;
+    height: calc(100% - 80px);
+    .malls-list-content {
+        &_bd {
+            position: relative;
+            .malls-banner-list{
+                height: 170px;
+            }
+        }
+    }
+}

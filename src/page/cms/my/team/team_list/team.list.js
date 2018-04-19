@@ -31,8 +31,10 @@ export class TeamList extends BaseVue {
     queryTeamList(cb = null){
         let _self = this;
         _self._$service.queryTeamList(_self.grade).then((res) => {
-            _self.dataList = res.data;
-            cb && cb();
+            if(!res.data.errorCode){
+                _self.dataList = res.data;
+                cb && cb();
+            }
         });
     }
 

@@ -1,0 +1,49 @@
+.deliver-tip-container {
+    .tip-content {
+        position: absolute;
+        z-index: 4000;
+        top: 15%;
+        left: 8%;
+        height: 250px;
+        width: 306px;
+        text-align: center;
+        font-size: 18px;
+        color: #333;
+        img {
+            width: 100%; 
+        }
+        .falied {
+            position: relative;
+            top: -50%;
+            button {
+                width: 200px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+        .succeed {
+            padding: 24px;
+            position: relative;
+            top: -50%;
+        }
+        button {
+            font-size: 15px;
+            margin-top: 15px;
+        }
+        .info-btn {
+            background-color: #ff6839;
+            color: #fff;
+        }
+        transform: scale(0.5);
+        transition: all 0.3s;
+        opacity: 0;
+    }
+    .tip-content-show{
+        transform: scale(1);
+        opacity: 1;
+    }
+    .weui-mask{
+        z-index:3000;
+    }
+    
+}

@@ -1,0 +1,101 @@
+.money-buy-container {
+    height: 100%;
+    flex-direction: column;
+    .money-buy {
+        &_hd {
+            .wdinfo {
+                height: 86px;
+                padding: 13px 13px 13px 10px;
+                border-bottom: 5px solid #f2f2f2;
+                background-color: #fff;
+                &_hd {
+                    img {
+                        height: 50px;
+                        width: 50px;
+                        border-radius: 5px;
+                    }
+                }
+                &_bd {
+                    padding-left: 10px;
+                    color: #333;
+                    .wdname {
+                        font-size: 16px;
+                        max-height: 16px;
+                        font-weight: normal;
+                        margin-top: -5px;
+                    }
+                    .schoolname {
+                        font-size: 12px;
+                        max-height: 12px;
+                        margin: 7px 0 8px 0;
+                    }
+                    .vipgrade {
+                        height: 14px;
+                        width: 70px;
+                        background: url("/static/images/newshop/vip.png") center center;
+                        background-size: 100% 100%;
+                        padding-left: 30px;
+                        font-size: 12px;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+        &_bd {
+            position: relative;
+            // padding-top: 86px;
+            .goods-list {
+                flex-wrap: wrap;
+                flex-grow: 2;
+                width: 100%;
+                .goods-item {
+                    width: 49.75%;
+                    background-color: #fff;
+                    border-top: 2px solid #f2f2f2;
+                    &:nth-child(even) {
+                        border-left: 2px solid #f2f2f2;
+                        flex: 1;
+                    }
+                    &_hd {
+                        height: 172px;
+                        .progressive-image,
+                        img {
+                            height: 100%;
+                            width: 100%;
+                        }
+                    }
+                    &_bd {
+                        padding-left: 13px;
+                        .goodsname {
+                            color: #333;
+                            font-size: 15px;
+                        }
+                        .goodsdesc {
+                            color: #808080;
+                            font-size: 12px;
+                        }
+                    }
+                    &_ft {
+                        padding-left: 13px;
+                        font-size: 16px;
+                        img {
+                            height: 14px;
+                            width: 14px;
+                            position: relative;
+                            top: 1px;
+                        }
+                        span:last-child {
+                            margin-left: -2px;
+                            display: inline-block;
+                        }
+                        .concat {
+                            margin-left: 5px;
+                            margin-right: 0px;
+                            font-weight: normal;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

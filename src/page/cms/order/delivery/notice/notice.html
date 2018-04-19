@@ -3,36 +3,37 @@
     <!--  -->
     <div class="notice-content" :class="{'notice-content-show': show}">
         <header class="notice-content-hd">
-            <span class="money">{{1880 | localMoney}}</span>
+            <span class="money">{{data.totalMoney | localMoney}}</span>
         </header>
         <section class="notice-content-bd">
             <div class="notice-detail-hd">
-                <span class="money">{{1880 | localMoney}}</span>
+                <span class="money">{{data.totalMoney | localMoney}}</span>
                 <i class="icon iconfont icon-iconfontclose" @click="closeSelf"></i>
             </div>
             <div class="notice-detail-bd">
                 <div class="weui-flex">
                     <img :src="takeImgSrc" class="take-img">
-                    <div class="right">{{data.from}}</div>
+                    <div class="right">{{data.getAddress}}</div>
                 </div>
                 <div class="weui-flex">
                     <div class="pending">
                         <img :src="pointImgSrc" class="point-img">
                     </div>
-                    <div class="right fromAddress">{{data.fromAddress}}</div>
+                    <div class="right fromAddress">{{data.getAddressDetail}}</div>
                 </div>
                 <div class="weui-flex">
                     <img :src="giveImgSrc" class="give-img">
                     <div class="right">
                         <p>{{data.to}}</p>
-                        <p>{{data.toAddress}}</p>
+                        <p>{{data.deliveryAddress}}</p>
+                        <p v-if="data.sex" class="sex-drom">{{data.sex == 1 ? '男生宿舍' :'女生宿舍'}}</p>
                     </div>
                 </div>
             </div>
             <div class="notice-detail-ft">
                 <div class="line"></div>
                 <div class="order-detail">
-                    订单编号：12312312313123123
+                    订单号码:<span>{{data.combinOrderNo}}</span>
                 </div>
             </div>
         </section>

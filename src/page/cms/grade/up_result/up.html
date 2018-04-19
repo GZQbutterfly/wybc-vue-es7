@@ -1,0 +1,121 @@
+<app-container class="up-container">
+
+    <div>
+        <!-- step 进度 -->
+
+        <header class="up-hd">
+            <div class="up-steps">
+                <template v-for="(step, index) in steps">
+                    <!--  @click="switchStep(step, index)" -->
+                    <div class="up-step" :class="{'success': step.success}">
+                        <i class="up-step-state"></i>
+                        <div class="up-step-text">
+                            {{step.name}}
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </header>
+
+
+        <section class="up-bd">
+            <!-- 第一步节点 操作 -->
+            <template v-if="stepIndex == 0">
+                <!-- 不需要缴纳保证金  -->
+                <div class="no-pay" v-if="currentStep.isDeposit">
+                    <div class="no-pay-img"></div>
+                    <div class="no-pay-info">
+                        当前M等级升级无需缴纳保证金
+                    </div>
+                </div>
+                <!-- 缴纳保证金 选择支付操作 -->
+                <div class="up-pay" v-if="!currentStep.isDeposit">
+                    <div class="up-pay-info">
+                        <div class="pay-info-text">
+                            <div class="pay-money">{{currentStep.value | localMoney}}</div>
+                            保证金（可退）
+                        </div>
+                    </div>
+                    <div class="up-pay-select">
+                        <div class="pay-cell" v-for="item in payList">
+                            <div class="pay-cell_hd">
+                                <img :src="item.src" alt="">
+                            </div>
+                            <div class="pay-cell_bd">
+                                {{item.name}}
+                            </div>
+                            <div class="pay-cell_ft" @click="swtichPay(item)">
+                                <i :class="[item.type === payActive ? 'weui-icon-success' : 'weui-icon-circle']"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- 第二步节点操作 未达标 -->
+            <!-- <template v-if="stepIndex == 1">
+                <div class="no-reach" v-if="!currentStep.isReach">
+                    <div class="no-reach-img"></div>
+                    <div class="no-reach-info">
+                        <div class="no-reach-money">
+                            {{currentStep.value | localMoney}}
+                        </div>
+                        <div class="no-reach-text">
+                            <span class="remind">单笔</span>进货订单金额大于等于{{currentStep.value | localMoney}}
+                        </div>
+                    </div>
+                    <div class="no-reach-remarks">
+                        <div class="no-reach-remarks_hd">
+                            特殊说明
+                        </div>
+                        <div class="no-reach-remarks_bd">
+                            <p>1.单笔进货金额须大于等于￥50000</p>
+                            <p>2.本次进货按照晋级前店长等级的进货价格计算</p>                         
+                        </div>
+                    </div>
+                </div>
+            </template> -->
+
+            <!-- 第三步节点操作 -->
+            <template v-if="stepIndex == 1">
+                <div class="up-reach">
+                    <template v-if="succeed">
+                        <div class="up-reach-img"></div>
+                        <h2 class="up-reach-bd">恭喜您! 晋级成功</h2>
+                        <div class="up-reach-ft">您已升级到<span>{{upName}}</span></div>
+                    </template>
+                    <template v-if="!succeed">
+                        <div>{{msg}}</div>
+                    </template>
+                </div>
+            </template>
+
+        </section>
+
+
+    </div>
+    <!-- 操作按钮 -->
+    <footer class="up-ft" slot="footer">
+        <!-- 第一步节点 操作 -->
+        <!-- <template v-if="stepIndex == 0">
+            <button class="to_next_btn deposit" type="button" v-if="currentStep.isDeposit" @click="nextSetp">
+                下一步
+            </button>
+            <button class="to_pay_btn deposit" type="button" v-if="!currentStep.isDeposit" @click="toPay">
+                立刻支付
+            </button>
+        </template> -->
+        <!-- 第二步节点 操作 -->
+        <!-- <template v-if="stepIndex == 1">
+            <button class="to_pay_btn reach" type="button" v-if="!currentStep.isReach" @click="toPurchase">
+                立刻进货
+            </button>
+        </template> -->
+        <!-- 第三步节点 操作 -->
+        <template v-if="stepIndex == 1">
+            <button class="to_home_btn deposit" type="button" @click="toHome">
+                回到首页
+            </button>
+        </template>
+    </footer>
+</app-container>

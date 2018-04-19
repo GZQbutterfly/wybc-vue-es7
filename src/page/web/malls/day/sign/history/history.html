@@ -1,0 +1,47 @@
+<app-container>
+    <div class="day-sign-history-container" :class="{'bg-c-fafafa': !list.length}">
+        <header class="day-sign-history-content_hd bg-c-ffd949">
+            <div class="text-center">
+                <div class="text-c-fff text-s-16">本月累积签到：{{daysCount}}天</div>
+                <div class="text-c-97500a text-s-12">已累积获得金币：
+                    <span class="text-c-ff001e">{{goldTotal}}</span>个</div>
+            </div>
+        </header>
+
+        <section class="day-sign-history-content_bd" v-if="showContent">
+            <template v-for="item in list" v-if="list.length">
+                <div class="sign-history-box weui-flex flex-align-m bg-c-fff text-c-333">
+                    <div class="text-s-15">{{item.date}}
+                        <!-- <div class="text-s-12 text-c-808080">{{item.time}}</div> -->
+                    </div>
+                    <div class="weui-flex__item text-center text-s-15">
+                        <template v-if="item.type">
+                            累积{{item.count}}天签到奖励
+                        </template>
+                        <template v-else>
+                            已签
+                        </template>
+                    </div>
+                    <div class="text-s-17 text-c-ee893e weui-flex flex-align-m">
+                        <span class="plus">+</span>
+                        <img src="/static/images/money/icon.png" alt=""> {{item.goldNum}}
+                    </div>
+                </div>
+            </template>
+
+            <template v-if="!list.length">
+                <div class="sign-nodata text-center ">
+                    <img src="/static/images/daysign/pencil.png">
+                    <div class="text-s-15 text-c-b3b3b3">没有签到记录</div>
+                </div>
+            </template>
+
+        </section>
+
+        <footer class="day-sign-history-content_ft" v-if="list.length">
+            <div class="nomore-data bg-c-f2f2f2 text-center text-c-b3b3b3 text-s-15">
+                没有更多
+            </div>
+        </footer>
+    </div>
+</app-container>

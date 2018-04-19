@@ -1,0 +1,25 @@
+<div class="day-task-share-container">
+    <div class="day-task-share-close" @click="close">
+        <i class="iconfont icon-cuowu"></i>
+    </div>
+    <div class="day-task-share-info">
+        <div class="day-task-share-info-header">
+        </div>
+        <div class="day-task-share-info-content" ref="contentRef">
+            <div class="day-task-share-info-title">
+                <img :src="user.headimgurl" class="headImg">
+                <p class="textDesc">
+                    <span>{{ name }}邀请你关注学惠精选，为TA</span>
+                    <span class="inBlock text-c-f5ba39">赚取金币</span>
+                </p>
+            </div>
+            <figure class="urlCode">
+                <img :src="urlCode">
+            </figure>
+            <div class="day-task-share-info-footer">
+                <p>学惠精选</p>
+                <p>致力于打造基于校园新零售！</p>
+            </div>
+        </div>
+    </div>
+</div>

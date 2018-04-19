@@ -1,0 +1,22 @@
+<div class="pay-continer">
+    <div class="pay-title">
+        <div class="pay-sys-name">学惠精选</div>
+        <div class="pay-price">{{query.totalMoney|localMoney}}</div>
+        <div class="pay-orderno">订单号:{{query.combinOrderNo}}</div>
+    </div>
+
+    <div class="pay-content">
+        <div class="pay-item">
+            <div class="pay-item-hd">
+                <i class="icon iconfont icon-x-campaign-wechat pay-wecat"></i>
+            </div>
+            <div class="pay-item-bd" >
+                    余额钱包 <span class="wallet-desc">(剩余{{query.userMoney|localMoney}})</span>
+            </div>
+        </div>
+        <psinput :password="password"></psinput>
+        <div v-if="msg.show" class="password-error">{{msg.value}}</div>
+        <keyboard :keyUp="keyUpHandle" :del="delHandle"></keyboard>
+    </div>
+
+</div>

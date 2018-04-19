@@ -1,4 +1,60 @@
 .up-container {
+    .up-hd {
+        height: 81px;
+        .up-steps {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            background-color: #fff;
+            .up-step {
+                flex: 1;
+                text-align: center;
+                position: relative;
+                &:not(:first-child) {
+                    .up-step-state:before {
+                        content: ' ';
+                        position: absolute;
+                        left: 0;
+                        top: 24%;
+                        width: 43%;
+                        height: 2px;
+                        background-color: #b3b3b3;
+                    }
+                }
+                &:not(:last-child) {
+                    .up-step-state:after {
+                        content: ' ';
+                        position: absolute;
+                        right: 0;
+                        top: 24%;
+                        width: 43%;
+                        height: 2px;
+                        background-color: #b3b3b3;
+                    }
+                }
+            }
+            .up-step-state {
+                display: inline-block;
+                width: 13px;
+                height: 13px;
+                border-radius: 50%;
+                border: 2px solid #b3b3b3;
+            }
+            .success {
+                .up-step-state {
+                    background-color: #08a1f8!important;
+                    border-color: #08a1f8!important;
+                    &:before {
+                        background-color: #08a1f8!important;
+                    }
+                    &:after {
+                        background-color: #08a1f8!important;
+                    }
+                }
+            }
+        }
+    }
+
     .up-bd {
         padding-bottom: 60px;
         .up-pay-info {

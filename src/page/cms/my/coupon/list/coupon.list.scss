@@ -1,0 +1,22 @@
+.coupon-list-container{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .coupon-list-header{
+        height: 200px;
+        font-size: 17px;
+        color: #333;
+        height: 48px;
+        background-color: #fff;
+        border-bottom: 1px solid #f2f2f2;
+        text-align: center;
+        line-height: 48px;
+        .active {
+            color: #7dcc43;
+        }
+    }
+    .coupon-list-data{
+        flex: 1;
+        position: relative;
+    }
+}

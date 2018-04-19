@@ -1,0 +1,41 @@
+<app-container class="timelimit-list-container weui-flex flex-col" :style="{visibility: showList ? 'visible' : 'hidden'}">
+
+
+    <!-- <div class="timelimit-list-container weui-flex flex-col" :style="{visibility: showList ? 'visible' : 'hidden'}"> -->
+
+    <header class="timelimit-list-content_hd bg-c-fff weui-flex flex-align-m" slot="header">
+        <div class="time-list-swiper text-center weui-flex__item text-c-b3b3b3">
+            <div class="swiper-container" ref="timelistRef">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" v-for="(item, index) in timelist" :key="index" :class="{'text-c-7ecc44': index == activatedindex}"
+                        @click="swtichTab(item,index)">
+                        <div class="text-s-20">{{item.time}}</div>
+                        <div class="text-s-12">{{item.action ? '抢购中' : '即将开始'}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bell weui-flex flex-align-m bg-c-fff">
+            <div class="vertical-line bg-c-b3b3b3"></div>
+            <div class="bell-icon bg-c-7ecc44 text-center" @click="toRemind">
+                <i class="icon iconfont icon-112 text-c-fff"></i>
+            </div>
+        </div>
+    </header>
+
+    <section class="timelimit-list-content_bd weui-flex__item">
+        <div class="swiper-container" ref="bodyRef">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" v-for="(item, index) in timelist" :key="index">
+                    <TimeLimitItem :record="item" v-if="item.createBody" ref="itemsRef" @operation="childrenLoading"></TimeLimitItem>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="timelimit-list-content_ft" slot="footer">
+
+    </footer>
+    <!-- </div> -->
+
+</app-container>

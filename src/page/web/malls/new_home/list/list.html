@@ -1,0 +1,45 @@
+<div class="malls-list-container">
+
+    <header class="malls-list-content_hd">
+
+    </header>
+
+    <section class="malls-list-content_bd">
+        <!-- top 公告 -->
+        <template v-if="msgOpts.list.length">
+            <app-topnotice :msgOpts="msgOpts"></app-topnotice>
+        </template>
+
+        <!--  -->
+        <pull-refresh :refresh="refresh" :infinite="infinite" :showNoData="false" ref="pullRefreshRef">
+
+            <!-- 首页banner -->
+            <template v-if="bannerList.length">
+                <app-banner :listImg="bannerList" imgField="imgUrl" class="malls-banner-list"> </app-banner>
+            </template>
+
+            <!-- 小图标 iconlist -->
+            <template v-if="iconList.length">
+                <icon-list :list="iconList"></icon-list>
+            </template>
+
+            <!-- 店长直营，代理 -->
+            <shop-card></shop-card>
+
+            <!-- 限时购 -->
+            <timelimit-banner ref="timelimitRef"></timelimit-banner>
+
+            <!-- 店长推荐  -->
+            <agent-malls ref="agentMallsRef"></agent-malls>
+
+            <!--  官方精品 -->
+            <official-malls ref="officialMallsRef" v-if="createOfficialMalls"></official-malls>
+        </pull-refresh>
+    </section>
+
+
+    <footer class="malls-list-content_ft">
+
+    </footer>
+
+</div>

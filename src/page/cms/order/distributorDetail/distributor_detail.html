@@ -4,21 +4,21 @@
             <div class="rob-box">
                 <div class="rob-box-hd">
                     <div class="money">￥
-                        <span>{{data.money}}</span>
+                        <span>{{deliveryInfo.delivery.deliveryMoney/100}}</span>
                     </div>
                     <div class="info">本单收入</div>
                 </div>
             </div>
             <div class="order-wait" v-text="getOrderStateName()"></div>
-            <div class="order-red" v-if="orderInfo.orderState==6">该订单无法获得酬金！~</div>
+            <div class="order-red" v-if="deliveryState==8||deliveryState==10">该订单无法获得酬金！~</div>
             <!-- 订单状态流程 -->
-            <div class="order-show" v-if="orderInfo.orderState > 1&&orderInfo.orderState <= 5">
-                <p :class="{'e6e6e6':orderInfo.orderState >= 1&&orderInfo.orderState<5}">
-                    <b :class="{'weui-icon-success':orderInfo.orderState >= 2&&orderInfo.orderState<5}"></b>
+            <div class="order-show" v-if="([4, 5, 6, 7, 9, 11].indexOf(deliveryState) > -1 )">
+                <p :class="{'e6e6e6': ([4, 6, 7, 9, 11].indexOf(deliveryState) > -1 ) }">
+                    <b :class="{'weui-icon-success': ([4,5,6].indexOf(deliveryState) > -1 )}"></b>
                     <i></i>
-                    <b :class="{'weui-icon-success':(orderInfo.orderState==4)}"></b>
+                    <b :class="{'weui-icon-success': ([7, 9].indexOf(deliveryState) > -1 )}"></b>
                     <i></i>
-                    <b :class="{'weui-icon-success':orderInfo.orderState==5}"></b>
+                    <b :class="{'weui-icon-success':deliveryState==11}"></b>
                 </p>
                 <div class="order-text">
                     <span>已接单</span>
@@ -28,23 +28,28 @@
             </div>
         </section>
         <!--订单配送-->
-        <p class="order-distribute">
+        <p class="order-distribute weui-flex flex-align-m">
             <i class="iconfont icon-truck"></i> 订单配送
         </p>
         <div class="order-distribute-adress">
             <div class="weui-flex flex-align">
                 <img src="/static/images/delivery/q.png" alt="">
-                <span>{{data.from}}</span>
+                <span>{{deliveryInfo.delivery.getAddress}}</span>
             </div>
             <div class="weui-flex flex-align">
                 <img src="/static/images/delivery/jiantou.png" alt="" class="img-jt">
-                <span class="color-80">{{data.fromAddress}}</span>
+                <span class="color-80">{{deliveryInfo.delivery.getAddressDetail}}</span>
             </div>
             <div class="weui-flex flex-align">
                 <img src="/static/images/delivery/s.png" alt="">
-                <span>{{data.to}}</span>
+                <!-- <span>{{data.to}}</span> -->
+                <div class="right">
+                    <p>{{deliveryInfo.delivery.deliveryAddress}}</p>
+                </div>
+                
             </div>
-            <div class="adress">{{data.toAddress}}</div>
+            <p v-if="deliveryInfo.delivery.sex" class="sex-drom">{{deliveryInfo.delivery.sex == 1 ? '男生宿舍' :'女生宿舍'}}</p>
+            <!-- <div class="adress">{{data.deliveryAddress}}</div> -->
         </div>
         <!--订单详情-->
         <p class="order-distribute flex-detaile">
@@ -52,21 +57,17 @@
         </p>
         <div class="order-detail">
             <div class="order-goods-list">
-                <div class="order-goods weui-flex">
-                    <span>商品名称</span>
-                    <span>x&nbsp;10</span>
-                    <span>¥1565</span>
-                </div>
-                <div class="order-goods weui-flex">
-                    <span>商品名称</span>
-                    <span>x&nbsp;10</span>
-                    <span>¥1565</span>
+                <div class="order-goods weui-flex" v-for="item in deliveryInfo.orders">
+                    <span class="text-ellipsis">{{item.goodsName}}</span>
+                    <span>x&nbsp;{{item.number}}</span>
+                    <span v-if="item.consuType==3">{{item.moneyPrice | localMoney}}+<img src="/static/images/money/icon.png" alt="">{{ item.goldPrice }}</span>
+                    <span v-else>{{item.moneyPrice | localMoney}}</span>
                 </div>
             </div>
             <div class="order-toatl weui-flex">
-                <div>总计：¥33</div>
+                <div>总计：{{deliveryInfo.delivery.totalMoney | localMoney}}</div>
                 <div>实付：
-                    <span class="prrce-red">¥16.2</span>
+                    <span class="prrce-red">{{deliveryInfo.delivery.totalMoney | localMoney}}</span>
                 </div>
             </div>
         </div>
@@ -75,20 +76,23 @@
             <img src="/static/images/delivery/bianhao.png">订单信息
         </p>
         <div class="order-msg">
-            订单号码：1454545454554
+            订单号码： {{deliveryInfo.delivery.combinOrderNo}}
         </div>
     </pull-refresh>
-    <footer>
-        <button class="primary" type="button" v-if="orderInfo.orderState==1">接单</button>
-        <div class="foot weui-flex" v-if="orderInfo.orderState>1&&orderInfo.orderState<5">
-            <div class="business">联系商家</div>
-            <div class="buyers" v-if="orderInfo.orderState>2">联系买家</div>
-            <div class="pickUp" v-if="orderInfo.orderState==2">我已取货</div>
+    <footer v-show="deliveryState!=10">
+        <button class="primary" type="button" v-if="([0, 1, 2].indexOf(deliveryState) > -1 )" @click="reciveOrders(deliveryInfo.delivery.combinOrderNo)">接单</button>
+        <div class="color-white"  v-if="([4,5].indexOf(deliveryState) > -1 )">分拣中</div>
+        <div class="foot weui-flex" v-if="([ 6, 7, 9].indexOf(deliveryState) > -1 )">
+            <div class="business" @click="contactMerchant(deliveryInfo.contact.shopPhone)"  v-if="deliveryState==6">联系商家</div>
+            <div class="pickUp" v-if="deliveryState==6" @click="getGoods(deliveryInfo.delivery.combinOrderNo)">
+                我已取货
+            </div>
+            <div class="buyers" v-if="([ 7,9].indexOf(deliveryState) > -1 )" @click="contactBuyer(deliveryInfo.contact.userPhone)">联系买家</div>
+            <div class="pickUp" v-if="([ 7,9].indexOf(deliveryState) > -1 )" @click="confirm(deliveryInfo.delivery.combinOrderNo)" >
+               确认送达
+            </div>
         </div>
     </footer>
-    <!-- <div class="rob-box-ft">
-        <button class="primary" type="button">接单</button>
-    </div>
- -->
-
+    <tip v-if="tipFirst" v-show="tipShow" :data="robData" :close="alertTip" :showTip="tipShow" :reload="reload"></tip>
+    <a :href="'tel:' + phonenumber " ref="callRef" v-show="false"></a>
 </div>

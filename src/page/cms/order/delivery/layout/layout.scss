@@ -1,13 +1,13 @@
 .delivery-layout {
     .take-img,
     .give-img {
-        height: 16px;
-        width: 16px;
+        height: 16px!important;
+        width: 16px!important;
         margin-top: 5px;
     }
     .point-img {
-        height: 20px;
-        width: 16px;
+        height: 20px!important;
+        width: 16px!important;
         margin-top: 1px;
     }
     button {
@@ -27,9 +27,25 @@
         }
         &:nth-child(2) {
             margin-left: 10px;
-        }
+        } // &[disabled]{
+        //     background-color: #F7F7F7;
+        //     color: #333;
+        //     // border: 1px solid #808080;
+        // }
     }
-    .success{
-        color:#7ecc44;
+    .success {
+        color: #7ecc44;
+    }
+    .disabled-btn {
+        background-color: #F7F7F7;
+        color: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+    .sex-drom {
+        font-size: 12px;
+        color: #808080;
+    }
+    .icon-truck {
+        transform: rotateY(180deg);
     }
 }

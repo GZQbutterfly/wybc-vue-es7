@@ -16,8 +16,8 @@
                     </div>
                 </div>
             </header>
-            <!-- content -->
-            <section class="popup-body" :style="popupBodyStyle">
+            <!-- content :style="popupBodyStyle"-->
+            <section class="popup-body" >
                 <div class="swiper-container popup-content" ref="popupSwiper">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
@@ -113,12 +113,15 @@ export default {
                 cH = cH * _bH;
                 _self.options.height = _self.options.height * 100 + '%';
             }
+            let maxWidth = width > _self.options.width ? (width + 5): _self.options.width;
+
+
             return {
                 popupContainerStyle: merge({
                     width: _self.options.width,
-                    height: _self.options.height,
-                    'max-height': (height + 5) + 'px',
-                    'max-width': (width + 5) + 'px',
+                    // height: _self.options.height,
+                    // 'max-height': (height + 5) + 'px',
+                    'max-width': maxWidth + 'px',
                 }, _self.setAlgin(_self.options, width, _bW, height, _bH)),
                 popupBodyStyle: {
                     height: cH + 'px'
@@ -139,8 +142,8 @@ export default {
 
             } else {
                 // center
-                _result.left = _self.getRate(w, bW) + '%';
-                _result.top = _self.getRate(h, bH) + '%';
+                // _result.left = _self.getRate(w, bW) + '%';
+                // _result.top = _self.getRate(h, bH) + '%';
             }
             return _result;
         },
@@ -170,28 +173,31 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .popup-layout {
     font-size: 18px;
-    box-sizing: border-box;
+    box-sizing: content-box;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 5050;
+    display: flex;
+    align-items: center;
     .popup-mode {
-        position: fixed;
+        // background-color: #ccc;
+        opacity: 0.5;
+        background: rgba(0, 0, 0, 0.6);
         left: 0;
         bottom: 0;
         right: 0;
         top: 0;
-        // background-color: #ccc;
-        opacity: 0.5;
-        background: rgba(0, 0, 0, 0.6);
-        z-index: 5050;
     }
     .popup-container {
-        position: fixed;
-        left: 10%;
-        bottom: 0;
-        right: 0;
-        top: 15%;
-        z-index: 6000;
+        position: relative;
+        margin: auto;
         background-color: #fff;
         border-radius: 10px;
         .swiper-container {
@@ -209,8 +215,8 @@ export default {
             align-items: flex-start;
             position: relative;
         }
-        .popup-header_hd {
-            }
+        // .popup-header_hd {
+        //     }
         .popup-header_bd {
             flex: 1;
             text-align: center;
@@ -233,6 +239,7 @@ export default {
         color: #999;
         font-size: 15px;
         height: 60%;
+        padding-bottom: 60px;
     }
     .popup-footer {
         position: absolute;
@@ -240,7 +247,7 @@ export default {
         right: 0;
         left: 0;
         // border-top: 1px solid #d5d5d6;
-        z-index: 7000;
+        // z-index: 7000;
         .toolbar {
             display: flex;
             width: 100%;

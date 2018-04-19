@@ -1,0 +1,40 @@
+<div class="cms-coupon-detail-container weui-flex flex-v">
+    <div class="cms-coupon-item">
+        <figure class="sign-img" ><img src="/static/images/coupon/jinhuoquan.png" alt=""></figure>
+        <div class="top-information">
+            <div class="information-coupon-price">{{coupon.moneyPrice  | localMoney}}</div>
+            <div class="coupon-detail-cell-rigth">
+                <h3 class="cms-coupon-name">{{coupon.couponName}}</h3>
+                <div v-if="coupon.minOrderPrice>0" class="cms-coupon-desc">满{{ coupon.minOrderPrice | localMoney }}可使用</div>
+                <div v-else class="cms-coupon-desc">立减{{ coupon.moneyPrice | localMoney('') }}</div>
+            </div>
+        </div>
+        <div class="sqlit-line"></div>
+        <div class="coupon-footer">
+            <span class="cms-coupon-goods">{{coupon.goodsLimit==0?'所有商品通用':'仅限部分商品'}}</span>
+            <span class="cms-coupon-date">{{expiryDate()}}</span>
+        </div>
+    </div>
+    <p class="coupon-goods-title">{{goods.length>0?'进货时以下商品可使用本张进货券':'暂无可使用劵的商品'}}</p>
+    <pull-refresh v-if="goods.length>0" :refresh="refresh" :infinite="infinite">
+        <div class="coupon-goods">
+            <div class="goods-list weui-flex">
+                <div class="goods-item" @click="toGoodsDetail(goods.goodsId)" v-for="(goods, index) in goods" :key="index">
+                    <div class="goods-item_hd">
+                        <img :src="goods.coverImg" :placeholder="goods.coverImg" />
+                        <img class="item-sign-img" src="/static/images/coupon/shangpin-biaozhi.png">
+                    </div>
+                    <div class="goods-item_bd">
+                        <div class="goodsname">{{goods.goodsName}}</div>
+                        <div class="goodsdesc">
+                            {{goods.coverImgDescription}}
+                        </div>
+                    </div>
+                    <div class="goods-item_ft weui-flex flex-align-m">
+                        <span class="money label-money" v-if="goods.purchasePrice">{{goods.stockPrice | localMoney}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+</pull-refresh>
+</div>

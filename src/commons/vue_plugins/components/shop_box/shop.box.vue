@@ -34,19 +34,20 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 .shop-box{
     display: flex;
     flex-direction: column;
     background-color: #ebf6ff;
     border-radius: 5px;
     padding: 14px 12px;
+    height: 100%;
     .shop-box_hd{
         flex:1;
         text-align: center;
         img{
-            width: 76px;
-            height: 72px;
+            width: 76px!important;
+            height: 72px!important;
         }
     }
     .shop-box_bd{
@@ -58,12 +59,12 @@ export default {
             margin-right: 10px;
         }
         img{
-            width:inherit;
-            height:inherit;
+            width: inherit;
+            height: inherit;
             border-radius: 50%;
         }
         .user-shop{
-            color:#333;
+            color: #333;
             text-align: left;
             .shopname{
                font-size: 15px;

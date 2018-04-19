@@ -18,7 +18,7 @@
         }
         .weui-flex__item {
             position: relative;
-            &:first-child:after {
+            &:not(:last-child):after{
                 content: ' ';
                 position: absolute;
                 right: 0;
@@ -27,6 +27,9 @@
                 width: 1px;
                 background-color: #e6e6e6;
             }
+            // &:first-child:after {
+               
+            // }
         }
     }
 

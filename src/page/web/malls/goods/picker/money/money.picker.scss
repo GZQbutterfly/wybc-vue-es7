@@ -1,0 +1,105 @@
+.money-picker-container {
+    .money-picker-content {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 2000;
+        background-color: #fff;
+        &_hd {
+            height: 60px;
+            padding: 0 13px;
+            border-bottom: 1px solid #c4c4c4;
+            img {
+                height: 36px;
+                width: 36px;
+            }
+            .goodsinfo {
+                margin-left: 13px;
+            }
+            .goodsname {
+                font-size: 13px;
+                color: #333;
+            }
+            .money-num {
+                margin-bottom: 2px;
+                margin-top: -2px;
+            }
+            .money-buy {
+                img {
+                    height: 14px;
+                    width: 14px;
+                    position: relative;
+                    top: 1px;
+                }
+                span:last-child {
+                    margin-left: -2px;
+                    display: inline-block;
+                }
+                .concat {
+                    margin-left: 5px;
+                    margin-right: 0px;
+                    font-weight: normal;
+                }
+            }
+            .gold {
+                font-size: 12px;
+            }
+            .icon-close {
+                font-size: 22px;
+                color: #b3b3b3;
+            }
+        }
+        &_bd {
+            padding: 0 13px;
+            height: 60px;
+            .counter {
+                input {
+                    width: 36px;
+                    height: 36px;
+                    text-align: center;
+                    border: 1px solid #d9d9d9;
+                }
+                span {
+                    text-align: center;
+                    display: inline-block;
+                    width: 36px;
+                    height: 36px;
+                    line-height: 30px;
+                    border: 1px solid #d9d9d9;
+                    &:first-child {
+                        margin-right: -5px;
+                    }
+                    &:last-child {
+                        margin-left: -5px;
+                        border-left: none;
+                    }
+                }
+                .disabeld {
+                    background: #f2f2f2;
+                    color: #cccccc;
+                }
+            }
+            .stocknum {
+                height: 11px;
+                font-size: 12px;
+                color: #808080;
+            }
+        }
+        &_ft {
+            button {
+                display: block;
+                width: 100%;
+                color: #fff;
+                font-size: 16px;
+                height: 50px;
+                background-color: #ff3a80;
+            }
+        }
+    } 
+    // ios 下 input 有圆角 去圆角 修复为直角
+    input {
+        border-radius: 0;
+        -webkit-appearance: none;
+    }
+}

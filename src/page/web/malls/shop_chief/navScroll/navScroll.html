@@ -1,0 +1,21 @@
+<div id="navScrollc">
+    <div class="swiper-container" ref="bannerSwiper">
+        <div class="swiper-wrapper">
+            <!-- <div class="swiper-slide">
+                <router-link to="/home">
+                    <div>
+                        <img src="/static/images/newshop/tuijian.png" alt="">
+                        <b style="color:#808080;">全部商品</b>
+                    </div>
+                </router-link>
+            </div> -->
+            <div class="swiper-slide" v-for="(item,index) in classifyNav" :key="index">
+                <div :class="{'active':item.goodsClassifyId==currentClassifyId}" @click="swichTabs(item.goodsClassifyId,index)">
+                    <img :src="item.unselectedImgUrl" v-show="item.goodsClassifyId!=currentClassifyId" />
+                    <img :src="item.selectedImgUrl" v-show="item.goodsClassifyId==currentClassifyId" />
+                    <b :class="{'active':item.goodsClassifyId==currentClassifyId}">{{item.classifyName}}</b>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,6 +2,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
     .weui-cells {
         margin-top: 5px;
         &:first-child {
@@ -90,7 +91,7 @@
                 .txt_orderNo {
                     //font-weight: 300;
                     font-size: 12px;
-                    color:#333;
+                    color: #333;
                 }
                 .txt_orderProfit {
                     //font-weight: 300;
@@ -103,22 +104,22 @@
                         color: #ff1c1c;
                     }
                 }
-                .discountDetail{
+                .discountDetail {
                     width: 65%;
                     font-size: 0.12rem;
                     color: #ff1c1c;
                     position: absolute;
-                    &~.order_timer{
+                    &~.order_timer {
                         margin-top: 20px;
                     }
                 }
-                .total_price{
+                .total_price {
                     font-size: .15rem;
                     line-height: .3rem;
                     color: #333;
                     padding-left: 4px;
-                    span{
-                        color:#ff1c1c;
+                    span {
+                        color: #ff1c1c;
                     }
                 }
                 .order_timer {
@@ -166,6 +167,7 @@
         flex: 1;
         position: relative;
         margin-top: 5px;
+        height: calc(100% - 250px);
         .weui-cell {
             padding-top: 15px;
             padding-bottom: 15px;
@@ -173,7 +175,7 @@
                 width: 90px;
             }
             .weui-cell__ft {
-               width: 13px;
+                width: 13px;
             }
         }
     }
@@ -191,7 +193,12 @@
             float: left;
             color: #333;
             p {
-                &:first-child {}
+                &:first-child {
+                    span {
+                        font-size: 12px;
+                        color: #ee893e;
+                    }
+                }
                 &:last-child {
                     font-size: 11.5px;
                     color: #ee893e;
@@ -235,8 +242,21 @@
             bottom: 0;
             font-size: 0;
             box-shadow: 0 0.01rem 0.2rem #808080;
+            .shopcar {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 50px;
+                height: 49px;
+                line-height: 49px;
+                text-align: center;
+                .icon-gouwuche {
+                    font-size: 20px!important;
+                    color: #7ecc44;
+                }
+            }
             >p {
-                width: calc(100% - 100px);
+                width: calc(100% - 200px);
                 height: 49px;
                 display: inline-block;
                 padding-right: 6px;
@@ -253,7 +273,7 @@
                 height: 49px;
                 display: inline-block;
                 line-height: 49px;
-                font-size: 18.5px;
+                font-size: 15px;
                 color: #fff;
                 background: #ff3a80;
                 text-align: center;
@@ -261,22 +281,25 @@
                     background: #ffb0cc;
                 }
             }
+            .joincar {
+                background: #ff973a;
+            }
         }
     }
-    .thisOrderFlag{
-        color:#fff;
+    .thisOrderFlag {
+        color: #fff;
         padding-left: 9px;
         padding-right: 1px;
         font-size: 11px;
         display: inline-block;
         position: relative;
-        &_jhdd{
+        &_jhdd {
             background-color: #f0c46f;
         }
-        &__yhdd{
+        &__yhdd {
             background-color: #6fb2f0;
         }
-        &:before{
+        &:before {
             content: " ";
             position: absolute;
             left: -1px;
@@ -284,8 +307,7 @@
             border-bottom: 10px solid transparent;
             border-left: 8px solid #fff;
         }
-    }
-    // .money-price{
+    } // .money-price{
     //     color: #ff1c1c;
     // }
 }

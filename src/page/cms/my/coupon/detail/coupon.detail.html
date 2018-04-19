@@ -1,0 +1,28 @@
+<div class="coupon-detail-container">
+    <div class="coupon-info">
+        <ci :coupon="coupon" :toDetail="null" :toShare="toCouponShare"></ci>
+    </div>
+    <div class="coupon-goods">
+        <pull-refresh :refresh="refresh" :infinite="infinite">
+            <p class="coupon-goods-title">当前店所在校区以下商品可用</p>
+            <div class="goods-list weui-flex">
+                <div class="goods-item" @click="toGoodsDetail(goods.goodsId)" v-for="(goods, index) in goods" :key="index">
+                    <div class="goods-item_hd">
+                        <progressive-img :src="goods.coverImg" :placeholder="goods.coverImg" />
+                        <div class="radus">券</div>
+                    </div>
+                    <div class="goods-item_bd">
+                        <div class="goodsname">{{goods.goodsName}}</div>
+                        <div class="goodsdesc">
+                            {{goods.coverImgDescription}}
+                        </div>
+                    </div>
+                    <div class="goods-item_ft weui-flex flex-align-m">
+                        <span class="money label-money" v-if="goods.purchasePrice">{{goods.purchasePrice | localMoney}}</span>
+                    </div>
+                </div>
+            </div>
+        </pull-refresh>
+    </div>
+    <cs :coupon="shareData" :close="shareClose"></cs>
+</div>

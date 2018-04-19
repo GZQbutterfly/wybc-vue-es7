@@ -11,7 +11,7 @@ export class Card extends Vue {
     @Prop({ type: String, default: 'rob' })
     cardType;
 
-    @Prop({ type: Object, default: () => { return { money: 200, from: '北京', fromAddress: '北京天安门', to: '成都', toAddress: '成都天府广场' } } })
+    @Prop({ type: Object, default: () => { return {} } })
     data;
 
     @Prop({ type: Function, default: () => { } })
@@ -30,6 +30,8 @@ export class Card extends Vue {
 
     mounted() {
 
+  
+
     }
 
 
@@ -39,6 +41,10 @@ export class Card extends Vue {
 
     mainClick() {
         this.main(this.data);
+    }
+
+    toDetail() {
+        this.$router.push({ path: 'distributor_detail', query: { combinOrderNo: this.data.combinOrderNo } });
     }
 
 }

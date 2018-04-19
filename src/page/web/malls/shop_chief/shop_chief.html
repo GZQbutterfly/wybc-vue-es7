@@ -1,0 +1,50 @@
+
+<!-- 店铺代理 -->
+<div class="shopChief">
+    <div class="classifyEmpty" v-if="classifyNav.length <= 1">
+        <img src="/static/images/shop-4.6/wushangpin.png" alt="" />
+        <!-- <h3>该店铺直营商品出售</h3> -->
+        <h4>暂无商品销售</h4>
+    </div>
+  <navScrollc v-if="classifyNav.length>1" @swichTab="swichTabGoods" :classifyNav="classifyNav" :currentClassifyId="currentClassifyId"
+                :currentIndex="currentIndex"></navScrollc>
+    <div class="shopChief_content" ref="homeContentRef"  @touchmove="touchMove($event)" @touchend="touchEnd($event)" v-if="classifyNav.length>1">
+        <pull-refresh :refresh="refresh" :infinite="infinite"  :monitoringMove="monitoringMoveFn" v-show="currentClassifyId==nav.goodsClassifyId" v-for="(nav,i) in classifyNav" :key="i">
+            <!-- 轮播 -->
+            <div class="carousel" v-if="classifyAdImgPic.length!=0" ref="bannerRef">
+                <app-banner :listImg="classifyAdImgPic"></app-banner>
+            </div>
+            <!-- 商品列表 -->
+            <!-- <list-goods :dataList="{data:classfyGoodsList}" v-if="classfyGoodsList.length!=0"></list-goods> -->
+            <ul class="goodsList" ref="goodsRef">
+                <li>
+                    <div class="shopPic">
+                        <dl class="shopPic_gs" v-for='item in classfyGoodsList'>
+                            <dt @click="toDetail(item.goodsId)">
+                                <img :src="item.coverImg" alt="">
+                                <!-- <span v-if="item.couponCount>0">券</span> -->
+                            </dt>
+                            <dd @click="toDetail(item.goodsId)">{{item.goodsName}}</dd>
+                            <dd @click="toDetail(item.goodsId)">
+                                <span>{{item.coverImgDescription}}</span>
+                            </dd>
+                            <dd>
+                                <span>{{item.purchasePrice | localMoney}}</span>
+                                <span @click="QuicklyJoinTheShoppingCart(item)">
+                                    <i class="iconfont icon-gouwuche"></i>
+                                </span>
+                            </dd>
+                            <div v-if="item.couponCount>0" class="coupon-img-roll">
+                                <img src="static/images/shop-4.6/youhuiquan.png" alt="">
+                            </div>
+                            <div class="right-bottom text-s-12 text-c-fff bg-c-333">店铺代理</div>
+                        </dl>    
+                    </div>  
+                </li>
+            </ul>
+        </pull-refresh>
+        <!-- <div class="scroller-pages text-c-fff bg-c-b8b8b8 text-center text-s-15" :style="{bottom:'1.2rem'}" v-show="pageOp.page && showPage">
+            {{pageOp.page}}/{{pageOp.total}}
+        </div> -->
+    </div>
+</div>

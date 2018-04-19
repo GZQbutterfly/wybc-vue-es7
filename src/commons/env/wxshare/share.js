@@ -70,14 +70,14 @@ export function wxshare(config, key, http) {
                         imgUrl: get(config, 'imgUrl') || '', // 分享图标
                         success: function (res) {
                             // 用户确认分享后执行的回调函数
-                            if (config && config.successDone) {
-                                config.successDone(res);
+                            if (config && config.success) {
+                                config.success(res);
                             }
                         },
                         cancel: function (res) {
                             // 用户取消分享后执行的回调函数
-                            if (config && config.cancelDone) {
-                                config.cancelDone(res);
+                            if (config && config.cancel) {
+                                config.cancel(res);
                             }
                         }
                     });
@@ -91,14 +91,14 @@ export function wxshare(config, key, http) {
                         desc: get(config, 'desc') || '',
                         success: function (res) {
                             // 用户确认分享后执行的回调函数
-                            if (config && config.successDone) {
-                                config.successDone(res);
+                            if (config && config.success) {
+                                config.success(res);
                             }
                         },
                         cancel: function (res) {
                             // 用户取消分享后执行的回调函数
-                            if (config && config.cancelDone) {
-                                config.cancelDone(res);
+                            if (config && config.cancel) {
+                                config.cancel(res);
                             }
                         }
                     });
@@ -110,14 +110,14 @@ export function wxshare(config, key, http) {
                         desc: get(config, 'desc') || '',
                         success: function (res) {
                             // 用户确认分享后执行的回调函数
-                            if (config && config.successDone) {
-                                config.successDone(res);
+                            if (config && config.success) {
+                                config.success(res);
                             }
                         },
                         cancel: function (res) {
                             // 用户取消分享后执行的回调函数
-                            if (config && config.cancelDone) {
-                                config.cancelDone(res);
+                            if (config && config.cancel) {
+                                config.cancel(res);
                             }
                         }
                     })

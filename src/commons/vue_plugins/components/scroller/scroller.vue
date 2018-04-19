@@ -12,11 +12,11 @@
         :class="{'active': state == 1, 'active refreshing': state == 2}"
       >
         <span class="spinner-holder">
-          <arrow class="arrow" :fillColor="refreshLayerColor" v-if="state != 2"></arrow>
+          <arrow class="arrow" :fillColor="refreshLayerColor" v-show="state != 2"></arrow>
 
-          <span class="text" v-if="state != 2" :style="{color: refreshLayerColor}" v-text="state == 1 ? overText : refreshText"></span>
+          <span class="text" v-show="state != 2" :style="{color: refreshLayerColor}" v-text="state == 1 ? overText : refreshText"></span>
 
-          <span v-if="state == 2">
+          <span v-show="state == 2">
             <slot name="refresh-spinner">
               <spinner :style="{fill: refreshLayerColor, stroke: refreshLayerColor}"></spinner>
             </slot>
@@ -38,10 +38,13 @@
           v-text="noDataText">
         </div>
       </div>
+      <div v-if="!showInfiniteLayer && showNoData" class="loading-layer">
+         <div class="no-data-text active" v-text="noDataText" :style="{color: loadingLayerColor}"></div>
+      </div>
     </div>
   </div>
 </template>
-<style lang="scss" scoped>
+<style lang="scss">
 ._v-container {
   width: 100%;
   height: 100%;
@@ -144,6 +147,7 @@ import Scroller from "../../../assets/scroller/core";
 import getContentRender from "../../../assets/scroller/render";
 import Spinner from "./spinner.vue";
 import Arrow from "./arrow.vue";
+import { debounce } from 'lodash';
 
 const re = /^[\d]+(\%)?$/;
 
@@ -165,11 +169,19 @@ export default {
   props: {
     onRefresh: Function,
     onInfinite: Function,
-    monitoringMove: Function, // 监听移动
+    monitoringMove: {// 监听移动
+      type:Function,
+      default: ()=>{}
+    }, 
     
     LRShakeflag :{
       type: Boolean,
       default: false
+    },
+
+    showNoData:{
+      type: Boolean,
+      default: true
     },
 
     refreshText: {
@@ -259,8 +271,9 @@ export default {
     showInfiniteLayer() {
       let contentHeight = 0;
       this.content ? (contentHeight = this.content.offsetHeight) : void 666;
-
-      return this.onInfinite ? contentHeight > this.minContentHeight : false;
+      // console.log('scroller  vue ', contentHeight, this.minContentHeight, contentHeight > this.minContentHeight);
+      // return this.onInfinite ? contentHeight > this.minContentHeight : false;
+      return this.onInfinite ?  true : false;
     }
   },
 
@@ -292,6 +305,7 @@ export default {
   },
 
   mounted() {
+    let _self = this;
 
 
     this.container = this.$refs.containerRef; //document.getElementById(this.containerId)
@@ -313,8 +327,12 @@ export default {
       snapping: this.snapping,
       animating: this.animating,
       animationDuration: this.animationDuration,
-      bouncing: this.bouncing
+      bouncing: this.bouncing,
+      monitoringMove: this.$props.monitoringMove
     });
+
+    this.container.__scroller = this.scroller;
+
 
     // enable PullToRefresh
     if (this.onRefresh) {
@@ -341,23 +359,31 @@ export default {
       );
     }
 
+
+    this.debounceInfinite = debounce(()=>{
+        _self.onInfinite && _self.onInfinite(_self.finishInfinite);
+    }, 500);
+
     // enable infinite loading
     if (this.onInfinite) {
       this.infiniteTimer = setInterval(() => {
-        let { left, top, zoom } = this.scroller.getValues();
+        let { left, top, zoom } = _self.scroller.getValues();
 
         // 在 keep alive 中 deactivated 的组件长宽变为 0
         if (
-          this.content.offsetHeight > 0 &&
-          top + 60 > this.content.offsetHeight - this.container.clientHeight
+          _self.content.offsetHeight > 0 &&
+          top + 60 > _self.content.offsetHeight - _self.container.clientHeight
         ) {
-          if (this.loadingState) return;
-          this.loadingState = 1;
-          this.showLoading = true;
-          this.onInfinite(this.finishInfinite);
+          if (_self.loadingState) return;
+          _self.loadingState = 1;
+          _self.showLoading = true;
+          _self.debounceInfinite()
+          // this.onInfinite(this.finishInfinite);
         }
       }, 10);
     }
+
+    
 
     // setup scroller
     let rect = this.container.getBoundingClientRect();
@@ -373,23 +399,29 @@ export default {
     }
 
     // onContentResize
-    const contentSize = () => {
+    this.contentSize = () => {
       return {
         width: this.content.offsetWidth,
         height: this.content.offsetHeight
       };
     };
 
-    let { content_width, content_height } = contentSize();
+    let { content_width, content_height } = this.contentSize();
+
+    this.content_width = content_width;
+    this.content_height = content_height;
 
     this.resizeTimer = setInterval(() => {
-      let { width, height } = contentSize();
-      if (width !== content_width || height !== content_height) {
-        content_width = width;
-        content_height = height;
-        this.resize();
-      }
+      let { width, height } = this.contentSize();
+        if (width !== this.content_width || height !== this.content_height) {
+          this.content_width = width;
+          this.content_height = height;
+          this.resize();
+        }
     }, 10);
+    // setTimeout(()=>{
+    //   this.reArea();
+    // }, 500);
   },
 
   destroyed() {
@@ -398,6 +430,18 @@ export default {
   },
 
   methods: {
+
+    reArea(){
+      setTimeout(()=>{
+        let { width, height } = this.contentSize();
+        if (width !== this.content_width || height !== this.content_height) {
+          this.content_width = width;
+          this.content_height = height;
+          this.resize();
+        }
+      }, 100);
+    },
+
     resize() {
       let container = this.container;
       let content = this.content;
@@ -410,10 +454,12 @@ export default {
     },
 
     finishPullToRefresh() {
+      // this.reArea();
       this.scroller.finishPullToRefresh();
     },
 
     finishInfinite(hideSpinner) {
+      // this.reArea();
       this.loadingState = hideSpinner ? 2 : 0;
       this.showLoading = false;
 
@@ -445,7 +491,7 @@ export default {
       this.__pageY = _touch.pageY;
       this.__notUp = false;
       this.isJudge = false;
-      //console.log('1 ', this.__pageX);
+      this.reArea();
     },
 
     touchMove(e) {
@@ -455,7 +501,6 @@ export default {
       let _pageX = _touch.pageX;
       let _pageY = _touch.pageY;
       if(this.$props.LRShakeflag && !this.__notUp && !this.isJudge){
-        //console.log('2 ', this.__pageX);
         // 左右滑动，不触发上下
         // 第一次移动判断是左右移动，还是上下移动
         let _x = Math.abs(_pageX - this.__pageX);
@@ -472,8 +517,16 @@ export default {
         this.scroller.doTouchMove(e.touches, e.timeStamp);
       }
 
-      //console.log('2  ', _pageX);
-      this.$props.monitoringMove && this.$props.handlerMove(this.getPosition());
+      // let { left, top, zoom } = this.scroller.getValues();
+
+      //  if (
+      //     this.content.offsetHeight > 0 &&
+      //     top + 300 > this.content.offsetHeight - this.container.clientHeight
+      //   ) {
+      //     console.log(123)
+      //     this.debounceInfinite();
+
+      //   }
     },
 
     touchEnd(e) {
@@ -536,6 +589,7 @@ export default {
       let { left, top, zoom } = this.scroller.getValues();
       let container = this.container;
       let content = this.content;
+
 
       if (top + 60 > this.content.offsetHeight - this.container.clientHeight) {
         setTimeout(() => {

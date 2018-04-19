@@ -1,0 +1,44 @@
+.timelimit-list-container {
+    height: 100%;
+    width: 100%;
+    .timelimit-list-content {
+        &_hd {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 75px;
+            padding-right: 50px;
+            z-index: 2;
+            .bell {
+                position: absolute;
+                right: 0;
+                top: 0;
+                z-index: 2;
+                height: 100%;
+                .vertical-line {
+                    height: 15px;
+                    width: 2px;
+                    margin-right: 10px;
+                }
+                .bell-icon {
+                    border-radius: 50%;
+                    width: 22px;
+                    height: 22px;
+                    line-height: 22px;
+                    margin-right: 10px;
+                }
+            }
+            .swiper-wrapper {
+                // justify-content: center;
+                justify-content: space-around;
+            }
+        }
+        &_bd {
+            margin-top: 75px;
+            .swiper-container {
+                height: 100%;
+            }
+        }
+    }
+}

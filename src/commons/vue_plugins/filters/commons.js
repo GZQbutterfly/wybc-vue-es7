@@ -35,7 +35,7 @@ Vue.filter('json', (value) => {
  */
 let digitsRE = /(\d{3})(?=\d)/g;
 
-let _currency = (value, _currency = '¥', decimals = 2) => {
+let _currency = (value, _u = '¥', decimals = 2) => {
     value = parseFloat(value);
     if (!isFinite(value) || !value && value !== 0) return '';
     let stringified = Math.abs(value).toFixed(decimals);
@@ -44,7 +44,7 @@ let _currency = (value, _currency = '¥', decimals = 2) => {
     let head = i > 0 ? _int.slice(0, i) + (_int.length > 3 ? ',' : '') : '';
     let _float = decimals ? stringified.slice(-1 - decimals) : '';
     let sign = value < 0 ? '-' : '';
-    return sign + _currency + head + _int.slice(i).replace(digitsRE, '$1,') + _float;
+    return sign + _u + head + _int.slice(i).replace(digitsRE, '$1,') + _float;
 };
 
 Vue.filter('currency', _currency);
@@ -54,12 +54,12 @@ Vue.filter('currency', _currency);
 /**
  * 格式化local money 金额（后台默认给分的数据，前台要除以100得到展示以元的数据）
  */
-Vue.filter('localMoney', (value) => {
+Vue.filter('localMoney', (value, _u) => {
     value = Number(value);
     if (value) {
-        return _currency(value / 100);
+        return _currency(value / 100, _u);
     } else {
-        return _currency(0);
+        return _currency(0, _u);
     }
 });
 

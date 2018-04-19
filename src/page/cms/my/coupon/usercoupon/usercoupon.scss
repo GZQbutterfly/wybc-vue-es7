@@ -1,0 +1,14 @@
+.cms-user-coupon {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    .coupon-list-content{
+		position: relative;
+	}
+}
+.flex-1 {
+    flex: 1;
+}
+.flex-v {
+    flex-direction: column;
+}

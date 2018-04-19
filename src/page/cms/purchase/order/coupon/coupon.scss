@@ -1,0 +1,129 @@
+.coupon {
+    height: 100%;
+    .flex-head {
+        height: 48px;
+        background-color: #fff;
+        border-bottom: 1px solid #f2f2f2;
+        text-align: center;
+        line-height: 48px;
+        color: #333;
+        font-size: 17px;
+        .active {
+            color: #7dcc43;
+        }
+        .weui-flex__item {
+            width: 50%;
+        }
+    }
+    .coupon-content {
+        height: 88%;
+        position: relative;
+        .coupon-list {
+            margin: 10px 10px 0;
+            .coupon-item-roll {
+                height: 140px;
+                background-color: #fff;
+                position: relative;
+                margin-top: 10px;
+                .roll {
+                    height: 60px;
+                    width: 60px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    img {
+                        height: 100%;
+                        width: 100%;
+                    }
+                }
+                 .color-ccc {
+                    color: #ccc!important;
+                }
+            }
+        }
+        .flex-c {
+            justify-content: space-around;
+        }
+        .weui-flex-right {
+            height: 50px;
+            margin-top: 26px;
+            width: 200px;
+            text-align: center;
+            span {
+                display: block;
+                width: 200px;
+                font-size: 20px;
+                color: #333;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            p {
+                font-size: 13px;
+                color: #333;
+            }
+        }
+        .weui-flex-left {
+            width: 100px;
+            height: 50px;
+            margin-top: 26px;
+            text-align: center;
+            p {
+                line-height: 30px;
+                font-size: 26px;
+                color: #fe0000;
+                height: 30px;
+            }
+            .nowuse {
+                //margin-left: 33px;
+                height: 20px;
+                width: 20px;
+                position: relative;
+                font-size: 18px !important;
+                i {
+                    position: absolute;
+                    font-size: 18px !important;
+                    top: 0;
+                    left: 0;
+                    color: #7ecc44;
+                }
+            }
+            .color-red {
+                color: red;
+                font-size: 16px !important;
+            }
+        }
+        .time {
+            height: 43px;
+            border-top: 2px solid #f2f2f2;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 12px;
+            p {
+                color: #333;
+            }
+            span {
+                color: #f2ac48;
+                text-decoration: underline;
+            }
+            .currency {
+                color: #7dcc43;
+                text-decoration: none;
+            }
+        }
+    }
+    .fixedBottom {
+        height: 50px;
+        background-color: #7dcc43;
+        color: #fff;
+        width: 100%;
+        text-align: center;
+        line-height: 50px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        font-size: 20px;
+    }
+}

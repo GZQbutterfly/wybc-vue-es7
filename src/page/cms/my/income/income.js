@@ -11,134 +11,142 @@ import './income.scss';
 export class MyIncome extends BaseVue {
     totalMoney = 0;
     todayMoney = 0;
+    todayConsume = 0;
 
-    queryFlag = true;
-
-    isRefreshing = false;
     _$service;
+
+    dataList_old = [
+        {
+            id: 0,
+            optType: 1,
+            value: '订单收益',
+            page: 0,
+            data: [],
+            create: true
+        },{
+            id: 1,
+            optType: 2,
+            value: '配送收益',
+            page: 0,
+            data: [],
+            create: false
+        },{
+            id: 2,
+            optType: 9,
+            value: '客服操作',
+            page: 0,
+            data: [],
+            create: false
+        },
+    ];
 
     dataList = [
         {
             id: 0,
-            value: '订单收益',
-            page: 1,
+            value: '收益',
+            consuType: 1, 
+            page: 0,
             data: [],
+            create: true
         },{
             id: 1,
-            value: '配送收益',
-            page: 1,
+            value: '消费',
+            consuType: 0,
+            page: 0,
             data: [],
-        },{
-            id: 2,
-            value: '客服操作',
-            page: 1,
-            data: [],
-        },
+            create: false
+        }
     ];
     dataList_limit = 10;
-    showItemId = this.dataList[0].id;
+    showItemId = 0;
 
     mounted() {
         this._$service = service(this.$store);
         this.$nextTick(() => {
-            document.title = "我的收益";
+            document.title = "收支明细";
         });
     }
 
     //点击切换类别
-    changeView(id){
-        let _self = this;
-        _self.showItemId = id;
+    changeView(item){
+        item.create = true;
+        this.showItemId = item.id;
     }
 
-    //加载当前id下的资讯
-    loadView() {
-        let _self = this;
-        let _item = _self.dataList[_self.showItemId];
+    fetchData(index, page, done){
+        let _item = this.dataList[this.showItemId];
         let query = {
-            page: _item.page,
-            limit: _self.dataList_limit,
-            shopId: _self.$store.state.workVO.user.userId,
+            // optType: _item.optType,
+            // optType: 2,
+            page: page,
+            limit: this.dataList_limit,
+            shopId: this.$store.state.workVO.user.userId,
+            consuType: _item.consuType 
         };
-        return _self._$service.queryIncomeList(query);
-    }
-
-    //处理上拉下拉得到的数据
-    setViewData(res,done,isRefresh){
         let _self = this;
-        let _item = _self.dataList[_self.showItemId];
-        if (res.data.errorCode) {
-            if (isRefresh) {
-                _item.data = [];
-            }
-        } else {
-            _self.totalMoney = res.totalMoney;
-            _self.todayMoney = res.todayMoney;
-            let len = res.data.length;
-            if (len) {
-                _self.queryPage == 1 && (_self.dataList = []);
-                for (var i = 0; i < len; i++) {
-                    let title = res.data[i].title;
-                    res.data[i].isOrder = (title.indexOf('订单') != -1);
-                    let reg_numb = /(\d+)/;
-                    res.data[i].orderNo = reg_numb.test(title) ? reg_numb.exec(title)[0] : '';
-                    res.data[i].isUserOrder = res.data[i].isOrder && res.data[i].incomeInfo == '用户订单';
-                    let reg_show = /\((\d+).?\)$/;
-                    if (reg_show.test(res.data[i].descri)) {
-                        let arr = reg_show.exec(res.data[i].descri);
-                        let txt = '<span class="shop-num">' + arr[1] + '</span>';
-                        let tmp = arr[0].replace(arr[1], txt);
-                        res.data[i].descri = res.data[i].descri.replace(arr[0], tmp);
+        this._$service.queryIncomeList(query)
+        .then(res=>{
+            let _result = res.data;
+            if (!_result || _result.errorCode) {
+                done(true);
+            }else{
+                let _data = _result.data;
+                _self.setTitleValue(_result);
+                if (_data.length>0) {
+                    _data.forEach(element => {
+                        element.isOrder = (element.title.indexOf('订单') != -1);
+                        let reg_numb = /(\d+)/;
+                        element.orderNo = reg_numb.test(element.title) ? reg_numb.exec(element.title)[0] : '';
+                        element.isUserOrder = element.isOrder && element.incomeInfo == '用户订单';
+                        let reg_show = /\((\d+).?\)$/;
+                        if (reg_show.test(element.descri)) {
+                            let arr = reg_show.exec(element.descri);
+                            let txt = '<span class="shop-num">' + arr[1] + '</span>';
+                            let tmp = arr[0].replace(arr[1], txt);
+                            element.descri = element.descri.replace(arr[0], tmp);
+                        }
+                    });
+                    if (page == 1) {
+                        _item.data = _data;
+                        _item.page = 1;
+                    }else{
+                        _item.data.push(..._data);
+                        _item.page = page;
                     }
                 }
+                done(true);
             }
-
-            if (isRefresh) {
-                _item.data = res.data.data;
-            } else {
-                _item.data.push(...res.data.data);
-            }
-            if (_item.data.length < _self.limit) {
-                _item.page = -1;
-            } else {
-                _item.page++;
-            }
-        }
-        done(true);
-        isRefresh && (_self.isRefreshing = false);
+        })
     }
+
+
+    setTitleValue(_result){
+        if(![undefined, null].includes(_result.totalMoney)){
+            this.totalMoney = (+_result.totalMoney) || 0; // 累积收益
+        }
+        if(![undefined, null].includes(_result.todayMoney)){
+            this.todayMoney = (+_result.todayMoney) || 0; // 今日收益
+        }
+        if(![undefined, null].includes(_result.todayConsume)){
+            this.todayConsume = (+_result.todayConsume) || 0; // 今日支出
+        }
+    }
+
 
     //下拉刷新
     refresh(done) {
         let _self = this;
-        if(_self.isRefreshing){
-            done(true);
-        }else{
-            _self.isRefreshing = true;
-            let _item = _self.dataList[_self.showItemId];
-            _item.page = 1;
-            let _listen = _self.loadView();
-            setTimeout(() => {
-                _listen.then((res) => {
-                    _self.setViewData(res,done,true);
-                })
-            }, 300);
-        }
+        setTimeout(() => {
+            _self.fetchData(_self.showItemId,1,done);
+        }, 300);
     }
 
     //上拉加载
     infinite(done) {
         let _self = this;
-        let _item = _self.dataList[_self.showItemId];
-        if (_item.page == -1) {
-            done(true);
-            return;
-        }
-        let _listen = _self.loadView();
+        let _item = this.dataList[this.showItemId];
         setTimeout(() => {
-            _listen.then((res) => {
-                _self.setViewData(res,done,false);
-            })
+            _self.fetchData(_self.showItemId,_item.page + 1,done)
         }, 300)
     }
 }

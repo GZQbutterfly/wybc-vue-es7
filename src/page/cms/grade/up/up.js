@@ -1,6 +1,6 @@
 // 立刻升级
 import { Component } from 'vue-property-decorator';
-import  BaseVue  from 'base.vue';
+import BaseVue from 'base.vue';
 import service from './up.service';
 
 
@@ -23,7 +23,9 @@ export class GradeUp extends BaseVue {
         // 注册服务
         this._$service = service(this.$store);
 
-        this.upName = this.$route.query.name;
+        let _query = this.$route.query || {};
+        this.upName = _query.name;
+        this.grade = _query.grade;
 
         // 页面标题
         document.title = '立刻晋级';
@@ -100,18 +102,19 @@ export class GradeUp extends BaseVue {
     }
     toPay() {
         let _self = this;
-        this._$service.toPay({
-            'url': '/cms/#/gradeUp?name=' + this.upName
-        }, this.payActive).then((res)=>{
-            if(res){
-                this.queryShopSteps();
-            }else{
+        _self._$service.toPay({
+            'url': '/cms/#/grade_up_result?name=' + _self.upName + '&grade=' + _self.grade
+        }, _self.payActive).then((res) => {
+            if (res) {
+                _self.$router.push({ path: 'grade_up_result', query: { name: _self.upName, grade: _self.grade } })
+                //_self.queryShopSteps();
+            } else {
                 let dialogObj = {
                     title: '提示',
                     content: '您已取消支付',
                     type: 'info',
                     mainBtn: '知道啦',
-                    mainFn() {}
+                    mainFn() { }
                 };
                 _self.$store.state.$dialog({ dialogObj });
             }
@@ -124,7 +127,7 @@ export class GradeUp extends BaseVue {
         // 跳转进货页面
         this.$router.push('cms_purchase');
     }
-    toHome(){
+    toHome() {
         this.$router.push('/');
     }
 }

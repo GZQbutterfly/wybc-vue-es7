@@ -1,24 +1,26 @@
 <template lang="html">
-    <div :class="{'weui-skin_android': android}" class="app-dialog" ref="dialogRef">
+    <div :class="{'weui-skin_android': android}" class="app-dialog tip-dailog" ref="dialogRef">
         <div class="weui-mask"></div>
         <transition name="popup">
-            <div class="weui-dialog" v-if="dialogObj" :style="dialogStyleObj">
-                <div class="weui-dialog__hd">
-                    <div class="dialog_info_img"
-                         :class="dialogObj.type"
-                         v-if="dialogObj.type"
-                         >
-                        <i class="icon iconfont"
-                           :class="{'icon-zhengque': dialogObj.type == 'success', 'icon-cuowu': dialogObj.type == 'error', 'icon-tanhao2': dialogObj.type == 'info'}"
-                        ></i>
+            <div class="dialog-container weui-flex flex-align-m">
+                <div class="weui-dialog" v-if="dialogObj" :style="dialogStyleObj">
+                    <div class="weui-dialog__hd">
+                        <div class="dialog_info_img"
+                            :class="dialogObj.type"
+                            v-if="dialogObj.type"
+                            >
+                            <i class="icon iconfont"
+                            :class="{'icon-zhengque': dialogObj.type == 'success', 'icon-cuowu': dialogObj.type == 'error', 'icon-tanhao2': dialogObj.type == 'info'}"
+                            ></i>
+                        </div>
+                        <strong class="weui-dialog__title">{{dialogObj.title}}</strong>
                     </div>
-                    <strong class="weui-dialog__title">{{dialogObj.title}}</strong>
-                </div>
-                <div class="weui-dialog__bd" v-html="dialogObj.content">
-                </div>
-                <div class="weui-dialog__ft">
-                    <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default dialog-first" v-if="dialogObj.assistBtn" @click="cbFn(dialogObj.assistFn)">{{dialogObj.assistBtn}}</a>
-                    <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary dialog-last" @click="cbFn(dialogObj.mainFn)">{{dialogObj.mainBtn}}</a>
+                    <div class="weui-dialog__bd" v-html="dialogObj.content">
+                    </div>
+                    <div class="weui-dialog__ft">
+                        <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default dialog-first" v-if="dialogObj.assistBtn" @click="cbFn(dialogObj.assistFn)">{{dialogObj.assistBtn}}</a>
+                        <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary dialog-last" @click="cbFn(dialogObj.mainFn)">{{dialogObj.mainBtn}}</a>
+                    </div>
                 </div>
             </div>
         </transition>
@@ -55,7 +57,7 @@ export default {
     mounted() {
         this.$nextTick(() => {
             timeout(() => {
-                this.getDialogStyleObj();
+                // this.getDialogStyleObj();
                 let _dialogRef = this.$refs.dialogRef;
                 _dialogRef.addEventListener('touchmove', function(e) {
                     e.preventDefault()
@@ -84,7 +86,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .popup-enter-active,
 .popup-leave-active {
     transition: all 0.2s;
@@ -95,12 +97,26 @@ export default {
     opacity: 0;
 }
 
+.dialog-container{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 91000;
+}
+
 .weui-dialog {
-    left: 10%;
-    top: 20%;
+    position: relative;
+    // left: 10%;
+    // top: 20%;
+    top: 0;
+    left: 0;
+    margin: auto;
     max-width: none;
     transform: scale3d(1, 1, 1);
     border-radius: 10px;
+    
     .weui-dialog__hd {
         background-color: #fff;
     }
@@ -158,7 +174,11 @@ export default {
     }
 }
 
-.weui-mask {
-    opacity: 0.5;
+
+.tip-dailog{
+    .weui-mask {
+        opacity: 0.5;
+        z-index: 90000;
+    }
 }
 </style>

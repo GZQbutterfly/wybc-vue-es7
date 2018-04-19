@@ -1,0 +1,149 @@
+.day-sign-container {
+    overflow: hidden;
+    .day-sign-content {
+        &_hd {
+            width: 100%;
+            padding-bottom: 15px;
+            position: relative;
+            .top-bg {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 30px;
+            }
+            .sign-bg-img {
+                height: 274px;
+                width: 100%;
+            }
+            .sign-info {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 2;
+                padding: 13px;
+                &_bd {
+                    margin-top: 18px;
+                    position: relative;
+                    height: 96px;
+                    line-height: 96px;
+                    img {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        height: 99px;
+                        width: 99px;
+                        margin: auto;
+                        z-index: -1;
+                    }
+                    // .sign-btn {
+                    //     // position: absolute;
+                    //     // top: 33px;
+                    //     // left: 0;
+                    //     // right: 0;
+                    // }
+                }
+                &_ft {
+                    margin-top: 15px;
+                }
+            }
+        } // 日历
+        &_bd {
+            width: 100%;
+            padding-left: 13px;
+            padding-right: 13px;
+            padding-bottom: 20px;
+            .calendar-title {
+                margin-top: 10px;
+                height: 25px;
+                margin-bottom: -1px; // margin-right: 1px;
+            }
+            .calendar {
+                .selected {
+                    background-color: #7dcc43 !important;
+                    span {
+                        background-color: #7dcc43 !important;
+                    }
+                }
+                table {
+                    color: #333 !important;
+                }
+                thead {
+                    border: 1px solid #fbf4d9;
+                    tr {
+                        background-color: #fbf4d9 !important;
+                        color: #fb703b !important;
+                        td:not(:last-child) {
+                            position: relative;
+                            &:after {
+                                content: ' ';
+                                position: absolute;
+                                right: 0px;
+                                height: 16px;
+                                width: 2px;
+                                background-color: #e8e1c6;
+                            }
+                        }
+                    }
+                }
+                tbody {
+                    border: 1px solid #f1eacf;
+                    td {
+                        width: 49px;
+                        height: 31.5px;
+                        vertical-align: middle !important;
+                    }
+                    tr:not(:last-child) {
+                        border-bottom: 1px solid #f1eacf;
+                    }
+                }
+            }
+            .sign-history-btn {
+                width: 70px;
+                height: 21px;
+                line-height: 20px;
+                border: 1px solid #2a74ef;
+                color: #2a74ef;
+                border-radius: 10px;
+            }
+        }
+        &_ft {
+            margin-top: 5px;
+            padding-left: 13px;
+            padding-right: 13px;
+            .sign-info-box {
+                margin-top: 10px;
+                img {
+                    height: 99.5px;
+                    width: 140px;
+                }
+                .right {
+                    margin-left: 10px;
+                    img {
+                        height: 15px;
+                        width: 15px;
+                    }
+                }
+                .get-btn {
+                    width: 124px;
+                    height: 41px;
+                    line-height: 41px;
+                    border-radius: 5px;
+                    margin-top: 8px;
+                }
+                .get-disabled {
+                    opacity: .6;
+                }
+            }
+        }
+    }
+    .red-circle {
+        display: inline-block;
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+        margin-right: 6px;
+    }
+}

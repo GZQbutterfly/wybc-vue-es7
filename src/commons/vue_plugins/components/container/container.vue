@@ -16,7 +16,7 @@
 import Scroller from '../../../assets/scroller/core';
 import getContentRender from '../../../assets/scroller/render';
 import {debounce} from 'lodash';
-
+import {parents} from 'common.env';
 
 export default {
     props: {
@@ -31,6 +31,11 @@ export default {
         callBack:{
             type: Function,
             default:()=>{}
+        },
+        // 是否检查 父类元素存在nomove类样式，并禁止滚动
+        noPopupmove:{
+            type:Boolean,
+            default: false
         }
     },
     data() {
@@ -62,7 +67,7 @@ export default {
             // 设置内容体的最小高度
             _self.mainRef = _$refs.mainRef;
             if(_self.mainRef.childElementCount == 1){
-                _self.mainRef.firstChild.style.minHeight = _self.content.offsetHeight + 'px';
+                _self.mainRef.firstElementChild.style.minHeight = _self.content.offsetHeight + 'px';
             }
             // ==>
             let render = getContentRender(_self.content);
@@ -127,6 +132,10 @@ export default {
             let activeElement = document.activeElement;
             if (/input/i.test(activeElement.tagName) && !_self.isResize) {
                 _self.callBack();
+            }
+            // 禁止滑动
+            if(_self.noPopupmove && parents(e.target, 'nomove', 'app-container')){
+                return;
             }
             _self.scroller.doTouchMove(e.touches, e.timeStamp);
         },

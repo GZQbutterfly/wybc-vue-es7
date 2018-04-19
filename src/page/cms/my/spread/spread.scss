@@ -61,12 +61,13 @@
         .weui-flex {
             align-items: center;
             text-align: center;
+            margin-top: 2px;
         }
         .weui-flex__item {
             height: 94px;
             background-color: #fff;
-            &:first-child {
-                margin-right: 1px;
+            &:last-child {
+                margin-left: 2px;
             }
             &:touched {
                 opacity: .5;
@@ -80,6 +81,9 @@
         }
         .icon-fenxiang {
             color: #6eb6ff;
+        }
+        .icon-wodeyouhuiquan {
+            color: #ff509e;
         }
         .text {
             font-size: 15px;

@@ -1,0 +1,10 @@
+<div class="iconlist-container text-center bg-c-fff">
+    <div class="swiper-container" ref="bannerSwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="(item,index) in list" :key="index" @click="goPage($event,item)">
+                <img :src="item.img" alt="">
+                <div class="icon-text text-s-15">{{item.iconName}}</div>
+            </div>
+        </div>
+    </div>
+</div>

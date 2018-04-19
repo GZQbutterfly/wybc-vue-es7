@@ -1,0 +1,24 @@
+<div class="coupon-share-container" v-show="coupon">
+    <div class="coupon-share-close" @click="close">
+        <i class="iconfont icon-cuowu"></i>
+    </div>
+    <div class="coupon-share-info">
+        <div class="coupon-share-info-header">
+        </div>
+        <div class="loading-content">
+            <i class="weui-loading"></i>
+        </div>
+        <div class="coupon-share-info-content" ref="contentRef" :style="{'visibility': show ? 'visible': 'hidden'}">
+            <div class="showPosition" ref="showBox" v-if="coupon">
+                <div class="price1" ref="price1">{{ coupon.moneyPrice | localMoney('') }}元</div>
+                <div class="price2" ref="price2" v-if="coupon.minOrderPrice">满{{ coupon.minOrderPrice | localMoney('') }}减{{ coupon.moneyPrice | localMoney('') }}</div>
+                <div class="price2" ref="price2" v-else>立减{{ coupon.moneyPrice | localMoney('') }}</div>
+                <div class="wdName" ref="wdName">{{ coupon.wdName }}</div>
+                <div class="qrCode" ref="qrCode"></div>
+            </div>
+            <img class="coupon_pic" src="../static/images/money/2222.png" ref="coupon_pic_copy" @load="imgLoading()">
+            <img class="coupon_pic" ref="coupon_pic">
+            <canvas style="display: none;" ref="canvas"></canvas>
+        </div>
+    </div>
+</div>

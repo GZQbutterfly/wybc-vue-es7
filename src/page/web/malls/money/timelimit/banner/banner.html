@@ -1,0 +1,35 @@
+<div class="timelimit-banner-container bg-c-fff" v-show="showBanner">
+    <!-- :style="{visibility: showBanner ? 'visible' : 'hidden'}" -->
+    <header class="timelimit-banner-content_hd  ">
+        <div class="banner weui-flex flex-algin-m text-s-14" >
+            <img src="static/images/timelimit/flcz-xuehuituijian.png" alt="" @click="toTimelimitList">
+            <div class="weui-flex__item text-c-333 text-right weui-flex flex-align-m">
+                <div>{{hour}}点场{{action ? '限时秒杀' : '即将开始'}}</div>
+                <div class="countdown weui-flex flex-align-m">
+                    <div class="bg-c-333 text-c-fff">{{countDate.hour}}</div>:
+                    <div class="bg-c-333 text-c-fff">{{countDate.minute}}</div>:
+                    <div class="bg-c-333 text-c-fff">{{countDate.second}}</div>
+                </div>
+            </div>
+            <div class="text-c-b3b3b3" @click="toTimelimitList">
+                查看全部>>
+            </div>
+        </div>
+    </header>
+    <section class="timelimit-banner-content_bd text-left">
+        <div class="swiper-container" ref="bodyRef">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide goods-box" v-for="(item, index) in list" :key="index" @click="toGoodsDetail(item)">
+                    <!-- :src="item.coverImg" -->
+                    <img alt="img" v-lazy="item.coverImg">
+                    <div class="text-c-ff1c1c text-s-17">{{item.moneyPrice | localMoney}}</div>
+                    <div class="text-c-808080 text-s-12 text-linethrough">{{item.purchasePrice | localMoney}}</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="timelimit-banner-content_ft">
+        <!-- <calendar :range="calendar2.range" :lunar="calendar2.lunar" :value="calendar2.value" :begin="calendar2.begin" :end="calendar2.end"
+            @select="calendar2.select"></calendar> -->
+    </footer>
+</div>

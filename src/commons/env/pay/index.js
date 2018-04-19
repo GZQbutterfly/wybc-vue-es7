@@ -23,7 +23,7 @@ export function registerPaySign(_vm) {
         _pay = new WxPay(_vm);
         payEnv.isWx = true;
     }else if(isNativeiOS()){
-        _pay = new NativeiOSPay();
+        _pay = new NativeiOSPay(_vm);
     }else if(isNativeAndroid()){
         _pay = new NativeAndroidPay(_vm);
     } else if (isApp()) {

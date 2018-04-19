@@ -1,0 +1,53 @@
+.pay-continer{
+    .pay-title{
+        text-align: center;
+        .pay-sys-name{
+            font-size: 15px;
+            color: #808080;
+        }
+        .pay-price{
+            font-size: 24px;
+            color: #fa0909;
+        }
+        .pay-orderno{
+            font-size: 15px;
+            color: #333333;
+        }
+    }
+    .pay-content{
+        margin-top:.1rem;
+        .pay-item{
+            padding: 0 0.1rem;
+            margin: .2rem 0;
+            height: 0.7rem;
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            .pay-item-hd {
+                margin: 4px;
+            }
+            .pay-item-bd {
+                margin-left: .1rem;
+                flex: 1;
+                font-size: 16px;
+                line-height: 30px;
+               
+            }
+            .pay-wecat{
+                background-color: #7dcc43;
+                color:#fff;
+                font-size: 25px;
+                padding: 3px;
+                border-radius: 5px;
+            }
+            .wallet-desc{
+                font-size: 12px;
+            }
+        }
+        .password-error{
+            margin-top: .2rem;
+            text-align: center;
+            color:#fb0c0c;
+        }
+    }
+}

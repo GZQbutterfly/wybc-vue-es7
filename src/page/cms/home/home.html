@@ -5,7 +5,6 @@
                 <img src="/static/images/minishop/diamond.png" alt="">
             </figure>
             <h4>M{{ shopData.vip + shopData.vipName }}</h4>
-            <span>立即晋级</span>
         </div>
         <div class="cmsHomeUser">
             <figure>
@@ -14,42 +13,56 @@
             <h4>{{ shopData.wdName }}</h4>
             <h5>{{ shopData.school }}</h5>
             <span :class="{'realname_success':realNameInfo.data.state == 4}" @click="toAuthPage" v-text="realNameStateList[realNameInfo.data.state]"></span>
-            <span :class="{'distributor_realname_success':realNameInfo.data.state == 4}" @click="toDistributorAuthPage" v-text="distributorRealNameStateList[realNameInfo.data.state]"></span>
+            <span :class="{'distributor_realname_success':distributorRealNameInfo.checkState == 2}" @click="toDistributorAuthPage" v-text="distributorRealNameStateList[distributorRealNameInfo.checkState]"
+                v-if="realNameInfo.data.state == 4 && distributorRealNameInfo.checkState != -1"></span>
         </div>
         <div class="cmsHomeLogOff">
             <i class="iconfont icon-xinfeng" :data-numb=" msgNum ? msgNum : '' " @click="toMessageNotice"></i>
-            <i class="iconfont icon-qiehuanzhanghao" @click="userLogOff"></i>
+            <i class="iconfont icon-shezhi1" @click="userOptions"></i>
         </div>
         <div class="cmsHomeHeadMsgBox">
             <app-topnotice :msgOpts="msgOpts"></app-topnotice>
-            <!-- <div class="cmsHomeHeadMsg" ref="cmsHomeHeadMsg">
-                <figure class="cmsHomeHeadMsgPic">
-                    <img src="/static/images/pic-login.png" alt="">
-                </figure>
-                <div class="cmsHomeHeadMsgTxt">{{ systemMsg.t }}
-                    <span>{{ systemMsg.t2 }}</span>
-                </div>
-            </div> -->
+        </div>
+        <div class="cmsHomeQuick" @click="toQuickFlag()" v-if="shopDeliveryState">
+            <template v-if="shopDeliveryState == 2">
+                <i class="iconfont icon-tishi text-c-ff1c1c"></i>
+                <span>&nbsp;快速仓:&nbsp;</span>
+                <span class="text-c-ff1c1c">未开启</span>
+            </template>
+            <template v-else>
+                <i class="iconfont icon-wancheng1 text-c-7ecc44"></i>
+                <span>&nbsp;快速仓:&nbsp;</span>
+                <span class="text-c-7ecc44">已开启</span>
+            </template>
         </div>
     </div>
     <div class="cmsBox weui-flex cmsHomePrice">
         <div class="weui-flex__item" @click="toIncome()">
             <p>
-                <i class="iconfont icon-shouyi2"></i>累计收益</p>
+                <i class="iconfont icon-shouyi2"></i>收益</p>
             <p>{{ userIncome | localMoney }}</p>
         </div>
         <div class="weui-flex__item" @click="toWallet()">
             <p>
-                <i class="iconfont icon-qianbao"></i>我的钱包</p>
+                <i class="iconfont icon-qianbao"></i>钱包</p>
             <p>{{ userMoney | localMoney }}</p>
+        </div>
+        <div class="weui-flex__item" @click="toCoupon()">
+            <p class="quan">
+                <!-- <i class="iconfont icon-wodeyouhuiquan"></i>进货券</p> -->
+                <img src="/static/images/quan.png" alt="">
+                <span>进货券</span>
+            </p>    
+            <p>{{userCouponCount}}张</p>
         </div>
     </div>
     <div class="cmsBox cmsHomeGridsBox">
         <div class="swiper-container" ref="gridsSwiper">
             <div class="swiper-wrapper">
                 <div class="weui-grids swiper-slide" v-for="data in gridsData">
-                    <div class="weui-grid" v-for="item in data" @click="visit(item.href,item.canVisit)">
+                    <div class="weui-grid" v-for="item in data" @click="item.toDo(item.href,item.canVisit)">
                         <figure>
+                            <div class="redRidus" v-if="item.redRidus&&item.redRidusNum!=0">{{item.redRidusNum>99?"99+":item.redRidusNum}}</div>
                             <img :src="item.icon" alt="">
                         </figure>
                         <p class="weui-grid__label" v-text="item.title"></p>

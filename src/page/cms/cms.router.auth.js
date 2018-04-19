@@ -13,9 +13,8 @@ export default (vm, router) => {
         }
     });
 
-
     function beforeCheckLogin() {
-        let _result = !isNotLogin() || cacheLogin();
+        let _result = !isNotLogin() ;
         if (!_result) {
             let _params = location.hash.replace('#/', '').split('?');
             toLogin(router, { realTo: _params[0], realToQuery: qs.parse(_params[1]) })

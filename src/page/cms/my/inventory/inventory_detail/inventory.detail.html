@@ -69,7 +69,7 @@
 
     <div class="buyGoods">
         <div class="buyGoodsText">
-            <p>购买数量：</p>
+            <p>仓库库存：<span>{{stockNum}}</span></p>
             <p>{{flag ? '首次' : ''}}最低进货金额&nbsp;&nbsp;&nbsp;{{ minMoney | localMoney }}</p>
         </div>
         <div class="buyGoodsNumb">
@@ -80,9 +80,11 @@
             <p class="buyGoodsNumb_add" @click="orderNumbNext()">+</p>
         </div>
         <div class="buyGoodsSubmit">
+            <div class="shopcar" @click="toShopcar"><i class="iconfont icon-gouwuche"></i></div>
             <p>总价:
                 <span>{{ totalMoney | localMoney }}</span>
             </p>
+            <div class="btn joincar" @click="joinCar">加入进货单</div>
             <div class="btn" :class="canBuy?'':'disabled'" @click="goBuy()">立即进货</div>
         </div>
     </div>

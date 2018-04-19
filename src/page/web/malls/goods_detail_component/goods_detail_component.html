@@ -1,0 +1,112 @@
+<div class=".goods-detail-content">
+    <div class="content">
+            <!-- <img class="goods-cover" :src="goods.bannerImg" alt=""> -->
+            <div class="goods-cover">
+                <gsbanner :dataList="bannerImg" :playerOptions="playerOptions" :hasVideo="hasBannerVideo" style="height:100%"></gsbanner>
+            </div>
+
+            <div class="goods-content">
+                <h4 class=" goods-name">{{goods.goodsName}}</h4>
+                <div class="price weui-flex flex-align-m">
+                    <!-- goods.consuType 2 RMB  3 rmb +金币 -->
+                    <span class="money-price" v-if="consumptionType==1 || consumptionType==3">
+                        {{goods.moneyPrice | localMoney}}
+                    </span>
+                    <span class="purchase" v-if="consumptionType==3">
+                      原价:{{goods.purchasePrice | localMoney}}
+                    </span>
+                    <div v-if="consumptionType==2" class="money-buy-price">
+                        <span class="label-money">{{goods.moneyPrice| localMoney}}</span>
+                        <span class="concat">+</span>
+                        <img src="/static/images/money/icon.png" alt="">
+                        <span class="label-money-volume">{{goods.goldPrice}}</span>
+                        <span class="invalid-money">原价 {{goods.purchasePrice | localMoney}}</span>
+                    </div>
+
+                </div>
+                <!-- 倒计时 -->
+                <div class="count_down" v-show="consumptionType!=3&&timeObj.showTime">
+                    <img src="/static/images/newshop/time.png" />
+                    <b>距商品下架时间:</b>
+                    <span>{{timeObj.int_day}}</span>天
+                    <span>{{timeObj.int_hour}}</span>小时
+                    <span>{{timeObj.int_minute}}</span>分
+                    <span>{{timeObj.int_second}}</span>秒
+                </div>
+                <!-- 倒计时 -->
+                <div class="count_down_time" v-show="consumptionType==3">
+                    <img src="/static/images/timelimit/time.png" />
+                    <b v-if="timeObj.timeShowType==1">商品限时购结束时间剩余:</b>
+                    <b v-else-if="timeObj.timeShowType==2">商品限时购开启时间剩余:</b>
+                    <b v-else>商品限时购开启时间:</b>
+                    <!-- <span>{{int_day}}</span>: -->
+                    <p>{{timeObj.timeShowType==3?timeObj.int_mounth+'月'+ timeObj.int_day+'日':""}}</p>
+                    <span>{{timeObj.int_hour}}</span>:
+                    <span>{{timeObj.int_minute}}</span>:
+                    <span>{{timeObj.int_second}}</span>
+                </div>
+                <!-- 促销 （rmb模式） -->
+                <template v-if="consumptionType==1 && counponObj && counponObj.moneyPrice">
+                    <div class="promotion">
+                        <span>促销</span>
+                        <span>优惠券</span>
+                        <template v-if="counponObj.minOrderPrice">
+                            <span>满{{counponObj.minOrderPrice | localMoney}} 减{{counponObj.moneyPrice/100}}元</span>
+                        </template>
+                        <template v-else>
+                            <span>立减{{counponObj.moneyPrice/100}}元</span>
+                        </template>
+                        <span @click="toCounponDetail">...</span>
+                    </div>
+                </template>
+            </div>
+            <div class="indexBox_logo">
+                <dl class="wdName">
+                    <dt>
+                        <img :src="shopkeeper.wdImg" alt="">
+                    </dt>
+                    <dd>
+                        <h4>{{shopkeeper.wdName}}</h4>
+                        <span>{{shopkeeper.school}}</span>
+                        <p>
+                            <span>{{'M'+shopkeeper.vipGrade}}</span>
+                        </p>
+                    </dd>
+                </dl>
+                <div class="serBox" :class="{'mar-30':isLimitBuy}">
+                    <span @click="goHome">
+                        回到店铺首页
+                        <i class="iconfont icon-mjiantou sercher"></i>
+                    </span>
+                    <div class="serBox-angent text-s-12 text-c-657bff" v-if="isLimitBuy&&($route.query.isAgent||$route.query.isAgent=='true')">店铺直营</div>
+                    <div class="serBox-angent-red text-s-12" v-if="isLimitBuy&&(!$route.query.isAgent||$route.query.isAgent=='false')">店铺代理</div>
+                </div>
+            </div>
+            <div class="detaileall">
+                <div v-if="goods.goodsVideo">
+                    <div class="line">
+                        <b></b>
+                        <i class="iconfont icon-shipin2"></i>
+                        <span class="line-font">视频</span>
+                        <b></b>
+                    </div>
+                    <fsvideo :playerOptions="coverVideoOptions"></fsvideo>
+                </div>
+
+                <div class="line">
+                    <b></b>
+                    <i class="iconfont icon-tupian"></i>
+                    <span class="line-font">详情</span>
+                    <b></b>
+                </div>
+                <article>
+                    <p v-html="goods.textDes"></p>
+                </article>
+            </div>
+            <!-- <div class="backHome">
+                <div class="backHome_box">
+                    <span>没有更多</span>
+                </div>
+            </div> -->
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="cms-coupon-item">
+    <figure class="sign-img" ><img src="/static/images/coupon/jinhuoquan.png" alt=""></figure>
+    <div class="top-information">
+        <div class="coupon-cell-left">
+            <h3 class="cms-coupon-name">{{coupon.couponName}}</h3>
+            <div v-if="coupon.minOrderPrice" class="cms-coupon-desc">满{{ coupon.minOrderPrice | localMoney }}可使用</div>
+            <div v-else class="cms-coupon-desc">立减{{ coupon.moneyPrice | localMoney('') }}</div>
+        </div>
+        <div class="coupon-cell-rigth">
+            <div class="cms-coupon-price">{{coupon.moneyPrice  | localMoney}}</div>
+            <!-- 可使用或已使用的优惠券 -->
+            <button v-if="coupon.state==0||coupon.state==1" :disabled="coupon.state==1" :class="{'weui-btn_disabled': coupon.state==1}" @click="toUse" class="weui-btn weui-btn_plain-default coupon-use-button">{{coupon.state!=0?'已使用':'立即使用'}}</button>
+            <!-- 作废的优惠券 -->
+            <div v-else-if="coupon.valid==0" class="coupon-avible-img"><img src="/static/images/money/zuofei.png" alt=""></div>
+            <!-- 未作废且过期的优惠券 -->
+            <div v-else class="coupon-avible-img"><img src="/static/images/money/shixiao.png" alt=""></div>
+        </div>
+    </div>
+    <div class="sqlit-line"></div>
+    <div class="coupon-footer">
+        <span @click="toDetail" class="cms-coupon-goods" :class="{'cms-text-underline' : coupon.goodsLimit&&coupon.state==0}">{{coupon.goodsLimit==0?'所有商品通用':'仅限部分商品'}}</span>
+        <span class="cms-coupon-date">{{expiryDate()}}</span>
+    </div>
+</div>

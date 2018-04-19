@@ -1,0 +1,85 @@
+.coupon-detail-container{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .coupon-info{
+        margin-bottom: 4px;
+    }
+    .coupon-goods{
+        flex: 1;
+        position: relative;
+        .coupon-goods-title{
+            height: 44px;
+            color: #b3b3b3;
+            text-align: center;
+            line-height: 44px;
+        }
+        .goods-list {
+            flex-wrap: wrap;
+            flex-grow: 2;
+            width: 100%;
+            .goods-item {
+                width: 49.75%;
+                background-color: #fff;
+                border-top: 5px solid #f2f2f2;
+                &:nth-child(even) {
+                    border-left: 2px solid #f2f2f2;
+                    flex: 1;
+                }
+                &_hd {
+                    position: relative;
+                    height: 172px;
+                    .progressive-image,
+                    img {
+                        height: 100%;
+                        width: 100%;
+                    }
+                    .radus{
+                        height: 16px;
+                        width: 16px;
+                        background-color: red;
+                        color: #fff;
+                        text-align: center;
+                        line-height: 16px;
+                        font-size: 12px;
+                        position: absolute;
+                        top: 0;
+                        left: 2px;
+                        z-index: 500;
+                        border-radius: 2px 2px;
+                    }
+                }
+                &_bd {
+                    padding-left: 13px;
+                    .goodsname {
+                        color: #333;
+                        font-size: 15px;
+                    }
+                    .goodsdesc {
+                        color: #808080;
+                        font-size: 12px;
+                    }
+                }
+                &_ft {
+                    padding-left: 13px;
+                    font-size: 16px;
+                    img {
+                        height: 14px;
+                        width: 14px;
+                        position: relative;
+                        top: 1px;
+                    }
+                    span:last-child {
+                        margin-left: -2px;
+                        display: inline-block;
+                    }
+                    .concat {
+                        margin-left: 5px;
+                        margin-right: 0px;
+                        font-weight: normal;
+                    }
+                }
+            }
+        }
+    }
+}

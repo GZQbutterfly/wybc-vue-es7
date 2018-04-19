@@ -5,12 +5,12 @@
                 <div @click="goDetile($event,str.linkTarget,str.goodsId)" v-if="index == 0">
                     <template>
                         <!-- <img :src="str.url"> -->
-                        <progressive-img :src="str.url" :placeholder="str.url" />
+                        <progressive-img :src="str[imgField]" :placeholder="str[imgField]" />
                     </template>
                 </div>
                 <template v-if="index != 0">
                     <!-- <img :src="str.url">  -->
-                    <img v-lazy="str.url" @click="goDetile($event,str.linkTarget,str.goodsId,str.linkType)" />
+                    <img v-lazy="str[imgField]" @click="goDetile($event,str.linkTarget,str.goodsId,str.linkType)" />
                     <!-- <img class="swiper-lazy" :data-src="str.url" :data-srcset="str.url + ' 2x'">
                     <div class="swiper-lazy-preloader"></div> -->
                 </template>
@@ -24,7 +24,16 @@
 import Swiper from 'swiper';
 
 export default {
-    props: ['listImg', 'config'],
+    props: {
+        listImg:{
+            type: Array,
+            default: []
+        },
+        imgField:{
+            type: String,
+            default: 'url'
+        }
+    },
     data() {
         return {}
     },
@@ -32,21 +41,17 @@ export default {
         let _self = this;
         let _config = _self.config || {};
         _self.$nextTick(() => {
-            _self.swiper = new Swiper(_self.$refs.bannerSwiper, {
-                //disableOnInteraction: false,
-                centeredSlides: true,
-                autoplay: {
-                    delay: 2500,
-                    disableOnInteraction: false,
-                },
-                // lazy: {
-                //     loadPrevNext: true,
-                //     loadOnTransitionStart: true,
-                //     loadPrevNextAmount: 0,
-                // },
-                observer: true,
-                observeParents: true,
-            });
+             setTimeout(() => {
+                _self.swiper = new Swiper(_self.$refs.bannerSwiper, {
+                    centeredSlides: true,
+                    autoplay: {
+                        delay: 2500,
+                        disableOnInteraction: false,
+                    },
+                    observer: true,
+                    observeParents: true,
+                });
+             }, 500);
         });
     },
     activated() {
@@ -75,26 +80,12 @@ export default {
     destroyed() {},
     methods: {
         goDetile(e, linkTarget, goodsId, linkType) {
-            // alert(linkTarget);
             if (!goodsId || linkType == 1) {
                 location.href = linkTarget;
             } else {
-                let url = location.href;
-                if (url.indexOf('cms') == -1) {
-                    this.$router.push({
-                        path: "goods_detail",
-                        query: {
-                            goodsId: goodsId
-                        }
-                    });
-                    return;
-                }
-                this.$router.push({
-                    path: "cms_purchase_goods_detail",
-                    query: {
-                        goodsId: goodsId
-                    }
-                });
+                let pathname = location.pathname;
+                let toPath = /cms/.test(pathname) ? 'cms_purchase_goods_detail' : 'goods_detail';
+                this.$router.push({path: toPath, query: {goodsId}});
             }
         }
     }

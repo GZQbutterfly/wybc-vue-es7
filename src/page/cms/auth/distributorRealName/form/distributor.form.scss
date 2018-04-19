@@ -1,90 +1,178 @@
 .distributor-container {
     height: 100%;
+    display: flex;
+    flex-direction: column;
     background-color: #fff;
-    .realform-bd {
-        font-size: 15px;
-        color: #323233;
-        position: relative;
-        padding-bottom: 60px;
-        .realform-upload {
-            padding-top: 40px;
-            .upload-img {
-                position: relative;
-                width: 223px;
-                height: 140px;
-                margin: auto;
-                background: url(../../../../../static/images/delivery/xushngzheng.png) center no-repeat;
-                background-size: 223px;
-            }
-            .photo-img {
-                width: 61px;
-                height: 50%;
-                margin: auto;
-                background: url(../../../../../static/images/minishop/photo.png) center no-repeat;
-                background-size: 61px;
-                position: relative;
-                top: 25%;
-            }
-            img {
-                position: absolute;
-                top: 0;
-                height: inherit;
-                width: inherit;
-            }
-            .img-mode {
-                position: absolute;
-                top: 0;
-                height: inherit;
-                width: inherit;
+    .distributor-content{
+        flex: 1;
+        overflow: scroll;
+        .up-hd {
+            height: 81px;
+            border-bottom: 8px solid #e8e8e8;
+            .up-steps {
+                display: flex;
+                align-items: center;
+                height: 100%;
                 background-color: #fff;
-            }
-            .photo-img-del {
-                position: absolute;
-                top: 0px;
-                right: 0;
-                background-color: #ee893e;
-                height: 16px;
-                width: 16px;
-                display: inline-block;
-                border-radius: 8px;
-                &::before {
-                    content: " ";
-                    position: absolute;
-                    top: 7px;
-                    left: 3px;
-                    width: 9px;
-                    display: block;
-                    border: 1px solid #fff;
+                .up-step {
+                    flex: 1;
+                    text-align: center;
+                    position: relative;
+                    &:not(:first-child) {
+                        .up-step-state:before {
+                            content: ' ';
+                            position: absolute;
+                            left: 0;
+                            top: 24%;
+                            width: 43%;
+                            height: 2px;
+                            background-color: #b3b3b3;
+                        }
+                    }
+                    &:not(:last-child) {
+                        .up-step-state:after {
+                            content: ' ';
+                            position: absolute;
+                            right: 0;
+                            top: 24%;
+                            width: 43%;
+                            height: 2px;
+                            background-color: #b3b3b3;
+                        }
+                    }
+                }
+                .up-step-state {
+                    display: inline-block;
+                    width: 13px;
+                    height: 13px;
+                    border-radius: 50%;
+                    border: 2px solid #b3b3b3;
+                }
+                .success {
+                    .up-step-state {
+                        background-color: #08a1f8!important;
+                        border-color: #08a1f8!important;
+                        &:before {
+                            background-color: #08a1f8!important;
+                        }
+                        &:after {
+                            background-color: #08a1f8!important;
+                        }
+                    }
                 }
             }
         }
-        .realform-ex {
-            margin-top: 38px;
-            display: flex;
-            font-size: 14px;
-            color: #323232;
-            .ex-hd {
-                margin-left: 38px;
+        .realform-bd {
+            font-size: 15px;
+            color: #323233;
+            position: relative;
+            padding-bottom: 60px;
+            .realform-upload {
+                padding-top: 40px;
+                .upload-img {
+                    position: relative;
+                    width: 223px;
+                    height: 140px;
+                    margin: auto;
+                    background: url(../../../../../static/images/delivery/xushngzheng.png) center no-repeat;
+                    background-size: 223px;
+                }
+                .photo-img {
+                    width: 61px;
+                    height: 50%;
+                    margin: auto;
+                    background: url(../../../../../static/images/minishop/photo.png) center no-repeat;
+                    background-size: 61px;
+                    position: relative;
+                    top: 25%;
+                }
+                img {
+                    position: absolute;
+                    top: 0;
+                    height: inherit;
+                    width: inherit;
+                }
+                .img-mode {
+                    position: absolute;
+                    top: 0;
+                    height: inherit;
+                    width: inherit;
+                    background-color: #fff;
+                }
+                .progress-box {
+                    background: #b3b3b3;
+                    color: #fff;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center; 
+                    .iconfont{
+                        font-size: 30px;
+                    }
+                }
+                .progress-text{
+                    position: absolute;
+                    color: #fff;
+                    bottom: 5px;
+                    right: 5px;
+                }
+                .photo-img-del {
+                    position: absolute;
+                    top: 0px;
+                    right: 0;
+                    background-color: #ee893e;
+                    height: 16px;
+                    width: 16px;
+                    display: inline-block;
+                    border-radius: 8px;
+                    &::before {
+                        content: " ";
+                        position: absolute;
+                        top: 7px;
+                        left: 3px;
+                        width: 9px;
+                        display: block;
+                        border: 1px solid #fff;
+                    }
+                }
             }
-            .ex-img {
-                width: 65px;
-                height: 65px;
-                margin: 0 10px;
-                background: url(../../../../../static/images/delivery/2.png) center no-repeat;
-                background-size: 65px;
+            .realform-ex {
+                margin-top: 38px;
+                display: flex;
+                font-size: 14px;
+                color: #323232;
+                .ex-hd {
+                    margin-left: 38px;
+                }
+                .ex-img {
+                    width: 65px;
+                    height: 65px;
+                    margin: 0 10px;
+                    background: url(../../../../../static/images/delivery/2.png) center no-repeat;
+                    background-size: 65px;
+                }
+                .ex-ft {
+                    width: 149px;
+                    color: #808080;
+                }
             }
-            .ex-ft {
-                width: 149px;
-                color: #808080;
+            .hide_choose_data{
+                color: transparent;
+                &::-webkit-calendar-picker-indicator{
+                    width: 100%;
+                    height: 100%;
+                    background: transparent;
+                }
+                &::-webkit-clear-button{
+                    display: none!important;
+                }
             }
         }
     }
     .realform-ft {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
         height: 50px;
+        // z-index: 50;
+        width: 100%;
         button {
             display: block;
             width: 100%;

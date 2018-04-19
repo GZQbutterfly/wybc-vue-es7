@@ -1,12 +1,13 @@
 // VIP等级页面
 import { Component } from 'vue-property-decorator';
-import  BaseVue  from 'base.vue';
+import BaseVue from 'base.vue';
+
 
 import { getLocalUserInfo, timeout, interval, match } from 'common.env';
 
 import { CircleComponent } from './circle/circle.component';
 
-import  Swiper  from 'swiper';
+import Swiper from 'swiper';
 
 import gradeController from './grade.controller';
 import service from './grade.service';
@@ -23,17 +24,10 @@ export class Grade extends BaseVue {
     gradeData = { tqData: {}, tjList: [], showContent: false };
     gradeList = [];
     status = '';
-    leaveTime = 0;
-    reDate = 0;
-    countDate = { hour: '00', minute: '00', second: '00', day: '00' };
     gradeActive = '';
-    tipCreate = false;
     showTjContent = false;
-    noUpInfo=false;
-    time;
-    timer;
-     _$service;
-     _user;
+    _$service;
+    _user;
     data() {
         return {};
     }
@@ -72,7 +66,6 @@ export class Grade extends BaseVue {
             on: {
                 init() {
                     timeout(() => {
-                        //_self.tipCreate = true;
                         if (_self.gradeActive > 4) {
                             this.slideTo(_self.gradeActive - 1);
                         } else if (_self.gradeActive <= 4) {
@@ -102,13 +95,6 @@ export class Grade extends BaseVue {
             return;
         }
         _self.gradeActive = item.grade;
-        // 清除存在的定时器
-        window.clearTimeout(_self.time);
-        window.clearInterval(_self.timer);
-        // 清除保级图标上的类样式
-        let reachImgDom = _self.$refs.gradeRef.querySelector('.reach-img');
-        reachImgDom && reachImgDom.classList.remove('img-scale');
-        _self.gradeData.bjData = {};
         _self.gradeData.reachedImg = '';
         _self.showTjContent = false;
         // 请求点击的等级数据
@@ -116,66 +102,7 @@ export class Grade extends BaseVue {
             gradeController.queryGradeData(_self, { grade: item.grade });
         });
     }
-    toUpGrade(item) {
-        let _dialog = this.$store.state.$dialog;
-        this._$service.queryUpInfo().then((res) => {
-            let _result = res.data;
-            if (_result.errorCode) {
-                this.tipDialog(_result.msg, 'error');
-            } else {
-                // 判断是否需要缴纳保证金，不用提示升级成功
-                if (!_result.ifNeedBail) {
-                    this.tipDialog('恭喜您! 晋级成功');
-                    gradeController.queryCurrentGrade(this);
-                } else {
-                    this.$router.push({ path: 'grade_up', query: { name: 'M' + this.gradeActive + this.gradeData.gradeName } });
-                }
-            }
-        }).catch(() => {
-            this.tipDialog('抱歉！系统服务出错', 'error');
-        });
-
-    }
-    // 保级条件图标 加载完成
-    reachLoadImg(event) {
-        let target = event.target;
-        target.classList.add('img-scale');
-        this.time = window.setTimeout(() => {
-            target.classList.remove('img-scale');
-        }, 1000);
-    }
-    /**
-     * 倒计时
-     */
-    countDown() {
-        let _self = this;
-        window.clearInterval(_self.timer);
-        _self.countDate = { hour: '00', minute: '00', second: '00', day: '00' };
-        if (_self.status === 'lock') {
-            return;
-        }
-        _self.leaveTime = _self.leaveTime < 0 ? 0 : _self.leaveTime;
-        gradeController.getCountDown(_self, _self.leaveTime);
-        if (match(_self.status, ['checking', 'checkover'])) {
-            let _runFlag = false;
-            _self.timer = interval(() => {
-                _self.leaveTime -= 1000;
-                if (_self.leaveTime <= 999) {
-                    timeout(() => {
-                        // 定时器looped active grade equals currentGrade.grade   run
-                        if (_runFlag && _self.currentGrade.grade === _self.gradeActive) {
-                            gradeController.queryCurrentGrade(_self);
-                        }
-                    });
-                    _self.countDate = { hour: '00', minute: '00', second: '00', day: '00' };
-                    window.clearInterval(_self.timer);
-                } else {
-                    _runFlag = true;
-                    gradeController.getCountDown(_self, _self.leaveTime);
-                }
-            }, 999);
-        }
-    }
+    
     toGuide() {
         this.$router.push('grade_guide');
     }
@@ -201,10 +128,5 @@ export class Grade extends BaseVue {
                 mainFn() { }
             }
         });
-    }
-    destroyed() {
-        //清除定时器
-        window.clearInterval(this.timer);
-        window.clearTimeout(this.time);
     }
 }

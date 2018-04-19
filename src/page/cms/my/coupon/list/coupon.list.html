@@ -1,0 +1,14 @@
+<div class="coupon-list-container">
+    <div class="coupon-list-header weui-flex">
+        <div class="weui-flex__item" v-for="(item,index) in coupon_data" :class="{'active':index==activeIndex}" @click="changeType(index)">{{item.name}}</div>
+    </div>
+    <div class="coupon-list-data">
+        <div  v-for="(item,index) in coupon_data">
+            <pull-refresh :refresh="refresh" :infinite="infinite" v-if="index==activeIndex">
+                <ci :coupon="item" :toDetail="activeIndex == 0 ? toCouponDetail : done" :toShare="toCouponShare" v-for="(item,index) in item.data" :key="index"></ci>
+            </pull-refresh>
+        </div>
+    </div>
+    <cs :coupon="shareData" :close="shareClose"></cs>
+    <!-- <ct :list="coupon_data[0].data" v-if="coupon_data[0].data.length" :showItem="shareData" @close="shareClose"></ct> -->
+</div>

@@ -4,32 +4,27 @@
     <template v-if="cardType === 'rob'">
         <div class="rob-box">
             <div class="rob-box-hd">
-                <div class="money">￥<span>{{data.money}}</span></div>
+                <div class="money">￥<span>{{data.deliveryMoney/100}}</span></div>
                 <div class="info">本单收入</div>
             </div>
-            <div class="rob-box-bd">
+            <div class="rob-box-bd" @click="toDetail">
                 <div  class="weui-flex">
-                    <!-- <i class="i i-take">取</i>  -->
                     <img :src="takeImgSrc" class="take-img">
-                    <div class="right">{{data.from}}</div>
+                    <div class="right">{{data.getAddress}}</div>
                 </div>
                 <div class="weui-flex">
                     <div class="pending">
-                        <!-- <i class="icon iconfont icon-zhankai"></i>
-                        <i class="icon iconfont icon-zhankai"></i>
-                        <i class="icon iconfont icon-zhankai"></i> -->
                         <img :src="pointImgSrc" class="point-img">
                     </div>
-                    <div class="right fromAddress">{{data.fromAddress}}</div>
+                    <div class="right fromAddress">{{data.getAddressDetail}}</div>
                 </div>
                 <div class="weui-flex">
-                    <!-- <i class="i i-give">送</i> -->
                     <img :src="giveImgSrc" class="give-img">
-                    <div class="right"><p>{{data.to}}</p><p>{{data.toAddress}}</p></div>
+                    <div class="right"><p>{{data.to}}</p><p>{{data.deliveryAddress}}</p><p v-if="data.sex" class="sex-drom">{{data.sex == 1 ? '男生宿舍' :'女生宿舍'}}</p></div>
                 </div>
             </div>
             <div class="rob-box-ft">
-                <button class="primary" type="button" @click="mainClick">接单</button>
+                <button class="primary" type="button" @click="mainClick" v-debounce>接单</button>
             </div>
 
         </div>
@@ -40,36 +35,33 @@
 
         <div class="pickup-box">
             <div class="pickup-box-hd">
-                <div class="money">￥<span>{{data.money}}</span></div>
+                <div class="money">￥<span>{{data.deliveryMoney/100}}</span></div>
                 <div class="info">本单收入</div>
             </div>
-            <div class="pickup-box-bd">
+            <div class="pickup-box-bd" @click="toDetail">
                 <div class="weui-flex">
-                    <!-- <i class="i i-take">取</i> -->
                     <img :src="takeImgSrc" class="take-img">
-                    <div class="right">{{data.from}}</div>
+                    <div class="right">{{data.getAddress}}</div>
                 </div>
                 <div class="weui-flex">
                     <div class="pending">
-                        <!-- <i class="icon iconfont icon-zhankai"></i>
-                        <i class="icon iconfont icon-zhankai"></i>
-                        <i class="icon iconfont icon-zhankai"></i> -->
                         <img :src="pointImgSrc" class="point-img">
                     </div>
-                    <div class="right fromAddress">{{data.fromAddress}}</div>
+                    <div class="right fromAddress">{{data.getAddressDetail}}</div>
                 </div>
                 <div class="weui-flex">
-                    <!-- <i class="i i-give">送</i> -->
                     <img :src="giveImgSrc" class="give-img">
                     <div class="right">
                         <p>{{data.to}}</p>
-                        <p>{{data.toAddress}}</p>
+                        <p>{{data.deliveryAddress}}</p>
+                        <p v-if="data.sex" class="sex-drom">{{data.sex == 1 ? '男生宿舍' :'女生宿舍'}}</p>
                     </div>
                 </div>
             </div>
             <div class="pickup-box-ft weui-flex">
-                <button class="default" type="button" @click="callClick">联系商家</button>
-                <button class="primary" type="button" @click="mainClick">我已取货</button>
+                <button class="default" type="button" @click="callClick" v-if="data.deliveryState != 5">联系商家</button>
+                <button type="button" @click="mainClick" :disabled="data.deliveryState == 5" :class="[data.deliveryState == 5 ? 'disabled-btn' : 'primary']">{{data.deliveryState == 5 ? '分拣中' : '我已取货'}}</button>
+                <!-- <button class="primary" type="button" @click="mainClick">我已取货</button> -->
             </div>
         </div>
     </template>
@@ -80,36 +72,32 @@
 
         <div class="delivering-box">
             <div class="delivering-box-hd">
-                <div class="money">￥<span>{{data.money}}</span></div>
+                <div class="money">￥<span>{{data.deliveryMoney/100}}</span></div>
                 <div class="info">本单收入</div>
             </div>
-            <div class="delivering-box-bd">
+            <div class="delivering-box-bd" @click="toDetail">
                 <div class="weui-flex">
-                    <!-- <i class="i i-take">取</i> -->
                     <img :src="takeImgSrc" class="take-img">
-                    <div class="right">{{data.from}}</div>
+                    <div class="right">{{data.getAddress}}</div>
                 </div>
                 <div class="weui-flex">
                     <div class="pending">
-                        <!-- <i class="icon iconfont icon-zhankai"></i>
-                        <i class="icon iconfont icon-zhankai"></i>
-                        <i class="icon iconfont icon-zhankai"></i> -->
                         <img :src="pointImgSrc" class="point-img">
                     </div>
-                    <div class="right fromAddress">{{data.fromAddress}}</div>
+                    <div class="right fromAddress">{{data.getAddressDetail}}</div>
                 </div>
                 <div class="weui-flex">
-                    <!-- <i class="i i-give">送</i> -->
                     <img :src="giveImgSrc" class="give-img">
                     <div class="right">
                         <p>{{data.to}}</p>
-                        <p>{{data.toAddress}}</p>
+                        <p>{{data.deliveryAddress}}</p>
+                        <p v-if="data.sex" class="sex-drom">{{data.sex == 1 ? '男生宿舍' :'女生宿舍'}}</p>
                     </div>
                 </div>
             </div>
             <div class="delivering-box-ft weui-flex">
                 <button class="default" type="button" @click="callClick">联系买家</button>
-                <!-- <button class="primary" type="button" @click="mainClick">我已送达</button> -->
+                <button class="primary" type="button" @click="mainClick">确认送达</button>
             </div>
         </div>
     </template>

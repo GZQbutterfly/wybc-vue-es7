@@ -1,24 +1,11 @@
 <div class="delivery-rob-container">
 
-    <!-- <card-box cardType="rob"></card-box> -->
-
-
 
     <pull-refresh ref="my_scroller" :refresh="refresh" :infinite="infinite" :LRShakeflag="true">
         <div class="result_list">
-            <card-box cardType="rob" v-for="(item, index) in list" :key="index" :main="receiveOrder"></card-box>
+            <card-box cardType="rob" v-for="(item, index) in list" :key="index" :main="receiveOrder" :data="item"></card-box>
         </div>
     </pull-refresh>
 
 
-    <!-- <minirefresh :refresh="refresh" :infinite="infinite">
-        <div>
-            <card-box cardType="rob" v-for="(item, index) in list" :key="index"></card-box>
-        </div>
-    </minirefresh> -->
-
-
-
-    <!-- 认证alter -->
-    <!-- <unauthorized v-if="authFirst" v-show="authShow" :close="alertAuth" :showAuth="authShow"></unauthorized> -->
 </div>

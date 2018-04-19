@@ -1,34 +1,50 @@
-.inventory_list{
+.inventory_list {
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    .weui-cells{
+    overflow: hidden;
+    .shopcar{
+      position: fixed;
+      height: 50px;
+      width: 50px;
+      bottom: 18px;
+      left: 18px;
+      text-align: center;
+      line-height: 50px;
+      opacity: 0.8;
+      border-radius: 50%;
+      background: #ccc;
+      .icon-gouwuche{
+          font-size: 25px!important;
+          color: #7ecc44;
+      }
+    } 
+    .weui-cells {
         margin-top: 5px;
-        &:first-child{
+        &:first-child {
             margin-top: 0;
             z-index: 999;
         }
-        .weui-cell{
+        .weui-cell {
             color: #333;
             font-size: 15px;
             padding: 7.5px 12.5px;
-            &::before{
+            &::before {
                 left: 0;
             }
-            &.box_goods{
+            &.box_goods {
                 padding-top: 15px;
                 padding-bottom: 15px;
-                .weui-cell__bd{
+                position: relative;
+                .weui-cell__bd {
                     height: 65px;
                     display: flex;
                     flex-direction: column;
-                    justify-content:center;
+                    justify-content: center;
                 }
             }
-            &.box_search{
-                .weui-cell__bd{
+            &.box_search {
+                .weui-cell__bd {
                     position: relative;
-                    &:before{
+                    &:before {
                         content: '\E62F';
                         position: absolute;
                         top: 0.01rem;
@@ -39,20 +55,20 @@
                     }
                 }
             }
-            .weui-cell__hd{
+            .weui-cell__hd {
                 width: 80px;
-                .pic_goods{
+                .pic_goods {
                     width: 65px;
                     height: 65px;
-                    img{
+                    img {
                         width: 100%;
                         height: 100%;
                     }
                 }
             }
-            .weui-cell__bd{
+            .weui-cell__bd {
                 height: 30px;
-                .ipt_search{
+                .ipt_search {
                     width: 304.5px;
                     height: 30px;
                     background: #f2f2f2;
@@ -62,40 +78,90 @@
                     text-indent: 40px;
                     position: relative;
                 }
-                .txt_goodsName{
+                .txt_goodsName {
                     font-weight: 300;
                     font-size: 17px;
                 }
-                .txt_goodsPrice{
-                    span{
+                .txt_goodsPrice {
+                    span {
                         color: #ff1c1c;
                     }
                 }
-                .txt_goodsNumb{
+                .txt_goodsNumb {
                     height: 30px;
                     line-height: 30px;
-                    span{
+                    span {
                         color: #7ecc44;
                     }
                 }
             }
-            .weui-cell__ft{
+            .weui-cell__ft {
                 line-height: 30px;
                 color: #333;
-                .btn_search{
+                .btn_search {
                     font-weight: 600;
                 }
-                .txt_goodsNumb{
-                    span{
+                .txt_goodsNumb {
+                    span {
                         color: #ff902d;
                     }
                 }
             }
+            .full-width {
+                width: 100%;
+            }
         }
     }
-    .box_goodses{
-        flex: 1;
+    .box_goodses {
+        // flex: 1;
         position: relative;
-        margin-top: -5px;
     }
+    .status_control {
+        width: 100%;
+        height: .5rem;
+        text-align: center;
+        line-height: .5rem;
+        margin-top: .05rem;
+        background-color: #ffffff;
+        .control_button {
+            height: 72%;
+            width: 44%;
+            border: 0.01rem solid #f2f2f2;
+            color: #ff6839;
+            background-color: #ffffff;
+            i {
+                padding-right: .05rem;
+            }
+        }
+        .status_closed {
+            color: #3b8eff;
+        }
+        .control_info {
+            position: absolute;
+            right: 0;
+        }
+    }
+    .position-joinCar {
+        position: absolute;
+        height: 25px;
+        width: 25px;
+        line-height: 25px;
+        text-align: center;
+        right: 15px;
+        top: 50px;
+        border: 1px solid #7ecc44;
+        border-radius: 2px 2px;
+        .icon-gouwuche {
+            font-size: 20px!important;
+            color: #7ecc44;
+        }
+    }
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.flex-v {
+    flex-direction: column;
 }

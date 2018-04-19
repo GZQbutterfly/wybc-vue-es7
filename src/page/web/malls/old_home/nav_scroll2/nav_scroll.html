@@ -1,0 +1,25 @@
+<!-- <div id="iconsList">
+    <app-swiper :options="swiperOption">
+        <app-swiper-slide v-for="(item,index) in iconsList" key="index">
+            <div @click="goPage($event,item.linkLocation)">
+                <img :src="item.img" alt="">
+
+                <b>{{item.iconName}}</b>
+            </div>
+        </app-swiper-slide>
+    </app-swiper>
+</div> -->
+<div id="iconsList">
+    <div class="swiper-container" ref="bannerSwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="(item,index) in iconsList" :key="index">
+
+                <div @click="goPage($event,item)">
+                    <img :src="item.img" alt="">
+
+                    <b>{{item.iconName}}</b>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

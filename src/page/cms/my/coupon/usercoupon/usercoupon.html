@@ -1,0 +1,17 @@
+<div class="cms-user-coupon weui-flex flex-v">
+	<div class="tab-header weui-flex-item">
+		<tab :tabs="tabItemList" @on-change="onChange" :index="index" :custStyle="custStyle"></tab>
+	</div>
+
+	<div class="coupon-list-content flex-1">
+		<div v-for="(tab,tindex) in tabItemList">
+			<div v-show="tableIndex==tindex">
+				<pull-refresh :refresh="refresh" :infinite="infinite">
+					<div v-for="coupon in couponList[tableIndex].data" v-if="tableIndex==tindex">
+						<ci :coupon="coupon"  ></ci>
+					</div>
+				</pull-refresh>
+			</div>
+		</div>
+	</div>
+</div>

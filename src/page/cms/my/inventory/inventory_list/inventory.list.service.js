@@ -3,8 +3,8 @@
 export default (_store) => {
     let _state = _store.state;
     let _http = _state.$http;
-
-    let goodslisturl = 'api/q_keyword';
+    //获取上级信息
+    const upInfo = 'api/wd_vip/q_up_wdinfo';
 
     function q(url, data) {
         return _http({
@@ -15,30 +15,17 @@ export default (_store) => {
     }
 
     return {
-
-        /**
-         * 获取搜索结果
-         * @param keyword 关键词
-         * @param page 页码
-         * @param limit 单页数据数
-         */
-        getGoods(keyword, page, limit) {
-            let data = {
-                keyword: keyword,
-                page: page,
-                limit: limit
-            }
-            return q(goodslisturl, data)
+        addGoods(data) {
+            return q('api/wholecart/a_whole_cart_goods', data)
         },
         // api/q_api_goods_stock
-        queryStockList(keyword, page, limit) {
-            let data = {
-                keyword: keyword,
-                page: page,
-                limit: limit,
-                shopId: _state.workVO.user.userId
-            }
+        async queryStockList(data) {
             return q('api/q_api_goods_stock', data);
+        }, 
+         upShopInfo(userId) {
+            return q(upInfo, {
+                infoId: userId,
+            });
         }
     }
 

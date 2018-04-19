@@ -25,6 +25,8 @@ export class Tip extends Vue {
 
     show = false;
 
+
+
     mounted() {
 
         this.$nextTick(() => {
@@ -46,12 +48,14 @@ export class Tip extends Vue {
         }, 100);
     }
 
-    closeSelf() {
-
-        this.show = false
+    closeSelf(index) {
+        this.show = false;
         timeout(() => {
-            this.close();
+            this.close(index);
         }, 400);
+    }
 
+    toDetail() {
+        this.closeSelf(1);
     }
 }

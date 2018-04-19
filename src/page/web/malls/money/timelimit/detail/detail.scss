@@ -1,0 +1,53 @@
+#money-timelimit-detail {
+    overflow: hidden;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    .home-content {
+        position: relative; // height: 5.26rem;
+        flex: 1;
+    }
+    .buy-content {
+        width: 100%;
+        height: 50px;
+        position: fixed;
+        bottom: 0px;
+        z-index: 100;
+        background-color: white;
+        text-align: center;
+        line-height: 50px;
+        box-shadow: 0 0.01rem 0.2rem #808080;
+        .shop-car {
+            width: 50px;
+            position: relative;
+            .iconfont {
+                font-size: 0.28rem!important;
+                color: #7ecc44;
+            }
+            p {
+                min-height: 0.18rem;
+                min-width: 0.16rem;
+                line-height: 0.18rem;
+                text-align: center;
+                position: absolute;
+                top: 0.05rem;
+                ;
+                right: 0.05rem;
+                background: red;
+                color: #fff;
+                border-radius: 50%;
+                font-size: 0.12rem;
+            }
+        }
+        .join-car {
+            flex: 1;
+            background-color: #ff973a;
+            color: #FFF;
+        }
+        .buy-now {
+            background-color: #FF3A80;
+            color: #FFF;
+            flex: 1;
+        }
+    }
+}

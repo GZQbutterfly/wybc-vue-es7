@@ -1,7 +1,7 @@
 #app,
 body,
 html {
-    font-family:PingFang SC, Microsoft Yahei, PingHei, Helvetica Neue, Helvetica, STHeitiSC-Light, Arial, sans-serif;
+    font-family: PingFang SC, Microsoft Yahei, PingHei, Helvetica Neue, Helvetica, STHeitiSC-Light, Arial, sans-serif;
     background-color: #f2f2f2;
     height: 100%;
     color: #5a5a5a;
@@ -37,6 +37,8 @@ ul li {
 
 img {
     border: 0;
+    width: inherit;
+    height: inherit;
 }
 
 a {
@@ -136,7 +138,7 @@ a {
 }
 
 .text-danger {
-    color: #ff1c1c!important; 
+    color: #ff1c1c!important;
 }
 
 .text-required-flag {
@@ -180,5 +182,11 @@ a {
 
 .layout-ft {
     position: absolute;
-    right: 15px; 
+    right: 15px;
+}
+
+// 去除 IOS移动端点击阴影
+* {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
 }

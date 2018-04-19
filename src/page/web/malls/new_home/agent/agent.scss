@@ -1,0 +1,79 @@
+.malls-agent-container {
+    width: 100%;
+    margin-top: 5px;
+    .malls-agent-content {
+        &_hd {
+            position: relative;
+            height: 50px;
+            img {
+                &:last-child {
+                    height: 50px;
+                    width: 123px;
+                }
+                &:first-child {
+                    position: absolute;
+                    left: -1px;
+                    top: 20px;
+                    width: 50px;
+                    height: 10px;
+                }
+            }
+        }
+        &_bd {
+            .classifylist-box {
+                margin-top: 2px;
+                &_hd {
+                    height: 45px;
+                    padding: 0 12px;
+                    img {
+                        height: 13px;
+                        width: 60px;
+                    }
+                }
+                &_bd {
+                    width: 100%;
+                    position: relative;
+                    img {
+                        height: 145px;
+                        width: 100%;
+                    }
+                    .bg-goods-info {
+                        &_hd {
+                            width: 150px;
+                            margin-right: 10px;
+                        }
+                        &_ft {
+                            height: 25px;
+                            width: 25px;
+                            line-height: 25px;
+                            border: 1px solid #7ecc44;
+                            border-radius: 2px;
+                        }
+                    }
+                    >div:last-child {
+                        padding: 10px 12px;
+                    }
+                    .goodsImg {
+                        position: relative;
+                        height: 145px;
+                        .yhqImg {
+                            height: 50px !important;
+                            width: 50px !important;
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                        }
+                        .right-bottom {
+                            position: absolute;
+                            bottom: 1px;
+                            right: 2px;
+                            border-radius: 2px;
+                            height: 16px;
+                            padding: 0 1px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

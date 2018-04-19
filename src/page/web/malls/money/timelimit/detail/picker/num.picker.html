@@ -1,0 +1,42 @@
+<div id="mask" v-if="isShow">
+    <div class="mask">
+        <section>
+            <div class="flex">
+                <div class="flex_name">
+                    <figure style=" height: 0.36rem;">
+                        <img :src="goods.coverImg">
+                    </figure>
+                    <div class="price">
+                        <span>{{goods.goodsName}}</span>
+                        <p v-if="!priceShow">{{goods.moneyPrice | localMoney}}</p>
+                        <p v-if="priceShow">{{total | localMoney}}</p>
+                    </div>
+                    <div class="stockAlert" v-if="stocks.stock<num&&stocks.userLimite>stocks.userBuyNum">库存不足</div>
+                    <div class="stockAlert" v-if="stocks.stock>=num&&(stocks.userLimite<num || stocks.userLimite<=stocks.userBuyNum)">超过用户购买上限</div>
+                </div>
+                <div id="close" @click="onClose">
+                    <i class="iconfont icon-iconfontclose"></i>
+                </div>
+            </div>
+            <div class="flex">
+                <div class="flex_item">
+                    <div class="store">
+                        <p>购买数量</p>
+                        <p>剩余库存：
+                            <span>{{stocks.stock}}</span>件
+                            <span>（每个用户限购{{stocks.userLimite}}件）</span>
+                        </p>
+                    </div>
+                    <div id="countControl">
+                        <span v-if="num==1||!num" style="background:#f2f2f2;color:#cccccc;">-</span>
+                        <span @click="decrease()" v-else>-</span>
+                        <input type="number" v-model="num" value="num" @keyup="onNum">
+                        <span @click="increase()">+</span>
+                    </div>
+                </div>
+            </div>
+            <div id="next" v-if="stocks.stock<num || nextStepShow || stocks.userLimite<=stocks.userBuyNum" style="background-color:#ccc;">下一步</div>
+            <div id="next" @click="nextStep()" v-else>下一步</div>
+        </section>
+    </div>
+</div>

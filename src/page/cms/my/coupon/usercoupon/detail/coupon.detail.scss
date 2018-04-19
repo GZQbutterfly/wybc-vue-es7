@@ -1,0 +1,132 @@
+.cms-coupon-detail-container{
+    height: 100%;
+    overflow: hidden;
+    .cms-coupon-item{
+        .top-information{
+            padding: .2rem .23rem .20rem .41rem;
+            display: flex;
+            .information-coupon-price{
+                text-align: center; 
+                line-height: .6rem;
+                margin-right: .4rem;
+                font-size: .4rem;
+                color: #fe0000;
+            }
+            .coupon-detail-cell-rigth{
+                height: .6rem;
+            }
+        }
+        
+        .sqlit-line{
+            margin: 0 .125rem;
+            height: .02rem;
+            background-color: #f5f5f5;
+        }
+    
+        .coupon-footer{
+            display: flex;
+            flex-direction: row-reverse;
+            margin: 0 .22rem;
+            line-height: .35rem;
+            .cms-coupon-date{
+                flex: 1;
+            }
+            .cms-coupon-goods {
+                font-size: .13rem;
+                color: #f2ac48;
+            }
+        }
+    }
+    .coupon-goods-title{
+        height: 44px;
+        color: #b3b3b3;
+        text-align: center;
+        line-height: 44px;
+    }
+    .coupon-goods{
+        position: relative;
+        flex: 1;
+        .goods-list {
+            flex-wrap: wrap;
+            flex-grow: 2;
+            width: 100%;
+            .goods-item {
+                width: 49.75%;
+                background-color: #fff;
+                border-top: 5px solid #f2f2f2;
+                position: relative;
+                .item-sign-img{
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: .5rem;
+                    height: .5rem;
+                }
+                
+                &:nth-child(even) {
+                    border-left: 2px solid #f2f2f2;
+                    flex: 1;
+                }
+                &_hd {
+                    position: relative;
+                    height: 172px;
+                    .progressive-image,
+                    img {
+                        height: 100%;
+                        width: 100%;
+                    }
+                    .radus{
+                        height: 16px;
+                        width: 16px;
+                        background-color: red;
+                        color: #fff;
+                        text-align: center;
+                        line-height: 16px;
+                        font-size: 12px;
+                        position: absolute;
+                        top: 0;
+                        left: 2px;
+                        z-index: 500;
+                        border-radius: 2px 2px;
+                    }
+                }
+                &_bd {
+                    padding-left: 13px;
+                    .goodsname {
+                        color: #333;
+                        font-size: 15px;
+                    }
+                    .goodsdesc {
+                        color: #808080;
+                        font-size: 12px;
+                    }
+                }
+                &_ft {
+                    padding-left: 13px;
+                    font-size: 16px;
+                    img {
+                        height: 14px;
+                        width: 14px;
+                        position: relative;
+                        top: 1px;
+                    }
+                    span:last-child {
+                        margin-left: -2px;
+                        display: inline-block;
+                    }
+                    .concat {
+                        margin-left: 5px;
+                        margin-right: 0px;
+                        font-weight: normal;
+                    }
+                }
+            }
+        }
+    }
+}
+.flex-1 {
+    flex: 1;
+}
+.flex-v {
+    flex-direction: column;
+}

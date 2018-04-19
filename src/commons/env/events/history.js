@@ -1,7 +1,7 @@
 // History  Events
 import { isString } from 'lodash';
 import { clientEnv, match } from '../common.env';
-let _CMSFlag =false;// clientEnv.cms;
+let _CMSFlag = clientEnv.cms;
 
 /**
  * auth history back to page
@@ -18,7 +18,9 @@ window.addEventListener('popstate', (event) => {
 // ==> history back function
 let webPath = {
     'order_detail': { noBacks: ['order_submit'], to: 'user_order' },
-    'user_order': { noBacks: ['order_submit'], to: 'userinfo' },
+    'user_order': { noBacks: ['order_submit','sys_pay_list','sys_pay'], to: 'userinfo' },
+    // 限时购页面
+    'money_timelimit_list': {noBacks: ['order_submit', 'money_timelimit_detail'], to: 'home'},
     'wybc_protocol': { noBacks: ['login'], to: 'login' }, // 登录页面存在参数，默认将参数存入sessionStorage里
     '*': { noBacks: ['login', 'login_back'], to: 'home' }
 };
@@ -31,14 +33,25 @@ function WEBHistory() {
     let formPathName = localStorage._activePathname.replace('/', ''); // this value in 'commons/auth/router' has set
     // console.log('to  route  name: ', toPathName);
     // console.log('form  route name: ', formPathName);
-    parse(toPathName, formPathName, webPath);
+    if(/login/.test(toPathName)){
+        to(localStorage._prevPath);
+    }else{
+        parse(toPathName, formPathName, webPath);
+    }
 }
 
 let cmsPath = {
     'cms_stock_order': { noBacks: ['cms_purchase_submit_order'], to: 'cms_purchase_userinfo' },
     'cms_purchase_order_detail': { noBacks: ['cms_purchase_submit_order'], to: 'cms_purchase_userinfo' },
     'grade': { noBacks: ['grade_up'], to: 'cms_home' },
-    'cms_home': { noBacks: ['realname_form'], to: 'cms_home' },
+    'cms_home': { noBacks: ['realname_form','faststore_info'], to: 'cms_home' },
+    // 实名认证结果页面
+    'realname_result': { noBacks: ['realname_form'], to: 'cms_home' },
+    'faststore_info': { noBacks: ['fast_store'], to: 'cms_home' },
+    'options': { noBacks: ['faststore_info','password_set'], to: 'cms_home' },
+    'delivery_m_order': { noBacks: ['faststore_info'], to: 'cms_home' },
+    // 配送员认证结果页面
+    'distributor_realname_result': { noBacks: ['distributor_realname_form'], to: 'cms_home' },
     '*': { noBacks: ['login', 'login_back'], to: 'cms_home' }
 };
 

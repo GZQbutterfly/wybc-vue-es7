@@ -65,3 +65,5 @@ Vue.component('pull-refresh', PullRefresh);
 
 // 引入过滤器
 import '../vue_plugins/filters/commons';
+
+import '../vue_plugins/directives';

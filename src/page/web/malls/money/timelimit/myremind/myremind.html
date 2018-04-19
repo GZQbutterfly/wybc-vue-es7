@@ -1,0 +1,66 @@
+<div class="myremind-container">
+    <pull-refresh ref="myScrollerRef" :refresh="refresh">
+        <div class="result_list ">
+            <!-- 时间段 -->
+            <div v-for="(record, i) in list" :key="i" v-if="record.goodsList.length">
+                <div class="timelimit-title bg-c-fff weui-flex">
+                    <div class="text-c-333 text-s-16">{{record.hour}}点场，{{record.action ? '限时秒杀' : '即将开始'}}</div>
+                    <div class="weui-flex__item text-right text-c-808080 text-s-12">{{record.periodDay}} {{record.time}} 至 {{record.timeEnd}}</div>
+                </div>
+                <!-- 商品集 -->
+                <div class="timelimit-goods-box bg-c-fff weui-flex flex-align-m" v-for="(goods, index) in record.goodsList" :key="index">
+                    <div class="goods-img" @click="toGoodsDetail(goods, record)">
+                        <!-- :src="goods.coverImg" -->
+                        <img alt="img" v-lazy="goods.coverImg" v-if="goods.coverImg">
+                    </div>
+                    <div class="weui-flex__item">
+                        <div>
+                            <div class="text-s-15">{{goods.goodsName}}</div>
+                            <div class="text-s-12">库存：
+                                <span class="text-c-ffa914">{{goods.number}}</span>件</div>
+                        </div>
+                        <div class=" weui-flex flex-align-b" :class="[goods.number ? 'margin-top-10' : 'margin-top-30']">
+                            <div class="goods-price">
+                                <div class="text-c-ff1c1c text-s-15">{{goods.moneyPrice | localMoney}}</div>
+                                <div class="text-c-808080 text-s-12 text-linethrough">{{goods.purchasePrice | localMoney}}</div>
+                            </div>
+                            <div class="weui-flex__item text-right">
+                                <template v-if="record.action">
+                                    <!-- 已经开始的商品抢购时段 -->
+                                    <template v-if="goods.number">
+                                        <div>
+                                            <button class="rob-btn bg-c-7ecc44 text-c-fff text-s-15" @click="toGoodsDetail(goods)">立即抢购</button>
+                                        </div>
+                                        <div class="rate-progress-c text-c-808080 text-s-10 weui-flex flex-align-m">
+                                            <div>已售{{goods._rate}}</div>
+                                            <div class="rate-progress">
+                                                <div class="bg-c-7ecc44" :style="{width: goods._rate}"></div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div class="text-s-15 text-c-808080">{{goods.limitedStock}}件全部抢光</div>
+                                    </template>
+
+                                </template>
+
+                                <template v-else>
+                                    <!-- 未开始时段 -->
+                                    <div>
+                                        <button class="rob-btn  text-s-15" :class="[goods.remindState ? 'bg-c-fff text-c-7ecc44' : 'bg-c-7ecc44 text-c-fff']" @click="setRemind(goods, record, goods.remindState)">
+                                            {{goods.remindState ? '取消提醒' : '提醒我'}}
+                                        </button>
+                                    </div>
+                                    <div class="rate-progress-c text-c-808080 text-s-10 weui-flex flex-align-m">
+                                        <!-- 771人已设置提醒 -->
+                                    </div>
+                                </template>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </pull-refresh>
+</div>

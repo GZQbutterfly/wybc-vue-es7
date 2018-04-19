@@ -1,0 +1,45 @@
+<div class="coupon-item">
+    <div class="coupon-item-header">
+        <div class="coupon-item_cell coupon-item-header_left">
+            <p>{{ coupon.couponName }}</p>
+        </div>
+        <div class="coupon-item_cell coupon-item-header_right">
+            <p>{{ coupon.wdName }}</p>
+            <p class="color-red">专用</p>
+        </div>
+    </div>
+    <div class="coupon-item-content"></div>
+    <div class="coupon-item-footer">
+        <div class="coupon-item_cell coupon-item-footer_left">
+            <p class="color-red">{{ coupon.moneyPrice | localMoney }}</p>
+            <p>满{{ coupon.minOrderPrice | localMoney }}可使用</p>
+            <p>有效期至：{{ coupon.expiryDate || '领取后' + coupon.validTimeDay + '天有效' }}</p>
+            <p v-if="!toDetail"> </p>
+            <p class="color-yellow" @click="toDetail(coupon)" v-else-if="coupon.goodsLimit && (coupon.shopLimit - coupon.amount)">仅限部分商品</p>
+            <p class="color-yellow" @click="toWebDetail(coupon)" v-else-if="coupon.goodsLimit">仅限部分商品</p>
+            <p class="color-yellow currency" v-else>所有商品通用</p>
+        </div>
+        <div class="coupon-item_cell coupon-item-footer_right">
+            <template v-if="coupon.valid == null">
+                <p class="font-s">
+                    <span class="color-red">{{ coupon.amount }}</span>/{{ coupon.shopLimit > 0 ? coupon.shopLimit : '不限量' }}</p>
+                <p class="nowuse active" @click="toShare(coupon)" v-if="coupon.shopLimit - coupon.amount">立即分享</p>
+                <p class="nowuse" v-else>已领取完</p>
+                <p class="font-m">
+                    <template v-if="coupon.userLimit > 0">
+                            每用户限<span class="color-yellow">{{ coupon.userLimit }}张</span>
+                    </template>
+                    <template v-else>
+                            用户领取不限量
+                    </template>
+                </p>
+            </template>
+            <template v-else>
+                <div class="coupon-item_over">
+                    <img src="/static/images/money/zuofei.png" alt="" v-if="coupon.valid === 0">
+                    <img src="/static/images/money/shixiao.png" alt="" v-else>
+                </div>
+            </template>
+        </div>
+    </div>
+</div>

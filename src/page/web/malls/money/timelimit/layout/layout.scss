@@ -1,0 +1,67 @@
+.timelimit-layout {
+    .timelimit-goods-box {
+        height: 132px;
+        width: 100%;
+        padding-left: 12px;
+        padding-right: 12px;
+        &:not(:first-child) {
+            margin-top: 2px;
+        }
+        .goods-img {
+            width: 110px;
+            height: 102px;
+            margin-right: 11px;
+        } // .goods-result{
+        // }
+        .margin-top-10 {
+            margin-top: 10px;
+        }
+        .margin-top-30 {
+            margin-top: 20px;
+        }
+        .rob-btn {
+            width: 100px;
+            height: 36px;
+            border-radius: 5px;
+            border: 1px solid #7ecc44;
+        }
+        button{
+            width: 100px;
+            height: 36px;
+            border-radius: 5px;
+        }
+        .goods-price {
+            div:first-child {
+                margin-bottom: -5px;
+            }
+        }
+        .rate-progress-c {
+            justify-content: flex-end;
+            .rate-progress {
+                border: 1px solid #7ecc44;
+                border-radius: 5px;
+                width: 100px;
+                height: 7px;
+                margin-left: 2px;
+                div {
+                    height: 100%;
+                    width: 0;
+                }
+            }
+        }
+    }
+    .timelimit-toast {
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1000;
+        .timelimit-toast-content {
+            margin: auto;
+            width: 70%;
+            border-radius: 5px;
+            padding: 20px;
+        }
+    }
+}

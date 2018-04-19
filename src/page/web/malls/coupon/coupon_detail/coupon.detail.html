@@ -1,0 +1,55 @@
+<div class="coupon-detail-container">
+    <div class="coupon-info">
+        <div class="coupon-item">
+            <div class="coupon-item_t weui-flex">
+                <span>{{coupon.couponName}}</span>
+                <span>{{coupon.wdName?coupon.wdName:"所有校区店铺"}}
+                    <p>{{coupon.wdName?"专用":"通用"}}</p>
+                </span>
+            </div>
+            <div class="coupon-item_c"></div>
+            <div class="coupon-item_b weui-flex">
+                <div class="money-roll">
+                    <p>{{coupon.moneyPrice | localMoney}}</p>
+                    <p v-if="coupon.minOrderPrice">满{{(coupon.minOrderPrice/100).toFixed(2)}}可使用</p>
+                    <p v-if="coupon.expiryDate">有效期：至{{coupon.expiryDate}}</p>
+                    <p v-else>有效期：{{coupon.validTimeDay}}天内有效</p>
+                </div>
+                <div class="money-use">
+                    <span>仅限部分商品</span>
+                    <!-- <span class="currency" v-else>所有商品通用</span> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="coupon-goods">
+        <pull-refresh :refresh="refresh" :infinite="infinite">
+            <p class="coupon-goods-title">当前店所在校区以下商品可用</p>
+            <div class="goods-list weui-flex">
+                <div class="goods-item" @click="toGoodsDetail(goods)" v-for="(goods, index) in goods" :key="index">
+                    <div class="goods-item_hd">
+                        <progressive-img :src="goods.coverImg" :placeholder="goods.coverImg" />
+                        <!-- 券标识 -->
+                        <div class="coupon-flag-img">
+                            <img src="static/images/money/quan-biaozhi.png" alt="">
+                        </div>
+                    </div>
+                    <div class="goods-item_bd">
+                        <div class="goodsname">{{goods.goodsName}}</div>
+                        <div class="goodsdesc">
+                            {{goods.coverImgDescription}}
+                        </div>
+                    </div>
+                    <div class="goods-item_ft weui-flex flex-align-m">
+                        <span class="money label-money" v-if="goods.purchasePrice">{{goods.purchasePrice | localMoney}}</span>
+                        <!-- <div v-if="true">
+                            <span class="concat">+</span>
+                            <img src="/static/images/money/icon.png" alt="">
+                            <span class="label-money-volume">{{goods.goldPrice}}</span>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </pull-refresh>
+    </div>
+</div>

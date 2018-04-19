@@ -1,0 +1,27 @@
+<div class="gift_crad-container">
+    <header class="gift_crad__hd">
+        <div class="weui-flex flex-algin-m">
+            <div>{{data.couponName}}</div>
+            <div class="weui-flex__item text-right" v-if="giftType == 'couponGfit'">
+                <div class="wdname text-ellipsis" v-if="data.wdName">
+                    {{data.wdName}}
+                </div>
+                <div class="flag text-right" v-if="giftType == 'couponGfit'">
+                        {{data.infoId ? '专用' : '通用'}}
+                </div>
+            </div>
+        </div>
+    </header>
+    <section class="gift_crad__bd">
+        <img src="static/images/money/bg.png" alt="">
+    </section>
+    <footer class="gift_crad__ft">
+        <div class="label-money gift_crad__ft_hd"><span class="money-u">￥</span><span class="money-v">{{data.moneyPrice | localMoney('')}}</span></div>
+        <div class="gift_crad__ft_bd">满{{data.minOrderPrice | localMoney('')}}可使用</div>
+        <div class="weui-flex gift_crad__ft_ft">
+            <div>有效期：<span v-if="data.expiryDate">至{{data.expiryDate}}</span> <span v-else>{{data.validTimeDay}}天内有效</span></div>
+            <div class="weui-flex__item text-right">{{data.goodsLimit ? '部分商品可用' : '所有商品通用'  }}</div>
+        </div>
+    </footer>
+
+</div>

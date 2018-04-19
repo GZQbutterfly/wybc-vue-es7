@@ -1,0 +1,46 @@
+.timelimit-banner-container {
+    margin: 5px 0;
+    width: 100%;
+    .timelimit-banner-content {
+        &_hd {
+            height: 42px;
+            padding: 13px;
+            .banner {
+                height: 15px;
+                img {
+                    height: 100%;
+                    width: 60px!important;
+                }             
+                >div:last-child{
+                    position: relative;
+                    top: -3px;
+                }
+            }
+        }
+        &_bd {
+            width: 100%;
+            padding-bottom: 15px;
+            .goods-box {
+                padding-right: 7px;
+                &:first-child {
+                    padding-left: 7px;
+                }
+                img {
+                    width: 96px;
+                    height: 96px;
+                }
+                >div:last-child{
+                    margin-top: -5px;
+                }
+            }
+        }
+    }
+    .countdown {
+        margin-left: 5px;
+        div {
+            border-radius: 5px;
+            padding: 1px 3px 0 3px;
+        }
+    }
+    
+}

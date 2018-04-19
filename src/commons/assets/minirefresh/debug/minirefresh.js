@@ -1264,6 +1264,10 @@ var MiniRefreshTheme = function (_Core) {
             contentWrap.insertBefore(downWrap, null);
             this.downWrap = downWrap;
             this.downWrapProgress = this.downWrap.querySelector('.downwrap-progress');
+            this.downWrapProgress.addEventListener('touchmove',(e)=>{
+                e.preventDefault();
+                return false;
+            });
             this.downWrapTips = this.downWrap.querySelector('.downwrap-tips');
             // 是否能下拉的变量，控制pull时的状态转变
             this.isCanPullDown = false;
@@ -1322,6 +1326,10 @@ var MiniRefreshTheme = function (_Core) {
 
             this.upWrap = upWrap;
             this.upWrapProgress = this.upWrap.querySelector('.upwrap-progress');
+            this.upWrapProgress.addEventListener('touchmove',(e)=>{
+                e.preventDefault();
+                return false;
+            });
             this.upWrapTips = this.upWrap.querySelector('.upwrap-tips');
             MiniRefreshTheme._changeWrapStatusClass(this.upWrap, CLASS_STATUS_DEFAULT);
         }

@@ -1,6 +1,6 @@
 // 我的库存详情
 import { Component, Watch } from 'vue-property-decorator';
-import  BaseVue  from 'base.vue';
+import BaseVue from 'base.vue';
 
 
 import InventoryDetailService from './inventory.detail.service';
@@ -30,7 +30,7 @@ export class MyInventoryDetail extends BaseVue {
     queryOrderId = '';
     buyMaxLength = 4;
     buyMaxNum = 9999;
-     _$service;
+    _$service;
 
     //结果的页码
     search_page = 0;
@@ -56,6 +56,7 @@ export class MyInventoryDetail extends BaseVue {
     initPage() {
         this.goodsId = this.$route.query.goodsId;
         // this.search_init();
+        this.queryGoodsStock();
     }
 
     //去商品详情
@@ -105,8 +106,8 @@ export class MyInventoryDetail extends BaseVue {
                 _self.search_flag = false;
                 _self.errorMsgDialog();
                 // 没有订单 也可针对该商品进货
-            // } else if (_orderDatas.length == 0) {
-            //     _self.search_flag = false;
+                // } else if (_orderDatas.length == 0) {
+                //     _self.search_flag = false;
             } else {
                 //console.log('第' + _self.search_page + '页数据:', res);
                 //商品
@@ -118,8 +119,8 @@ export class MyInventoryDetail extends BaseVue {
                     _self.buyMaxNum = _self.goodsData.wholeMaxBuyNum || _self.buyMaxNum;
                     _self.buyMaxLength = (_self.buyMaxNum + '').length;
                     //if (_result.discountMoney !== _result.goods.moneyPrice) {
-                        // _self.showDiscountDetail = true;
-                        //_self.goodsData.moneyPrice = _result.discountMoney;
+                    // _self.showDiscountDetail = true;
+                    //_self.goodsData.moneyPrice = _result.discountMoney;
                     //}
                 }
                 //库存
@@ -244,8 +245,8 @@ export class MyInventoryDetail extends BaseVue {
      */
     getTime(t) {
         let _getN = function (n) {
-                return n > 9 ? n : '0' + n;
-            },
+            return n > 9 ? n : '0' + n;
+        },
             _getT = function (n, t = 3) {
                 return --t ? _getT(Math.floor(n / 60), t) + ':' + _getN(n % 60) : _getN(n);
             };
@@ -285,7 +286,7 @@ export class MyInventoryDetail extends BaseVue {
     calcOrderInfo() {
         this.totalMoney = this.goodsData.moneyPrice * this.chooseNum;
         this.canBuy = false;
-        if (this.totalMoney >= this.minMoney) {
+        if (this.totalMoney >= this.minMoney&&this.chooseNum<=this.stockNum) {
             this.canBuy = true;
         }
         //chooseNum改变,计算各个订单是否满足
@@ -297,13 +298,27 @@ export class MyInventoryDetail extends BaseVue {
         //     }
         // }
     }
-
+    stockNum = 0;
+    async queryGoodsStock() {
+        let _self = this;
+        let _param = {
+            goodsId: _self.$route.query.goodsId,
+            deliveryType: 0
+        }
+        let ordinaryStockNum = (await this._$service.queryGoodsStock(_param)).data;
+        _self.stockNum = ordinaryStockNum
+    }
     /**
      * 减小数量
      */
     orderNumbPrev() {
         if (this.chooseNum) {
             this.chooseNum--;
+        }
+        if (this.chooseNum > this.stockNum) {
+            this.canBuy = false;
+        }else{
+            this.canBuy = true;
         }
     }
 
@@ -312,6 +327,11 @@ export class MyInventoryDetail extends BaseVue {
      */
     orderNumbNext() {
         this.chooseNum++;
+        if(this.chooseNum>this.stockNum){
+            this.canBuy = false;
+        } else {
+            this.canBuy = true;
+        }
     }
 
     //输入框失焦
@@ -322,6 +342,11 @@ export class MyInventoryDetail extends BaseVue {
             this.chooseNum = num;
         } else {
             this.chooseNum = 0;
+        }
+        if (this.chooseNum > this.stockNum) {
+            this.canBuy = false;
+        } else {
+            this.canBuy = true;
         }
         this.calcOrderInfo();
     }
@@ -377,8 +402,41 @@ export class MyInventoryDetail extends BaseVue {
     goBuy() {
         let _self = this;
         if (this.canBuy) {
-            this.$router.push({ path: 'cms_purchase_submit_order', query: { goodsId: _self.goodsId, goodsType: 'entity', number: this.chooseNum, orderSrouce: 'goods', stockType:0 } });
+            this.$router.push({ path: 'cms_purchase_submit_order', query: { goodsId: _self.goodsId, goodsType: 'entity', number: this.chooseNum, orderSrouce: 'goods', stockType: 0 } });
         }
     }
+    toShopcar() {
+        this.$router.push({ path: "cms_purchase_shop_car" });
+    }
+    /**
+     * 加入进货单
+     */
+    joinCar() {
+        if (this.chooseNum == 0) {
+            let dialogObj = {
+                title: '提示',
+                content: "请选择加入进货单商品数量",
+                mainBtn: '确定',
+                type: 'info',
+                mainFn() { }
+            };
+            this.$store.state.$dialog({ dialogObj });
+            return;
+        }
 
+        let _self = this;
+        let opt = {
+            goodsId: _self.goodsId,
+            number: _self.chooseNum
+        }
+        this._$service.addGoods(opt).then(res => {
+            if (res.data.errorCode) {
+                let _toast = _self.$store.state.$toast;
+                _toast({ title: res.data.msg, success: false });
+                return;
+            }
+            let _toast = _self.$store.state.$toast;
+            _toast({ title: '加入进货单成功' });
+        })
+    }
 }

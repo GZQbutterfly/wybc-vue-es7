@@ -1,0 +1,81 @@
+.delivery-m-tabs-container {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    .delivery-tabs-container_hd {
+        position: relative;
+        height: 50px;
+        .fast-btn {
+            width: 70px;
+            position: absolute;
+            z-index:22;
+            right: 12px;
+            bottom: 5px;
+            text-decoration: underline;
+        }
+        .open-btn {
+            background-color: #fff;
+            border: 1px solid #d9d9d9;
+            width: 167px;
+            margin: auto;
+            .weui-loading {
+                position: relative;
+                top: -2px;
+            }
+        }
+        border-bottom: 5px solid #f2f2f2;
+    }
+    .delivery-tabs-container_bd {
+        position: relative;
+        flex: 1;
+    } // .tabs-hd { }
+    .tabs-bd {
+        height: 100%;
+        position: relative;
+        .swiper-container {
+            height: 100%;
+        }
+        .delivery-m-card-box:not(:first-child) {
+            margin-top: 5px;
+        }
+        .swiper-slide:not(:last-child) {
+            border-right: 1px solid #f2f2f2;
+        }
+    }
+    .delivery-tabs-container_ft {
+        height: 49px;
+        text-align: center;
+        align-items: center;
+        font-size: 15px;
+        color: #333;
+        box-shadow: 0 1px 10px #808080;
+        z-index: 50;
+        position: relative;
+        button {
+            display: block;
+            width: 60%;
+            font-size: 17px;
+            height: 36px;
+            margin: auto;
+            line-height: 36px;
+        }
+        .load-btn {
+            border: 1px solid #d9d9d9;
+            width: 167px;
+            .weui-loading {
+                position: relative;
+                top: -2px;
+            }
+        }
+        .menu-btn {
+            width: 70px;
+            transform: translate3d(0, 0, 0) rotate(180deg);
+            position: absolute;
+            z-index:22;
+            right:0;
+            top:5px;
+        }
+    }
+}

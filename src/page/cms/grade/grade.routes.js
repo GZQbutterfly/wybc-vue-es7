@@ -36,8 +36,18 @@ const routes = [// ===>
                         resolve(require('./up/up')['GradeUp']);
                     }, 'cms/grade/grade');
                 }
+            },{
+                path: '/grade_up_result',
+                name: 'grade_up_result',
+                meta: {
+                    title: '立刻晋级'
+                },
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./up_result/up')['GradeUp']);
+                    }, 'cms/grade/grade');
+                }
             },
-            // GradeGuide
             {
                 path: '/grade_guide',
                 name: 'grade_guide',

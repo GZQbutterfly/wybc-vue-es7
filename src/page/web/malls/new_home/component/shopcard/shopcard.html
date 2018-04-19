@@ -1,0 +1,20 @@
+<div class="shopcard-contanier weui-flex">
+    <template v-for="(item, index) in list">
+        <div class="shopcard-box  weui-flex__item bg-c-fff" @click="go(item)">
+            <div class="shopcard-box_hd text-s-16">
+                <template v-if="item.labelImg">
+                    <img :src="item.labelImg" alt="item.label">
+                </template>
+                <template v-else>
+                    {{item.label}}
+                </template>
+            </div>
+            <div class="shopcard-box_bd text-s-12 text-c-808080">
+                {{item.desc}}
+            </div>
+            <div class="shopcard-box_ft text-center">
+                <img :src="item.img" alt="">
+            </div>
+        </div>
+    </template>
+</div>

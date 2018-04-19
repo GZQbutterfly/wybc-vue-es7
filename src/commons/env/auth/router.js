@@ -1,15 +1,17 @@
 // 路由权限监控
-import { isNotLogin, loginDialog, toLogin, wxAppid, isWeiXin, getUrlParams, qs, cacheLogin, closeDialog, isCMS, timeout } from '../common.env';
+import { isNotLogin, loginDialog, toLogin, wxAppid, isWeiXin, getUrlParams, qs, closeDialog, cacheLogin, isCMS, timeout } from '../common.env';
 
 import { indexOf, merge } from 'lodash';
 import interceptRouters from './router.data';
 import { registerPaySign } from '../pay';
+import middlewareRouter from './router.middleware';
 
 export class RouterAuth {
     _$vm;
     _$store;
     _$router;
     _$authEnv;
+    _$middlewareRouter;
     constructor(_vm, authEnv = (() => { })) {
         this._$vm = _vm;
         this._$store = _vm.$store;
@@ -18,6 +20,7 @@ export class RouterAuth {
 
         this._$router.beforeEach(this.beforeEach.bind(this));
         this._$router.afterEach(this.afterEach.bind(this));
+        this._$middlewareRouter = middlewareRouter.bind(_vm.$router);
         timeout(() => {
             this.setPay();
         }, 500);
@@ -30,13 +33,17 @@ export class RouterAuth {
         let _index = indexOf(interceptRouters, to.name);
         if (_index > -1 && isNotLogin()) {
             // 路由登录  默认缓存登录
-            if (cacheLogin()) {
-                next();
-            } else {
-                toLogin(this._$router, { toPath: nextName, realTo: realTo, realToQuery: realToQuery });
-            }
+            // if (cacheLogin()) {
+            //     next();
+            // } else {
+            toLogin(this._$router, { toPath: nextName, realTo: realTo, realToQuery: realToQuery });
+            // }
         } else {
-            next();
+            this._$middlewareRouter(to, from).then(() => {
+                next();
+            }).catch(() => {
+                next();
+            });
         }
         // 监听授权环境
         this._$authEnv();
@@ -50,11 +57,16 @@ export class RouterAuth {
     }
 
     afterEach(to, from) {
-         timeout(() => {
+        timeout(() => {
+            if (!/login/.test(from.path)) {
+                localStorage._prevPath = from.fullPath;
+                localStorage._prevPathName = from.path;
+                localStorage._prevSearch = qs.stringify(from.query);
+            }
             localStorage._activePath = location.href;
             localStorage._activePathname = to.path;
             localStorage._activeSearch = qs.stringify(to.query);
-         });
+        });
     }
     setPay() {
         let _self = this;

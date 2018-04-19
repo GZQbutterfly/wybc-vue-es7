@@ -30,7 +30,7 @@ http.createServer(function (req, res) {
                     res.write("data: " + (JSON.stringify(json)) + "\n\n");
                     send();
                 }
-            }, Math.floor(Math.random() * 10000 + 3000));
+            }, Math.floor(Math.random() * 10 + 3000));
         }
 
         send();

@@ -1,0 +1,18 @@
+<div class="options-continer">
+    <div class="weui-cells">
+        <div class="weui-cell weui-cell_access" @click="setPayPassWord">
+            <div class="weui-cell__bd">
+                <p>{{hasPassword?'找回钱包支付密码':'设置钱包支付密码'}} </p>
+            </div>
+            <div class="weui-cell__ft"></div>
+        </div>
+        <div v-if="hasPassword" class="weui-cell weui-cell_access" @click="changePayPassWord">
+            <div class="weui-cell__bd">
+                <p>修改钱包支付密码</p>
+            </div>
+            <div class="weui-cell__ft"></div>
+        </div>
+    </div>
+</div>
+
+

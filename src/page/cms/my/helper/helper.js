@@ -40,6 +40,7 @@ export class Helper extends BaseVue {
                     }
                 });
             });
+            _self.updateWxShare();
         });
     }
 }

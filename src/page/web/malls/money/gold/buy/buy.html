@@ -1,0 +1,44 @@
+<div class="money-buy-container weui-flex">
+
+    <!--  -->
+    <section class="money-buy_bd weui-flex__item">
+        <pull-refresh :refresh="refresh" :infinite="infinite">
+            <div class="result">
+                <!-- banner -->
+                <div class="banner">
+                    <app-banner :listImg="bannerList"></app-banner>
+                </div>
+
+                <!-- goods list -->
+                <!-- <list-goods :dataList="{data:goodsList}"></list-goods> -->
+                <div class="goods-list weui-flex">
+                    <div class="goods-item" @click="toGoodsDetail(goods)" v-for="(goods, index) in goodsList" :key="index">
+                        <div class="goods-item_hd">
+                            <progressive-img :src="goods.coverImg" :placeholder="goods.coverImg" />
+                        </div>
+                        <div class="goods-item_bd">
+                            <div class="goodsname">{{goods.goodsName}}</div>
+                            <div class="goodsdesc">
+                                {{goods.coverImgDescription}}
+                            </div>
+                        </div>
+                        <div class="goods-item_ft weui-flex flex-align-m">
+                            <span class="money label-money" v-if="goods.purchasePrice">{{goods.moneyPrice | localMoney}}</span>
+                            <div v-if="true">
+                                <span class="concat">+</span>
+                                <img src="/static/images/money/icon.png" alt="">
+                                <span class="label-money-volume">{{goods.goldPrice}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </pull-refresh>
+    </section>
+
+    <!--  -->
+    <footer class="money-buy_ft">
+
+    </footer>
+
+</div>

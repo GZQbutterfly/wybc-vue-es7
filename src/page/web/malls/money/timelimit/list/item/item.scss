@@ -1,0 +1,20 @@
+.timelimit-item-container {
+    height: 100%;
+    .timelimit-item-content {
+        &_hd {
+            padding: 5px 12px;
+        } // &_bd{
+        // }
+    }
+   
+    .countdown{
+        margin-left: 5px;
+        div{
+            border-radius: 5px; 
+            // width: 15px;
+            padding: 3px;
+            height: 18px;
+            line-height: 12px;
+        }
+    }
+}

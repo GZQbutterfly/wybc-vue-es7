@@ -1,0 +1,27 @@
+.gift_pack-container {
+    z-index: 9999;
+    .gift_pack-content {
+        position: fixed;
+        top: -1px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 3000;
+        transform: scale(0.5);
+        transition: all 0.3s;
+        opacity: 0;
+        width: 100%;
+    }
+    .gift_pack-content-show {
+        transform: scale(1);
+        opacity: 1;
+    }
+    .weui-mask {
+        opacity: 0;
+        background: rgba(0, 0, 0, 0.8);
+        transition: opacity .5s ease-in;
+    }
+    .weui-mask-show {
+        opacity: 1;
+    }
+}

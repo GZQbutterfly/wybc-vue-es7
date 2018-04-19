@@ -1,0 +1,29 @@
+<div class="web-order-delivery">
+    <pull-refresh :refresh="refresh">
+        <div class="order-delivery-info">
+            <div class="cell iconfont icon-wuliu">
+                <h4>订单号码:{{orderDeliveryInfo.combinOrderNo}}</h4>
+                <h5>{{orderDeliveryInfo.createAt | date('yyyy-MM-dd hh:mm:ss')}}</h5>
+            </div>
+        </div>
+        <!--icon-zhuanlan_jiemu icon-cangkucangchu -->
+        <div class="order-delivery-detail">
+            <div class="cell iconfont" :class="{'icon-zhuanlan_jiemu':i==0,'icon-cangkucangchu':(i==orderDeliveryInfo.deliveryState.length-1&&i!=0)}"
+                v-for="(item,i) in orderDeliveryInfo.deliveryState" v-if="item.deliveryState!=3">
+                <h4 v-if="item.deliveryState==0">用户完成支付,订单即将发货</h4>
+                <!-- <h4 v-if="item.deliveryState==3&&false">订单发货，并由分仓配送</h4> -->
+                <h4 v-else-if="item.deliveryState==4">订单发货，并分配店长配送员为你配送:</h4>
+                <h4 v-else-if="item.deliveryState==5">订单包裹分拣中</h4>
+                <h4 v-else-if="item.deliveryState==6">分拣完成，配送店长<span class="red">{{item.userName}}</span>待取货</h4>
+                <h4 v-else-if="item.deliveryState==7">已取货，订单配送中</h4>
+                <h4 v-else-if="item.deliveryState==10"> 配送店长取消本次配送，即将转交分仓配送</h4>
+                <h4 v-else-if="item.deliveryState==9">已经为您指派分仓配送员，分仓配送中：</h4>
+                <h4 v-else-if="item.deliveryState==11">订单已送达，交易完成</h4>
+                <h4 v-if="(item.deliveryState==4 || item.deliveryState==7 ||item.deliveryState==9)&&item.userName">{{item.userName}}
+                    <span v-if="item.phone" class="phone-pad">{{ item.phone }}</span>
+                </h4>
+                <h5>{{item.createAt | date('yyyy-MM-dd hh:mm:ss')}}</h5>
+            </div>
+        </div>
+    </pull-refresh>
+</div>

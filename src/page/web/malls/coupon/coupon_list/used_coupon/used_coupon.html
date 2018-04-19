@@ -1,0 +1,28 @@
+<div class="used_coupon">
+    <pull-refresh :refresh="refresh" :infinite="infinite">
+        <div class="coupon-list">
+            <div class="coupon-item" v-for="(v,i) in couponList">
+                <div class="coupon-item_t weui-flex">
+                    <span>{{v.couponName}}</span>
+                    <span>{{v.wdName?v.wdName:"所有校区"}}
+                        <p>{{v.wdName?"专用":"通用"}}</p>
+                    </span>
+                </div>
+                <div class="coupon-item_c"></div>
+                <div class="coupon-item_b weui-flex">
+                   <div class="money-roll">
+                    <p>{{v.moneyPrice | localMoney}}</p>
+                    <p v-if="v.minOrderPrice">满{{(v.minOrderPrice/100).toFixed(2)}}可使用</p>
+                    <p v-else>无门槛限制</p>
+                    <p>有效期：{{v.expiryDate}}</p>
+                   </div>
+                   <div class="money-use">
+                       <div class="nowuse">已使用</div>
+                        <span v-if="v.goodsLimit==1">仅限部分商品</span>
+                        <span class="currency" v-else>所有商品通用</span>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </pull-refresh>    
+</div>

@@ -1,0 +1,52 @@
+<div class="cmsorder-content weui-flex flex-v">
+    <div  class="cmsorder-detail">
+        <div v-if="orderInfo.orderState==5" class="cmsorder-title">
+            <figure>
+                <img src="/static/images/newshop/wancheng.png" alt=""> </figure>
+            <span class="title-title">店长已送达，订单完成</span>
+        </div>
+        <div v-else-if="orderInfo.orderState==4" class="cmsorder-title">
+            <figure>
+                <img src="/static/images/newshop/paytime.png" alt=""> </figure>
+            <span class="title-title">等待店长配送</span>
+        </div> 
+
+        <div class="cmsorder-goods">
+            <div class="goods-shop-icon">
+                <i class="iconfont icon-ID"></i>
+                <span>{{orderInfo.buyerName}}</span>
+            </div>
+            <div class="weui-flex goods-shop-icon">
+                <span class="color-gray">物流状态</span>
+                <!-- 待发货,待收货,交易完成 -->
+                <span class="weui-flex-item flex-1 text-rigth text-color-green">{{orderInfo.orderState==4?'待配送':'交易完成'}}</span>
+            </div>
+            <div class="goods-item weui-flex" v-for="(goods,index) in orderGoods" @click="toGoodsDetail(goods.goodsId)">
+                <img :src="goods.coverImg">
+                <div class="order-goods-right flex-1">
+                    <div class="goods-title weui-flex ">
+                        <span>{{ goods.goodsName }}</span>
+                        <span class="title-price flex-1">{{ goods.moneyPrice|localMoney}}
+                        </span>
+                    </div>
+                    <span class="number">X{{ goods.number }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="money-about">
+            <div class="money-about-item">
+                <span>售价总计</span>
+                <span>{{saleTotal()|localMoney}}</span>
+            </div>
+        </div>
+
+        <div class="order-info">
+            <div>订单号:{{orderInfo.combinOrderNo}}</div>
+            <div>创建时间:{{orderInfo.createAt}}</div>
+        </div>
+    </div>
+    <div  class="footer-quick-button weui-flex">
+        <div @click="deliveryNow(orderInfo.combinOrderNo)" class="flex-1">{{orderInfo.orderState==5?'配送详情':'去配送'}}</div>
+    </div>
+</div>

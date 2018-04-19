@@ -81,6 +81,7 @@ export class AliPay   {
         data.payType = this._$payData.payType;
         data.userId = user.userId;
         data.token = user.token;
+        data.subPayType = "QUICK_WAP_WAY"; 
         location.href = baseURL + url + '?' + qs.stringify(data) + '&_pay=alipay';
     }
 }

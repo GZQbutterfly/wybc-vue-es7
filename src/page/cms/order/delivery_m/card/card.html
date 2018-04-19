@@ -1,0 +1,42 @@
+<div class="delivery-m-card-box bg-c-fff">
+    <!-- 配送中 -->
+    <div class="delivering-box">
+        <div class="delivering-box-hd">
+            <div class="money text-s-15 text-c-f41c1c">￥
+                <span class="text-s-30">{{data.deliveryMoney/100}}</span>
+            </div>
+            <div class="info text-s-11 text-c-ffa914">本单收入</div>
+        </div>
+        <div class="delivering-box-bd" @click="toDetail">
+            <div class="weui-flex">
+                <i class="icon iconfont icon-shijian text-c-3b8eff"></i>
+                <div class="right">
+                    要求送达时间{{data.deliveryTime}}
+                    <div class="text-s-12 " :class="[overFlag ? 'text-c-7ecc44' : 'text-c-f41c1c']">
+                        剩余时间:
+                        <template v-if="overFlag">
+                            <span class="sj">{{countDate.hour}}</span>小时
+                            <span class="sj">{{countDate.minute}}</span>分
+                            <span class="sj">{{countDate.second}}</span>秒
+                        </template>
+                        <template v-else>
+                            已超时 (本单收入降低{{data.punishMent}}%)
+                        </template>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-flex">
+                <img :src="giveImgSrc" class="give-img">
+                <div class="right text-c-333 text-s-15">
+                    <p>{{data.to}}</p>
+                    <p>{{data.address}}</p>
+                    <p v-if="data.sex" class="sex-drom">{{data.sex == 1 ? '男生宿舍' :'女生宿舍'}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="delivering-box-ft weui-flex">
+            <button class="default" type="button" @click="callClick">联系买家</button>
+            <button class="primary" type="button" @click="mainClick">确认送达</button>
+        </div>
+    </div>
+</div>

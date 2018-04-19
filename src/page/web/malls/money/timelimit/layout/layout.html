@@ -1,0 +1,17 @@
+<div class="warp timelimit-layout" ref="warpRef">
+    <div class="main-content views">
+        <keep-alive>
+            <router-view v-if="$route.meta.keepAlive"></router-view>
+        </keep-alive>
+        <router-view v-if="!$route.meta.keepAlive"></router-view>
+    </div>
+   <!-- 限时购 设置提醒 后 提示toast -->
+    <div class="timelimit-toast weui-flex flex-algin-m" v-show="timelimitToast.show">
+        <div class="timelimit-toast-content bg-c-mode text-center text-c-fff">
+            <div class="text-s-15">
+                {{timelimitToast.title}}
+            </div>
+            <div class="text-s-12">{{timelimitToast.content}}</div>
+        </div>
+    </div>
+</div>

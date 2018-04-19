@@ -1,0 +1,14 @@
+<div class="gift_pack-container">
+
+    <!--  -->
+    <div class="weui-mask" v-if="mode" :class="{'weui-mask-show': show}"></div>
+
+
+    <!-- 内容 -->
+    <div class="gift_pack-content " :class="{'gift_pack-content-show': show}">
+        <new-gift :data="opts.data" @takeGift="takeGift" v-if="newGift" :giftType="opts.giftType"></new-gift>
+        <gift-detail :data="opts.data" v-if="giftDetail" :giftType="opts.giftType"></gift-detail>
+    </div>
+
+    <!-- @click="closeSelf" -->
+</div>

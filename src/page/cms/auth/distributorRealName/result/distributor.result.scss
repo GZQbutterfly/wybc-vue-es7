@@ -1,6 +1,6 @@
 .realresult-container-distributor {
-    height: 100%;
     background-color: #fff;
+    min-height: 100%;
     .realresult-hd {
         text-align: center;
         padding-top: 48px;
@@ -9,6 +9,16 @@
         color: #333;
         .realresult-title {
             font-size: 21px;
+        }
+        .text-tip{
+            color: #2da4ff;
+        }
+        hr{
+            width: 25px;
+            height: 5px;
+            background: #7ecc44;
+            margin: 0 auto;
+            border: none;
         }
     }
     .success {
@@ -30,15 +40,15 @@
             margin-bottom: 90px;
         }
         .resolve {
-            background: url(../../../../../static/images/minishop/tongguo.png) center no-repeat;
+            background: url(../../../../../static/images/delivery/cool.png) center no-repeat;
             background-size: 199px;
         }
         .reject {
-            background: url(../../../../../static/images/minishop/weitongguo.png) center no-repeat;
+            background: url(../../../../../static/images/delivery/ai.png) center no-repeat;
             background-size: 199px;
         }
         .pending {
-            background: url(../../../../../static/images/minishop/shenhe.png) center no-repeat;
+            background: url(../../../../../static/images/delivery/xi.png) center no-repeat;
             background-size: 199px;
         }
     }

@@ -1,5 +1,5 @@
 import { set, merge, find, get, isEmpty } from 'lodash';
-import dialog  from '../../vue_plugins/components/popup/dialog';
+import dialog from '../../vue_plugins/components/popup/dialog';
 import { toWEB } from './location';
 
 /**

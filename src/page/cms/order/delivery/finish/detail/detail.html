@@ -1,19 +1,22 @@
-<div class="delivery-finish-detail">
-    <pull-refresh  :refresh="refresh">
+<app-container>
+    <div class="delivery-finish-detail">
+        <!-- <pull-refresh  :refresh="refresh"> -->
         <div>
             <header class="finish-detail_hd">
                 <div class="detail-head_hd">
-                    <div class="money">￥<span>{{data.money}}</span></div>
+                    <div class="money">￥
+                        <span>{{data.deliveryMoney/100}}</span>
+                    </div>
                     <div class="info">本单收入</div>
                 </div>
                 <div class="detail-head_bd">
-                    用户确认收货，订单成功送达！
+                    {{orderStatus == 'received' ? '店长配送员确认订单已送达！' : '订单已取消,转由分仓直接配送...'}}
                 </div>
                 <div class="detail-head_ft">
-                    <div class="steps-list weui-flex flex-align-b">
+                    <div class="steps-list weui-flex flex-align-b" v-if="orderStatus == 'received'">
                         <div class="step-item" v-for="(item, index) in stepsOption.steps" :key="index">
                             <div class="weui-flex flex-align-m">
-                                <i  :class="{'weui-icon-success': stepsOption.stepIndex == index, 'default': stepsOption.stepIndex < index, 'ok': stepsOption.stepIndex > index}"></i>
+                                <i :class="{'weui-icon-success': stepsOption.stepIndex == index, 'default': stepsOption.stepIndex < index, 'ok': stepsOption.stepIndex > index}"></i>
                                 <div class="step-line" v-if="index < stepsOption.len " :class="{'default-bgc': stepsOption.stepIndex <= index, 'ok-bgc': stepsOption.stepIndex > index}"></div>
                             </div>
                             <label>{{item.label}}</label>
@@ -29,19 +32,20 @@
                 <div class="detail-content_bd">
                     <div class="weui-flex">
                         <img :src="takeImgSrc" class="take-img">
-                        <div class="right">{{data.from}}</div>
+                        <div class="right">{{data.getAddress}}</div>
                     </div>
                     <div class="weui-flex">
                         <div class="pending">
                             <img :src="pointImgSrc" class="point-img">
                         </div>
-                        <div class="right fromAddress">{{data.fromAddress}}</div>
+                        <div class="right fromAddress">{{data.getAddressDetail}}</div>
                     </div>
                     <div class="weui-flex">
                         <img :src="giveImgSrc" class="give-img">
                         <div class="right">
                             <p>{{data.to}}</p>
-                            <p>{{data.toAddress}}</p>
+                            <p>{{data.deliveryAddress}}</p>
+                            <p v-if="data.sex" class="sex-drom">{{data.sex == 1 ? '男生宿舍' :'女生宿舍'}}</p>
                         </div>
                     </div>
                 </div>
@@ -51,30 +55,34 @@
                     </div>
                     <div class="order-details">
                         <div class="goods-list">
-                            <div class="goods-item weui-flex" v-for="(item, index) in goodsList" :key="index">
-                                <div class="goods-item-hd weui-flex__item text-ellipsis">{{item.goodsName}}</div>
-                                <div class="goods-item-bd weui-flex__item">x<span>{{item.number}}</span></div>
-                                <div class="goods-item-ft text-right">{{item.price | localMoney}}</div>
+                            <div class="goods-item weui-flex" v-for="(item, index) in orders" :key="index">
+                                <div class="goods-item-hd text-ellipsis">{{item.goodsName}}</div>
+                                <div class="goods-item-bd">x<span>{{item.number}}</span>
+                                </div>
+                                <div class="goods-item-ft text-right" v-if="item.consuType == 3">{{item.moneyPrice | localMoney}}+<img src="/static/images/money/icon.png" alt="">{{ item.goldPrice }}</div>
+                                <div class="goods-item-ft text-right" v-else>{{item.moneyPrice | localMoney}}</div>
                             </div>
                         </div>
                         <div class="goods-price-total weui-flex title">
-                            <div class="weui-flex__item">总计：{{1655 | localMoney}}</div>
-                            <div class="weui-flex__item text-right">实付：<span class="money">{{1655 | localMoney}}</span></div>
+                            <div class="weui-flex__item">总计：{{data.totalMoney | localMoney}}</div>
+                            <div class="weui-flex__item text-right">实付：
+                                <span class="money">{{data.totalMoney | localMoney}}</span>
+                            </div>
                         </div>
                     </div>
-                
+
                 </div>
             </section>
             <footer class="finish-detail_ft">
                 <div class="title weui-flex flex-align-m">
-                    <img :src="orderInfoImgSrc">
-                    订单信息
+                    <img :src="orderInfoImgSrc"> 订单信息
                 </div>
                 <div class="title order-info weui-flex">
                     <span>订单号码：</span>
-                    <span>1231231231231212312</span>
+                    <span>{{data.combinOrderNo}}</span>
                 </div>
             </footer>
         </div>
-    </pull-refresh>
-</div>
+        <!-- </pull-refresh> -->
+    </div>
+</app-container>

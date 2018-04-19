@@ -1,10 +1,23 @@
 <app-container class="up-container">
     <div>
+        <header class="up-hd">
+            <div class="up-steps">
+                <template v-for="(step, index) in steps">
+                    <!--  @click="switchStep(step, index)" -->
+                    <div class="up-step" :class="{'success': step.success}">
+                        <i class="up-step-state"></i>
+                        <div class="up-step-text">
+                            {{step.name}}
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </header>
         <section class="up-bd">
                 <div class="up-pay">
                     <div class="up-pay-info">
                         <div class="pay-info-text">
-                            <div class="pay-money">{{100 | localMoney}}</div>
+                            <div class="pay-money">{{pledgeMoney | localMoney}}</div>
                             押金（可退）
                         </div>
                     </div>

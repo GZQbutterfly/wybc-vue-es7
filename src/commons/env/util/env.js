@@ -169,7 +169,7 @@ export function pageNotAccess() {
         content: '该功能暂未开放，敬请期待！',
         type: 'info',
         assistBtn: '',
-        mainBtn: '确认',
+        mainBtn: '知道啦',
         assistFn() { },
         mainFn() { }
     };
@@ -208,6 +208,32 @@ export function formHttp(url, data, type = 'POST') {
         xhr.send(formData);
     });
 }
+
+export function xhrGetStream(url, data = {}) {
+    let xhr = new XMLHttpRequest();
+    url = /^http/.test(url) ? url : baseURL + url;
+    return new Promise((resolve, reject) => {
+        xhr.responseType = 'blob';
+        xhr.onload = function (event) {
+            resolve(event);
+        }
+        xhr.onerror = function (err) {
+            reject(err);
+        }
+        xhr.open('post', url, true);
+
+        let formData = new FormData();
+        for (let key in data) {
+            hasOwn.call(data, key) && formData.append(key, data[key]);
+        }
+        xhr.send(formData);
+    });
+}
+
+export function  createObjectURL(blob){
+    return window.URL ? window.URL.createObjectURL(blob) : window.webkitURL.createObjectURL(blob);
+}
+
 
 try {
     window.localStorage.____TestIOReader = "reader";

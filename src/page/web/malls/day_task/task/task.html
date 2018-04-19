@@ -1,0 +1,74 @@
+<div class="day-task-list">
+    <div class="weui-cells" v-if="data_goods.data.length">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p class="title">
+                    <img src="static/images/fastdelivery/mrfx.png" alt="" class="title_1">
+                </p>
+                <p class="desc text-ellipsis">
+                    完成以下任务,还可以获得
+                    <span class="text-c-ee893e">{{ data_goods.securableGold }}</span>金币
+                </p>
+                <p class="rules" @click="toRules(1)">规则说明</p>
+            </div>
+        </div>
+        <div class="weui-cell" v-for="(item,index) in data_goods.data">
+            <div class="weui-cell__hd">
+                <p class="type">
+                    <img src="static/images/fastdelivery/fenxiang.png" alt="">
+                </p>
+            </div>
+            <div class="weui-cell__bd">
+                <p class="task">
+                    分享商品&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ item.finishNumber }}<span class="text-c-808080">/{{ item.amount }}</span>
+                </p>
+                <p class="gold">
+                    奖励：
+                    <span class="text-c-ee893e">{{ item.gold }}</span>金币
+                </p>
+            </div>
+            <div class="weui-cell__ft">
+                <p class="todo doing" @click="toHome" v-if="item.taskState == 1">做任务</p>
+                <p class="todo" @click="getGold(index)" v-else-if="item.taskState == 2">领奖励</p>
+                <p class="todo done" v-else-if="item.taskState == 3">已完成</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="weui-cells" v-if="data_friend.length">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p class="title">
+                    <img src="static/images/fastdelivery/yqhy.png" alt="" class="title_2">
+                </p>
+                <p class="desc text-ellipsis">
+                    积分获取
+                    <span class="text-c-ee893e">无上限</span>
+                </p>
+                <p class="rules" @click="toRules(2)">规则说明</p>
+            </div>
+        </div>
+        <div class="weui-cell" v-for="(item,index) in data_friend">
+            <div class="weui-cell__hd">
+                <p class="type">
+                    <img src="static/images/fastdelivery/yaoqing.png">
+                </p>
+            </div>
+            <div class="weui-cell__bd">
+                <p class="task">
+                    邀请好友关注&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ item.finishNumber }}<span class="text-c-808080">/{{ item.amount }}</span>
+                </p>
+                <p class="gold">
+                    奖励：
+                    <span class="text-c-ee893e">{{ item.gold }}</span>金币
+                </p>
+            </div>
+            <div class="weui-cell__ft">
+                <p class="todo doing" @click="toShare" v-if="item.taskState == 1">做任务</p>
+                <p class="todo" @click="getGold(index,false)" v-else-if="item.taskState == 2">领奖励</p>
+                <p class="todo done" v-else-if="item.taskState == 3">已完成</p>
+            </div>
+        </div>
+    </div>
+</div>

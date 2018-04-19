@@ -1,0 +1,108 @@
+.web-order-delivery {
+    line-height: 1;
+    height: 100%;
+    .red {
+        color: #f90b0b;
+    }
+    .phone-pad {
+        margin-left: 17px;
+    }
+    .order-delivery-info {
+        padding: 5px 23px;
+        margin-bottom: 10px;
+        background: #fff;
+        .cell {
+            padding: 10px 16px;
+            position: relative;
+            &:before {
+                position: absolute;
+                top: 10px;
+                left: -12px;
+                padding: 4px;
+            }
+            h4,
+            h5 {
+                font-weight: 300;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                font-family: PingFang SC, Microsoft Yahei, PingHei, Helvetica Neue, Helvetica, STHeitiSC-Light, Arial, sans-serif;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                color: #333;
+            }
+            h4 {
+                font-size: 15px;
+            }
+            h5 {
+                font-size: 13px;
+            }
+        }
+    }
+    .order-delivery-detail {
+        padding: 5px 23px;
+        background: #fff;
+        position: relative;
+        &:before {
+            content: '';
+            position: absolute;
+            width: 1px;
+            height: calc(100% - 65px);
+            top: 25px;
+            left: 23px;
+            background: #f2f2f2;
+        }
+        .cell {
+            padding: 10px 16px;
+            position: relative;
+            &:before {
+                position: absolute;
+                top: 10px;
+                left: -12px;
+                padding: 4px;
+                color: #fff;
+            }
+            &:after {
+                content: '';
+                width: calc(100% - 30px);
+                height: 1px;
+                background: #f2f2f2;
+                position: absolute;
+                left: 15px;
+                bottom: 0;
+            }
+            &:first-child {
+                &:before {
+                    background: #f55c39;
+                    border-radius: 50%;
+                }
+            }
+            &:last-child {
+                &:before {
+                    background: #b3b3b3;
+                    border-radius: 50%;
+                }
+                &:after {
+                    content: none;
+                }
+            }
+            h4,
+            h5 {
+                font-weight: 300;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                font-family: PingFang SC, Microsoft Yahei, PingHei, Helvetica Neue, Helvetica, STHeitiSC-Light, Arial, sans-serif;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                color: #333;
+            }
+            h4 {
+                font-size: 15px;
+            }
+            h5 {
+                font-size: 13px;
+            }
+        }
+    }
+}

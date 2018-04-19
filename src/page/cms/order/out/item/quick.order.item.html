@@ -1,0 +1,51 @@
+<div class="list_content" @click="toOrderDetail(order.id)">
+	<div v-if="true">
+		<div class="order-title weui-flex">
+			<i class="iconfont icon-ID "></i>
+			<span>{{order.buyerName}}(快速订单)</span>
+			<span class="flex title-rigth" style="color:#7ecc44">{{transOrderState()}}</span>
+		</div>
+		<div class="row-line"></div>
+	</div>
+
+	<!-- 订单号&&支付时间 -->
+	<div class="weui-flex order-title">
+		<span class="weui-flex-item ">订单号:{{order.combinOrderNo}}</span>
+		<span class="color-gray flex title-rigth">{{order.payTime}}</span>
+	</div>
+
+	<!-- 订单商品列表 -->
+	<!-- <div v-for="(goods,index) in order.orderGoods"> -->
+		<div class="weui-flex order-goods">
+			<img class="goods-cover" :src=order.orderGoods[0].coverImg alt="">
+			<div class="flex goods-info">
+				<div class="weui-flex">
+					<span>{{order.orderGoods[0].goodsName}}</span>
+					<span class="flex price">{{order.orderGoods[0].moneyPrice|localMoney}}</span>
+				</div>
+				<p class="">x {{order.orderGoods[0].number}}</p>
+			</div>
+		</div>
+	<!-- </div> -->
+
+	<!-- 商品列表展开选项 -->
+	<div v-if="expandAble(order.orderGoods.length)" class="expand-link">
+		<span>查看全部 {{order.orderGoods.length}} 件商品 </span>
+	</div>
+
+	<!-- 总计 -->
+	<div >
+		<div class="order-plus weui-flex flex-right">
+			<span class="desc-font color-red"> {{saleTotal() | localMoney}}</span>
+			<span class="color-black">售价总计:&nbsp;&nbsp;</span>
+		</div>
+		<div class="row-line"></div>
+	</div>
+
+	<!-- 去配送 -->
+	<div v-if="order.orderState===4">
+		<div class="order-plus weui-flex flex-right">
+			<button @click.stop="deliveryNow(order)" class="item-button button-green">去配送</button>
+		</div>
+	</div>
+</div>

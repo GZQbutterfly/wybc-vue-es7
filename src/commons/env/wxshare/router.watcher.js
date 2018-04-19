@@ -16,7 +16,7 @@ export class WxShareWatcher {
         let shareConfig = {};
         let fullPath = to.fullPath.toLowerCase();
         let name = to.name.toLowerCase();
-        if (config.state.hideAllList[name]) {
+        if (!config.state.custShareList[name]) {
             shareConfig = {
                 hideAllItem: true,
             }

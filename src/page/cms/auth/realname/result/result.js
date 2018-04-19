@@ -1,6 +1,8 @@
 // 实名认证结果页面
 import { Component } from 'vue-property-decorator';
-import BaseVue  from 'base.vue';
+import BaseVue from 'base.vue';
+
+import  service from '../form/form.service';
 
 import './result.scss';
 @Component({
@@ -11,19 +13,27 @@ export class RealNameResult extends BaseVue {
     resultType = '';// 返回结果 认证通过（ resolve ）;认证不通过（ reject ）; 认证等待( pending )
     result = {};
     _$dialog;
+    _$service;
     mounted() {
         this._$dialog = this.$store.state.$dialog;
+        this._$service = service(this.$store);
         this.$nextTick(() => {
             document.title = '实名认证';
             this.renderResult();
         });
     }
-    renderResult() {
+    async renderResult() {
         let _self = this;
-        this.result = this.$route.query.result;
-        if(this.result.data){
-            this.resultType = this.types[this.result.data.state || '1'];
-        }else{
+        _self.result = _self.$route.query.result;
+
+        if (!_self.result || !_self.result.data) {
+            _self.result = (await _self._$service.queryRealName()).data;
+        }
+        if (_self.result.data) {
+            _self.resultType = _self.types[_self.result.data.state || '1'];
+        } else {
+
+
             // this._$dialog({
             //     dialogObj: {
             //         title: '提示',
@@ -31,7 +41,7 @@ export class RealNameResult extends BaseVue {
             //         content: '服务异常',
             //         mainBtn: '确定',
             //         mainFn() {
-                        _self.$router.push('cms_home');
+            _self.$router.push('cms_home');
             //         }
             //     }
             // });

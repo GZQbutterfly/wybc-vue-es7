@@ -1,0 +1,51 @@
+<div class="malls-agent-container" v-if="showContent">
+    <header class="malls-agent-content_hd text-center bg-c-fff">
+        <img src="./static/images/shop-4.6/kuaishou-ct.png" alt="">
+
+        <img src="./static/images/shop-4.6/ztj.png" alt="">
+
+    </header>
+
+    <section class="malls-agent-content_bd" v-if="classifyList.length">
+        <!-- 分类集合 -->
+        <template v-for="(item, index) in classifyList">
+            <!-- v-if="item.goodsList && item.goodsList.length" -->
+            <div class="classifylist-box">
+                <div class="classifylist-box_hd weui-flex flex-align-m bg-c-fff" v-if="item._titleImg">
+                    <div class="weui-flex__item">
+                        <img :src="item._titleImg" :alt="item.classifyName">
+                    </div>
+                    <div class="text-s-13 text-c-b3b3b3" @click="toClassify(item)">查看全部>></div>
+                </div>
+                <div class="classifylist-box_bd bg-c-fff" v-if="item._firstGoods">
+                    <!-- <template v-if="item.adList.length">
+                        <app-banner :listImg="item.adList" imgField="imgUrl"> </app-banner>
+                    </template> -->
+                    <div class="goodsImg" @click="toDetail(item._firstGoods)">
+                        <img :src="item._firstGoods.bigImg || item._firstGoods.coverImg" alt="">
+                        <img src="./static/images/shop-4.6/youhuiquan.png" alt="" v-if="item._firstGoods.couponCount" class="yhqImg">
+                        <div class="right-bottom text-s-12 text-c-fff bg-c-333">店长直营</div>
+                    </div>
+
+                    <!-- last dom -->
+                    <div class="weui-flex flex-align-m">
+                        <div class="bg-goods-info_hd text-ellipsis text-s-15 text-c-333">{{item._firstGoods.goodsName}}</div>
+                        <div class="bg-goods-info_bd weui-flex__item text-c-ff1c1c text-s-17">{{item._firstGoods.moneyPrice | localMoney}}</div>
+                        <div class="bg-goods-info_ft text-c-7ecc44 " @click="joinCar(item._firstGoods)">
+                            <i class="iconfont icon-gouwuche text-s-20"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="classifylist-box_ft" v-if="item._subGoodsList && item._subGoodsList.length">
+                    <goods-list :dataList="{data: item._subGoodsList}" @joinCar="joinCar" status="agentmalls"></goods-list>
+                </div>
+            </div>
+        </template>
+    </section>
+
+
+    <footer class="malls-agent-content_ft">
+
+    </footer>
+
+</div>

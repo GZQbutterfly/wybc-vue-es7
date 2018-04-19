@@ -3,6 +3,10 @@ import { isApp, isWeiXin } from 'common.env';
 export default (store) => {
     let _state = store.state;
     let _http = _state.$http;
+    //查询
+    let querydistributorrealname = 'api/q_shoper_delivery_check';
+    let querymoney = 'api/q_config_pledge';
+    
     function q(url, data) {
         return _http({
             data: data,
@@ -43,7 +47,16 @@ export default (store) => {
         toPay(data, payType) {
             let _pay = _state.$pay;
             _pay._backUrl = data.url;
-            return _pay.pay('api/wd_vip/wd_pay_bail', data, payType);
+            return _pay.pay('api/pay_delivery_check', data, payType);
+        },
+        
+        //获取配送员认证信息
+        queryDistributorRealName() {
+            return q(querydistributorrealname);
+        },
+
+        queryMoney(){
+            return q(querymoney);
         }
     };
 }

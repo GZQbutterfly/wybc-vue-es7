@@ -57,24 +57,25 @@ baseConfig.plugins.push(
         ],
         minChunks: Infinity
     }),
-    new ExtractTextPlugin('[name].css'),
+    new ExtractTextPlugin({ filename: '[name].css', disable: false, allChunks: true }),
     new OptimizeCssAssetsPlugin({
         assetNameRegExp: /\.css$/g,
         cssProcessor: require('cssnano'),
         cssProcessorOptions: { discardComments: { removeAll: true } },
         canPrint: true
     }),
-    new ParallelUglifyPlugin({
-        cacheDir: '.cache/',
-        uglifyJS: {
-            output: {
-                comments: false
-            },
-            compress: {
-                warnings: false
-            }
-        }
-    }),
+    // new ParallelUglifyPlugin({
+    //     cacheDir: 'buildCache/',
+    //     uglifyJS: {
+    //         output: {
+    //             comments: false
+    //         },
+    //         compress: {
+    //             warnings: false
+    //         }
+    //     }
+    // }),
+    new webpack.optimize.UglifyJsPlugin(),
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('production')
     })

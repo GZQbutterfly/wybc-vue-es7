@@ -47,7 +47,6 @@ let handlerServer = (() => {
         }
     }
     return (url, data, callBack) => {
-
         if (isFunction(data)) { callBack = data };
         if (!callBack) { callBack = () => { } };
         let source = new EventSource(url + '?' + qs.stringify(data));
@@ -67,8 +66,7 @@ let handlerServer = (() => {
     }
 })();
 
-export default () => {
-    return {
+export default {
         /**
          * 获取服务端推送消息
          * @param {String}          url       服务地址
@@ -79,5 +77,4 @@ export default () => {
             url = url.includes('http') ? url : baseURL + url;
             return handlerServer(url, data, callBack);
         }
-    };
-}
+};

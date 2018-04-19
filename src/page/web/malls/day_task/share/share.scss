@@ -1,0 +1,85 @@
+.day-task-share-container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f2f2f2;
+    .day-task-share-close{
+        line-height: 1;
+        text-align: center;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 10px;
+        color: #808080;
+        border: 1px solid #808080;
+        padding: 4px;
+        border-radius: 50%;
+    }
+    .day-task-share-info{
+        width: 325px;
+        text-align: center;
+        .day-task-share-info-header,
+        .day-task-share-info-content{
+            margin: 0 auto;
+        }
+        .day-task-share-info-header{
+            width: 323px;
+            height: 145px;
+            background-image: url('../../../../../static/images/fastdelivery/wxShare-desc.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            background-position: center;
+            margin-bottom: 10px;
+        }
+        .day-task-share-info-content{
+            width: 325px;
+            height: 371px;
+            background: #fff;
+            box-shadow: 0 1px 5px rgba(0,0,0,.35);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .day-task-share-info-title{
+                display: flex;
+                align-items: center;
+                height: 50px;
+                margin: 12px;
+                .headImg{
+                    width: 50px;
+                    height: 50px;
+                    margin-right: 12px;
+                }
+                .textDesc{
+                    flex: 1;
+                    text-align: left;
+                    font-size: 0;
+                    span{
+                        font-size: 17px;
+                    }
+                }
+            }
+            .urlCode{
+                width: 100%;
+                text-align: center;
+                font-size: 0;
+                img{
+                    width: 155px;
+                    height: 155px;
+                }
+            }
+            .day-task-share-info-footer{
+                width: 100%;
+                font-size: 13px;
+                margin-bottom: 10px;
+                color: #333;
+            }
+        }
+    }
+}

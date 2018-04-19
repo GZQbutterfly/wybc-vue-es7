@@ -1,0 +1,46 @@
+<div class="delivery-m-tabs-container" ref="tabsRef">
+
+    <header class="delivery-tabs-container_hd weui-flex bg-c-fff flex-align-m text-center" @touchmove="noTouchMove">
+        <div class="weui-flex__item  text-s-15">
+            <button class="button open-btn" @click="openFastInventory" :class="[isOpenFast ? 'text-c-ff6839' : 'text-c-3b8eff']">
+                <i class="icon iconfont icon-xiazai47" :class="[isOpenFast ? 'icon-flag' : 'icon-xiazai47']"></i>
+                {{isOpenFast? '关闭快速仓' : '开启快速仓'}}
+            </button>
+        </div>
+        <div class="fast-btn text-s-12 text-c-808080" @click="$router.push('delivery_m_order_guid')">
+            快速仓说明
+        </div>
+
+    </header>
+
+    <section class="delivery-tabs-container_bd">
+        <div class="tabs-bd" ref="tabsCbdRef">
+            <delivering ref="deliveringRef"></delivering>
+        </div>
+    </section>
+
+    <footer class="delivery-tabs-container_ft weui-flex bg-c-fff" @touchmove="noTouchMove">
+        <div class="load-reflush weui-flex__item">
+            <button class="button load-btn bg-c-fff" @click="queryDatas">
+                <i class="weui-loading" v-show="loaddingShow"></i>
+                {{loaddingShow? '刷新中...': '刷新'}}
+            </button>
+        </div>
+        <button class="button menu-btn bg-c-fff" @click="rightSlideOutMenu">
+            <i class="icon iconfont icon-caidan text-c-808080 text-s-30"></i>
+        </button>
+    </footer>
+
+
+    <!-- 左滑出菜单 -->
+    <slideslip-menu v-show="menuShow" v-if="menuFirst" :close="rightSlideOutMenu" :showMenu="menuShow"></slideslip-menu>
+    <!-- 消息推送 -->
+    <!-- <notice v-if="noticeFirst" v-show="noticeShow" :close="alertNotice" :showNotice="noticeShow" :data="noticeData"></notice> -->
+    <!-- loadding -->
+    <loadding v-if="loaddingFirst" v-show="loaddingShow"></loadding>
+    <!-- 认证alter -->
+    <!-- <unauthorized v-if="authFirst" v-show="authShow" :close="alertAuth" :showAuth="authShow" :data="authData"></unauthorized> -->
+    <!-- 抢单提示 -->
+    <!-- <tip v-if="tipFirst" v-show="tipShow" :data="robData" :close="alertTip" :showTip="tipShow"></tip> -->
+
+</div>

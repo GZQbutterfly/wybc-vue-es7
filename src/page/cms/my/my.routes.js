@@ -2,6 +2,8 @@
 
 import withdrawsRoutes from './withdraws/withdraws.routes';
 import myInventoryRoutes from './inventory/inventory.routes';
+import myCounponRoutes from './coupon/coupon.routes';
+import payRoutes from './password/pay.routes';
 
 const routes = [// 我的钱包
     {
@@ -54,7 +56,8 @@ const routes = [// 我的钱包
                         resolve(require('./spread/spread')['MySpread']);
                     }, 'cms/my/sys');
                 }
-            }, {
+            },
+            {
                 path: '/team_list',
                 name: 'team_list',
                 component: resolve => {
@@ -62,7 +65,8 @@ const routes = [// 我的钱包
                         resolve(require('./team/team_list/team.list')['TeamList']);
                     }, 'cms/my/sys');
                 }
-            }, {
+            },
+            {
                 path: '/helper',
                 name: 'helper',
                 component: resolve => {
@@ -81,10 +85,39 @@ const routes = [// 我的钱包
                     }, 'cms/my/sys');
                 }
             },
+            //快速仓
+            {
+                path: '/fast_store',
+                name: 'fast_store',
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./fastStore/fastStore')['FastStore']);
+                    }, 'cms/my/sys');
+                }
+            },{
+                path: '/faststore_info',
+                name: 'faststore_info',
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./fastStore/infomation/fastStore.info')['FastStoreInfo']);
+                    }, 'cms/my/sys');
+                },
+            },{
+                path: '/options',
+                name: 'options',
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./options/options')['Options']);
+                    }, 'cms/my/sys');
+                }
+            },
             //提现记录
             ...withdrawsRoutes,
             //我的库存
-            ...myInventoryRoutes
+            ...myInventoryRoutes,
+            // 我的优惠券
+            ...myCounponRoutes,
+            ...payRoutes
         ]
     }
 ];

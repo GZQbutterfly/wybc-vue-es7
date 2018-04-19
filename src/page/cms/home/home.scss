@@ -6,6 +6,16 @@
         margin-top: .05rem;
         width: 0 auto;
         border-radius: .025rem;
+        .quan {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            img {
+                height: 16px;
+                width: 16px;
+                margin-right: 2px;
+            }
+        }
     }
     .cmsHomePic {
         width: 3.5rem;
@@ -75,7 +85,7 @@
             h4 {
                 font-size: .15rem;
             }
-            h5{
+            h5 {
                 font-size: .1rem;
                 font-weight: 300;
                 margin-top: -5px;
@@ -84,14 +94,29 @@
                 font-size: .12rem;
                 padding: 0 .025rem;
                 border: 1px solid #333333;
-                &.realname_success{
+                &.realname_success {
                     color: #f74cac;
                     border: 1px solid #f74cac;
                 }
-                &.distributor_realname_success{
+                &.distributor_realname_success {
                     color: #53a9fa;
                     border: 1px solid #53a9fa;
                 }
+            }
+        }
+        .cmsHomeQuick {
+            position: absolute;
+            top: .2rem;
+            left: calc(50% - .8rem);
+            width: 1.6rem;
+            height: .2rem;
+            text-align: center;
+            font-size: 0.14rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            i {
+                font-weight: 600;
             }
         }
         .cmsHomeLogOff {
@@ -242,7 +267,7 @@
                     color: #ff902d;
                 }
             }
-            &:last-child {
+            &:nth-child(2) {
                 p:first-child {
                     i:before {
                         color: #ff6594;
@@ -250,6 +275,17 @@
                 }
                 p:last-child {
                     color: #ff586c;
+                }
+            }
+            &:last-child {
+                border-left: 2px solid #e6e6e6;
+                p:first-child {
+                    i:before {
+                        color: #657bff;
+                    }
+                }
+                p:last-child {
+                    color: #657bff;
                 }
             }
         }
@@ -355,10 +391,24 @@
                         figure {
                             width: .9rem;
                             height: .9rem;
+                            position: relative;
                             img {
                                 width: 100%;
                                 height: 100%;
                             }
+                        }
+                        .redRidus {
+                            height: 20px;
+                            width: 20px;
+                            position: absolute;
+                            top: -10px;
+                            right: -5px;
+                            border-radius: 50%;
+                            background-color: #ed1319;
+                            color: #fff;
+                            font-size: 12px;
+                            line-height: 20px;
+                            text-align: center;
                         }
                         .weui-grid__label {
                             width: 100%;

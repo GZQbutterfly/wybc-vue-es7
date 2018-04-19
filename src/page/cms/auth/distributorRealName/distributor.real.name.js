@@ -22,11 +22,32 @@ export class DistributorRealName extends BaseVue {
         })
     }
 
-    toForm() {
-        if(this.hasErr){
-            this.$router.push('cms_home');
+    async toForm() {
+        let _self = this;
+        if(_self.hasErr){
+            _self.$router.push('cms_home');
         }else{
-            this.$router.push('distributor_realname_form');
+            let res = await _self._$service.queryDistributorRealName();
+            res = res.data;
+            if(res.errorCode){
+                let dialogObj = {
+                    title: '提示',
+                    content: res.msg || '服务器错误，请稍后重试!',
+                    type: 'error',
+                    mainBtn: '确定',
+                    assistFn() {
+                    },
+                    mainFn() {
+                        _self.$router.push('cms_home');
+                    }
+                };
+                _self.$store.state.$dialog({ dialogObj });
+            }
+            else if(res.pledgeFlag){
+                _self.$router.push('distributor_realname_form');
+            }else{
+                _self.$router.push('distributor_deposit');
+            }
         }
     }
 
@@ -34,10 +55,9 @@ export class DistributorRealName extends BaseVue {
         let _self = this;
         let res = await _self._$service.queryRealName();
         res = res.data;
-        console.log(11111,res.data)
         if(res.errorCode){
             _self.hasErr = true;
-        }else if(res.data.state != 4){
+        }else if(res.state != 4){
             let dialogObj = {
                 title: '提示',
                 content: '您未实名认证，不能申请配送员认证！',
@@ -46,7 +66,7 @@ export class DistributorRealName extends BaseVue {
                 assistFn() {
                 },
                 mainFn() {
-                    if (res.data.state == 0 || res.data.state == 3) {
+                    if (res.state == 0 || res.state == 3) {
                         _self.$router.push('realname');
                     } else {
                         _self.$router.push({ path: 'realname_result', query: {result: res}});

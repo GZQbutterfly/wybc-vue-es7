@@ -1,0 +1,62 @@
+.templ-coupon-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .7);
+    box-sizing: content-box;
+    .templ-coupon_hd {
+        .icon-cuowu {
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        img {
+            width: 296px;
+            height: 108.5px;
+        }
+    }
+    .coupon_pic {
+        width: 325px;
+        height: 460px;
+    }
+    .templ-coupon_bd {
+        margin: auto;
+        position: relative;
+        display: inline-block;
+        .templ-coupon-box {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            &_hd {
+                margin-top: 44px;
+                div:last-child {
+                    margin-top: -5px;
+                }
+            }
+            &_bd {
+                margin-top: 65px;
+            }
+            &_ft {
+                width: 140px;
+                height: 140px;
+                margin: auto;
+                margin-top: 33px;
+                // background-color: red; 
+            }
+        }
+        .templ-coupon-qrimg{
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            margin: auto;
+            border-radius: 5px;
+            margin-top: -1px;
+        }
+    }
+}

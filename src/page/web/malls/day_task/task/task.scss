@@ -1,0 +1,93 @@
+.day-task-list{
+    color: #333;
+    .weui-cells{
+        margin-top: 15px;
+        &:first-child{
+            margin-top: 0;
+        }
+        .weui-cell{
+            min-height: 39px;
+            box-sizing: content-box;
+            padding: 16.5px 11px 18px 13px!important;
+            font-size: 14px;
+            align-items: center;
+            &:first-child{
+                border-top: 2px solid #f2f2f2;
+            }
+            &:before{
+                left: 0;
+            }
+            .weui-cell__hd{
+                margin-right: 11.5px;
+                .type{
+                    width: 34px;
+                    height: 34px;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+            }
+            .weui-cell__bd{
+                position: relative;
+                .title{
+                    line-height: 1;
+                    display: block;
+                    margin-bottom: 9px;
+                    text-align: center;
+                    .title_1{
+                        width: 156px;
+                        height: 25px;
+                    }
+                    .title_2{
+                        width: 160px;
+                        height: 20px;
+                    }
+                }
+                .desc{
+                    width: 230px;
+                    height: 20px;
+                    line-height: 20px;
+                    color: #808080;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                .rules{
+                    height: 20px;
+                    line-height: 20px;
+                    color: #333;
+                    position: absolute;
+                    text-decoration: underline;
+                    bottom: 0;
+                    right: 0;
+                }
+                .task{
+                    font-size: 17px;
+                }
+                .gold{
+                    font-size: 15px;
+                }
+            }
+            .weui-cell__ft{
+                .todo{
+                    width: 70px;
+                    height: 27px;
+                    line-height: 27px;
+                    border-radius: 13.5px;
+                    text-align: center;
+                    border: 1px solid #ff3a80;
+                    color: #ff3a80;
+                }
+                .doing{
+                    border: 1px solid #7ecc44;
+                    color: #7ecc44;
+                }
+                .done{
+                    border: 1px solid #e6e6e6;
+                    background: #e6e6e6;
+                    color: #b3b3b3;
+                }
+            }
+        }
+    }
+}

@@ -9,6 +9,7 @@ import loadding from 'components/popup/loadding';
 import toast from 'components/popup/toast';
 
 import {getLocalUserInfo} from 'common.env';
+import envStore from '../../commons/config/store';
 
 const store = new Vuex.Store({
     modules: {
@@ -36,5 +37,8 @@ const store = new Vuex.Store({
         increment(state) {}
     }
 });
+
+
+store.registerModule(['env_state'], envStore);
 
 export default store;

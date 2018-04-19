@@ -5,7 +5,9 @@ import orderRoutes from './order/order.routes';
 import authRoutes from './auth/auth.routes';
 import gradeRoutes from './grade/grade.routes';
 import myRoutes from './my/my.routes';
-import scannerRoutes from './scanner/scanner.routes'
+import scannerRoutes from './scanner/scanner.routes';
+import {CmsHome} from './home/home';
+import payRoutes from './syspay/pay.routes';
 
 // ==>
 const routes = [
@@ -17,11 +19,12 @@ const routes = [
     }, {
         path: '/cms_home',
         name: 'cms_home',
-        component: (resolve) => {
-            require.ensure([], require => {
-                resolve(require('./home/home.js')['CmsHome']);
-            }, `cms/home`);
-        }
+        component: CmsHome
+        // (resolve) => {
+        //     require.ensure([], require => {
+        //         resolve(require('./home/home.js')['CmsHome']);
+        //     }, `cms/home`);
+        // }
     },
     ...purchaseRoutes,
     ...orderRoutes,
@@ -29,12 +32,21 @@ const routes = [
     ...myRoutes,
     ...gradeRoutes,
     ...scannerRoutes,
+    ...payRoutes,
     {
         path: '/message_notice',
         name: 'message_notice',
         component: resolve => {
             require.ensure([], require => {
                 resolve(require('../sys/notice/message/message.notice')['MessageNotice']);
+            }, 'sys/system');
+        }
+    },{
+        path: '/info',
+        name: 'info',
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('./info/info')['Info']);
             }, 'sys/system');
         }
     },

@@ -1,0 +1,76 @@
+<div class="timelimit-item-container">
+    <header class="timelimit-item-content_hd weui-flex text-s-12">
+        <div class="weui-flex__item text-c-808080">{{record.periodDay}} {{record.time}} 至 {{record.timeEnd}}</div>
+        <div class="text-right weui-flex">
+            <span class="text-c-808080">{{record.action ? '距结束' : '距开始'}}</span>
+
+            <div class="countdown weui-flex flex-align-m" v-if="dayTime > overTime">
+                <div class="bg-c-333 text-c-fff">{{countDate.hour}}</div>:
+                <div class="bg-c-333 text-c-fff">{{countDate.minute}}</div>:
+                <div class="bg-c-333 text-c-fff">{{countDate.second}}</div>
+            </div>
+            <div v-else>
+                <span class="text-c-ff1c1c">{{Math.floor(overTime/dayTime)}}</span>天以后
+            </div>
+        </div>
+    </header>
+    <section class="timelimit-item-content_bd bg-c-f2f2f2">
+        <!-- :pages="{page:page, total: list.length}" -->
+        <pull-refresh ref="myScrollerRef" :refresh="refresh" :infinite="infinite" :LRShakeflag="true">
+            <div class="result_list ">
+                <div class="timelimit-goods-box bg-c-fff weui-flex flex-align-m" v-for="(goods, index) in list" :key="index">
+                    <div class="goods-img" @click="toGoodsDetail(goods)">
+                        <!-- :src="goods.coverImg" -->
+                        <img alt="img" v-lazy="goods.coverImg">
+                    </div>
+                    <div class="weui-flex__item">
+                        <div>
+                            <div class="text-s-15">{{goods.goodsName}}</div>
+                            <div class="text-s-12">库存：
+                                <span class="text-c-ffa914">{{goods.leftStock}}</span>件</div>
+                        </div>
+                        <div class=" weui-flex flex-align-b" :class="[goods.number ? 'margin-top-10' : 'margin-top-30']">
+                            <div class="goods-price">
+                                <div class="text-c-ff1c1c text-s-15">{{goods.moneyPrice | localMoney}}</div>
+                                <div class="text-c-808080 text-s-12 text-linethrough">{{goods.purchasePrice | localMoney}}</div>
+                            </div>
+                            <div class="weui-flex__item text-right">
+                                <template v-if="record.action">
+                                    <!-- 已经开始的商品抢购时段 -->
+                                    <template v-if="goods.number">
+                                        <div>
+                                            <button class="rob-btn bg-c-7ecc44 text-c-fff text-s-15" @click="toGoodsDetail(goods)">立即抢购</button>
+                                        </div>
+                                        <div class="rate-progress-c text-c-808080 text-s-10 weui-flex flex-align-m">
+                                            <div>已售{{goods._rate}}</div>
+                                            <div class="rate-progress">
+                                                <div class="bg-c-7ecc44" :style="{width: goods._rate}"></div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div>
+                                            <button class="bg-c-b3b3b3 text-c-fff text-s-15">已抢光</button>
+                                        </div>
+                                        <!-- <div class="text-s-15 text-c-808080">{{goods.limitedStock}}件全部抢光</div> -->
+                                    </template>
+                                </template>
+                                <template v-else>
+                                    <!-- 未开始时段  "remindState": 0 | 1 //提醒   0:没有设置提醒  1: 已经设置提醒 -->
+                                    <div>
+                                        <button class="rob-btn  text-s-15" :class="[goods.remindState ? 'bg-c-fff text-c-7ecc44' : 'bg-c-7ecc44 text-c-fff']" @click="setRemind(goods, goods.remindState)">
+                                            {{goods.remindState ? '取消提醒' : '提醒我'}}
+                                        </button>
+                                    </div>
+                                    <div class="rate-progress-c text-c-808080 text-s-10 weui-flex flex-align-m">
+                                        <!-- 771人已设置提醒 -->
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </pull-refresh>
+    </section>
+</div>

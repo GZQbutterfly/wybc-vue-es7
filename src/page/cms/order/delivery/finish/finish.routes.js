@@ -6,7 +6,7 @@ const routes = [
         component: resolve => {
             require.ensure([], require => {
                 resolve(require('./list/list')['List']);
-            }, 'web/order/delivery');
+            }, 'cms/order/delivery');
         }
     },
     // 完成订单详情
@@ -16,7 +16,7 @@ const routes = [
         component: resolve => {
             require.ensure([], require => {
                 resolve(require('./detail/detail')['Detail']);
-            }, 'web/order/delivery');
+            }, 'cms/order/delivery');
         }
     }
 ]

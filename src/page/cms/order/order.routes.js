@@ -1,4 +1,5 @@
 import deliveryRoutes from './delivery/delivery.routes';
+import deliveryMRoutes from './delivery_m/delivery.routes';
 
 const routes = [
     {
@@ -45,6 +46,14 @@ const routes = [
                         resolve(require('./out/detail/out.order.detail')['OutOrderDetail']);
                     }, 'cms/order/order');
                 }
+            }, {
+                path: '/cms_quick_order_detail',
+                name: 'cms_quick_order_detail',
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./out/detail/quick.order.detail')['QuickOrderDetail']);
+                    }, 'cms/order/order');
+                }
             }
         ]
     },
@@ -58,7 +67,10 @@ const routes = [
             }, 'cms/order/order');
         }
     },
-    ...deliveryRoutes
+    // 众包配送
+    ...deliveryRoutes,
+    // 店长配送
+    ...deliveryMRoutes
 ];
 
 export default routes;

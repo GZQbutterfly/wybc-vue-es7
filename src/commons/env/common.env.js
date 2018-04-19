@@ -11,3 +11,5 @@ export * from './util/login';
  export * from './util/dom';
 
  export * from './util/http';
+
+ export * from './util/md5';

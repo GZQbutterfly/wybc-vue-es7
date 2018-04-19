@@ -1,0 +1,99 @@
+<div class="day-sign-popup-container nomove">
+    <div class="weui-mask" @click="close"></div>
+    <div class="day-sign-popup-content" :class="{'day-sign-popup-content-show': show}">
+        <!-- 签到 popup -->
+        <template v-if="signPopup == 'sign'">
+            <div class="bg-c-fff text-center">
+                <div class="day-sign-popup-content_hd">
+                    <img src="/static/images/daysign/delete.png" alt="" @click="close">
+                </div>
+                <div class="day-sign-popup-content_bd">
+                    <img :src="'/static/images/daysign/' + (record.success ? 'chenggong' : 'shibai') + '.png'" alt="" onclick="return false">
+                </div>
+                <div class="day-sign-popup-content_ft">
+                    <!-- 签到 success -->
+                    <template v-if="record.success">
+                        <div class="sign-info_hd text-s-19 text-c-000">本月累积签到
+                            <span class="text-c-ed1e24">{{record.num}}</span>天</div>
+                        <div class="sign-info_bd">
+                            <img src="/static/images/daysign/qiandaochenggong.png" alt="" onclick="return false">
+                        </div>
+                        <div class="sign-info_ft">
+                            <div class="text-c-333 text-s-15">
+                                <template v-if="record.gold">
+                                    今日签到成功，恭喜获得
+                                    <span class="text-c-ee893e">{{record.gold}}</span>金币
+                                </template>
+                                <template v-else>
+                                    今日签到成功，再接再厉~
+                                </template>
+                            </div>
+                            <div class="text-c-808080 text-s-13" v-if="record.count">
+                                <template v-if="record.num >= record.count">
+                                    (已累积{{record.count}}天签到，快领取奖励吧)
+                                </template>
+                                <template v-else>
+                                    (累积{{record.count}}天签到, 获得更多金币奖励)
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- 签到 failed -->
+                    <template v-else>
+                        <div class="sigh-fail_hd">
+                            <img src="/static/images/daysign/shibailian.png" alt="" onclick="return false">
+                            <div class="text-c-fff text-s-13">签到失败</div>
+                        </div>
+                        <div class="sigh-fail_bd text-c-333 text-s-15">
+                            {{record.msg || '签到失败，请稍后再试！'}}
+                        </div>
+                        <div class="sigh-fail_ft bg-c-7dcc43 text-c-fff text-s-19" @click="close">好的</div>
+                    </template>
+                </div>
+            </div>
+        </template>
+
+        <!-- 领取金币 popup -->
+        <template v-if="signPopup == 'getgold'">
+            <div class="sign-get-gold bg-c-fff text-center">
+                <div class="sign-get-gold_hd">
+                    <img src="/static/images/daysign/delete.png" alt="" @click="close">
+                </div>
+
+                <div class="sign-get-gold_bd  text-s-19 text-c-000">
+                    <div>{{data.success ? '累积签到奖励' : '领取失败'}}</div>
+                    <template v-if="data.success">
+                        <img :src="'/static/images/daysign/geticon.png'" alt="">
+                    </template>
+                    <template v-else>
+                        <div class="get-fail">
+                            <img src="/static/images/daysign/shibailian.png" alt="">
+                            <div class="text-c-fff text-s-13">签到失败</div>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="sign-get-gold_ft">
+                    <template v-if="data.success">
+                        <div class="text-c-333 text-s-15">
+                            累积签到完成，恭喜获得
+                            <span class="text-c-ee893e">{{data.gold}}</span>金币
+                        </div>
+                        <div class="text-c-808080 text-s-13">
+                            (累积签到, 获得更多金币奖励)
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div class="sigh-fail_bd text-c-333 text-s-15">
+                            {{data.msg || '领取失败，请稍后再试！'}}
+                        </div>
+                        <div class="text-c-808080 text-s-13">
+                            (累积签到, 获得更多金币奖励)
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </div>
+</div>

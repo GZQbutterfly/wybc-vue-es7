@@ -1,6 +1,6 @@
 // 我要推广
 import { Component } from 'vue-property-decorator';
-import BaseVue  from 'base.vue';
+import BaseVue from 'base.vue';
 import { getLocalUserInfo, pageNotAccess, timeout } from 'common.env';
 
 import service from './spread.service';
@@ -41,11 +41,8 @@ export class MySpread extends BaseVue {
             _self.wdName = _wdVipInfo.wdName;
         });
 
-        this._$service.queryInviteCode().then((res) => {
-            let _result = res.data;
-            if (!_result.errorCode) {
-                this.code = _result;
-            }
+        this._$service.queryInviteCode().then((code) => {
+            this.code = code;
         });
     }
 
@@ -55,8 +52,15 @@ export class MySpread extends BaseVue {
         // pageNotAccess();
         this.$router.push({ path: 'easy_scanner', query: { type: 'spread', code: this.code } });
     }
+    
     // 分享
     toShare() {
-        this.$router.push({ path: 'easy_scanner', query: { type: 'spread', shop: 'share', wdName : this.wdName } });
+        this.$router.push({ path: 'easy_scanner', query: { type: 'spread', shop: 'share', wdName: this.wdName } });
     }
+
+    //优惠券
+    toCoupon(){
+        this.$router.push('my_coupon_list');
+    }
+    
 }

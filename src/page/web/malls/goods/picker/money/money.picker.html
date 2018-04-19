@@ -1,0 +1,39 @@
+<div class="money-picker-container">
+    <div class="weui-mask"></div>
+
+    <div class="money-picker-content bg-fff">
+        <header class="money-picker-content_hd weui-flex flex-align-m">
+            <img :src="goods.coverImg">
+            <div class="weui-flex__item goodsinfo">
+                <span class="goodsname">{{goods.goodsName}}</span>
+                <div class="weui-flex money-num flex-align-m">
+                    <span class="label-money">{{goods.moneyPrice * num | localMoney}}</span>
+                    <div class="money-buy">
+                        <span class="concat">+</span>
+                        <img src="/static/images/money/icon.png" alt="">
+                        <span class="label-money-volume">{{ goods.goldPrice * num}}</span>                       	
+                    </div>
+                    <span v-show="!goldFlag || goods.goldPrice > amountGold" class=" weui-flex__item text-right text-danger gold">金币不足</span>
+                </div>
+            </div>
+            <i class="icon iconfont icon-close" @click="closeFn"></i>
+        </header>
+
+        <section class="money-picker-content_bd weui-flex flex-align-m">
+            <div>购买数量:
+                <div class="stocknum">剩余<span class="label-money-volume">{{goods.amount}}</span>件</div>
+            </div>
+            <div class="weui-flex__item text-right counter">
+                <span @click="minus()" :class="{'disabeld': num == 1}">-</span>
+                <input type="tel" v-model="innum" />
+                <span @click="plus()">+</span>
+            </div>
+        </section>
+
+        <footer class="money-picker-content_ft">
+            <button type="button" class="bg-ff3a80" @click="nextStep"> 下一步</button>
+        </footer>
+
+    </div>
+
+</div>

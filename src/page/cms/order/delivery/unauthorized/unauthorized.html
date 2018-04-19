@@ -3,22 +3,22 @@
 
     <div class="unauthorized-content" :class="{'content-show': show}">
         <header class="unauthorized-content-hd weui-flex">
-            <div class="weui-flex__item">请先完成配送员认证</div>
+            <div class="weui-flex__item">请先完成{{title}}认证</div>
 
             <i class="icon iconfont icon-zhankai" @click="closeSelf"></i>
 
         </header>
         <section class="unauthorized-content-bd">
             <div>
-                请准备好学生证
+                请准备好{{data.errorCode == 222 ? '身份证': '学生证'}}
             </div>
             <div>
                 平台会保护好您的个人信息，请放心认证
             </div>
         </section>
         <footer class="unauthorized-content-ft">
-            <button type="button" class="auth-btn">
-                马上认证
+            <button type="button" class="auth-btn" @click="toAuth">
+                {{btnStr}}
             </button>
         </footer>
     </div>

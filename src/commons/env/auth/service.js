@@ -5,6 +5,7 @@ import { merge, indexOf, set, get } from 'lodash';
 
 
 import serviceData from './service.data';
+import serviceExData from './service.ex.data';
 
 export class ServiceAuth {
     _$vm;
@@ -33,12 +34,13 @@ export class ServiceAuth {
         });
     }
     requestBefore(config) {
-
         this._$user = this._$state.workVO.user;
         let _baseUrl = get(this._$http, 'defaults.baseURL');
         let _apiUrl = config.url.replace(_baseUrl, '');
 
         let _userId = get(this._$user, 'userId');
+
+        let isNotSer = config.isNotSer;
 
         // 匹配需要校验的服务并添加userId 和 token
         if (match(_apiUrl, serviceData)) {
@@ -53,18 +55,27 @@ export class ServiceAuth {
         // web 前端
         if (clientEnv.web) {
             // 为所有的服务请求都加载shopId
-            let localWdInfo = JSON.parse(localStorage.wdVipInfo || null) || {};
-            config.data = merge({ shopId: localWdInfo.infoId || localWdInfo.shopId }, config.data);
-        }else if (clientEnv.cms) {
+            if (!match(_apiUrl, serviceExData)) {
+                let localWdInfo = this._$state.env_state.cache.currentShop;
+                config.data = merge({ shopId: localWdInfo.infoId }, config.data);
+            }
+        } else if (clientEnv.cms) {
             //cms 为所有的服务请求都加载shopId
-            config.data = merge({ shopId: _userId}, config.data);
+            config.data = merge({ shopId: _userId }, config.data);
+        }
+
+        // get (set params) 
+        if (/get/i.test(config.method)) {
+            config.params = { ...config.params, ...config.data };
         }
 
         // 默认序列化参数  isNotSer = true 不使用序列化
-        if (!config.isNotSer) {
+        if (!isNotSer) {
             cleanObject(config.data);
             set(config, 'data', qs.stringify(config.data));
         }
+
+
         return config;
     }
     response(response) {

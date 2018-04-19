@@ -1,0 +1,29 @@
+<div class="cms-mask-coupon">
+    <div class="mask-head">进货券
+        <span class="iconfont icon-cuowu1" @click="$router.back()"></span>
+        <p>已领取进货券(满足条件后即可用于当前商品)</p>
+    </div>
+    <div class="mask-content">
+        <pull-refresh :refresh="refresh" :infinite="infinite">
+            <div class="coupon-list">
+                <div class="coupon-item-roll" v-for="v in couponList">
+                    <div class="weui-flex flex-c">
+                        <div class="weui-flex-left">{{v.moneyPrice | localMoney}}</div>
+                        <div class="weui-flex-right">
+                            <span>{{v.couponName}}</span>
+                            <p v-if="v.minOrderPrice">满{{(v.minOrderPrice/100).toFixed(2)}}减{{(v.moneyPrice/100).toFixed(2)}}</p>
+                            <p v-else>无门槛限制</p>
+                        </div>
+                    </div>
+                    <div class="time">
+                        <p v-if="v.expiryDate">有效期：至{{v.expiryDate}}</p>
+                        <p v-else>有效期：{{v.validTimeDay}}天内有效</p>
+                        <span v-if="v.goodsLimit==1">仅限部分商品</span>
+                        <span class="currency" v-else>所有商品通用</span>
+                    </div>
+                    <div class="roll"><img src="/static/images/daysign/shangpin-biaozhi.png"></div>
+                </div>
+            </div>
+        </pull-refresh>
+    </div>
+</div>

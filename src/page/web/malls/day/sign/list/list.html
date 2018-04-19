@@ -1,0 +1,90 @@
+<app-container :noPopupmove="true">
+    <div class="day-sign-container" :style="{visibility: showList ? 'visible' : 'hidden'}">
+
+        <header class="day-sign-content_hd bg-c-fff">
+            <div class="sign-bg-img">
+                <!-- 此div修复头部图片顶部的圆角问题 -->
+                <div class="top-bg bg-c-ecca41"></div>
+                <img src="/static/images/daysign/qiandao-bg.png" onclick="return false">
+                <div class="sign-info text-center text-c-fff">
+                    <div class="sign-info_hd text-right  text-s-13 text-underline" @click="$router.push('day_sign_guid')">规则说明</div>
+                    <div class="sign-info_bd" @click="signin">
+                        <img :src="'/static/images/daysign/'+(userSign.signType ? 'qiandao' : 'qiandao0')+'.png'">
+                        <div class="sign-btn text-s-18">{{userSign.signType ? '已签到': '点击签到'}}</div>
+                    </div>
+                    <div class="sign-info_ft">
+                        <div class="text-s-17" v-if="userSign.goldNum">
+                            <template v-if="userSign.signType">
+                                今日签到成功，再接再厉~
+                            </template>
+                            <template v-else>
+                                今日签到即可获取奖励{{userSign.goldNum}}金币
+                            </template>
+                        </div>
+                        <div class="text-c-97500a text-s-12" v-if="list.length">累计签到可获取更多惊喜奖励</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="day-sign-content_bd bg-c-fff">
+            <div class="weui-flex flex-align-m">
+                <div class="weui-flex__item text-s-17 text-c-333">
+                    <span class="red-circle bg-c-f00"></span>{{currentMoth}}月签到日历</div>
+                <div class="sign-history-btn text-center text-s-13" @click="$router.push('day_sign_history')">签到记录</div>
+            </div>
+            <div class="calendar-title text-center bg-c-ecca41 text-c-fff text-s-15">{{toDay | date}}</div>
+            <calendar v-if="showCalender" :showTitle="false" :signDays="calendar2.signDays" :showToDay="true" :noselected="true"></calendar>
+        </section>
+
+        <footer class="day-sign-content_ft bg-c-fff">
+            <div class="text-s-17 text-c-333">
+                <span class="red-circle bg-c-f00"></span>本月累积签到：
+                <span class="text-c-ff3a80">{{daysCount}}</span>天
+            </div>
+            <template v-for="item in list">
+                <div class="sign-info-box weui-flex flex-algin-m">
+                    <div>
+                        <img :src="'/static/images/daysign/'+(item.imgname)+'.png'" alt="">
+                    </div>
+                    <div class="weui-flex__item right">
+                        <div class="text-s-17 text-c-ee893e">
+                            <img src="/static/images/money/icon.png" alt="">{{item.goldNum}}</div>
+                        <div class="text-s-13 text-c-808080">
+                            <template v-if="daysCount >= item.total">
+                                本月已累积签到{{daysCount}}天, 点击领取~~
+                            </template>
+                            <template v-else>
+                                累积签到{{item.total}}天即可获得金币奖励
+                            </template>
+                        </div>
+                        <div class="get-btn text-center text-s-17 text-c-fff bg-c-7dcc43" :class="{'get-disabled': daysCount < item.total}" @click="getGold(item)"
+                            v-if="!item.get">
+                            <template v-if="daysCount >= item.total">
+                                立即领取
+                            </template>
+                            <template v-else>
+                                累积签到{{daysCount}}/{{item.total}}
+                            </template>
+                        </div>
+                        <div class="get-btn text-center text-s-17 text-c-b3b3b3 bg-c-e6e6e6" v-else>
+                            已领取
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+        </footer>
+
+        <div class="nomore-data bg-c-f2f2f2 text-center text-c-b3b3b3 text-s-15">
+            没有更多
+        </div>
+
+    </div>
+
+    <div slot="footer">
+        <!-- 签到popup -->
+        <sign-popup v-if="createPopup" v-show="showPopup" @close="triggerPopup" :showPopup="showPopup" :signPopup="signPopup" :info="popupInfo"></sign-popup>
+    </div>
+
+</app-container>

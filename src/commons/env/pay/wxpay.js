@@ -123,6 +123,7 @@ export class WxPay  {
         console.log('支付pay', url, data);
         let _fn = async () => {
             let _result = (await _self.q(url, merge(data, _self._$payData))).data;
+            console.log('支付结果',_result);
             if (!_result.errorCode) {
                 return  (await _self.chooseWXPAY(_result));
             } else {
@@ -188,6 +189,7 @@ export class WxPay  {
         return new Promise((res, rej) => {
             _self.q(url, merge(data, _self._$payData)).then((response) => {
                 let _result = response.data;
+                console.log('支付结果',_result);
                 if (!_result.errorCode) {
                     let _backUrl = _self._backUrl;
                     let _href = null;
@@ -197,7 +199,7 @@ export class WxPay  {
                         _href = encodeURIComponent(`${location.origin}/order_detail?orderId=${data.orderId}`);
                     }
                     location.href = `${_result.mweb_url}&redirect_url=${_href}`;
-                    //res(true);
+                    res(true);
                 } else {
                     _self._$state.$dialog({
                         dialogObj:{
@@ -208,7 +210,7 @@ export class WxPay  {
                             mainFn() { }
                         }
                     })
-                    res(null);
+                    res(false);
                 }
             });
         });

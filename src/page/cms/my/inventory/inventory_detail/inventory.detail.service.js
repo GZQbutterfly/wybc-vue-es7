@@ -15,7 +15,9 @@ export default (_store) => {
     }
 
     return {
-
+        addGoods(data) {
+            return q('api/wholecart/a_whole_cart_goods', data)
+        },
         /**
          * 获取搜索结果
          * @param goodsId 关键词
@@ -32,58 +34,58 @@ export default (_store) => {
             return q(querywaitorders, data);
             // let list = {
             //     "data": [													//我的库存中的商品详情-订单部分
-            //         // {
-            //         //     "orderId": 5,								//订单ID
-            //         //     "userId": 1,								//用户Id
-            //         //     "shopId": null,							//店铺Id
-            //         //     "goodsId": 3,								//商品ID
-            //         //     "orderNo": "25206461189065",				//订单号
-            //         //     "combinOrderNo": "25206461189060",		//父订单号（支付单号，仅在待支付时有用），如果是查询待支付的把相同的父订单号订单列在一起支付
-            //         //     "number": 50,								//数量
-            //         //     "moneyPrice": 2,							//单价
-            //         //     "totalMoney": 10,							//总价
-            //         //     "shopSaleDisct": null,					//商家售卖折扣率
-            //         //     "shopBuyDisct": null,						//商家购买折扣率
-            //         //     "shopIncome": null,						//商铺收入
-            //         //     "acceptStatus": false,					//接受状态
-            //         //     "payType": null,							//支付类型
-            //         //     "payTime": null,							//支付时间
-            //         //     "acceptTime": null,						//接受时间
-            //         //     "throwTime": null,						//抛单时间
-            //         //     "orderState": 1,							//订单状态
-            //         //     "userVipGrade": 1,						//用户店铺VIP等级	//0为普通用户，订单为用户订单，反之为进货订单
-            //         //     "saleVipGrade": null,						//售卖店铺VIP等级	//0为商城
-            //         //     "buyerName": 'xxxx',							//显示名字，userVipGrade：0 ，用户名字，userVipGrade>1：店铺名字
-            //         //     "purchasePrice": 50000,					//原价
-            //         //     "punishDisct": 10,							//惩罚折扣率
-            //         //     "shopName": 'xxx'							//xxx
-            //         // },
-            //         // {
-            //         //     "orderId": 5,								//订单ID
-            //         //     "userId": 1,								//用户Id
-            //         //     "shopId": null,							//店铺Id
-            //         //     "goodsId": 3,								//商品ID
-            //         //     "orderNo": "25206461189065",				//订单号
-            //         //     "combinOrderNo": "25206461189060",		//父订单号（支付单号，仅在待支付时有用），如果是查询待支付的把相同的父订单号订单列在一起支付
-            //         //     "number": 10,								//数量
-            //         //     "moneyPrice": 2,							//单价
-            //         //     "totalMoney": 10,							//总价
-            //         //     "shopSaleDisct": null,					//商家售卖折扣率
-            //         //     "shopBuyDisct": null,						//商家购买折扣率
-            //         //     "shopIncome": null,						//商铺收入
-            //         //     "acceptStatus": false,					//接受状态
-            //         //     "payType": null,							//支付类型
-            //         //     "payTime": null,							//支付时间
-            //         //     "acceptTime": null,						//接受时间
-            //         //     "throwTime": null,						//抛单时间
-            //         //     "orderState": 1,							//订单状态
-            //         //     "userVipGrade": 1,						//用户店铺VIP等级	//0为普通用户，订单为用户订单，反之为进货订单
-            //         //     "saleVipGrade": null,						//售卖店铺VIP等级	//0为商城
-            //         //     "buyerName": 'xxxx',							//显示名字，userVipGrade：0 ，用户名字，userVipGrade>1：店铺名字
-            //         //     "purchasePrice": 50000,					//原价
-            //         //     "punishDisct": 10,							//惩罚折扣率
-            //         //     "shopName": 'xxx'							//xxx
-            //         // },
+            //         {
+            //             "orderId": 5,								//订单ID
+            //             "userId": 1,								//用户Id
+            //             "shopId": null,							//店铺Id
+            //             "goodsId": 3,								//商品ID
+            //             "orderNo": "25206461189065",				//订单号
+            //             "combinOrderNo": "25206461189060",		//父订单号（支付单号，仅在待支付时有用），如果是查询待支付的把相同的父订单号订单列在一起支付
+            //             "number": 50,								//数量
+            //             "moneyPrice": 2,							//单价
+            //             "totalMoney": 10,							//总价
+            //             "shopSaleDisct": null,					//商家售卖折扣率
+            //             "shopBuyDisct": null,						//商家购买折扣率
+            //             "shopIncome": null,						//商铺收入
+            //             "acceptStatus": false,					//接受状态
+            //             "payType": null,							//支付类型
+            //             "payTime": null,							//支付时间
+            //             "acceptTime": null,						//接受时间
+            //             "throwTime": null,						//抛单时间
+            //             "orderState": 1,							//订单状态
+            //             "userVipGrade": 1,						//用户店铺VIP等级	//0为普通用户，订单为用户订单，反之为进货订单
+            //             "saleVipGrade": null,						//售卖店铺VIP等级	//0为商城
+            //             "buyerName": 'xxxx',							//显示名字，userVipGrade：0 ，用户名字，userVipGrade>1：店铺名字
+            //             "purchasePrice": 50000,					//原价
+            //             "punishDisct": 10,							//惩罚折扣率
+            //             "shopName": 'xxx'							//xxx
+            //         },
+            //         {
+            //             "orderId": 5,								//订单ID
+            //             "userId": 1,								//用户Id
+            //             "shopId": null,							//店铺Id
+            //             "goodsId": 3,								//商品ID
+            //             "orderNo": "25206461189065",				//订单号
+            //             "combinOrderNo": "25206461189060",		//父订单号（支付单号，仅在待支付时有用），如果是查询待支付的把相同的父订单号订单列在一起支付
+            //             "number": 10,								//数量
+            //             "moneyPrice": 2,							//单价
+            //             "totalMoney": 10,							//总价
+            //             "shopSaleDisct": null,					//商家售卖折扣率
+            //             "shopBuyDisct": null,						//商家购买折扣率
+            //             "shopIncome": null,						//商铺收入
+            //             "acceptStatus": false,					//接受状态
+            //             "payType": null,							//支付类型
+            //             "payTime": null,							//支付时间
+            //             "acceptTime": null,						//接受时间
+            //             "throwTime": null,						//抛单时间
+            //             "orderState": 1,							//订单状态
+            //             "userVipGrade": 1,						//用户店铺VIP等级	//0为普通用户，订单为用户订单，反之为进货订单
+            //             "saleVipGrade": null,						//售卖店铺VIP等级	//0为商城
+            //             "buyerName": 'xxxx',							//显示名字，userVipGrade：0 ，用户名字，userVipGrade>1：店铺名字
+            //             "purchasePrice": 50000,					//原价
+            //             "punishDisct": 10,							//惩罚折扣率
+            //             "shopName": 'xxx'							//xxx
+            //         },
             //     ],
             //     "discountMoney": 6500,                    //商品折扣价（单位：分）
             //     "minMoney": 55,               //最低进货金额（单位：分）
@@ -93,12 +95,17 @@ export default (_store) => {
             //         "goodsname": "测试tjl",                                     //商品名称
             //         "coverImg": "http://wybc-qa.oss-cn-hangzhou.aliyuncs.com/WebApp/goods/cover/420298145112/组 259.png",             //商品图片
             //         "moneyPrice": 10000,									//商品进货价（单位：分）
-            //         "amount": 22,										//商品当前库存
+            //         "amount": 0,										//商品当前库存
             //         "purchase": 22,                                     //商品总需库存
             //         'wholeMaxBuyNum': 333
             //     }
             // };
             // return Promise.resolve({ data: list });
-        }
+        },
+        //查询仓库库存
+        queryGoodsStock(data) {
+            data.shopId = _state.workVO.user.userId;
+            return q("api/stock/q_sg_goods_stock", data);
+        },
     }
 }

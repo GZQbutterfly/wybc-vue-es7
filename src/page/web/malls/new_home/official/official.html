@@ -1,0 +1,30 @@
+<div class="malls-official-container" v-if="showContent">
+
+    <header class="malls-official-content_hd text-center bg-c-fff">
+        <img src="./static/images/shop-4.6/guanfang-ct.png" alt="">
+
+        <img src="./static/images/shop-4.6/gfjp.png" alt="">
+
+    </header>
+
+
+    <section class="malls-official-content_bd">
+        <!-- <div class="swiper-container" ref="bannerSwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" v-for="(item,index) in oo.banner" :key="index">
+                    <img :src="item.imgUrl" alt="">
+                </div>
+            </div>
+        </div> -->
+        <app-banner :listImg="oo.banner" imgField="imgUrl" v-if="oo.banner"> </app-banner>
+    </section>
+
+    <footer class="malls-official-content_ft">
+        <goods-list :dataList="{data: oo.goods}" @joinCar="joinCar" status="officialmalls" v-if="oo.goods"></goods-list>
+
+        <div class="allgoods-btn text-center text-c-7ecc44" @click="$router.push('shop_chief')">
+            全部代理商店
+        </div>
+    </footer>
+
+</div>

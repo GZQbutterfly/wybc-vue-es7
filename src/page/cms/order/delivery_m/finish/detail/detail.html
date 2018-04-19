@@ -1,0 +1,123 @@
+<app-container>
+    <div class="delivery-m-finish-detail " :class="{'delivery-m-finish-detail-pdbottm': !orderStatusIndex}">
+        <div>
+            <header class="finish-detail_hd">
+                <div class="detail-head_hd">
+                    <div class="money">￥
+                        <span>{{data.deliveryMoney/100}}</span>
+                    </div>
+                    <div class="info">本单收入</div>
+                </div>
+                <div class="detail-head_bd">
+                    {{orderStatusStr}}
+                </div>
+                <div class="detail-head_ft">
+                    <div class="steps-list weui-flex flex-align-b">
+                        <div class="step-item" v-for="(item, index) in stepsOption.steps" :key="index">
+                            <div class="weui-flex flex-align-m">
+                                <i :class="{'weui-icon-success': stepsOption.stepIndex == index, 'default': stepsOption.stepIndex < index, 'ok': stepsOption.stepIndex > index}"></i>
+                                <div class="step-line" v-if="index < stepsOption.len " :class="{'default-bgc': stepsOption.stepIndex <= index, 'ok-bgc': stepsOption.stepIndex > index}"></div>
+                            </div>
+                            <label>{{item.label}}</label>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <section class="finish-detail_bd">
+                <div class="title detail-content-hd weui-flex flex-align-m">
+                    <i class="icon iconfont icon-truck"></i> 订单配送
+                </div>
+                <div class="detail-content_bd">
+                    <!-- 配送中 -->
+                    <template v-if="!orderStatusIndex">
+                        <div class="weui-flex flex-align-t">
+                            <div>
+                                <!-- text-s-30 -->
+                                <i class="icon iconfont icon-shijian text-c-3b8eff"></i>
+                            </div>
+                            <div class="right">
+                                <div class="text-s-15 text-c-333">要求送达时间{{deliveryTime | date('yyyy-MM-dd hh:mm:ss')}}</div>
+                                <div class="text-s-12 " :class="[overFlag ?  'text-c-7ecc44' : 'text-c-f41c1c' ]">剩余时间:
+                                    <template v-if="overFlag">
+                                        <span class="sj">{{countDate.hour}}</span>小时
+                                        <span class="sj">{{countDate.minute}}</span>分
+                                        <span class="sj">{{countDate.second}}</span>秒
+                                    </template>
+                                    <template v-else>
+                                        已超时 (本单收入降低{{data.punishMent}}%)
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- 送达 -->
+                    <template v-else>
+                        <!-- <div class="text-center over-delivery">
+                            <div class="weui-flex flex-align-t"> -->
+                        <div class="weui-flex flex-align-t over-delivery">
+                            <div class="">
+                                <!-- text-s-30 -->
+                                <i class="icon iconfont  " :class="[isOnTime? 'icon-wancheng text-c-7ecc44': 'icon-tishi text-c-ff752a']"></i>
+                            </div>
+                            <div class="right text-s-12 text-c-808080">
+                                <span class="text-s-15 text-c-333">{{isOnTime ? '准时送达' : '超时送达'}}</span>
+                                <div>
+                                    <div>要求送达时间{{deliveryTime | date('yyyy-MM-dd hh:mm:ss')}}</div>
+                                    <div>实际送达时间{{finishTime | date('yyyy-MM-dd hh:mm:ss')}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <div class="weui-flex">
+                        <img :src="giveImgSrc" class="give-img">
+                        <div class="right text-c-333 text-s-15">
+                            <p>{{data.to}}</p>
+                            <p>{{data.address}}</p>
+                            <p v-if="data.sex" class="sex-drom">{{data.sex == 1 ? '男生宿舍' :'女生宿舍'}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-content_ft">
+                    <div class="title order-title weui-flex flex-align-m">
+                        <img :src="orderDetailImgSrc" alt=""> 订单详情
+                    </div>
+                    <div class="order-details">
+                        <div class="goods-list">
+                            <div class="goods-item weui-flex" v-for="(item, index) in orders" :key="index">
+                                <div class="goods-item-hd text-ellipsis">{{item.goodsName}}</div>
+                                <div class="goods-item-bd">x
+                                    <span>{{item.number}}</span>
+                                </div>
+                                <div class="goods-item-ft text-right">{{item.moneyPrice | localMoney}}</div>
+                            </div>
+                        </div>
+                        <div class="goods-price-total weui-flex title">
+                            <div class="weui-flex__item">总计：{{data.totalMoney | localMoney}}</div>
+                            <div class="weui-flex__item text-right">实付：
+                                <span class="money">{{data.totalMoney | localMoney}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            <footer class="finish-detail_ft">
+                <div class="title weui-flex flex-align-m">
+                    <img :src="orderInfoImgSrc"> 订单信息
+                </div>
+                <div class="title order-info weui-flex">
+                    <span>订单号码：</span>
+                    <span>{{data.combinOrderNo}}</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <div slot="footer" class="delivery-m-finish-detail-footer weui-flex bg-c-fff flex-align-m text-center" v-if="!orderStatusIndex">
+        <div class="weui-flex__item" @click="callClick">联系买家</div>
+        <div class="weui-flex__item bg-c-7ecc44 text-c-fff" @click="mainClick">确认送达</div>
+    </div>
+
+    <a :href="'tel:' + phonenumber " ref="callRef" v-show="false"></a>
+</app-container>

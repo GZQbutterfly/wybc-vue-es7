@@ -26,7 +26,7 @@ export class Card extends Vue {
     toDetail() {
 
 
-        this.$router.push({ path: 'delivery_finish_detail', query: { id: '12312' } })
+        this.$router.push({ path: 'delivery_finish_detail', query: { combinOrderNo: this.data.combinOrderNo, deliveryState: this.data.deliveryState } })
 
     }
 

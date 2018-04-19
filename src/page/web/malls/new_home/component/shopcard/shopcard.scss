@@ -1,0 +1,23 @@
+.shopcard-contanier {
+    width: 100%;
+    margin-top: 5px;
+    .shopcard-box {
+        padding: 10px 0 0 11px;
+        &:not(:first-child) {
+            margin-left: 2px;
+        }
+        &_hd {
+            img {
+                height: 16px;
+                width: 65px;
+            }
+        }
+        &_ft {
+            padding: 14px 0;
+            img {
+                width: 49px;
+                height: 49px;
+            }
+        }
+    }
+}

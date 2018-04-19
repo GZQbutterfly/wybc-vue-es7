@@ -2,57 +2,117 @@
 
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
+import { find } from 'lodash';
+
+import {timeout} from 'common.env';
 import { Card } from '../../card/card';
 import Swiper from 'swiper';
 
-//import { Unauthorized } from '../../unauthorized/unauthorized';
+import service from '../../delivery.service';
 
 import './rob.scss';
 @Component({
     template: require('./rob.html'),
     components: {
-        'card-box': Card,
-        //'unauthorized': Unauthorized
+        'card-box': Card
     }
 })
-export class RobOrder extends Vue {
-    @Prop({ type: Function, default: () => { } })
-    operation;
-
+export class Rob extends Vue {
 
     list = [];
 
     authShow = false;
     authFirst = false;
 
+    page = 0;
+    limit = 10;
+
+    arrs = [
+        {
+            "deliveryState": 4,			//单子状态 
+            "combinOrderNo": 1564654879,  	//订单号
+            "getAddress": "食堂门口",		//取货地点
+            "getAdressDetail": "",			//取货详细地址
+            "deliveryAddress": "",			//配送地址
+            "deliveryMoney": 200 		//本单收入
+        },
+        {
+            "deliveryState": 4,			//单子状态 
+            "combinOrderNo": 1564654879,  	//订单号
+            "getAddress": "食堂门口",		//取货地点
+            "getAdressDetail": "",			//取货详细地址
+            "deliveryAddress": "",		//配送地址
+            "deliveryMoney": 200 		//本单收入
+        }
+    ];
+
+    _$service;
     mounted() {
+        this._$service = service(this.$store);
+
         this.$nextTick(() => {
             this.initPage();
         });
+
     }
 
     initPage() {
-        // this.alertAuth();
+
+
     }
 
-    refresh(done) {
+    queryList() {
+        this.page = 0;
+        return this.queryNext();
+    }
+
+    async queryNext() {
+        this.page++;
+        let _result = (await this._$service.queryRobOrderList({ page: this.page, limit: this.limit })).data;
+        if (!_result || _result.errorCode || !_result.data) {
+            return [];
+        } else {
+            return _result.data;
+        }
+    }
+
+    setList(datas, flag) {
+
+        //datas.push(...this.arrs); // test
+
+        if (flag) {
+            this.list.push(...datas);
+        } else {
+            this.list = datas;
+        }
+    }
+
+    // 下拉刷新
+    refresh(done = (() => { })) {
         let _self = this;
+        let _result = _self.queryList();
+
         setTimeout(() => {
-            _self.list = [3, 4, 5, 6];
-            done(true);
+            _result.then((datas) => {
+                _self.setList(datas);
+                done(true);
+            });
         }, 500);
+
     }
 
+    // 下拉加载 
     infinite(done) {
         let _self = this;
+        let _result = _self.queryNext();
+
         setTimeout(() => {
-            if (_self.list.length < 10) {
-                _self.list.push(5, 6, 7, 8, 9);
-                done(false);
-            } else {
+            _result.then((datas) => {
+                _self.setList(datas, true);
                 done(true);
-            }
-        }, 300);
+            });
+        }, 500);
+
     }
 
     alertAuth() {
@@ -60,16 +120,53 @@ export class RobOrder extends Vue {
         this.authShow = !this.authShow;
     }
 
-    receiveOrder(item) {
-        let success = Math.floor(Math.random()*2);
+    async receiveOrder(item) {
+        // 1. 实名 check
+        let _authFlag = false;
+        let _result = await this._$service.queryRealName({});
+
+        _result.authtype = 'sfz';
+
+        _authFlag = _result.state != 4;
+
+        if (_result.state == 4) {
+            // 2, 配送员 check
+            _result = await this._$service.queryAuthResult({});
+            _result.authtype = 'psy';
+            _authFlag = _result.checkState != 2;
+        }
+
         let data = {
-            auth: false,
+            auth: _authFlag,
+            authData: _result,
             order: {
-                success: !success
+                success: false
             }
         };
-        this.operation(data);
+
+        // _result.checkState = 2; //test
+        if (_result.checkState == 2) {
+            // 接单
+            let loadding = this.$store.state.$loadding();
+            _result = (await this._$service.receivedOrderResult({ combinOrderNo: item.combinOrderNo })).data;
+            if (_result && _result.success) {
+                // true
+                data.order.success = true;
+            }
+            // this.refresh();
+            timeout(() => {
+                this.refresh();
+                loadding.close();
+            }, 700);
+        }
+
+        // 触发父组件事件
+        this.$emit('operation', 'rob', data);
         console.log('接单', item);
+    }
+
+    getList() {
+        return this.list;
     }
 
 }

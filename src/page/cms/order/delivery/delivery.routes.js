@@ -8,7 +8,7 @@ const routes = [
         component: resolve => {
             require.ensure([], require => {
                 resolve(require('./layout/layout')['Layout']);
-            }, 'web/order/delivery');
+            }, 'cms/order/delivery');
         },
         redirect: {
             name: 'delivery_order'
@@ -18,10 +18,11 @@ const routes = [
             {
                 path: '/delivery_order',
                 name: 'delivery_order',
+                meta: { title: '配送单', keepAlive: false},
                 component: resolve => {
                     require.ensure([], require => {
                         resolve(require('./tabs/tabs')['DeliveryTabs']);
-                    }, 'web/order/delivery');
+                    }, 'cms/order/delivery');
                 },
             },
             // 已完成订单

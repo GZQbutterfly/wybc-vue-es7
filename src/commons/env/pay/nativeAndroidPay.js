@@ -1,14 +1,12 @@
 import Vue from 'vue';
 import { merge } from 'lodash';
 
-import { bridge, callNative } from '../../bridge/bridge';
-
 import { PayComponent } from './pay.component';
 //
 /**
- * iOS 原生pay
+ * android
  */
-export class NativeiOSPay {
+export class NativeAndroidPay {
     _$vm;
     _$store;
     _$router;
@@ -39,7 +37,7 @@ export class NativeiOSPay {
                 el: document.createElement('div'),
                 data: {
                     listPays: [
-                        { icon: 'icon-x-campaign-wechat pay-wecat', name: '微信支付', paymodel: 'wxpay' },
+                        // { icon: 'icon-x-campaign-wechat pay-wecat', name: '微信支付', paymodel: 'wxpay' },
                         { icon: 'icon-rectangle390 pay-ali', name: '支付宝支付', paymodel: 'alipay' }
                     ],
                     selectPay(item) {
@@ -72,11 +70,10 @@ export class NativeiOSPay {
             if (item) {
                 // item.paymodel  wxpay 微信支付； alipay 阿里支付；
                 let _result = await _self[item.paymodel](url, data);
+                _result.paymodel = item.paymodel;
                 // 支付订单结果获取后，进行支付next 
-                // TODO 
-                callNative("AndroidPay", data, function (rebackData) {
-                    //网页回调返回  非支付返回
-                    console.log('返回数据: ', rebackData);
+                window.wybcJSBridge.api.AndroidPay(_result,function(reciveData){
+                    console.log('调用原生支付')
                 });
             } else {
                 // 取消支付

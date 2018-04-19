@@ -1,0 +1,114 @@
+.day-sign-popup-container {
+    overflow: hidden;
+    .day-sign-popup-content {
+        position: fixed;
+        top: 22%;
+        left: 0;
+        right: 0; // bottom: 0;
+        z-index: 6000;
+        transform: scale(0.5);
+        transition: all 0.3s;
+        opacity: 0;
+        >div {
+            position: relative;
+            height: 300px;
+            width: 305px;
+            border-radius: 30px;
+            margin: auto;
+        }
+        &_hd {
+            position: absolute;
+            top: -40px;
+            right: 20px;
+            img {
+                height: 40.5px;
+                width: 23px;
+            }
+        }
+        &_bd {
+            position: relative;
+            top: -20px;
+            img {
+                height: 56px;
+                width: 279px;
+            }
+        }
+        &_ft {
+            .sign-info {
+                // &_hd{
+                // }
+                &_bd {
+                    margin-top: 25px;
+                    img {
+                        height: 87px;
+                        width: 87px;
+                    }
+                }
+                &_ft {
+                    margin-top: 25px;
+                }
+            }
+            .sigh-fail {
+                &_hd {
+                    img {
+                        height: 87px;
+                        width: 87px;
+                    }
+                    >div {
+                        position: relative;
+                        top: -36px;
+                    }
+                }
+                &_bd {
+                    // margin-top: 15px;
+                    margin-bottom: 30px;
+                }
+                &_ft {
+                    height: 45px;
+                    line-height: 45px;
+                    width: 155px;
+                    border-radius: 5px;
+                    margin: auto;
+                }
+            }
+        }
+        .sign-get-gold {
+            &_hd {
+                position: absolute;
+                top: -40px;
+                right: 20px;
+                img {
+                    height: 40.5px;
+                    width: 23px;
+                }
+            }
+            &_bd {
+                position: relative;
+                >div {
+                    padding-top: 30px;
+                }
+                >img {
+                    margin-top: 25px;
+                    margin-bottom: 30px;
+                    height: 87px;
+                    width: 87px;
+                }
+                .get-fail {
+                    margin-bottom: 10px;
+                    >div {
+                        position: relative;
+                        top: -36px;
+                    }
+                    img {
+                        height: 87px;
+                        width: 87px;
+                    }
+                }
+            }
+        }
+    }
+    .day-sign-popup-content-show {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

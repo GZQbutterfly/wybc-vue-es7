@@ -1,0 +1,103 @@
+.available_coupon {
+    height: 100%;
+    position: relative;
+    .coupon-list {
+        padding: 0 12px;
+    }
+    .coupon-item {
+        margin-top: 10px;
+        background: #fff;
+        overflow: hidden;
+    }
+    .coupon-item_t {
+        height: 45px;
+        padding: 0 13px;
+        justify-content: space-around;
+        align-items: center;
+        color: #333;
+        span {
+            color: #333;
+            display: block;
+            width: 46%;
+            &:nth-child(2) {
+                font-size: 13px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                text-align: right;
+                p {
+                    height: 13px;
+                    line-height: 13px;
+                    color: #fe0000;
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+    .coupon-item_c {
+        width: 320px;
+        margin: 0 auto;
+        border-bottom: dotted 6px #f2f2f2;
+        position: relative;
+    }
+    .coupon-item_c:before,
+    .coupon-item_c:after {
+        content: '';
+        position: absolute;
+        background: #f2f2f2;
+        top: -12px;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+    }
+    .coupon-item_c:before {
+        left: -33px;
+    }
+    .coupon-item_c:after {
+        right: -33px;
+    }
+    .coupon-item_b {
+        // padding-top: 20px;
+        min-height: 88px;
+        justify-content: space-around;
+        align-items: center;
+        .money-roll {
+            width: 200px;
+            p {
+                color: #333;
+                height: 20px;
+                line-height: 20px;
+                font-size: 13px;
+                &:nth-child(1) {
+                    color: #fe0000;
+                    font-size: 23px;
+                    height: 30px;
+                    line-height: 30px;
+                }
+            }
+        }
+        .money-use {
+            span {
+                display: block;
+                font-size: 12px;
+                color: #f2ac48;
+                text-decoration: underline;
+                margin-top: 10px;
+                margin-left: 12px;
+                &.currency {
+                    color: #7dcc43;
+                    text-decoration: none;
+                }
+            }
+        }
+        .nowuse {
+            height: 34px;
+            width: 100px;
+            background-color: #7dcc43;
+            color: #fff;
+            text-align: center;
+            line-height: 34px;
+            border-radius: 5px 5px;
+        }
+    }
+}

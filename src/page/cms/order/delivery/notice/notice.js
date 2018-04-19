@@ -3,6 +3,7 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 
 import { timeout, getLocalUserInfo, interval } from 'common.env';
 
+import service from '../delivery.service';
 
 import './notice.scss';
 @Component({
@@ -15,7 +16,7 @@ export class Notice extends Vue {
     @Prop({ type: Boolean, default: true })
     showNotice;
 
-    @Prop({ type: Object, default: () => { return { money: 200, from: '北京', fromAddress: '北京天安门', to: '成都', toAddress: '成都天府广场' } } })
+    @Prop({ type: Object, default: () => { return { } } })
     data;
 
     takeImgSrc = require('../../../../../static/images/delivery/q.png');
@@ -30,12 +31,15 @@ export class Notice extends Vue {
 
     timer = 0;
 
+    _$service;
+
     mounted() {
+
+        this._$service = service(this.$store);
 
         this.$nextTick(() => {
 
             this.showContent();
-
 
         });
 
@@ -51,8 +55,8 @@ export class Notice extends Vue {
 
     showContent() {
         timeout(() => {
-            this.timeNum = 10;
-            this.show = !this.show;
+            this.timeNum = this.data.countDownTime || 10;
+            this.show = true;
             this.timer = interval(() => {
                 if (!this.timeNum) {
                     this.closeSelf();
@@ -78,12 +82,15 @@ export class Notice extends Vue {
 
     // 抢单ing
 
-    robOrder() {
+    async robOrder() {
         window.clearInterval(this.timer);
-        console.log('抢单ing');
-        let success = Math.floor(Math.random() * 2);
-        window.clearInterval(this.timer);
-        this.close({ success: !success })
+        let success = false;
+        let _result = (await this._$service.receivedOrderResult({ combinOrderNo: this.data.combinOrderNo })).data;
+        if (_result && _result.success) {
+            success = true;
+        }
+        //success = true;//test
+        this.close({ success })
     }
 
 

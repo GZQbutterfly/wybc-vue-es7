@@ -13,14 +13,14 @@
         .detail-head_ft {}
     }
     .finish-detail_bd {
-        .detail-content_hd {
+        .detail-content-hd {
             margin-top: 5px;
             padding-left: 10px;
             padding-top: 5px;
             padding-bottom: 5px;
             .icon-truck {
                 font-size: 20px;
-                margin-right: 8px;
+                margin-right: 5px;
             }
         }
         .detail-content_bd {
@@ -58,6 +58,18 @@
                 padding-top: 15px;
                 .goods-list {
                     border-bottom: 1px solid #f2f2f2;
+                    .goods-item-ft {
+                        line-height: 24px;
+                        width: 150px;
+                        img {
+                            height: 16px;
+                            width: 16px;
+                        }
+                    }
+                    .goods-item-hd{
+                        width: 150px;
+                    }
+
                 }
                 .goods-item {
                     padding-bottom: 5px;
@@ -117,8 +129,8 @@
             }
         }
         .step-line {
-            width: 115px;
-            height: 2px; 
+            width: 116px;
+            height: 2px;
             background-color: #e6e6e6;
         }
         .default {

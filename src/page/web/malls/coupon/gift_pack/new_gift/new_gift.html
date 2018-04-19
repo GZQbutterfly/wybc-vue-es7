@@ -1,0 +1,13 @@
+<div class="new_gift-container" @touchmove="noTouchMove">
+
+    <header class="new_gift__hd"></header>
+    <section class="new_gift__bd"  @click="takeGift">
+        <img src="static/images/money/hb.png" alt="">
+        <div class="new_gift_text">{{giftType == 'newGift' ? '新手大礼包' : '店铺优惠券'}}</div>
+        <!-- <div class="take_btn"></div> -->
+    </section>
+    <footer class="new_gift__ft">
+        <img src="static/images/money/sc.png" alt="" @click="closeSelf">
+    </footer>
+
+</div>

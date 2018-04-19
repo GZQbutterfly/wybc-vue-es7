@@ -36,7 +36,8 @@ export function getUrlParams(hashFlag = false) {
 
 
 export function appendParams(params) {
-    let url = location.href;
+    let url = location.origin + location.pathname;
+    //
     if (url.indexOf('?') != -1) {
         for (var key in params) {
             url += '&';

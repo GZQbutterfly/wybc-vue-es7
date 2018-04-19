@@ -1,0 +1,41 @@
+<div v-if="contentVisit" class="pay-list-continer">
+    <div class="pay-list-title">
+        <div class="pay-list-sys-name">学惠精选</div>
+        <div class="pay-list-price">{{query.totalMoney|localMoney}}</div>
+        <div class="pay-list-orderno">订单号:{{query.combinOrderNo}}</div>
+    </div>
+
+    <div class="pay-list-content">
+        <div @click="chooseWxPay" class="pay-list-item">
+            <div class="pay-list-item-hd">
+                <i class="icon iconfont icon-x-campaign-wechat pay-wecat"></i>
+            </div>
+            <div class="pay-list-item-bd">
+                    微信
+            </div>
+            <i :class="[selectPayType=='WX'?'weui-icon-success':'weui-icon-circle']"></i>
+        </div>
+        <div v-if="!isWx" @click="chooseAliPay" class="pay-list-item">
+            <div class="pay-list-item-hd">
+                <i class="icon iconfont icon-x-campaign-wechat pay-wecat"></i>
+            </div>
+            <div class="pay-list-item-bd">
+                    支付宝
+            </div>            
+            <i :class="[selectPayType=='ALI'?'weui-icon-success':'weui-icon-circle']"></i>
+        </div>
+        <div v-if="wallet" @click="chooseWallet" class="pay-list-item">
+            <div class="pay-list-item-hd">
+                <i class="icon iconfont icon-x-campaign-wechat pay-wecat"></i>
+            </div>
+            <div class="pay-list-item-bd" :class="{'text-gray':!walletAvible}">
+                    余额钱包 <span class="wallet-desc">(剩余{{userMoney|localMoney}} <span v-if="!walletAvible" class="wallet-warnning">余额不足</span>)</span>
+            </div>
+            <i :class="[selectPayType=='SYS'?'weui-icon-success':'weui-icon-circle']"></i>
+        </div>
+    </div>
+
+    <footer @click="payOrder" class="pay-list-button">
+        确认支付{{query.moneyPrice}}
+    </footer>
+</div>

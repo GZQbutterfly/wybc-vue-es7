@@ -1,5 +1,5 @@
 <div class="myTeam">
-    <div class="weui-cells">
+    <!-- <div class="weui-cells">
         <div class="weui-cell cell__bg">
             <div class="weui-cell__bd">
                 <img src="../../static/images/minishop/sj.png">
@@ -7,35 +7,43 @@
             </div>
             <div class="weui-cell__ft">{{ teamData.inviteWdInfo.userName }}</div>
         </div>
-    </div>
+    </div> -->
     <div class="weui-cells">
-        <div class="weui-cell cell__bg">
+        <!-- <div class="weui-cell cell__bg">
             <div class="weui-cell__bd">
                 <img src="../../static/images/minishop/sjia.png">
                 <span>供货人</span>
             </div>
             <div class="weui-cell__ft" v-if="teamData.flag == 0">{{ teamData.upperWdInfo }}</div>
+        </div> -->
+        <div class="weui-cell cell__bg">
+            <div class="weui-cell__bd">
+                <img src="../../static/images/minishop/sj.png">
+                <span>邀请人</span>
+            </div>
+            <div class="weui-cell__ft">{{ teamData.inviteWdInfo.userName }}</div>
         </div>
-        <template v-if="teamData.flag == 1">
+        <template>
             <div class="weui-cell">
                 <div class="weui-cell__bd">昵称</div>
-                <div class="weui-cell__ft">{{ teamData.upperWdInfo.userName }}</div>
+                <!-- upperWdInfo -->
+                <div class="weui-cell__ft">{{ teamData.inviteWdInfo.userName }}</div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">手机号</div>
-                <div class="weui-cell__ft">{{ teamData.upperWdInfo.phone }}</div>
+                <div class="weui-cell__ft">{{ teamData.inviteWdInfo.phone }}</div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">微店校区</div>
-                <div class="weui-cell__ft">{{ teamData.upperWdInfo.school }}</div>
+                <div class="weui-cell__ft">{{ teamData.inviteWdInfo.school }}</div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">店名</div>
-                <div class="weui-cell__ft">{{ teamData.upperWdInfo.wdName }}</div>
+                <div class="weui-cell__ft">{{ teamData.inviteWdInfo.wdName }}</div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">店长等级</div>
-                <div class="weui-cell__ft">M{{ teamData.upperWdInfo.wdVipGrade + ' ' + teamData.upperGradeName }}</div>
+                <div class="weui-cell__ft">M{{ teamData.inviteWdInfo.wdVipGrade }}</div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">实名认证</div>

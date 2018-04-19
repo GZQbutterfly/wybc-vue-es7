@@ -1,0 +1,54 @@
+<div class="delivery-finish-card-container bg-c-fff">
+    <!-- :style="{'background-color': data.deliveryState == 11 ? '#fff' : '#e6e6e6'}" -->
+    <div class="finish-box ">
+        <header class="finish-box-hd weui-flex">
+            <div class="weui-flex__item">{{data.time}} 送达
+                <span :class="[isOnTime? 'text-c-7ecc44': 'text-c-ff752a']">({{isOnTime ? '准时送达' : '超时送达'}})</span>
+            </div>
+            <div>
+                <!-- <span :class="{'success':data.deliveryState==10}">{{data.deliveryState == 11 ? '已结算' : '已取消'}}</span> -->
+                <span >已结算</span>
+                <span class="money">{{data.deliveryMoney/100}}元</span>
+            </div>
+        </header>
+        <section class="finish-box-bd weui-flex" @click="toDetail">
+            <div class="weui-flex__item">
+                <div class="weui-flex">
+                    <div class="weui-flex flex-align-t over-delivery">
+                        <div class="">
+                            <!-- text-s-30 -->
+                            <i class="icon iconfont  " :class="[isOnTime? 'icon-wancheng text-c-7ecc44': 'icon-tishi text-c-ff752a']"></i>
+                        </div>
+                        <div class="right text-s-12 text-c-808080">
+                            <span class="text-s-15 text-c-333">{{isOnTime ? '准时送达' : '超时送达'}}</span>
+                            <div>
+                                <div> 要求送达时间 {{data.deliveryTime}}</div>
+                                <div> 实际送达时间 {{data.finishTime}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="weui-flex">
+                    <img :src="giveImgSrc" class="give-img">
+                    <div class="right">
+                        <p>{{data.to}}</p>
+                        <p>{{data.address}}</p>
+                        <p v-if="data.sex" class="sex-drom">{{data.sex == 1 ? '男生宿舍' :'女生宿舍'}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <i class="icon iconfont icon-mjiantou"></i>
+            </div>
+
+        </section>
+        <footer class="finish-box-ft"></footer>
+    </div>
+    <div class="finish-order">
+        <div>
+            订单号码:
+            <span>{{data.combinOrderNo}}</span>
+        </div>
+    </div>
+</div>

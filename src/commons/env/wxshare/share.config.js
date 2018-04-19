@@ -6,6 +6,7 @@ Vue.use(Vuex);
 //路由中大小写风格不统一  此配置统一小写
 
 let store = new Vuex.Store({
+    //TODO 修改为默认全部隐藏. (隐藏需要大于功能需求)
     state: {
         hideAllList: {
             'order_submit': true,
@@ -39,6 +40,10 @@ let store = new Vuex.Store({
             'realname':true,
             'realname_form':true,
             'realname_result':true,
+            'distributor_deposit':true,
+            'distributor_realname_result':true,
+            'distributor_realname_form':true,
+            'distributor_realname':true,
             'withdraws_list':true,
             'withdraws_detail':true,
             'cms_stock_order':true,
@@ -47,9 +52,46 @@ let store = new Vuex.Store({
             'cms_purchase_shop_car':true,
             'message_notice':true,
             'cms_purchase_classify':true,
+            'cms_home':true,
             'my_team':true,
             'helper':true,
+            'about':true,
+            'coupon_list':true,
+            "order_coupon":true,
+            "coupon_detail":true,
+            "mask_coupon":true,
+            "my_coupon_list":true,
+            "my_coupon_detail":true,
+            'delivery_finish_list': true,
+            'delivery_finish_detail': true,
+            'delivery_order': true,
 
+            'delivery_m_finish_list': true,
+            'delivery_m_finish_detail': true,
+            'delivery_m_order': true,
+
+            'day_task':true,
+            'day_task_share':true,
+            'day_task_rules':true,
+            'fast_store':true,
+            'faststore_info':true,
+            'options':true,
+            'lead':true,
+            'lead_search':true,
+
+        },
+        custShareList:{
+            'home':true,
+            'classify':true,
+            'goods_detail':true,
+            'grade':true,
+            'info':true,
+            'helper':true,
+            'cms_stock_info':true,
+            'easy_scanner':true,
+            'information':true,
+            'money_gold_buy':true,
+            'money_timelimit_detail':true,
         },
         shareConfig: {// 可动态带参存储---
             cmshome: {
