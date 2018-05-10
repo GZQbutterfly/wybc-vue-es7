@@ -18,6 +18,7 @@ export class ApplyShopInvitecode extends BaseVue {
     _$service;
     school = '';
     campusId = 0;
+    showContent = false;
     mounted() {
         let _self = this;
         this._$popup = _self.$store.state.$popup;
@@ -56,11 +57,29 @@ export class ApplyShopInvitecode extends BaseVue {
         } else {
             //check hasWd
             _self.queryUserHasShop(() => {
-                //check incode
-                if (_incode) {
-                    _self.incode = _incode;
-                    _self.toCreateShop(true);
-                }
+                _self._$service.queryParentCode(null)
+                .then(res=>{
+                    let _result = res.data;
+                    if (_result && !_result.errorCode) {
+                        if (_result.ifHasInvited) {
+                            _self.incode = _result.invitationCode;
+                            _self._$service.queryInvitationCode(_self.incode).then((res) => {
+                                //检查邀请码是否正确
+                                if (res.data.errorCode) {
+                                    _self.errorCodePopup();
+                                } else {
+                                    res.data.upPhoneNum = res.data.upPhoneNum.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+                                    _self.dialogPopup(res.data,false);
+                                }
+                            });
+                        }else{
+                            if (_incode) {
+                                _self.incode = _incode;
+                            }
+                            _self.showContent = true;
+                        }
+                    }
+                })
             })
         }
     }
@@ -196,12 +215,12 @@ export class ApplyShopInvitecode extends BaseVue {
     }
 
     /**
-     * 确认邀请人信息
+     * 确认推荐人信息
      */
-    dialogPopup(data) {
+    dialogPopup(data,cancelAble=true) {
         let _self = this;
         _self._$popup({
-            title: '确定邀请人信息',
+            title: '确定推荐人信息',
             close: true,
             height: 0.37,
             width: '268px',
@@ -220,7 +239,7 @@ export class ApplyShopInvitecode extends BaseVue {
                             </div>
                         </div>
                        `,
-            assistBtn: '重新输入',
+            assistBtn: cancelAble?'重新输入':'',
             mainBtn: '确定',
             assistFn() {
                 _self.incode = '';
@@ -253,7 +272,7 @@ export class ApplyShopInvitecode extends BaseVue {
                     dialogObj: {
                         title: '提示',
                         type: 'error',
-                        content: '系统分配邀请人失败,请稍后再试！',
+                        content: '系统分配推荐人失败,请稍后再试！',
                         assistBtn: '',
                         mainBtn: '确定',
                         mainFn() {
@@ -262,7 +281,7 @@ export class ApplyShopInvitecode extends BaseVue {
                 });
             }else{
                 _self._$popup({
-                    title: '确定邀请人信息',
+                    title: '确定推荐人信息',
                     close: true,
                     height: 0.37,
                     width: '268px',

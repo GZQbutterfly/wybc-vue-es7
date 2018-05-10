@@ -9,7 +9,9 @@ import {
     getAuthUser,
     qs,
     baseURL,
-    getLocalUserInfo
+    getLocalUserInfo,
+    isNativeiOS,
+    isNativeAndroid
 } from 'common.env';
 
 const wx = require('weixin-js-sdk');
@@ -38,14 +40,16 @@ export class SysPayList extends BaseVue {
 
     contentVisit = true;
 
+    isNative = false;
     mounted() {
+        document.title = "支付方式";
         this.isWx = isWeiXin();
         this.query = this.$route.query;
         this.submitType = this.query.submitType;
         this.toPath = this.query.toPath;
+        this.isNative = (isNativeAndroid()||isNativeiOS());
         this.orderPayType = this.query.orderPayType;
         this._$service = service(this.$store);
-        let _self = this;
     }
 
     chooseWxPay() {
@@ -64,22 +68,59 @@ export class SysPayList extends BaseVue {
                 this.payOrderWXH5();
             }
         } else if (this.selectPayType == "ALI") {
-            this.payOrderAli(this.payOrderUrl);
+            this.payOrderAli();
         } 
     }
 
     payOrderAli(url) {
-        let _self = this;
-        let user = getLocalUserInfo();
-        let _data = {
-            payType: 'ALI',
-            subPayType: "QUICK_WAP_WAY",
-            userId: user.userId,
-            token: user.token,
-            combinOrderNo: this.query.combinOrderNo,
-            orderId: this.query.orderId
+        if (this.isNative) {
+            this.payOrderNativeAli();
+        }else{
+            let _self = this;
+            let user = getLocalUserInfo();
+            let _data = {
+                payType: 'ALI',
+                subPayType: "QUICK_WAP_WAY",
+                userId: user.userId,
+                token: user.token,
+                combinOrderNo: this.query.combinOrderNo,
+                orderId: this.query.orderId
+            }
+            location.href = baseURL + 'api/order/pay_order' + '?' + qs.stringify(_data) + '&_pay=alipay';
         }
-        location.href = baseURL + url + '?' + qs.stringify(_data) + '&_pay=alipay';
+    }
+
+    payOrderNativeAli(){
+        let _param = {
+            combinOrderNo: this.query.combinOrderNo,
+            payType: 'ALI',
+            subPayType: 'QUICK_MSECURITY_PAY',
+        }
+        let _self = this;
+        this._$service.payOrder(_param)
+        .then(res=>{
+            if (!res.data||res.data.errorCode) {
+                let dialogObj = {
+                    title: '提示',
+                    content: res.data.msg ? res.data.msg : '系统错误',
+                    assistBtn: '',
+                    type: 'info',
+                    mainBtn: '确定',
+                    assistFn() {},
+                    mainFn() {
+                        _self.$router.replace({path:"home"});
+                    }
+                }
+                _self.$store.state.$dialog({
+                    dialogObj
+                });
+            }else{
+                res.paymodel = 'alipay';
+                window.wybcJSBridge.api.iOSPay(res,function(reciveData){
+                    console.log('调用原生支付')
+                });
+            }
+        })
     }
 
     payOrderWxJS() {
@@ -90,6 +131,8 @@ export class SysPayList extends BaseVue {
             openid: getAuthUser().openid,
             appid: wxAppid,
         }
+        
+        let loadding = this.$store.state.$loadding();
         let _self = this;
         this._$service.payOrder(_param)
             .then(res => {
@@ -102,7 +145,11 @@ export class SysPayList extends BaseVue {
                         type: 'info',
                         mainBtn: '确定',
                         assistFn() {},
-                        mainFn() {}
+                        mainFn() {
+                            loadding.close();
+                            _self.$router.replace({ path: "home" });
+                          
+                        }
                     }
                     _self.$store.state.$dialog({
                         dialogObj
@@ -129,10 +176,11 @@ export class SysPayList extends BaseVue {
                             _self.$router.replace({
                                 path: "user_order",
                                 query: {
-                                    listValue: 2
+                                    listValue: 0
                                 }
                             });
                         }
+                        loadding.close();
                     },
                     cancel: cancelRes => {
                         _self.$router.replace({
@@ -141,6 +189,7 @@ export class SysPayList extends BaseVue {
                                 listValue: 1
                             }
                         });
+                        loadding.close();
                     },
                     error: errRes => {
                         _self.$router.replace({
@@ -149,6 +198,7 @@ export class SysPayList extends BaseVue {
                                 listValue: 1
                             }
                         });
+                        loadding.close();
                     }
                 });
             });
@@ -202,7 +252,7 @@ export class SysPayList extends BaseVue {
                     _self.$router.push({
                         path: "user_order",
                         query: {
-                            listValue: 2
+                            listValue: 0
                         }
                     });
                 } else {
@@ -217,7 +267,7 @@ export class SysPayList extends BaseVue {
                             _self.$router.push({
                                 path: "user_order",
                                 query: {
-                                    listValue: 2
+                                    listValue: 0
                                 }
                             });
                         }

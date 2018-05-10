@@ -1,0 +1,95 @@
+.myrecommendation {
+    .weui-cells {
+        padding-bottom: .05rem;
+        margin-top: .05rem;
+        &:first-child {
+            margin-top: 0;
+        }
+        .weui-cell {
+            height: .29rem;
+            line-height: .29rem;
+            padding: 0 .15rem;
+            font-size: .15rem;
+            color: #333;
+            &:first-child {
+                height: .63rem;
+                line-height: .63rem;
+                margin-bottom: .05rem;
+                border-bottom: 1px dashed #e6e6e6;
+                .weui-cell__bd {
+                    figure {
+                        width: .4rem;
+                        height: .4rem;
+                        display: block;
+                        margin-right: .11rem;
+                        position: relative;
+                        &:after {
+                            content: attr(data-vip);
+                            position: absolute;
+                            bottom: -.05rem;
+                            right: -.15rem;
+                            ;
+                            background: #f2bd2d;
+                            color: #fff;
+                            font-size: .11rem;
+                            height: .1rem;
+                            line-height: .1rem;
+                            padding: .01rem .04rem;
+                        }
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 50%;
+                        }
+                    }
+                }
+            }
+            &:before {
+                content: none;
+            }
+            .weui-cell__bd {
+                display: flex;
+                align-items: center;
+                .imgBox {
+                    width: .2rem;
+                    height: .15rem;
+                    text-align: center;
+                    img {
+                        height: .15rem;
+                        width: .15rem;
+                        display: block;
+                    }
+                }
+            }
+            .weui-cell__ft {
+                font-size: .12rem;
+            }
+        }
+    }
+    .align-right {
+        text-align: right;
+        b {
+            color: #f89016;
+            font-weight: normal;
+        }
+    }
+    .bg-fff {
+        background-color: #fff;
+        font-size: 15px;
+    }
+    .title-img {
+        display: flex;
+        align-items: center;
+        img {
+            height: 18px;
+            width: 18px;
+            margin-right: 3px;
+        }
+        span {
+            b {
+                color: #9bbef8;
+                font-weight: normal;
+            }
+        }
+    }
+}

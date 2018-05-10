@@ -35,7 +35,8 @@ export default (_store) => {
          */
         getKeyWord_list(keyword) {
             let data = {
-                keyword: keyword
+                keyword: keyword,
+                isUser:1,
             }
             return q(keywordlisturl, data)
         },
@@ -48,7 +49,8 @@ export default (_store) => {
                 keyword: keyword,
                 page: page,
                 limit: limit,
-                 magType: magType
+                magType: magType,
+                isUser:1
             }
             return q(goodslisturl, data)
         },

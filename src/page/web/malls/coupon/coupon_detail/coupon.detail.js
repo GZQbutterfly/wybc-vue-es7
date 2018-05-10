@@ -49,7 +49,7 @@ export class MyCouponDetail extends BaseVue {
         _self.over = false;
         let _infoId = _self.$route.query.shopId;
         if (!_infoId) {
-            _infoId = await  this.$store.dispatch('CHECK_WD_INFO');
+            _infoId = (await  this.$store.dispatch('CHECK_WD_INFO')).infoId;
         }
         let query = {
             page: _self.page++,
@@ -80,7 +80,7 @@ export class MyCouponDetail extends BaseVue {
         }
         let _infoId = _self.$route.query.shopId;
         if (!_infoId) {
-            _infoId = await this.$store.dispatch('CHECK_WD_INFO');
+            _infoId = (await this.$store.dispatch('CHECK_WD_INFO')).infoId;
         }
         let query = {
             page: _self.page++,
@@ -109,7 +109,7 @@ export class MyCouponDetail extends BaseVue {
         // debugger;
         let _shopId = this.$route.query.shopId;
         if (_shopId==null) {
-            _shopId = await this.$store.dispatch('CHECK_WD_INFO');
+            _shopId = (await this.$store.dispatch('CHECK_WD_INFO')).infoId;
         }
         let query = {
             goodsId: goods.goodsId,

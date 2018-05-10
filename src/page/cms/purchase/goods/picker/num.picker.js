@@ -96,15 +96,11 @@ export class NumberPicker extends Vue {
     }
     getCount() {
         let _this = this;
-        // let maxNum = this.$props.goods.wholeMaxBuyNum;
-         this.priceShow = true;
-        // if (maxNum && this.num > maxNum) {
-        //     this.num = maxNum;
-        //     this.total = this.$props.goods.moneyPrice * this.num;   
-        //     let _toast = this.$store.state.$toast;
-        //     _toast({ title: '一次最多购买' + maxNum + '件', success: false });
-        //     return;
-        // }
+        let maxNum = this.$props.fastStockState.amount;
+        this.priceShow = true;
+        if (this.$props.min.buy != 0&&maxNum && this.num > maxNum) {
+            this.num = maxNum;
+        }
         this.total = this.$props.goods.stockPrice * this.num;   
     }
     onClose() {

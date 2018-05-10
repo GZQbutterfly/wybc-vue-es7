@@ -8,8 +8,8 @@ let webpack = require('webpack'),
 module.exports = {
     output: {
         path: path.join(__dirname, '../dist'),
-        filename: '[name].js',
-        chunkFilename: '[name].js?[hash:20]', // 
+        filename: '[name].[hash:20].js',
+        chunkFilename: '[name].[hash:20].js', // 
         publicPath: '../'
     },
     module: {

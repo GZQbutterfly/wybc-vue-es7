@@ -92,6 +92,7 @@ let store = new Vuex.Store({
             'information':true,
             'money_gold_buy':true,
             'money_timelimit_detail':true,
+            'user_scanner':true,
         },
         shareConfig: {// 可动态带参存储---
             cmshome: {

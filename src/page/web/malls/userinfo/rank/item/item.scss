@@ -1,0 +1,94 @@
+.rank-item-container {
+    width: 100%;
+    .rank-user {
+        position: relative;
+        padding: 0 22px 30px 22px;
+        img {
+            width: .86rem;
+            height: .86rem;
+            border-radius: 50%;
+        }
+        .rank-value {
+            height: 35px;
+            line-height: 35px;
+            width: 133px;
+            border-radius: 20px;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -17.5px;
+            margin: auto;
+        }
+        .current-text {
+            margin-bottom: -10px;
+            margin-top: 5px;
+        }
+        &_bd {
+            margin-top: 10px;
+        }
+    }
+    .rank-list {
+        padding-top: 35px;
+        padding-bottom: 10px;
+        .rank-item {
+            position: relative;
+            margin: 11px 12px 0;
+            background-color: #f2faec;
+            padding: 3px 20px 3px 12px;
+            border-radius: 3px;
+            &_hd {
+                position: relative;
+                width: 29px;
+                height: 40px;
+                .item-rank-value {
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 5px;
+                    text-align: center;
+                }
+            }
+            img {
+                &:nth-child(1) {
+                    width: .29rem;
+                    height: .40rem;
+                }
+                &:nth-child(2) {
+                    margin-left: .2rem;
+                    width: .40rem;
+                    height: .40rem;
+                    border-radius: 50%;
+                }
+            }
+            .item-nickname {
+                margin-left: 12px;
+                margin-right: 5px;
+                min-width: 120px;
+            }
+        }
+        .nolist{
+            margin: 86px 0;
+            img{
+                width: 78px;
+                height: 72px;
+            }
+        }
+    }
+    .no-shop {
+        padding-top: 30%;
+        img {
+            height: 83px;
+            width: 83px;
+        }
+        .open-btn {
+            border: 1px solid #7ecc4e;
+            width: 100px;
+            height: 33px;
+            line-height: 33px;
+            margin: auto;
+            margin-top: 12px;
+            font-weight: 500;
+            border-radius: 5px;
+        }
+    }
+}

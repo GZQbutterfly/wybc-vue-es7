@@ -113,6 +113,10 @@ export class MessageNotice extends Vue {
         let _toPath = 'order_detail';
         let _query = { orderId: item.orderNo, combinOrderNo: item.combinOrderNo };
         if (this.cms) {
+            if (item.enclosureType == 3) {
+                _toPath = 'cms_my_coupon';
+                _query = {};
+            }
             let _msgType = +item.msgType;
             if (_msgType == 2) {
                 return;
@@ -136,14 +140,19 @@ export class MessageNotice extends Vue {
                 case 7:
                     _toPath = 'delivery_m_finish_detail';
                     break;
-                default:
-                    _toPath = 'cms_out_order_detail';
             }
         } else {
             if (item.limitGoods) {
                 _toPath = 'money_timelimit_detail';
                 let params = item.limitGoods.split('_')
                 _query = { goodsId: params[1], periodId: params[2], shopId: params[0] };
+            }
+            if (item.enclosureType == 1) {
+                _toPath = 'money_gold_detail';
+                _query = {};
+            }else if(item.enclosureType == 2){
+                _toPath = 'coupon_list';
+                _query = {};
             }
         }
         this.$router.push({ path: _toPath, query: _query });

@@ -227,4 +227,15 @@
     .font-color-nomal{
         color:#808080;
     }
+    .weui-cell_vcode {
+        align-items: center!important;
+        height: 50px;
+        .weui-cell__ft {
+            margin-right: 15px;
+            .weui-vcode-img {
+                height: 30px;
+                width: 75px;
+            }
+        }
+    }
 }

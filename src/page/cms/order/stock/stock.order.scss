@@ -24,6 +24,7 @@
     }
     .order-list-content {
         position: relative;
+        height: calc(100% - 50px);
     }
     .orderNo-text {
         color: #FF0000;
@@ -38,9 +39,9 @@
     }
 }
 
-.flex-1 {
-    flex: 1;
-}
+// .flex-1 {
+//     //  flex: 1;
+// }
 
 .flex-v {
     flex-direction: column;

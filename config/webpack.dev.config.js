@@ -42,11 +42,13 @@ baseConfig.plugins.push(
         minify: {
             removeComments: true
         },
-        cache: true,
-        hash: true,
+        cache: false,
+        hash: false,
+        showErrors: true,
+        chunksSortMode: 'dependency',
         favicon: path.join(__dirname, '../src/page/favicon.ico'),
         inject: 'body',
-        chunks: ['static/lib/lodash', 'static/lib/vue_mode', 'sys/env/common.env', 'sys/plugins/swiper', 'web/main']
+        chunks: ['sys/plugins/swiper', 'sys/env/common.env', 'static/lib/lodash', 'static/lib/vue_mode', 'web/main']
     }),
     new HtmlWebpackPlugin({
         filename: path.join(__dirname, '../dist/cms/index.html'),
@@ -54,18 +56,20 @@ baseConfig.plugins.push(
         minify: {
             removeComments: true
         },
-        cache: true,
-        hash: true,
+        cache: false,
+        hash: false,
+        showErrors: true,
+        chunksSortMode: 'dependency',
         favicon: path.join(__dirname, '../src/page/favicon.ico'),
         inject: 'body',
-        chunks: ['static/lib/lodash', 'static/lib/vue_mode', 'sys/env/common.env', 'sys/plugins/swiper', 'cms/main']
+        chunks: ['sys/plugins/swiper', 'sys/env/common.env', 'static/lib/lodash', 'static/lib/vue_mode', 'cms/main']
     }),
     new webpack.optimize.CommonsChunkPlugin({
         name: [
-            'static/lib/lodash',
-            'static/lib/vue_mode',
+            'sys/plugins/swiper',
             'sys/env/common.env',
-            'sys/plugins/swiper'
+            'static/lib/lodash',
+            'static/lib/vue_mode'
         ],
         minChunks: Infinity
     }),

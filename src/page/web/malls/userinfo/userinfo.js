@@ -17,7 +17,9 @@ export class UserInfo extends BaseVue {
     userInfo = {};
     userScore = {
         amountGold: '0', // 默认为0 就行
-        amountCoupon: '0'
+        amountCoupon: '0',
+        amountFollow:'0',
+        amountFans:"0",
     };
     userLogin = false;
     orderList = [];
@@ -36,10 +38,25 @@ export class UserInfo extends BaseVue {
             style: { color: '#ff586c' },
             imgStyle: { width: '.22rem', height: '.14rem' },
             path: "coupon_list",
-        }
+        },
+        {
+            name: '我的粉丝',
+            value: 'amountFans',
+            img: '/static/images/shop-4.6/guanzhufensi.png',
+            style: { color: '#fd4848' },
+            imgStyle: { width: '.22rem', height: '.2rem' },
+            path: "fans_record",
+        },
+        {
+            name: '关注店铺',
+            value: 'amountFollow',
+            img: '/static/images/shop-4.6/guanzhudianpu.png',
+            style: { color: '#f6408d' },
+            imgStyle: { width: '.17rem', height: '.20rem' },
+            path: "follow_shop",
+        },
     ];
-
-    hasShop = false
+    hasShop = false;
     userMsgNum = 0;
     //查询是否有店失败 隐藏入口
     hasShopError = true;
@@ -49,8 +66,6 @@ export class UserInfo extends BaseVue {
 
         }
     }
-
-    // private _shopCarCount;
     mounted() {
         //注册服务
         this._$service = userInfoService(this.$store);
@@ -100,14 +115,23 @@ export class UserInfo extends BaseVue {
         let _self = this;
         _self._$service.queryUserRoll().then((res) => {
             if (!res.data.errorCode) {
-                _self.userScore.amountGold = res.data.amountGold;
-                _self.userScore.amountCoupon = res.data.amountCoupon;
-                if(_self.userScore.amountGold > 9999999){
-                    _self.userScore.amountGold = '9999999+';
+                _self.userScore.amountGold = res.data.gold;
+                _self.userScore.amountCoupon = res.data.coupon;
+                _self.userScore.amountFans = res.data.fans;
+                _self.userScore.amountFollow = res.data.attentionWd; 
+                if (_self.userScore.amountGold > 99999) {
+                    _self.userScore.amountGold = '99999+';
                 }
-                if(_self.userScore.amountCoupon > 9999999){
-                    _self.userScore.amountCoupon = '9999999+';
+                if (_self.userScore.amountCoupon > 99) {
+                    _self.userScore.amountCoupon = '99+';
                 }
+                if (_self.userScore.amountFans > 99) {
+                    _self.userScore.amountFans = '99+';
+                }
+                if (_self.userScore.amountFollow > 99) {
+                    _self.userScore.amountFollow = '99+';
+                }
+               
             }
         });
     }
@@ -115,7 +139,6 @@ export class UserInfo extends BaseVue {
     queryUserHasShop() {
         let _self = this;
         this._$service.queryUserHasShop().then((res) => {
-            console.log('用户开店信息', res)
             if (!res.data.errorCode) {
                 _self.hasShopError = false;
             }
@@ -124,7 +147,6 @@ export class UserInfo extends BaseVue {
             }
         });
     }
-
     userinfoInit() {
 
         if (!isNotLogin()) {
@@ -144,10 +166,7 @@ export class UserInfo extends BaseVue {
                 this.orderList[3].num = '';
             })
             this.queryUserHasShop();
-
-
             this.queryUserRoll();
-
             this._$service.queryMessageNum().then((res) => {
                 let _result = res.data;
                 if (_result.errorCode) {
@@ -181,7 +200,30 @@ export class UserInfo extends BaseVue {
     }
 
     toRouter(path) {
-        path && this.$router.push(path);
+      path && this.$router.push(path);
+        //暂时不用
+        // if (path == 'follow_shop') {
+        //     let flag = isNotLogin();
+        //     let dialog = this.$store.state.$dialog;
+        //     if (flag) {
+        //         let dialogObj = {
+        //             title: '提示',
+        //             content: '登录后才能查看关注店铺，是否登录?',
+        //             assistBtn: '取消',
+        //             mainBtn: '确定',
+        //             type: 'info',
+        //             assistFn() { },
+        //             mainFn() {
+        //                 toLogin(_self.$router, { toPath: "follow_shop" });
+        //             }
+        //         };
+        //         dialog({ dialogObj });
+        //     } else {
+        //         path && this.$router.push(path);
+        //     }
+        // } else {
+        //     path && this.$router.push(path);
+        // }
     }
 
     toApply() {
@@ -194,10 +236,8 @@ export class UserInfo extends BaseVue {
         }
         this.userLogin = false;
         this.hasShopError = true;
-        // this.pointData[0].value = '-';
-        // this.pointData[1].value = '-';
         this.user_img = '/static/images/pic-nologin.png';
-        //this._shopCarCount.getShopcarGoodsesList();
+
     }
 
     logOff() {
@@ -233,5 +273,8 @@ export class UserInfo extends BaseVue {
     toUserMsg() {
         this.$router.push({ path: 'message_notice' });
     }
-
+	
+    jump(item){
+        this.$router.push({ path:item.path});
+    }
 }

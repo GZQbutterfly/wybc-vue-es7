@@ -17,8 +17,8 @@
 				</div>
 				<p>x {{order.goodses[index].number}}</p>
 				<div class="gold_coiney" v-if="order.goodses[index].consuType == 3&&!timeLimit">
-					<span class="price">{{order.goodses[index].moneyPrice|localMoney}}</span>
-					&nbsp;+&nbsp;
+					<span v-if="order.goodses[index].moneyPrice" class="price">{{order.goodses[index].moneyPrice|localMoney}}</span>
+					<span v-if="order.goodses[index].moneyPrice" >+</span>
 					<img src="/static/images/money/icon.png" alt="" style="width: 0.145rem; height: 0.145rem;">
 					<span class="gold">{{order.goodses[index].goldPrice}}</span>
 				</div>
@@ -60,7 +60,7 @@
 		<div class="row-line"></div>
 	</template>
 	<!--抵扣优惠券-->
-	<template v-if="useRoll">
+	<template v-if="useRoll && totalRoll">
 		<div class="order-plus weui-flex flex-right">
 			<span class="desc-font color-origin">- {{ totalRoll | localMoney }}</span>
 			<span class="desc-font color-black">优惠券:&nbsp;&nbsp;</span>

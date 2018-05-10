@@ -1,0 +1,44 @@
+<div class="shelves-item-container bg-c-fff">
+    <header class="shelves-item-title weui-flex flex-align-b">
+        <div class="weui-flex__item text-s-15 text-c-333">{{opts.label}}</div>
+        <div class="text-s-13">总计
+            <span class="text-c-7ecc44">{{opts.list.length}}</span>种商品</div>
+    </header>
+
+
+    <section class="shelves-item-content">
+        <div v-for="(item, index) in opts.list" :key="index" class="shelves-goods-box">
+            <div class="goodsinfo weui-flex flex-align-m">
+                <div class="goodsinfo_hd" @click="toDetail(item)">
+                    <img :src="item.coverImg" alt="">
+                    <template v-if="item.couponCount">
+                        <img src="/static/images/daysign/shangpin-biaozhi.png" class="jhq">
+                    </template>
+                </div>
+                <div class="goodsinfo_bd">
+                    <div class="text-c-333 text-s-15 text-ellipsis" @click="toDetail(item)">{{item.goodsName}}</div>
+                    <div class="text-c-808080 text-s-12 text-ellipsis">{{item.coverImgDescription}}</div>
+                    <div class="text-s-15 text-c-ff1c1c">{{item.stockPrice | localMoney}}</div>
+                </div>
+                <div class="goodsinfo_ft weui-flex__item text-right" >
+                    <template v-if="isAdd(item)">
+                        <!-- <img :src="addImg" alt="" @click="inCar(item)"> -->
+                        <i class="icon iconfont icon-wuuiconxiangjifangda text-s-30 text-c-7ecc44" @click="inCar(item)"></i>
+                    </template>
+                    <template v-else>
+                        <i class="icon iconfont icon-wuuiconxiangjifangda text-s-30 text-c-ccc"></i>
+                        <!-- <img :src="noAddImg" alt=""> -->
+                    </template>
+                </div>
+            </div>
+            <div class="weui-flex text-c-333 text-s-13">
+                <div class="weui-flex__item">仓库库存:
+                    <span class="text-c-7ecc44">{{item.amount || 0}}</span>
+                </div>
+                <div>我的库存:
+                    <span class="text-c-ee893e">{{item.wdAmount || 0}}</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

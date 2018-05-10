@@ -90,7 +90,7 @@ export class UserOrder extends BaseVue {
 						order.orders.push(orders[i]);
 						for (let k = 0; k < goodses.length; ++k) {
 							let goods = goodses[k]
-							if (goods.orderId == order.orderId) {
+							if (goods.orderId == orders[i].orderId) {
 								order.goodses.push(goods);
 							}
 						}

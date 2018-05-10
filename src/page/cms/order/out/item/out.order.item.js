@@ -37,7 +37,7 @@ export class OutOrderItem extends Vue {
 		this.$router.push({
 			path: 'cms_out_order_detail',
 			query: {
-				orderId: this.$props.order.orderId,
+				combinOrderNo: this.$props.order.orders[0].combinOrderNo,
 			}
 		});
 	}
@@ -47,7 +47,24 @@ export class OutOrderItem extends Vue {
 	}
 
 	saleTotal() {
-		let order = this.$props.order;
-		return order.purchasePrice * order.number;
+		let order = this.$props.order.orders;
+		let total = 0;
+		for (let index = 0; index < order.length; index++) {
+			const element = order[index];
+			total = total + element.totalMoney;
+		}
+
+		
+		return total;
+	}
+
+	rebateTotal(){
+		let _total = 0;
+		let _rebates = this.$props.order.rebates;
+		for (let index = 0; index < _rebates.length; index++) {
+			const element = _rebates[index];
+			_total += element.rebateMoney;
+		}
+		return _total;
 	}
 }

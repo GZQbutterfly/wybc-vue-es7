@@ -19,7 +19,7 @@
         <div class="weui-cell cell__bg">
             <div class="weui-cell__bd">
                 <img src="../../static/images/minishop/sj.png">
-                <span>邀请人</span>
+                <span>推荐人</span>
             </div>
             <div class="weui-cell__ft">{{ teamData.inviteWdInfo.userName }}</div>
         </div>
@@ -33,21 +33,23 @@
                 <div class="weui-cell__bd">手机号</div>
                 <div class="weui-cell__ft">{{ teamData.inviteWdInfo.phone }}</div>
             </div>
-            <div class="weui-cell">
-                <div class="weui-cell__bd">微店校区</div>
-                <div class="weui-cell__ft">{{ teamData.inviteWdInfo.school }}</div>
-            </div>
-            <div class="weui-cell">
-                <div class="weui-cell__bd">店名</div>
-                <div class="weui-cell__ft">{{ teamData.inviteWdInfo.wdName }}</div>
-            </div>
-            <div class="weui-cell">
-                <div class="weui-cell__bd">店长等级</div>
-                <div class="weui-cell__ft">M{{ teamData.inviteWdInfo.wdVipGrade }}</div>
-            </div>
-            <div class="weui-cell">
-                <div class="weui-cell__bd">实名认证</div>
-                <div class="weui-cell__ft">{{ teamData.realName }}</div>
+            <div v-if="teamData.inviteWdInfo.school">
+                <div  class="weui-cell">
+                    <div class="weui-cell__bd">微店校区</div>
+                    <div class="weui-cell__ft">{{ teamData.inviteWdInfo.school }}</div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">店名</div>
+                    <div class="weui-cell__ft">{{ teamData.inviteWdInfo.wdName }}</div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">店长等级</div>
+                    <div class="weui-cell__ft">M{{ teamData.inviteWdInfo.wdVipGrade }}</div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">实名认证</div>
+                    <div class="weui-cell__ft">{{ teamData.realName }}</div>
+                </div>
             </div>
         </template>
     </div>

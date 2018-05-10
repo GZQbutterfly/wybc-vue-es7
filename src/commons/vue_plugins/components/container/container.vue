@@ -92,6 +92,9 @@ export default {
                 _self.isResize = !_self.isResize;
                 _self.debounceArea();
             });
+            this.resizeTimer = setInterval(() => {
+                this.reArea();
+            }, 10);
         },
         reArea() {
             let _self = this;

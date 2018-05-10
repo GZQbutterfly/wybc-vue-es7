@@ -5,6 +5,7 @@ let webpack = require('webpack'),
     ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
     OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin'),
+    CleanWebpackPlugin = require('clean-webpack-plugin'),
     baseConfig = require('./webpack.base.config');
 
 
@@ -29,8 +30,8 @@ baseConfig.plugins.push(
             removeComments: true,
             collapseWhitespace: true
         },
-        cache: true,
-        hash: true,
+        cache: false,
+        hash: false,
         favicon: path.join(__dirname, '../src/page/favicon.ico'),
         inject: 'body',
         chunks: [ 'static/lib/lodash','static/lib/vue_mode', 'sys/env/common.env','sys/plugins/swiper', 'web/main']
@@ -42,8 +43,8 @@ baseConfig.plugins.push(
             removeComments: true,
             collapseWhitespace: true
         },
-        cache: true,
-        hash: true,
+        cache: false,
+        hash: false,
         favicon: path.join(__dirname, '../src/page/favicon.ico'),
         inject: 'body',
         chunks: ['static/lib/lodash','static/lib/vue_mode', 'sys/env/common.env','sys/plugins/swiper', 'cms/main']
@@ -78,6 +79,12 @@ baseConfig.plugins.push(
     new webpack.optimize.UglifyJsPlugin(),
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('production')
+    }),
+    new CleanWebpackPlugin(['../dist'], {
+        root: __dirname,
+        verbose: true,
+        dry: false,
+        allowExternal: true
     })
 );
 

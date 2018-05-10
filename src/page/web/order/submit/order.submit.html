@@ -102,7 +102,7 @@
                             <div class="weui-cell__bd">
                                 <div class="order-text">{{v.goodsName}}</div>
                                 <div class="order-money" v-if="v.consuType==3&&!periodIdBuyFlag">
-                                    <span class="color-ff1c1c">{{v.moneyPrice | localMoney}}+</span>
+                                    <span v-if="v.moneyPrice" class="color-ff1c1c">{{v.moneyPrice | localMoney}}+</span>
                                     <img src="/static/images/money/icon.png" alt="">
                                     <span class="color-ee893e">{{v.goldPrice}}</span>
                                 </div>
@@ -193,7 +193,7 @@
         </section>
     </div>
     <!-- 提交 -->
-    <footer class="order-submitting-footer weui-tabbar">
+    <footer class="order-submitting-footer weui-tabbar custom-footer">
         <div class="weui-flex weui-cell__bd text-right flex-right">
             <span class="span-money label-money">{{orderTotal.pay | localMoney}}</span>
             <span>需付:</span>

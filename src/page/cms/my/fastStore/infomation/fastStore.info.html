@@ -81,13 +81,13 @@
                     <div class="info-desc">由于快速仓订单将店长自己配送，请如实填写以上信息</div>
             </div>
         </div>
-        <footer class="step-footer"   @click="nextStep">{{currentStep==0?'下一步':(isEdit?'提交修改':'提交信息')}}</footer>
-        <div class="tost-code" v-if="isTostCodeShow">
+        <footer class="step-footer custom-footer"   @click="nextStep">{{currentStep==0?'下一步':(isEdit?'提交修改':'提交信息')}}</footer>
+        <div class="tost-code custom-footer" v-show="isTostCodeShow">
             <div class="tost-content">
-                <div class="weui-cell flex-end" tag="div">
+                <div class="weui-cell flex-end">
                     <span class="close" @click="closeToast">X</span>
                 </div>
-                <div class="weui-cell" tag="div">
+                <div class="weui-cell">
                     <div class="weui-cell__hd">
                         <label class="weui-label">手机号</label>
                     </div>
@@ -100,13 +100,26 @@
                                 :disabled="disbtn">{{btnMsg}}</button>
                     </div>
                 </div>
-                <div class="weui-cell" tag="div">
+                <div class="weui-cell">
                     <div class="weui-cell__hd">
                         <label class="weui-label">验证码</label>
                     </div>
                     <div class="weui-cell__bd">
                         <input class="weui-input" type="number" placeholder="验证码" v-model="modifyCode" maxlength="6" @input="inputCode()">
                     </div>
+                </div>
+                <!-- 图形码 -->
+                <div class="weui-cell weui-cell_vcode" v-show="showImgCode">
+                        <div class="weui-cell__hd">
+                            <label class="weui-label">图形码</label>
+                        </div>
+                        <div class="weui-cell__bd">
+                            <input class="weui-input" type="text" placeholder="请输入图形码" v-model="imgcode"  @input="inputImgCode()"
+                                maxlength="4">
+                        </div>
+                        <div class="weui-cell__ft" @click="queryImgCode">
+                            <img class="weui-vcode-img" :src="imgcodesrc" v-if="imgcodesrc">
+                        </div>
                 </div>
                 <div class="phone-change-sure" @click="changePhoneSure()">确认修改</div>
             </div>

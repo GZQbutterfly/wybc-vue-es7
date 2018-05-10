@@ -6,7 +6,7 @@ export default (_store) => {
 
 
     //获取订单详情
-    let orderinfourl = 'api/order/q_order';
+    let orderinfourl = 'api/order/q_combin_order';
     //确认收货
     let receipturl = 'api/order/confirm_receipt';
     //删除并退款
@@ -25,12 +25,11 @@ export default (_store) => {
         /**
          * 查询订单详情
          */
-        getOrderInfo(orderNo) {
-            let user = _state.workVO.user;
+        getOrderInfo(combinOrderNo) {
             let data = {
                 // userId: user.id,
                 // token: user.token,
-                orderId: orderNo
+                combinOrderNo: combinOrderNo
             }
             return q(orderinfourl, data);
         },

@@ -6,7 +6,7 @@
     </div>
 
     <div class="pay-list-content">
-        <div @click="chooseWxPay" class="pay-list-item">
+        <div v-if="!isNative" @click="chooseWxPay" class="pay-list-item">
             <div class="pay-list-item-hd">
                 <i class="icon iconfont icon-x-campaign-wechat pay-wecat"></i>
             </div>
@@ -17,7 +17,7 @@
         </div>
         <div v-if="!isWx" @click="chooseAliPay" class="pay-list-item">
             <div class="pay-list-item-hd">
-                <i class="icon iconfont icon-x-campaign-wechat pay-wecat"></i>
+                <i class="icon iconfont icon-rectangle390 pay-ali"></i>
             </div>
             <div class="pay-list-item-bd">
                     支付宝
@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    <footer @click="payOrder" class="pay-list-button">
+    <footer @click="payOrder" class="pay-list-button  custom-footer">
         确认支付{{query.moneyPrice}}
     </footer>
 </div>

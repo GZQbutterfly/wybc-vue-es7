@@ -1,7 +1,7 @@
 // 构建本地服务器
 let webpack = require('webpack'),
     WebpackDevServer = require('webpack-dev-server'),
-    config = require('./build.js');
+    config = require('./build');
 
 
 let pathname = 'qaservice.365bencao.cn',

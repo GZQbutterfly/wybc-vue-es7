@@ -5,8 +5,8 @@
         <pull-refresh :refresh="refresh" :infinite="infinite">
             <div class="result">
                 <!-- banner -->
-                <div class="banner">
-                    <app-banner :listImg="bannerList"></app-banner>
+                <div class="banner" v-if="bannerList.length">
+                    <app-banner :listImg="bannerList" class="malls-banner-list"></app-banner>
                 </div>
 
                 <!-- goods list -->
@@ -23,9 +23,9 @@
                             </div>
                         </div>
                         <div class="goods-item_ft weui-flex flex-align-m">
-                            <span class="money label-money" v-if="goods.purchasePrice">{{goods.moneyPrice | localMoney}}</span>
+                            <span class="money label-money" v-if="goods.moneyPrice">{{goods.moneyPrice | localMoney}}</span>
                             <div v-if="true">
-                                <span class="concat">+</span>
+                                <span v-if="goods.moneyPrice" class="concat">+</span>
                                 <img src="/static/images/money/icon.png" alt="">
                                 <span class="label-money-volume">{{goods.goldPrice}}</span>
                             </div>

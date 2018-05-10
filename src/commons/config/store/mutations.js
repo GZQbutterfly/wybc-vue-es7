@@ -12,6 +12,7 @@ export default {
                 localStorage.wdVipInfo = sessionStorage.wdVipInfo = JSON.stringify(shop);
             }
             state.cache.currentShop = shop;
+            this.commit('ADD_HISTORY_SHOP', _shopId);
         }
     },
     /**

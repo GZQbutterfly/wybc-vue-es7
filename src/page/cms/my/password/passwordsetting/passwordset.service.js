@@ -14,6 +14,9 @@ export default (_store) => {
     return {
         setPassword(data) {
            return  q('api/user_pay/setting_pay_password',data);
-        }
+        },
+        payCMSOrder(data){
+            return q('api/order_whole/pay_order',data);
+        },
     };
 }

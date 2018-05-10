@@ -60,7 +60,7 @@
                 <div class="order-goods weui-flex" v-for="item in deliveryInfo.orders">
                     <span class="text-ellipsis">{{item.goodsName}}</span>
                     <span>x&nbsp;{{item.number}}</span>
-                    <span v-if="item.consuType==3">{{item.moneyPrice | localMoney}}+<img src="/static/images/money/icon.png" alt="">{{ item.goldPrice }}</span>
+                    <span v-if="item.consuType==3"><span v-if="item.moneyPrice">{{item.moneyPrice | localMoney}}+</span><img src="/static/images/money/icon.png" alt="">{{ item.goldPrice }}</span>
                     <span v-else>{{item.moneyPrice | localMoney}}</span>
                 </div>
             </div>
@@ -79,7 +79,7 @@
             订单号码： {{deliveryInfo.delivery.combinOrderNo}}
         </div>
     </pull-refresh>
-    <footer v-show="deliveryState!=10">
+    <footer class="custom-footer" v-show="deliveryState!=10">
         <button class="primary" type="button" v-if="([0, 1, 2].indexOf(deliveryState) > -1 )" @click="reciveOrders(deliveryInfo.delivery.combinOrderNo)">接单</button>
         <div class="color-white"  v-if="([4,5].indexOf(deliveryState) > -1 )">分拣中</div>
         <div class="foot weui-flex" v-if="([ 6, 7, 9].indexOf(deliveryState) > -1 )">

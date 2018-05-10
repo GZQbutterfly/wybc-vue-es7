@@ -179,12 +179,12 @@
                 </span>
             </p>
         </div>
-        <button class="total_right button_able" @click="onSettle">
+        <button class="total_right button_able" v-show="settlement==0" style="background-color:#ccc;">
             结算({{settlement}})
         </button>
-        <!-- <button :class="total_right button_able" @click="onSettle">
+        <button class="total_right button_able" @click="onSettle" v-show="settlement!=0">
             结算({{settlement}})
-        </button> -->
+        </button>
 
     </div>
     <div class="total" v-if="!isEdit" v-show="!isEmpty">

@@ -11,12 +11,11 @@
                 <i class="icon iconfont icon-x-campaign-wechat pay-wecat"></i>
             </div>
             <div class="pay-item-bd" >
-                    余额钱包 <span class="wallet-desc">(剩余{{query.userMoney|localMoney}})</span>
+                学惠钱包支付 <span class="wallet-desc">(剩余{{userMoney|localMoney}})</span>
             </div>
         </div>
-        <psinput :password="password"></psinput>
+        <psinput :over="passwordOver"></psinput>
         <div v-if="msg.show" class="password-error">{{msg.value}}</div>
-        <keyboard :keyUp="keyUpHandle" :del="delHandle"></keyboard>
     </div>
 
 </div>

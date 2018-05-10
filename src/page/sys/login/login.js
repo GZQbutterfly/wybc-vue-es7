@@ -296,9 +296,10 @@ export class Login extends BaseVue {
                 _self.msg.show = true;
             } else {
                 //记录当前店铺信息
-                let localWdInfo = await _self.$store.dispatch('CHECK_WD_INFO');
+                let localWdInfo = await this.$store.getters.GET_WD_INFO();
                 if (localWdInfo && localWdInfo.infoId != null) {
                     _self._$service.addShopHistory();
+                    // _self.$store.commit('ADD_HISTORY_SHOP', localWdInfo.infoId);
                 }
                 _self.setUser(_result);
                 this.$router.replace({

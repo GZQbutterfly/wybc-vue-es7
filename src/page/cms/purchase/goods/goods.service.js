@@ -20,7 +20,7 @@ export default (store) => {
 
     return {
         goodsInfo(gsNo) {
-            return q(q_goods, { goodsId: gsNo });
+            return q(q_goods, { goodsId: gsNo ,type:1});
         },
         addGoods(options) {
             let user = store.state.workVO.user;

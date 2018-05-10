@@ -1,4 +1,4 @@
-#app,
+
 body,
 html {
     font-family: PingFang SC, Microsoft Yahei, PingHei, Helvetica Neue, Helvetica, STHeitiSC-Light, Arial, sans-serif;
@@ -6,6 +6,24 @@ html {
     height: 100%;
     color: #5a5a5a;
 }
+#app{
+    height: 100%;
+    background-color: #f2f2f2;
+    padding-bottom: 0  !important;
+    padding-bottom: constant(safe-area-inset-bottom) !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+}
+#app::after{
+    position: absolute;
+    content:'';
+    background:#fff;
+    bottom: 0;
+    height: 0;
+    width: 100%;
+    height:constant(safe-area-inset-bottom) !important;
+    height: env(safe-area-inset-bottom) !important;
+}
+
 
 .warp {
     height: 100%;
@@ -184,6 +202,15 @@ a {
     position: absolute;
     right: 15px;
 }
+
+//适配iPhone X
+.custom-footer{
+    bottom: 0 !important;
+    bottom: constant(safe-area-inset-bottom) !important;
+    bottom: env(safe-area-inset-bottom) !important;
+}
+
+
 
 // 去除 IOS移动端点击阴影
 * {

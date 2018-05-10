@@ -1,0 +1,43 @@
+.shelves-item-container {
+    // height: 100%;
+    padding-top: 2px;
+    margin-bottom: 20px;
+    .shelves-item-content {
+        position: relative;
+    }
+    .shelves-goods-box {
+        margin-top: 15px;
+        border-bottom: 1px solid #f2f2f2;
+        .goodsinfo {
+            margin-bottom: 12px;
+            &_hd {
+                position: relative;
+                margin-right: 10px;
+                img {
+                    height: 65px;
+                    width: 65px;
+                }
+                .jhq {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 33px;
+                    height: 33px;
+                }
+            }
+            &_bd {
+                max-width: 142px;
+                >div:last-child {
+                    margin-top: 3px;
+                    margin-bottom: 5px;
+                }
+            }
+            &_ft {
+                img {
+                    height: 31px;
+                    width: 31px;
+                }
+            }
+        }
+    }
+}

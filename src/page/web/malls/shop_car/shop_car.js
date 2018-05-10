@@ -330,6 +330,7 @@ export class ShopCar extends BaseVue {
         if (res.errorCode || res.data.length == 0) {
             _self.isEmpty = true;
             _self.isShow = false;
+            _self.$store.state.shopCar.count = 0;
             return;
         }
         let _data = { data: [], speedStore: [] }; //data快速 speedStore普通
@@ -432,7 +433,7 @@ export class ShopCar extends BaseVue {
             _self.isEmpty = true;
             _self.$store.state.shopCar.count = 0;
         }
-
+        _self.setCheck();
         _self.invalidLists = [..._invalidLists, ...ksInvalidLists];
         if (!_self.invalidLists.length) {
             _self.isShow = false;
@@ -522,38 +523,6 @@ export class ShopCar extends BaseVue {
         }
         _self.transferFormat(shopcartCache);
     }
-    //设置选中商品
-    setGoods() {
-        let goodsId = JSON.parse(localStorage.getItem("checkState") || null);
-        let _self = this;
-        let flag = true;
-
-        if (goodsId && goodsId.length != 0) {
-            _self.validLists.forEach(lists => {
-                let flag2 = true;
-                lists.data.forEach(item => {
-                    goodsId.forEach(ele => {
-                        if (ele.shopId == lists.shopId) {
-                            ele.goodsId.forEach(v => {
-                                if (item.goodsId == v) {
-                                    item.check = true;
-                                }
-                            })
-
-                        }
-                    });
-                    if (!item.check) {
-                        flag = false;
-                        flag2 = false;
-                    }
-                });
-
-                lists.wxShopCheck = flag2;
-            });
-            _self.checkAll = flag;
-            _self.calTotalMoney();
-        }
-    }
     //本地缓存勾选状态
     cacheCheck() {
         let _self = this;
@@ -572,6 +541,48 @@ export class ShopCar extends BaseVue {
             })
         })
         localStorage.setItem("checkState", JSON.stringify(obj));
+    }
+    //设置选中状态
+    setCheck(){
+        let checkState = JSON.parse(localStorage.getItem("checkState") || null);
+        if (checkState && checkState.deliveryType==1){ //快速
+            this.shopCars[0].data.forEach(item=>{
+                if (checkState.shopId==item.shopId){
+                    let flag = true;
+                    item.data.forEach(v => {
+                        checkState.goodsId.forEach(j=>{
+                            if(v.goodsId==j){
+                                v.check = true;
+                            }
+                        })
+                        if(!v.check){
+                            flag = false;
+                        }
+                    })
+                    item.wxShopCheck = flag;
+                }
+               
+            })
+        } 
+        else if (checkState && checkState.deliveryType == 0){
+            this.shopCars[1].data.forEach(item => {
+                if (checkState.shopId == item.shopId) {
+                    let flag = true;
+                    item.data.forEach(v => {
+                        checkState.goodsId.forEach(j => {
+                            if (v.goodsId == j) {
+                                v.check = true;
+                            }
+                        })
+                        if (!v.check) {
+                            flag = false;
+                        }
+                    })
+                    item.wxShopCheck = flag;
+                }
+            })
+        }
+        
     }
     //单选
     onRadio(i, index1, index2) {
@@ -600,7 +611,6 @@ export class ShopCar extends BaseVue {
         })
 
         _self.checkAll = flag2;
-        // _self.cacheCheck();
         _self.calTotalMoney();
 
     }
@@ -637,6 +647,7 @@ export class ShopCar extends BaseVue {
                 })
             });
         }
+        this.cacheCheck();
     }
 
     //店铺商品全选 完成状态下isEdit=false店铺单选
@@ -683,7 +694,7 @@ export class ShopCar extends BaseVue {
                     })
                 })
             }
-            // _self.cacheCheck();
+             _self.cacheCheck();
         } else {//删除
             _self.shopCars[i].data[index1].wxShopCheck = flag;
             _self.shopCars[i].data[index1].data.forEach(item => {
@@ -719,8 +730,6 @@ export class ShopCar extends BaseVue {
         })
         _self.checkAll = !_self.checkAll;
         _self.calTotalMoney();
-        // _self.cacheCheck();
-        // _self.checkLimit(_self.validLists);
     }
     //减
     minus(i, index1, index2) {
@@ -931,13 +940,13 @@ export class ShopCar extends BaseVue {
     }
     //删除购物车选中列表
     delete() {
-        let flag = !isNotLogin();
-        //本地删除购物车
-        let shopcartCache = JSON.parse(localStorage.getItem("shopcartCache") || null);
-        let goodsId = JSON.parse(localStorage.getItem("checkState"));
+        let flag = !isNotLogin(); 
+        let checkState = JSON.parse(localStorage.getItem("checkState") || null);
         let goodsIdarr = [];
         let _self = this;
         if (!flag) {
+             //本地删除购物车
+            let shopcartCache = JSON.parse(localStorage.getItem("shopcartCache") || null);
             let ptarr = [], ksarr = [];
             this.shopCars.forEach(item => {
                 let list = [];
@@ -1048,12 +1057,46 @@ export class ShopCar extends BaseVue {
         } else {
             _self.isShow = false;
         }
+        _self.deleteCheckStates();
         if (this.shopCars[0].data.length == 0 && this.shopCars[1].data.length == 0) {
             _self.isEmpty = true;
             _self.$store.state.shopCar.count = 0;
             return;
         }
         _self.calTotalMoney();
+    }
+    deleteCheckStates(){//删除勾选缓存
+        let gooosIds=[];
+        let checkState = JSON.parse(localStorage.getItem("checkState") || null);
+        if (checkState && checkState.deliveryType == 1) { //快速
+            this.shopCars[0].data.forEach(item => {
+                if (checkState.shopId == item.shopId) {
+                    item.data.forEach(v => {
+                        checkState.goodsId.forEach(j => {
+                            if (v.goodsId == j && !v.check) {
+                                gooosIds.push(j);
+                            }
+                        })
+                    })
+                }
+
+            })
+        }
+        else if (checkState && checkState.deliveryType == 0) {
+            this.shopCars[1].data.forEach(item => {
+                if (checkState.shopId == item.shopId) {
+                    item.data.forEach(v => {
+                        checkState.goodsId.forEach(j => {
+                            if (v.goodsId == j && !v.check) {
+                                gooosIds.push(j);
+                            }
+                        })
+                    })
+                }
+            })
+        }
+        checkState.goodsId = gooosIds;
+        localStorage.setItem("checkState", JSON.stringify(checkState));
     }
     //设置购物车显示数量
     setNum(validLists) {
@@ -1149,7 +1192,7 @@ export class ShopCar extends BaseVue {
         if (checkStock) {
             let dialogObj = {
                 title: '提示',
-                content: '部分商品库存不足！！',
+                content: '部分商品库存不足！',
                 assistBtn: '',
                 mainBtn: '确定',
                 type: 'info',

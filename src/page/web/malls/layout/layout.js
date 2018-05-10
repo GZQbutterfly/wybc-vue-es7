@@ -18,9 +18,9 @@ export class Layout extends Vue {
     isCreatedMenu = true;
     isHead = false;
     isHeadSearch = false;
-
     shopkeeper = {};
-
+    isFollow = false;//未关注
+    followName = '关注';
     data() {
         return {
             activeName: this.$route.name
@@ -54,6 +54,9 @@ export class Layout extends Vue {
             }
 
             this._$service.shopInfo();
+            if (!isNotLogin()) {
+                this.isFollowWd();
+            }
         });
     }
 
@@ -61,6 +64,10 @@ export class Layout extends Vue {
     watchRoute(newRoute, oldRoute) {
         this.isCreatedMenu = newRoute.query.noMenu || newRoute.meta.noMenu ? false : true;
         this.activeName = newRoute.name;
+        if (isNotLogin() && newRoute.name == 'home') {
+            this.isFollow = false;
+            this.followName = '关注';
+        }
     }
 
     loadedShopId = '';
@@ -78,10 +85,10 @@ export class Layout extends Vue {
         _self.$nextTick(() => {
             // 请求购物车 商品数量
             let _routerName = _self.$route.name;
-            if (['home', 'classify', 'information', 'userinfo'].includes(_routerName)){
+            if (['home', 'classify', 'information', 'userinfo'].includes(_routerName)) {
                 shopCarGoodsService(this.$store).getShopcarGoodsesList();
             }
-            
+
         });
     }, 1000);
 
@@ -95,6 +102,18 @@ export class Layout extends Vue {
         });
     }
 
+    async isFollowWd() {
+        let _shopId = await this.getShopId();
+        let _result = (await this._$service.followShop({ shopId: _shopId })).data;
+        if (!_result.errorCode) {
+            this.isFollow = _result.attentionState;
+            if (this.isFollow) {
+                this.followName = "已关注";
+            } else {
+                this.followName = "关注";
+            }
+        }
+    }
     destroyed() {
         this.$store.state.giftVO.show = false;
     }
@@ -112,5 +131,75 @@ export class Layout extends Vue {
         return _query;
     }
 
+    followShop() {
+        let _self = this;
+        let dialog = this.$store.state.$dialog;
+        if (this.isFollow) {
+            let dialogObj = {
+                title: '提示',
+                content: '是否取消关注' + _self.$store.state.env_state.cache.currentShop.wdName + '?',
+                assistBtn: '取消',
+                mainBtn: '确定',
+                type: 'info',
+                assistFn() { },
+                mainFn() {
+                    _self.$store.dispatch('CANCEL_FOLLOW_SHOP').then(flag => {
+                        _self.isFollow = flag;
+                        if (flag) {
+                            _self.followName = "已关注";
+                        } else {
+                            _self.followName = "关注";
+                        }
+                    });
+                }
+            };
+            dialog({ dialogObj });
+        } else {
+            let flag = isNotLogin();
+            if (flag) {
+                let dialogObj = {
+                    title: '提示',
+                    content: '登录后才能关注店铺，是否登录?',
+                    assistBtn: '取消',
+                    mainBtn: '确定',
+                    type: 'info',
+                    assistFn() { },
+                    mainFn() {
+                        toLogin(_self.$router, { toPath: "home" });
+                    }
+                };
+                dialog({ dialogObj });
+            } else {
+                this._$service.queryUserFollowNum().then(res => {
+                    if (!res.data.errorCode) {
+                        if (res.data.count >= 20) {
+                            let dialogObj = {
+                                title: '关注失败',
+                                content: '关注数量已达上限(20个)，请取消部分店铺关注后再试！',
+                                assistBtn: '',
+                                mainBtn: '知道了',
+                                type: 'info',
+                                assistFn() { },
+                                mainFn() { }
+                            };
+                            dialog({ dialogObj });
+                        } else {
+                            _self.$store.dispatch('ADD_FOLLOW_SHOP').then(flag => {
+                                _self.isFollow = flag;
+                                if (!_self.isFollow) {
+                                    _self.followName = "关注";
+                                } else {
+                                    _self.followName = "已关注";
+                                }
+                            });
+                        }
+                    }
+                })
+            }
+        }
 
+
+
+        //  this.$store.dispatch('CANCEL_FOLLOW_SHOP',{shopId:119});//取消店铺
+    }
 }

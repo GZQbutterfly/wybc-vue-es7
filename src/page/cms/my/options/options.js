@@ -46,4 +46,7 @@ export class Options extends BaseVue {
     changePayPassWord(){
         this.$router.push({path:'payoptions'});
     }
+    toUserAddress() {
+        this.$router.push('cms_user_address');
+    }
 }

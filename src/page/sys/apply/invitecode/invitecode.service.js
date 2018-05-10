@@ -33,7 +33,12 @@ export default (_store) => {
             return q(queryuserhasshop, {});
         },
 
-
+        /**
+         * 获取邀请关系中上级邀请码
+         */
+        queryParentCode(data){
+            return q('api/wd_vip/q_invited_user_info',data);
+        },
         /**
          * 随机得到一个有效的邀请码
          */

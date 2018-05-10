@@ -167,6 +167,9 @@ export class CmsPurchaseOrderDetail extends BaseVue {
             // obj.orderState=2;//test
             obj.leftTime = res.data.leftTime;
             obj.leftDay = res.data.leftDays || 0;
+            if (res.data.logis) {
+                obj.logis = [res.data.logis];
+            }
             obj.goods = [];
             obj.goods = res.data.orderGoods;
         }
@@ -356,11 +359,12 @@ export class CmsPurchaseOrderDetail extends BaseVue {
     goPay() {
         // hptPayDialog(this, this.orderId);
         let _this = this;
-        let obj = this.$store.state.$loadding();
-        let _parm = {
+      //  let obj = this.$store.state.$loadding();
+        let _param = {
             combinOrderNo: this.orderInfo.combinOrderNo,
             orderId: this.orderInfo.orderId,
-            ownStore: _this.ownStore
+            ownStore: _this.ownStore,
+            totalMoney:this.totalPrice,
         }
 
         this.$router.push({path:"sys_pay_list",query:_param});

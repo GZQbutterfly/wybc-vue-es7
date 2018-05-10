@@ -11,11 +11,11 @@
         </template>
 
         <!--  -->
-        <pull-refresh :refresh="refresh" :infinite="infinite" :showNoData="false" ref="pullRefreshRef">
+        <pull-refresh :refresh="refresh" :infinite="infinite" ref="pullRefreshRef">
 
             <!-- 首页banner -->
             <template v-if="bannerList.length">
-                <app-banner :listImg="bannerList" imgField="imgUrl" class="malls-banner-list"> </app-banner>
+                <app-banner :listImg="bannerList" imgField="imgUrl" class="malls-banner-list" orgin="home" @toDetaile = "bannerToDetaile"> </app-banner>
             </template>
 
             <!-- 小图标 iconlist -->
@@ -34,12 +34,16 @@
 
             <!--  官方精品 -->
             <official-malls ref="officialMallsRef" v-if="createOfficialMalls"></official-malls>
+
+            <footer class="malls-official-content_ft">
+                <goods-list :dataList="{data: goodsList}" @joinCar="joinCar" status="officialmalls" v-if="goodsList.length"></goods-list>
+            </footer>
+
         </pull-refresh>
     </section>
 
 
     <footer class="malls-list-content_ft">
-
     </footer>
 
 </div>

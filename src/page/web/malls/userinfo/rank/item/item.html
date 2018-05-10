@@ -1,0 +1,69 @@
+<div class="rank-item-container bg-c-f2f2f2">
+    <template v-if="showContent">
+        <pull-refresh :refresh="refresh" :infinite="infinite" :staticHeigth=310 :LRShakeflag="true">
+            <div class="rank-item-content">
+                <div class="rank-user">
+                    <!-- <div class="rank-user_hd text-s-14 text-c-808080">
+                        活动时间:
+                        <span class="text-c-f7b64c"> {{new Date() | date('yyyy-MM-dd hh:mm') }} 一 {{new Date() | date('yyyy-MM-dd hh:mm') }}</span>
+                    </div> -->
+                    <div class="rank-user_bd text-center bg-c-f2f2f2">
+                        <img :src="userInfo.headImage"></img>
+                        <h3 class="text-ellipsis">{{userInfo.nickName}}</h3>
+                        <div v-if="opts.ranktype == 'shoprank'" class="text-s-12 text-c-808080">{{myWdInfo.school}}</div>
+                        <div class="current-value">
+                            <div class="current-text text-s-14 text-c-2e73db">现有金币</div>
+                            <label class="text-s-30 text-c-ff3a80">{{amountGold}}</label>
+                        </div>
+                    </div>
+                    <div class="rank-user_ft">
+                        <div class="rank-value text-center text-c-fff " :class="userInfo.rankValue ? 'bg-c-7ecc44' : 'bg-c-ff6839'">
+                            <template v-if="userInfo.rankValue">
+                                第{{userInfo.rankValue}}名
+                            </template>
+                            <template v-else>
+                                未上榜
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rank-list bg-c-fff text-s-14">
+                    <template v-if="firstLoadFlag">
+                        <template v-if="rankData && rankData.length">
+                            <div class="rank-item weui-flex flex-align-m" v-for="(item,index) in rankData">
+                                <div class="rank-item_hd">
+                                    <img src="/static/images/minishop/medal.png" alt="">
+                                    <span class="item-rank-value text-s-13 text-c-fff">{{item.rankValue}}</span>
+                                </div>
+                                <img :src="item.headimgurl" :alt="item.altImg">
+                                <span class="weui-flex__item item-nickname text-c-f9820d text-ellipsis">{{item.nickname}}</span>
+                                <span class="text-c-ff3a80  text-ellipsis">{{item.score}}</span>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="nolist text-center text-s-15 text-c-b3b3b3">
+                                <img src="/static/images/follow_rank/wurenshangbang.png" alt="">
+                                <div>暂无人上榜，快去积累金币吧！</div>
+                            </div>
+                        </template>
+                    </template>
+                </div>
+            </div>
+        </pull-refresh>
+    </template>
+
+    <!--  -->
+    <template v-else>
+        <!-- 店铺信息 -->
+        <template v-if="opts.ranktype == 'shoprank'">
+            <div class="no-shop text-center">
+                <div>
+                    <img src="/static/images/follow_rank/dianpu.png">
+                </div>
+                <div class="text-s-15 text-c-b3b3b3">亲，您还没有自己的店铺哟！~</div>
+                <div class="open-btn text-s-13 text-c-7dcc43" @click="$router.push('apply_shop_campaign')">立即开店</div>
+            </div>
+        </template>
+    </template>
+</div>

@@ -99,9 +99,10 @@ export class MoneyGoldBuy extends BaseVue {
         (flag ? (this.goodsList = datas) : (this.goodsList.push(...datas)));
     }
 
+
     // 下拉刷新
     refresh(done) {
-        this.queryBanerList();
+        this.queryBannerList();
 
         let _result = this.queryGoodsInit();
 

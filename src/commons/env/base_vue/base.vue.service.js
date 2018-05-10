@@ -30,7 +30,7 @@ export default (_store) => {
                         resolve(data);
                     });    
                 } else if (_shopId!=null && (localWdInfo.infoId!=_shopId)) {
-                    _store.commit('ADD_HISTORY_SHOP', _shopId);
+                    // _store.commit('ADD_HISTORY_SHOP', _shopId);
                     _store.dispatch('CHECK_WD_INFO',  merge({shopId: _shopId}, data)).then((data)=>{
                         resolve(data);
                     });                                   

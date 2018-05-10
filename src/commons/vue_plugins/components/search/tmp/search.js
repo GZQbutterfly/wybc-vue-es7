@@ -181,7 +181,7 @@ export class searchBar extends BaseVue {
         let origin = this.$route.query.origin;
         if (!origin) {
             let path = this.$route.path;
-            origin = (path.indexOf('#') != -1) ? 'cms_purchase_classify' : 'home';
+            origin = (path.indexOf('#') != -1) ? 'cms_goods_shelves' : 'home';
         }
         return origin;
     }

@@ -12,7 +12,7 @@ export default function (opts) {
     });
 
     instance.title = opts.title;
-    instance.time = opts.time || 2000;
+    instance.time = opts.time || 800;
     instance.success = opts.success == null ? true : false;
     instance.mode = false;
     merge(instance, opts);

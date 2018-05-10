@@ -1,15 +1,15 @@
-<div class="money-picker-container">
+<div class="money-picker-container ">
     <div class="weui-mask"></div>
 
-    <div class="money-picker-content bg-fff">
+    <div class="money-picker-content bg-fff custom-footer">
         <header class="money-picker-content_hd weui-flex flex-align-m">
             <img :src="goods.coverImg">
             <div class="weui-flex__item goodsinfo">
                 <span class="goodsname">{{goods.goodsName}}</span>
                 <div class="weui-flex money-num flex-align-m">
-                    <span class="label-money">{{goods.moneyPrice * num | localMoney}}</span>
+                    <span v-if="goods.moneyPrice" class="label-money">{{goods.moneyPrice * num | localMoney}}</span>
                     <div class="money-buy">
-                        <span class="concat">+</span>
+                        <span v-if="goods.moneyPrice" class="concat">+</span>
                         <img src="/static/images/money/icon.png" alt="">
                         <span class="label-money-volume">{{ goods.goldPrice * num}}</span>                       	
                     </div>
@@ -31,7 +31,7 @@
         </section>
 
         <footer class="money-picker-content_ft">
-            <button type="button" class="bg-ff3a80" @click="nextStep"> 下一步</button>
+            <button type="button" class="bg-ff3a80" :class="{'disabled':!checkStockNum()}" @click="nextStep">{{checkStockNum()?'下一步':'库存不足'}}</button>
         </footer>
 
     </div>

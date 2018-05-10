@@ -123,25 +123,46 @@ export class OutOrder extends BaseVue {
             let rebate = data.rebate;
             for (let i = 0; i < orders.length; ++i) {
                 let order = orders[i];
-                order.goods = new Array();
-                for (let k = 0; k < goodses.length; ++k) {
-                    let goods = goodses[k]
-                    if (goods.orderId == order.orderId) {
-                        goods.moneyPrice = order.moneyPrice;
-                        order.goods.push(goods);
+				order.goodses = new Array();
+                order.orders = new Array();
+                order.rebates = new Array();
+				let combinOrderNo = order.combinOrderNo;
+				//组合订单
+				if (combinOrderNo) {
+					while (orders[i] && (combinOrderNo == orders[i].combinOrderNo)) {
+						order.orders.push(orders[i]);
+						for (let k = 0; k < goodses.length; ++k) {
+							let goods = goodses[k]
+							if (goods.orderId == orders[i].orderId) {
+								order.goodses.push(goods);
+							}
+                        }
+                        
+                        for (let b = 0; b < rebate.length; ++b) {
+							let _rebate = rebate[b]
+							if (_rebate.orderId == orders[i].orderId) {
+								order.rebates.push(_rebate);
+							}
+						}
+						i++;
+					}
+					--i;
+				} else {
+					order.orders.push(orders[i]);
+					for (let k = 0; k < goodses.length; ++k) {
+						let goods = goodses[k]
+						if (goods.orderId == order.orderId) {
+							order.goodses.push(goods);
+						}
                     }
-                }
-
-                order.rebate = {};
-                if (rebate && rebate.length > 0) {
-                    for (var index = 0; index < rebate.length; index++) {
-                        var element = rebate[index];
-                        if (element.orderNo == order.orderNo) {
-                            order.rebate = element;
-                            break;
+                    for (let b = 0; b < rebate.length; ++b) {
+                        let _rebate = rebate[b]
+                        if (_rebate.orderId == order.orderId) {
+                            order.rebates.push(_rebate);
                         }
                     }
                 }
+                
                 orderList.push(order);
             }
         }

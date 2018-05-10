@@ -127,7 +127,7 @@ export class CmsPurchaseSubmitOrder extends BaseVue {
                     _self.goodsList = [];
                     return;
                 }
-                if (res.data.data.state != 1 || res.data.data.onSaleState != 1) {
+                if (res.data.data.state != 1 || res.data.data.onStockState != 1) {
                     let dialogObj = {
                         title: '提示',
                         content: '该商品已下架或停售',
@@ -291,11 +291,8 @@ export class CmsPurchaseSubmitOrder extends BaseVue {
             let obj = this.$store.state.$loadding();
             _self._$service.submitOrder(data).then(res => {
                 if (res.data.errorCode) {
-                    if (res.data.errorCode) {
-                        _self.submittedResultErrCode(res.data);
-                        obj.close();
-                        return;
-                    }
+                    _self.submittedResultErrCode(res.data);
+                    obj.close();
                     return;
                 }
                 _self.orderId = res.data.orderId;
@@ -307,9 +304,9 @@ export class CmsPurchaseSubmitOrder extends BaseVue {
                 // _self._$service.pay(_param).then(res => {
                 //     sessionStorage.removeItem("CmsCouponDetail");
                 //     _self.payCallBack(res);
-                //     obj.close();
+                     obj.close();
                 // })
-                _self.$router.push({path:"sys_pay_list",query:_param});
+                _self.$router.replace({path:"sys_pay_list",query:_param});
             })
         } else {
             data = {
@@ -343,13 +340,8 @@ export class CmsPurchaseSubmitOrder extends BaseVue {
                     totalMoney:res.data.totalMoney,
                     submitType:2
                 }
-                // _self._$service.pay(_param).then(res => {
-                //     sessionStorage.removeItem("CmsCouponDetail");
-                //     _self.payCallBack(res);
-                //     obj.close();
-                // })
-                
-                toWEB("sys_pay_list",_param);
+                obj.close();
+                _self.$router.replace({path:"sys_pay_list",query:_param});
             })
         }
     }
@@ -570,6 +562,8 @@ export class CmsPurchaseSubmitOrder extends BaseVue {
                     _self.alertDailog(_result.msg);
                 }
             }
+        }else if(_errorCode==147){
+            _self.alertDailog('订单已存在,请勿重复提交.',true);
         } else {
             _self.alertDailog(result.msg);
         }
@@ -633,7 +627,8 @@ export class CmsPurchaseSubmitOrder extends BaseVue {
         })
     }
 
-    alertDailog(msg) {
+    alertDailog(msg,toOrderList= false) {
+        let _self = this;
         let dialogObj = {
             title: '',
             content: msg || '',
@@ -643,6 +638,11 @@ export class CmsPurchaseSubmitOrder extends BaseVue {
             assistFn() {
             },
             mainFn() {
+                if (toOrderList) {
+                    _self.$router.replace({ path: 'cms_stock_order', query: { listValue: '1' } });
+                }else{
+                    _self.$router.back();
+                }
             }
         };
         this._$dialog({ dialogObj });

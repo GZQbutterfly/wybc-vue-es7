@@ -308,6 +308,7 @@ export class OrderSubmit extends BaseVue {
         } else {
             this.defaultWay = 2;
         }
+
     }
     addressObj = {};
     /**
@@ -323,6 +324,7 @@ export class OrderSubmit extends BaseVue {
             if (!this.moneyBuyFlag) {
                 if ([1, 2].includes(this.defaultWay) && _result && _result.campus != this.wdInfo.school) {
                     // 众包配送 快速仓配送时，默认地址不在该店铺所在校区地址时，清除默认地址显示
+                    _self.checkDeliveryWay();
                     return;
                 }
             }
@@ -537,6 +539,26 @@ export class OrderSubmit extends BaseVue {
                 return;
             }
         }
+        //纯金币购订单
+        if (_self.orderTotal.pay == 0 && _self.orderTotal.goldPrice>0) {
+            let dialogObj = {
+                title: '提示',
+                content: '确认支付，立即扣除账户金币'+ _self.orderTotal.goldPrice+'个，是否支付？',
+                type: 'info',
+                assistBtn: '我再想想',
+                mainBtn: '确认支付',
+                assistFn() {
+                    _self.orderSubmitFlag = false;
+                 },
+                mainFn() {
+                    _self.onlyGoldPay(_data);
+                }
+            };
+            _self.$store.state.$dialog({ dialogObj });
+            return ;
+        }
+
+
         //检查订单提交格式(地址等)以及用户券是否足够
         if (((_self.orderSrouce == 'goods') && _self.goodsType != 'entity') || _self.isAddress()) {
             let obj = _self.$store.state.$loadding();
@@ -577,46 +599,6 @@ export class OrderSubmit extends BaseVue {
                     else {
                         _result = _self._$service.submitOrder(_data);
                     }
-                } else {
-                    // 虚拟
-                    let _leaveMsg = {};
-                    let _check = true;
-                    for (let l = 0, len = _self.leaveMsg.length; l < len; l++) {
-                        let _item = _self.leaveMsg[l];
-                        if (!_item.value) {
-                            _check = false;
-                            break;
-                        }
-                        _leaveMsg[_item.name] = _item.value;
-                    }
-                    if (_check) {
-                        _data.leaveMsg = JSON.stringify(_leaveMsg);
-                        _data.goodsId = _self.goodsList[0].id;
-
-                        if (_self.goodsList[0].consuType == 3) {
-                            //抵扣的金币
-                            _data.gold = _self.orderTotal.goldPrice;
-
-                            _result = _self._$service.submitGoldOrder(_data);
-
-                        } else {
-
-                            _result = _self._$service.submitOrder(_data);
-
-                        }
-                    } else {
-                        let dialogObj = {
-                            title: '',
-                            content: '请填写留言信息!',
-                            assistBtn: '',
-                            type: 'info',
-                            mainBtn: '知道啦',
-                            assistFn() { },
-                            mainFn() { }
-                        };
-                        _self.$store.state.$dialog({ dialogObj });
-                        obj.close();
-                    }
                 }
             }
             //处理提交订单之后
@@ -624,7 +606,9 @@ export class OrderSubmit extends BaseVue {
                 _result.then((res) => {
                     let _result = res.data;
                     if (_result.errorCode) {
-                        if (_self.periodId) {     //限时购
+                        if (_result.errorCode==147) {
+                            _self.submittedBackSureAlter(_result);
+                        }else if (_self.periodId) {     //限时购
                             _self.timeLimitBuyError(_result);
                         } else {
                             _self.pareSubmittedBackError(_result).then((msg) => {  //非限时购
@@ -644,32 +628,73 @@ export class OrderSubmit extends BaseVue {
                         }
                         obj.close();
                     } else {
-                        let _param = {
-                            combinOrderNo: _result.combinOrderNo,
-                            orderId: _result.orderId,
-                            totalMoney:_result.totalMoney,
-                            orderPayType:_self.orderPayType
-                        };
-                        _self.$router.push({path:'pay_list',query:_param});
-
-                        // let orderPayType = {
-                        //     combinOrderNo: _result.combinOrderNo,
-                        //     orderPayType: _self.orderPayType
-                        // }
-                        // _self._$service.pay(_param).then((res) => {
-                        //     if (res !== null) {
-                        //         _self.payCallBack(res, orderPayType);
-                        //     }
-                        //     obj.close();
-                        // }).catch(() => {
-                        //     obj.close();
-                        // });
+                        //全金币支付
+                        obj.close();
+                        if (_result.orderState == 3) {
+                            _self.$router.replace({path:'pay_result',query:_result});
+                        }else{
+                            let _param = {
+                                combinOrderNo: _result.combinOrderNo,
+                                orderId: _result.orderId,
+                                totalMoney:_result.totalMoney,
+                                orderPayType:_self.orderPayType
+                            };
+                            _self.$router.push({path:'pay_list',query:_param});
+                        }
                     }
                 });
             }
+          
         }
         _self.orderSubmitFlag = false;
     }
+
+    onlyGoldPay(data){
+        let _self = this;
+        data.number = _self.number;
+        data.goodsId = _self.goodsList[0].shopCarts[0].goodsId;
+        let _result = null;
+        let obj = _self.$store.state.$loadding();
+        if (_self.goodsList[0].shopCarts[0].consuType == 3) {
+            //抵扣的金币
+            data.gold = _self.orderTotal.goldPrice;
+            _result = _self._$service.submitGoldOrder(data);
+        }
+        if (_result) {
+            _result.then((res) => {
+                let _result = res.data;
+                _result.goldPrice = _self.orderTotal.goldPrice;
+                obj.close();
+                if (_result.errorCode) {
+                    if (_result.errorCode==147) {
+                        _self.submittedBackSureAlter(_result);
+                    }else if (_self.periodId) {     //限时购
+                        _self.timeLimitBuyError(_result);
+                    } else {
+                        _self.pareSubmittedBackError(_result).then((msg) => {  //非限时购
+                            let dialogObj = {
+                                title: '提示',
+                                content: msg,
+                                type: 'info',
+                                assistBtn: '',
+                                mainBtn: '知道啦',
+                                assistFn() { },
+                                mainFn() {
+                                    _self.submittedBackSureAlter(_result);
+                                }
+                            };
+                            _self.$store.state.$dialog({ dialogObj });
+                        });
+                    }
+                } else {
+                    if (_result.orderState == 3) {
+                        _self.$router.replace({path:'pay_result',query:_result});
+                    }
+                }
+            });
+        }
+    }
+
     /**
      * 订单提交后限时购 报错 信息 处理
      * @param {*} result 
@@ -706,10 +731,23 @@ export class OrderSubmit extends BaseVue {
         // 143		分仓库存不足
         // 144		快速仓库存不足
         // 145      快速仓未开启
-        if (!this.moneyBuyFlag && [143, 144, 145].includes(result.errorCode)) {
+        if(result.errorCode==147){
+            let dialogObj = {
+                title: '提示',
+                content: '订单已存在,请勿重复提交.',
+                type: 'info',
+                assistBtn: '',
+                mainBtn: '确定',
+                assistFn() { },
+                mainFn() {
+                    _self.$router.replace({ path: 'user_order' ,query:{listValue:1}});
+                }
+            };
+            _self.$store.state.$dialog({ dialogObj });
+        }else if (!this.moneyBuyFlag && [143, 144, 145].includes(result.errorCode)) {
             if (_self.orderSrouce == "goods" && [145].includes(result.errorCode)){
                 _self.$router.push({path:"home"});
-            }else{
+            } else{
                 _self.$router.back();
             }    
         }
@@ -820,6 +858,9 @@ export class OrderSubmit extends BaseVue {
                         _self.orderPayType = 1;
                         _orderTotal.goldShow = true;
                         // console.log(111, _self.userGoldNum);
+                        if (Number(_self.userGoldNum)<0){
+                            _self.userGoldNum = 0;
+                        }
                         if (_self.userGoldNum >= item.goldPrice * item.number) {
                             _orderTotal.goldPrice += (item.goldPrice * item.number) || 0;
                             disMoney += item.number * (item.purchasePrice - item.moneyPrice) || 0;
@@ -992,6 +1033,7 @@ export class OrderSubmit extends BaseVue {
                 this.defaultWay = 2;
             }
         }
+
         this.deliveryWay = this.deliveryWays[this.defaultWay];
         this.deliveryArrive = this.deliveryArrives[this.defaultWay];
         this.checkAddressInfo();

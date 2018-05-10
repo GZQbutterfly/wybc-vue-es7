@@ -60,9 +60,54 @@
         </section>
         <div id="goodspullrefresh" v-else>
             <pull-refresh ref="my_scroller" :refresh="refresh" :infinite="infinite">
-                <list-goods :dataList="data_goods" @joinCar="joinCar"></list-goods>
+                <div v-for="(item, index) in data_goods.data" :key="index" class="search-goods-box">
+                    <div class="search-goodsinfo weui-flex flex-align-m">
+                        <div class="search-goodsinfo_hd" @click="toGoodsDetail(item.goodsId)">
+                            <figure><img  class="cover-img" :src="item.coverImg" alt=""></figure>
+                            <figure v-if="item.couponCount"><img class="coupon-sign" src="/static/images/daysign/shangpin-biaozhi.png"></figure>
+                        </div>
+                        <div class="search-goodsinfo_bd" @click="toGoodsDetail(item.goodsId)">
+                            <div class="text-c-333 text-s-15 text-ellipsis">{{item.goodsName}}</div>
+                            <div class="text-c-333 text-s-15">进货价
+                                <span class="text-s-15 text-c-ff1c1c">{{item.stockPrice | localMoney}}</span>
+                            </div>
+                        </div>
+                        <div class="search-goodsinfo_ft " @click="addGoods2Car(item)">
+                            <i class="icon iconfont icon-wuuiconxiangjifangda text-s-30 " :class="[item.amount ? 'text-c-7ecc44' : 'text-c-ccc']"></i>
+                        </div>
+                    </div>
+                    <div class="weui-flex search-goods-stock" @click="toGoodsDetail(item.goodsId)">
+                        <div class="weui-flex__item">仓库库存:
+                            <span class="text-c-7ecc44">{{item.amount}}</span>
+                        </div>
+                        <div>我的库存:
+                            <span class="text-c-ee893e">{{item.wdAmount}}</span>
+                        </div>
+                    </div>
+                </div>
             </pull-refresh>
         </div>
     </div>
+
+    <div class="shopcar  bg-c-fff weui-flex flex-align-m custom-footer" v-show="frm_push">
+        <div class="shopcar_hd"  @click="viewShopCar">
+            <i class="icon iconfont icon-gouwuche text-c-7ecc44"></i>
+            <div class="tuqi-tip"></div>
+            <div class="tuqi-tip-b"></div>
+            <div class="weui-badge">{{shopcarOpts.countTotal}}</div>
+        </div>
+        <div class="shopcar_bd weui-flex__item text-c-333"  @click="viewShopCar">
+            <div class="text-c-15 ">总计：
+                <span class="text-c-ff1c1c">{{shopcarOpts.totalPrice|localMoney}}</span>
+            </div>
+            <div class="text-s-13">最低进货金额：
+                <span class="text-c-ee893e">{{shopcarOpts.leastMoney|localMoney}}</span>
+            </div>
+        </div>
+        <div class="shopcar_ft diff-btn  text-c-fff text-s-17 text-center" @click="settlementCar" :class="[accordWithBalance() ? 'bg-c-ff3a80' : 'bg-c-ccc']">
+            结算
+        </div>
+    </div>
+    <shelves-shopcar  v-show="frm_push" ref="shelvesShopcarRef" :opts="shopcarOpts"  @cleanCar="cleanCar" :carmap="carmap" @queryCar="queryCarGoodsList"></shelves-shopcar>
 
 </div>

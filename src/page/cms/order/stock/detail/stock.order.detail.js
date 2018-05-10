@@ -58,7 +58,7 @@ export class StockOrderDetail extends BaseVue {
                         return
                     } else {
                         self.orderInfo = res.data.orderWhole;
-                        self.goodsInfo = res.data.orderGoods;
+                        self.orderGoods = res.data.orderGoods;
                         self.commi = res.data.orderCommi;
                         self.curShopBuyDisct = res.data.curShopBuyDisct ? res.data.curShopBuyDisct : 100;
                         if (res.data.orderWhole.acceptTimeLeft > 0) {
@@ -182,11 +182,11 @@ export class StockOrderDetail extends BaseVue {
             })
     }
 
-    stockNow(orderId) {
+    stockNow(goodsId) {
         this.$router.push({
             path: 'my_inventory_detail',
             query: {
-                goodsId: this.goodsInfo.goodsId,
+                goodsId: goodsId,
             }
         })
     }

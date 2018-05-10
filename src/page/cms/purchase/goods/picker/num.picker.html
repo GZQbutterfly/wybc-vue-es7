@@ -30,11 +30,14 @@
                         <span v-if="num==1||!num" style="background:#f2f2f2;color:#cccccc;">-</span>
                         <span @click="decrease()" v-else>-</span>
                         <input type="number" v-model="num" @keyup="onNum">
-                        <span @click="increase()">+</span>
+                        <span v-if="fastStockState.amount<=num" style="background:#f2f2f2;color:#cccccc;">+</span>
+                        <span @click="increase()" v-else>+</span>
+                       
                     </div>
                 </div>
-            </div>         
-            <div id="next" @click="nextStep()" v-show="min.buy!=0">下一步</div>
+            </div>
+            <div id="next" v-show="min.buy!=0&&fastStockState.amount<=0" style="background-color:#ccc;">下一步</div>
+            <div id="next" @click="nextStep()" v-show="min.buy!=0&&fastStockState.amount>0">下一步</div>
             <div id="next" @click="nextStep()" v-show="min.buy==0&&min.leastBuy<=goods.stockPrice*num&&num<=fastStockState.amount">下一步</div>
             <div id="next" v-show="min.buy==0&&fastStockState.amount<num" style="background-color:#ccc;">库存不足</div>
             <div id="next" v-show="(min.buy==0&&fastStockState.amount>=num)&&min.leastBuy>goods.stockPrice*num" style="background-color:#ccc;">未达到{{min.flag?"首次升级":'最低'}}进货金额</div>

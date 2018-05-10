@@ -292,7 +292,7 @@ export class CmsPurchaseClassify extends BaseVue {
         this.currentIndex = index;
         let _self = this;
         console.log("导航下标:", index, "分类id:", id);
-        this.$router.replace({ path: "cms_purchase_classify", query: { classify: id } });
+        this.$router.replace({ path: "cms_goods_shelves", query: { classify: id } });
         let flag = await this.isClassifyId(id, index);
         if (flag) { //更新数据
             await this.setCurrentPageData(id, index);
@@ -314,7 +314,7 @@ export class CmsPurchaseClassify extends BaseVue {
      */
     goSearch() {
         let typeId = this.currentClassifyId ? '?classify=' + this.currentClassifyId : '';
-        this.$router.push({ path: "cms_purchase_search", query: { origin: 'cms_purchase_classify' + typeId } });
+        this.$router.push({ path: "cms_purchase_search", query: { origin: 'cms_goods_shelves' + typeId } });
     }
 
     QuicklyJoinTheShoppingCart(item) {

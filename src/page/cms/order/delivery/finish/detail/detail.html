@@ -59,7 +59,7 @@
                                 <div class="goods-item-hd text-ellipsis">{{item.goodsName}}</div>
                                 <div class="goods-item-bd">x<span>{{item.number}}</span>
                                 </div>
-                                <div class="goods-item-ft text-right" v-if="item.consuType == 3">{{item.moneyPrice | localMoney}}+<img src="/static/images/money/icon.png" alt="">{{ item.goldPrice }}</div>
+                                <div class="goods-item-ft text-right" v-if="item.consuType == 3"><span v-if="item.moneyPrice">{{item.moneyPrice | localMoney}}+</span><img src="/static/images/money/icon.png" alt="">{{ item.goldPrice }}</div>
                                 <div class="goods-item-ft text-right" v-else>{{item.moneyPrice | localMoney}}</div>
                             </div>
                         </div>

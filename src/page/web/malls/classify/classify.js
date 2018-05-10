@@ -7,6 +7,7 @@ import homeController from '../new_home/list/gift.contr';
 // import { GoodsList } from '../goods_list/goods_list';
 import classifyService from './classify.service';
 import './classify.scss';
+import { debug } from 'util';
 
 @Component({
     template: require('./classify.html'),
@@ -110,6 +111,9 @@ export class Classify extends BaseVue {
      */
     async isClassifyId(classifyId) {
         let _classify = (await this._$service.classfyList()).data;
+        if (_classify.classifies.length==0){
+            return false;
+        }
         let arr = {
             classifyName: "全部商品",
             goodsClassifyId: -1,
@@ -167,6 +171,7 @@ export class Classify extends BaseVue {
         if (!_classify || _classify.errorCode || _classify.classifies.length == 0) {
             this.classfyGoodsList = [];
             this.classifyAdImgPic = [];
+            this.classifyNav = [];
             return;
         }
         let arr = {
@@ -296,10 +301,10 @@ export class Classify extends BaseVue {
         if (flag) { //更新数据
             this.setCurrentPageData(id, index);
         } else {
-            this.$router.replace({ path: "classify", query: { classify: -1 } });
             await this.queryClassifyNav();
             await this.fetchGoodsData(-1, 0, 1);
             this.setPage();
+            this.$router.replace({ path: "classify", query: { classify: -1 } });
         }
         let _res = await this.fetchShopData();
         let config = {

@@ -13,10 +13,10 @@
                     请于
                     <span v-text="formatDate"></span>内付款，超时订单将自动关闭
                 </p>
-                <p id="finalTime" v-if="orderInfo.orderState == 4&&orderInfo.ownStore">
+                <!-- <p id="finalTime" v-if="orderInfo.orderState == 4&&orderInfo.ownStore">
                     此订单将于
                     <span>{{orderInfo.leftDay}}</span>天后自动确认收货
-                </p>
+                </p> -->
             </div>
         </div>
 
@@ -61,22 +61,22 @@
             <div class="address-detail-sex text-right" v-if="orderInfo.sex">{{orderInfo.sex == 1 ? '男生宿舍' : '女生宿舍'}}</div>
         </div>
 
+        <!-- 订单编号 -->
+        <div class="line order-number" v-if="showOrderNumber&&orderInfo.ownStore">
+            <template v-if="orderInfo.logis&&orderInfo.logis[0].logisNo">
+                <p>
+                    <i class="iconfont icon-truck"></i> 运单编号：
+                    <b class="logisNo" v-text="orderInfo.logis[0].logisNo"></b>
+                </p>
+                <p class='delivery-company' v-text="orderInfo.logis[0].logisName"></p>
+            </template>
+            <template v-else>
+                <i class="iconfont icon-truck"></i>
+                <p class="noMessage">暂无物流信息</p>
+            </template>
+        </div>
         <!-- 单/多sku订单 -->
         <template v-for="(item,index) in orderInfo.goods">
-            <!-- 订单编号 -->
-            <div class="line order-number" v-if="showOrderNumber&&orderInfo.ownStore">
-                <template v-if="orderInfo.logis&&orderInfo.logis[index].logisNo">
-                    <p>
-                        <i class="iconfont icon-truck"></i> 运单编号：
-                        <b class="logisNo" v-text="orderInfo.logis[index].logisNo"></b>
-                    </p>
-                    <p class='delivery-company' v-text="orderInfo.logis[index].logisName"></p>
-                </template>
-                <template v-else>
-                    <i class="iconfont icon-truck"></i>
-                    <p class="noMessage">暂无物流信息</p>
-                </template>
-            </div>
             <!-- 商品信息前的图标 -->
             <div class="line order-line" v-if="index==0">
                 <p class="sm">
@@ -145,7 +145,7 @@
             <p v-if="!combinOrderNo">支付订单号码：{{ orderInfo.combinOrderNo }}</p>
             <!-- <p>订单号码：{{ combinOrderNo ? orderInfo.combinOrderNo:orderInfo.orderNo }}</p> -->
             <p>订单号码：{{ orderInfo.combinOrderNo }}</p>
-            <p v-if="![1, 6].includes(orderInfo.orderState)">支付方式: {{orderInfo.payType}}</p>
+            <p v-if="![1, 6].includes(orderInfo.orderState)">支付方式： {{$store.state.cache.lookup['PAY_METHOD'][orderInfo.payType]}}</p>
             <!-- <p>订单号码：{{ orderInfo.orderNo }}</p> -->
             <p>创建时间：{{ orderInfo.createAt | date('yyyy-MM-dd hh:mm:ss')}}</p>
             <p>进货仓储方式：{{stocktype}}</p>
@@ -166,7 +166,7 @@
 
 
     <!-- 底部弹出框 -->
-    <div class="confirm-receipt" v-if="orderInfo.orderState==1">
+    <div class="confirm-receipt custom-footer" v-if="orderInfo.orderState==1">
         <template>
             <div class="box-price">
                 合计：

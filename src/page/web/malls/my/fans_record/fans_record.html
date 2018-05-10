@@ -1,0 +1,36 @@
+<div class="fans">
+    <ul class="money-type">
+        <li :class="{active:i==showIndex}" v-for="(v,i) in navLists" @click="switchtab(i)">{{v}}</li>
+    </ul>
+    <div class="goldNum weui-flex">
+        <div class="goldadd weui-flex">
+            <img src="/static/images/shop-4.6/fensi.png"  v-if="showIndex==0">
+            <img src="/static/images/shop-4.6/quguan.png" v-else-if="showIndex==1">
+            <img src="/static/images/shop-4.6/kaidian.png" v-else>
+            <span v-if="showIndex==0">关注粉丝人数<b>{{produceRecord.recordsTotal}}</b>人</span>
+            <span v-else-if="showIndex==1">取关人数<b>{{produceRecord.recordsTotal}}</b>人</span>
+            <span v-else>粉丝开店人数<b>{{produceRecord.recordsTotal}}</b>人</span>                               
+        </div>
+        <div class="goldnow weui-flex" v-if="showIndex==2">开店奖励金币<b>{{produceRecord.totalGold}}</b></div>        
+        <div class="goldnow weui-flex" v-else>关注获得金币<b>{{produceRecord.totalGold}}</b></div>  
+    </div>
+    <div class="content" v-for="(v,i) in navLists" v-if="i==showIndex">
+        <pull-refresh :refresh="refresh" :infinite="infinite">
+            <div class="li weui-flex" v-for="v in produceRecord.data" v-if="produceRecord.data&&produceRecord.data.length">
+                <div class="list-lef weui-flex">
+                    <img :src="v.headimgurl">
+                    <span>{{v.nickname}}</span>
+                </div>
+                <div class="list-rig">
+                    <p v-if="showIndex==0"><img src="/static/images/shop-4.6/yiguanzhu.png"></p>
+                    <p v-else-if="showIndex==1">
+                        <img src="/static/images/shop-4.6/yiquguan.png">
+                    </p>
+                    <p v-else>
+                        <img src="/static/images/shop-4.6/yikaidian.png">
+                    </p>
+                </div>
+            </div>
+        </pull-refresh>
+    </div>
+</div>

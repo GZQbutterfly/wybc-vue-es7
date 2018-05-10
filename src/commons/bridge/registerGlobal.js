@@ -1,16 +1,15 @@
 import bridge from './bridge';
+import {isCMS} from 'common.env';
 
 export default (router) => {
     bridge.ready();
 
     function backRoute(router){
         let fullPath = location.href;
-        if (fullPath.indexOf("cms_purchase_submit_order")!=-1) {
+        if (isCMS()) {
             return "cms_stock_order";
-        } else if(fullPath.indexOf("order_submit")!=-1){
+        } else {
             return "user_order";
-        }else {
-            return null;
         }
     }
 

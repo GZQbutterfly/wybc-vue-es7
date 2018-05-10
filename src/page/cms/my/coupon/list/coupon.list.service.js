@@ -11,6 +11,7 @@ export default (store) => {
     }
     return {
         getCouponList(url, query) {
+            query.type = 1;
             return q(url, query);
         }
     }

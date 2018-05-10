@@ -1,7 +1,7 @@
 <template  lang="html">
   <div class="password-keyboard">
         <ul>
-          <li @click="keyUpHandle($event)" v-for="val in keys"  :key="val">
+          <li @click.prevent="keyUpHandle($event)" v-for="val in keys"  :key="val">
             {{ val }}
           </li>
           <li class="del " @click="delHandle"><i class="icon iconfont icon-shanchu"></i></li>

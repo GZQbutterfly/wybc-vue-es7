@@ -1,0 +1,31 @@
+<div class="pay-result-contianer">
+    <div class="pay-result-title">
+        <img src="/static/images/xuehui.png" alt="">
+        <div class="pay-result-text text-c-333">支付成功</div>
+        <div class="pay-result-value text-c-333"><span class="text-c-ff902d">{{orderInfo.goldPrice}}</span>金币</div>
+    </div>
+    <div class="pay-result-order">
+        <div class="pay-result-item">
+            <span>商品名</span>
+            <span>{{orderInfo.goodsName}}</span>
+        </div>
+        <div class="pay-result-item">
+            <span>订单号码</span>
+            <span>{{orderInfo.combinOrderNo}}</span>
+        </div>
+        <div class="pay-result-item">
+            <span>支付时间</span>
+            <span>{{orderInfo.payTime}}</span>
+        </div>
+        <div class="pay-result-item">
+            <span>支付方式</span>
+            <span>金币支付</span>
+        </div>
+    </div>
+    <div class="button-footer">
+        <button class="ok" type="button" @click="ok">
+            确认
+        </button>
+    </div>
+    
+</div>

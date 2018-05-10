@@ -1,7 +1,7 @@
-<div class="lead-search-container">
+<div class="lead-search-container" ref="containerRef">
 
     <!-- 输入框以及表单 -->
-    <div :class="[{ 'search-after': frm_push }]" class="box-search box-search-ipt">
+    <div :class="[{ 'search-after': frm_push }]" class="lead-search lead-search-ipt">
         <div id="frm-search">
             <i class="iconfont icon-iconfonticonfontsousuo1"></i>
             <input type="text" placeholder="搜索店铺" id="ipt-search" autocomplete="off" spellcheck="false" @focus="ipt_focus" v-model="ipt_search"
@@ -15,8 +15,8 @@
     </div>
 
     <!-- 搜索前 -->
-    <div class="box-search-before" v-show="!ipt_search && data_history.length">
-        <div class="box-search box-search-history" v-show="data_history.length">
+    <div class="lead-search-before" v-show="!ipt_search && data_history.length">
+        <div class="lead-search lead-search-history" v-show="data_history.length">
             <h3 class="search-title">搜索历史</h3>
             <ul class="search-history-list">
                 <li class="search-history-cell" @click="word_click" v-for="keyword of data_history">{{ keyword }}
@@ -31,8 +31,8 @@
     </div>
 
     <!-- 提示关键词联想 -->
-    <div class="box-search-content" v-show="ipt_search && !frm_push">
-        <div class="box-search box-search-keyword">
+    <div class="lead-search-content" v-show="ipt_search && !frm_push">
+        <div class="lead-search lead-search-keyword">
             <ul class="search-keyword-list">
                 <li class="search-keyword-cell" @click="word_click" v-for="keyword of data_keyword">{{ keyword }}</li>
             </ul>
@@ -40,7 +40,7 @@
     </div>
 
     <!-- 搜索结果 -->
-    <div class="box-search-after" v-show="frm_push">
+    <div class="lead-search-after" v-show="frm_push">
         <template v-if="!data_list.length">
             <section class="search-after-nomessage">
                 <div>

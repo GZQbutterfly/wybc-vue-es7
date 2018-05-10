@@ -24,7 +24,7 @@
             <div class="weui-flex__item" v-for="item in pointData" @click="toRouter(item.path)" :style="item.style">
                 <h4 v-text="item.name"></h4>
                 <p>
-                    <img :src="item.img" :style="item.imgStyle">
+                    <!-- <img :src="item.img" :style="item.imgStyle"> -->
                     <span>&nbsp;{{ userScore[item.value] }}</span>
                 </p>
             </div>
@@ -48,6 +48,12 @@
             </div>
         </div>
         <div class="weui-cells">
+            <!-- <router-link class="weui-cell weui-cell_access" :to="{path:'recommend_shop'}">
+                <div class="weui-cell__bd">
+                    <p>推荐开店</p>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </router-link> -->
             <router-link class="weui-cell weui-cell_access" :to="{path:'information'}">
                 <div class="weui-cell__bd">
                     <p>资讯</p>
@@ -66,13 +72,19 @@
                 </div>
                 <div class="weui-cell__ft"></div>
             </router-link>
-           
+            <router-link class="weui-cell weui-cell_access" :to="{path:'rank_gold'}">
+                <div class="weui-cell__bd">
+                    <p>排行榜</p>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </router-link>
             <router-link class="weui-cell weui-cell_access" :to="{path:'about'}">
                 <div class="weui-cell__bd">
                     <p>关于我们</p>
                 </div>
                 <div class="weui-cell__ft"></div>
             </router-link>
+          
         </div>
     </div>
 </app-container>

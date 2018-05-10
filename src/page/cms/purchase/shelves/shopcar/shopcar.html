@@ -1,0 +1,62 @@
+<div class="shelves-shopcar-container">
+
+    <div class="weui-mask" :class="{'weui-mask-show': show}" @click="showContent" v-show="show" @touchmove="noTouchMove"></div>
+
+    <div class="shelves-shopcar-content bg-c-f2f2f2" :class="getContentClass()">
+
+        <div class="shopcar-info bg-c-b3b3b3 text-s-11 text-c-fff" v-show="diffLeastMoney()">
+            <i class="weui-icon-warn text-s-15"></i>
+            最低进货金额
+            <span class="text-c-ff1c1c">{{opts.leastMoney | localMoney}}元</span>, 还差
+            <span class="text-c-ff1c1c">{{opts.leastMoney - opts.totalPrice | localMoney }}元</span>
+        </div>
+
+        <div class="shopcar-title weui-flex bg-c-fff">
+            <div class="text-c-333 text-s-15 weui-flex__item">已选商品
+                <span class="text-s-12">(
+                    <span class="text-c-7ecc44">{{countType}}</span>种商品，共计
+                    <span class="text-c-ee893e">{{countTotal}}</span>件)</span>
+            </div>
+            <div @click="clean">
+                <i class="icon  iconfont icon-qingkong text-s-18"></i>
+                清空
+            </div>
+        </div>
+
+        <div class="shopcar-list bg-c-fff" ref="listRef">
+            <div>
+                <!--  -->
+                <div class="shopcar-item weui-flex flex-align-b" v-for="(item, index) in list" :key="index">
+                    <div class="shopcar-item_hd">
+                        <div class="text-c-333 text-s-15 text-ellipsis">{{item.goodsName}}</div>
+                        <div class="goods-desc text-c-808080 text-s-12 text-ellipsis">{{item.coverImgDescription}}</div>
+                    </div>
+                    <div class="shopcar-item_bd weui-flex__item">
+                        <div class="weui-flex flex-align-m">
+                            <div class="weui-flex__item">
+                                <span class="text-c-ff1c1c">{{item.moneyPrice * item.__number | localMoney}}</span>
+                            </div>
+                            <div class="weui-flex flex-align-m text-s-15">
+                                <span class="sub " @click="sub(item, index)" :class="{'disabeld': !item.__number }">-</span>
+                                <input type="tel" v-model="item.__number" @input="input($event, item, index)" @blur="blur(item, index)">
+                                <span class="plus" @click="plus(item, index)" :class="{'disabeld': item.__number >= item.maxBuyNum}">+</span>
+                            </div>
+                        </div>
+                        <div class="weui-flex text-s-11">
+                            <div class="weui-flex__item">仓库库存:
+                                <span class="text-c-7ecc44">{{item.amount}}</span>
+                            </div>
+                            <div class="shopcar-flag">我的库存:
+                                <span class="text-c-ee893e">{{item.wdAmount}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="shopcar-item_ft"></div>
+                </div>
+                <!--  -->
+            </div>
+        </div>
+
+    </div>
+
+</div>

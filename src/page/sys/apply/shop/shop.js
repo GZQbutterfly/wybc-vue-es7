@@ -206,9 +206,9 @@ export class ApplyShop extends BaseVue {
                         //自动获取的邀请码一定是正确的 ../反正不弹窗
                         let msg = '';
                         if (flag) {
-                            msg = '根据您的邀请码信息，你的邀请人' + res.upUserName + '已成为您的邀请人！';
+                            msg = '根据您的邀请码信息，你的推荐人' + res.upUserName + '已成为您的推荐人！';
                         } else {
-                            msg = '根据您的邀请码信息，邀请人' + res.upUserName + '的等级不够，不能成为您的邀请人，系统已自动选择 ' + res.upperUserName + ' 用户成为您的邀请人';
+                            msg = '根据您的邀请码信息，推荐人' + res.upUserName + '的等级不够，不能成为您的推荐人，系统已自动选择 ' + res.upperUserName + ' 用户成为您的推荐人';
                         }
                        // _self.dialogPopup(msg);
                     }
@@ -239,7 +239,7 @@ export class ApplyShop extends BaseVue {
         let _self = this;
         _self._$dialog({
             dialogObj: {
-                title: '选定邀请人',
+                title: '选定推荐人',
                 type: 'info',
                 content: msg,
                 assistBtn: '',

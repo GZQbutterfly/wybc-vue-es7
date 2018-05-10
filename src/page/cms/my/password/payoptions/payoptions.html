@@ -6,7 +6,7 @@
             </div>
             <div class="weui-cell__ft"></div>
         </div>
-        <div v-if="hasPassword" class="weui-cell weui-cell_access" @click="changePayPassWord">
+        <div v-if="hasPassword && passwordAble" class="weui-cell weui-cell_access" @click="changePayPassWord">
             <div class="weui-cell__bd">
                 <p>修改钱包支付密码</p>
             </div>

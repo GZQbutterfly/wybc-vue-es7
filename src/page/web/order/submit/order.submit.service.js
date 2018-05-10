@@ -19,7 +19,7 @@ export default (_store) => {
          * 获取微店信息
          */
         getWdInfo(shopId) {
-            return _store.dispatch('CHECK_WD_INFO', shopId);
+            return _store.dispatch('CHECK_WD_INFO', { shopId, noset: true });
         },
 
         /**
@@ -125,11 +125,11 @@ export default (_store) => {
         getFee_in_gold() {
             return q("api/q_inside_gold_delivery_config");
         },
-          /*获取邮费_限时购_校外地址*/
+        /*获取邮费_限时购_校外地址*/
         getFee_timeLimitBuy() {
             return q("api/q_limit_time_outside_delivery");
         },
-          /*获取邮费_限时购_校内地址*/
+        /*获取邮费_限时购_校内地址*/
         getFee_in_timeLimitBuy() {
             return q("api/q_limit_time_inside_delivery");
         },

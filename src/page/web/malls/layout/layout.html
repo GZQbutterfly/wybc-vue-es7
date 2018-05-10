@@ -21,11 +21,11 @@
                 </dd>
             </dl>
             <div class="wdName_ft weui-flex flex-align-m">
-                <!-- 4.6.3 -->
-                <!-- <div class="add-follow text-c-333 text-center" v-show="$route.name === 'new_home'" @click="$store.commit('ADD_FOLLOW_SHOP')">
-                    <span class="text-s-15">+</span>
-                    <span class="text-s-13 ">关注</span>
-                </div> -->
+                <!-- 4.6.3 v-show="$route.name === 'new_home'-->
+                <div class="add-follow text-c-333 text-center" v-show="$route.name == 'home'" @click="followShop">
+                    <span class="text-s-15" v-if="!isFollow">+</span>
+                    <span class="text-s-13 ">{{followName}}</span>
+                </div>
                 <div class="serBox " @click='goSearch($route.name)' v-show="isHeadSearch">
                     <i class="iconfont icon-sousuo sercher"></i>
                 </div>
@@ -43,13 +43,13 @@
     </div>
 
     <!-- 底部菜单 -->
-    <footer class="layout-nav-footer" v-if="isCreatedMenu">
+    <footer class="layout-nav-footer custom-footer" v-if="isCreatedMenu">
         <div class="line"></div>
         <div class="weui-flex nav-boxs">
             <router-link :to="item.path" :title="item.title" class="weui-flex__item nav-box" v-for="item,key in list" :key="key">
                 <img class="wybc-icon" :src="item.imgDefSrc" :alt="item.title" v-show="item.name !== activeName">
                 <img class="wybc-icon" :src="item.imgActSrc" :alt="item.title" v-show="item.name === activeName">
-                <span class="weui-badge" v-if="item.showBadge && $store.state.shopCar.count">{{$store.state.shopCar.count}}</span>
+                <span class="weui-badge" v-if="item.showBadge && $store.state.shopCar.count">{{$store.state.shopCar.count>99?'99+':$store.state.shopCar.count}}</span>
                 <p class="nav-label">{{item.title}}</p>
             </router-link>
         </div>

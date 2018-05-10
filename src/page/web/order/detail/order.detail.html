@@ -12,10 +12,10 @@
                     请于
                     <span v-text="formatDate"></span>内付款，超时订单将自动关闭
                 </p>
-                <p id="finalTime" v-if="orderInfo.orders.orderState == 4 && orderInfo.orders.orderType==2">
+                <!-- <p id="finalTime" v-if="orderInfo.orders.orderState == 4 && orderInfo.orders.orderType==2">
                     此订单将于
                     <span>{{orderInfo.leftDay}}</span>天后自动确认收货
-                </p>
+                </p> -->
             </div>
         </div>
 
@@ -116,8 +116,8 @@
                     <div class="order-goods-left">
                         <span class="title">{{ v.goodsName }}</span>
                         <div class="gold_coiney" v-if="v.consuType == 3&&!timeLimit">
-                            <span class="price">{{ v.moneyPrice | localMoney }}</span>
-                            &nbsp;+&nbsp;
+                            <span v-if="v.moneyPrice" class="price">{{ v.moneyPrice | localMoney }}</span>
+                            <span  v-if="v.moneyPrice"> + </span>
                             <img src="/static/images/money/icon.png" alt="" style="width: .145rem;height: .145rem;">
                             <span class="gold">{{ v.goldPrice }}</span>
                         </div>
@@ -163,7 +163,7 @@
         </div>
 
         <!-- 优惠券-->
-        <div class="line order-line" v-if="useRoll">
+        <div class="line order-line" v-if="useRoll && totalRoll">
             <span class="fleft">优惠券</span>
             <span class="text-c-f99939">- {{ totalRoll | localMoney }}</span>
         </div>
@@ -194,7 +194,7 @@
             <!-- <p>订单号码：{{ combinOrderNo ? orderInfo.orders.combinOrderNo : orderInfo.orders.orderNo }}</p> -->
             <p>订单号码：{{ orderInfo.orders.combinOrderNo }}</p>
             <!-- 订单状态，1：待支付 2：已支付\备货中  3：待发货 4.已发货，5：交易完成，6：交易关闭（原因有：1-买家取消、2-支付超时、-订单异常) -->
-            <p v-if="![1, 6].includes(orderInfo.orders.orderState)">支付方式: {{orderInfo.orders.payType}}</p>
+            <p v-if="![1, 6].includes(orderInfo.orders.orderState)">支付方式：{{$store.state.cache.lookup['PAY_METHOD'][orderInfo.orders.payType]}}</p>
             <p>创建时间：{{ orderInfo.orders.createAt | date('yyyy-MM-dd hh:mm:ss')}}</p>
             <!-- 买家留言 虚物 -->
             <div class="xunigoods" v-if="orderInfo.orders.gsType == 2 && JSON.stringify(orderLeaveMsg) != '{}'">
@@ -211,7 +211,7 @@
     </pull-refresh>
 
     <!-- 底部弹出框 -->
-    <div class="confirm-receipt" v-if="orderInfo.orders.orderState==1">
+    <div class="confirm-receipt custom-footer" v-if="orderInfo.orders.orderState==1">
         <template>
             <div class="box-price">
                 合计：

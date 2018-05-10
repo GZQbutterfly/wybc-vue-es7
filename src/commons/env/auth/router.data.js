@@ -15,4 +15,6 @@ export default [
     'day_sign_list',
     /* 我的优惠券 */
     'coupon_list',
+    /*金币排行*/
+    'rank_gold',
 ];

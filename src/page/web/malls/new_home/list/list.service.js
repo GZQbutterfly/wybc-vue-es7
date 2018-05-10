@@ -25,8 +25,8 @@ export default (store) => {
         },
 
         /**
-        * 登陆用户检测是否已经领取过新手大礼包
-        */
+         * 登陆用户检测是否已经领取过新手大礼包
+         */
         queryCheckHasGift() {
             return q('api/activites/check_has_gifts');
         },
@@ -34,11 +34,13 @@ export default (store) => {
             return q('api/activites/check_first_gifts_avalid')
         },
         /**
-        * 拆新手礼包
-        * @param {String} code 
-        */
+         * 拆新手礼包
+         * @param {String} code 
+         */
         async takeGiftPack(couponId) {
-            return q('api/activites/get_gifts', { couponId });
+            return q('api/activites/get_gifts', {
+                couponId
+            });
             // return {
             //     data: {
             //         "gifts": [
@@ -70,7 +72,10 @@ export default (store) => {
          * 领取优惠券
          */
         async takeCounpon(couponId, shopId) {
-            return q('api/activites/user_get_coupon', { couponId, shopId });
+            return q('api/activites/user_get_coupon', {
+                couponId,
+                shopId
+            });
             // return {
             //     data: {
             //         "gifts": [
@@ -97,6 +102,17 @@ export default (store) => {
             //         ]    //false:已经领取过; true:  还没有领取过
             //     }
             // }
+        },
+        //查询仓库库存
+        queryGoodsStock(data) {
+            return q("api/stock/q_all_goods_stock", data);
+        },
+        //查询快速仓开启状态
+        queryStoreState(data) {
+            return q("api/q_shopDelivery_state", data)
+        },
+        queryHomeGoodsList(data) {
+            return q("api/q_claid_goods_by_fz", data);
         }
 
     }

@@ -76,12 +76,12 @@ export default (_store) => {
                         resolve(data);
                     });    
                 } else if (_shopId != null && (localWdInfo.infoId != _shopId)) {
-                    _store.commit('ADD_HISTORY_SHOP', _shopId);
+                    // _store.commit('ADD_HISTORY_SHOP', _shopId);
                     _store.dispatch('CHECK_WD_INFO',  {shopId: _shopId}).then((data)=>{
                         resolve(data);
                     });  
                 } else if (localWdInfo.infoId == null) {
-                    _store.dispatch('CHECK_WD_INFO', data).then((data)=>{
+                    _store.dispatch('CHECK_WD_INFO', localWdInfo.infoId).then((data)=>{
                         resolve(data);
                     });   
                 } else {
@@ -89,6 +89,12 @@ export default (_store) => {
                 }
             });
             return promsi;
+        },
+        followShop(data){
+            return q("api/wd_vip/check_if_attention",data);
+        },
+        queryUserFollowNum() {
+            return q("api/wd_vip/q_my_attention_wd_count");
         }
     }
 };

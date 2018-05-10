@@ -4,7 +4,7 @@
         <div class="weui-toast" :style="{'max-width':width+'px'}">
             <i class="weui-icon_toast" :class="iconClass" v-if="iconClass">
             </i>
-            <p class="weui-toast__content text-s-14">{{title}}</p>
+            <p class="weui-toast__content text-s-14" :class="{'noicon': !iconClass}">{{title}}</p>
         </div>
     </div>
 </template>
@@ -49,7 +49,6 @@ export default {
            }else{
                 this.iconClass = '';
            }
-
            this.timer = window.setTimeout(() => {
                this.show = false;
            }, this.time);
@@ -85,6 +84,9 @@ export default {
             word-wrap: break-word;
             // line-height: 50px;
             padding-bottom: 15px; 
+        }
+        .noicon {
+            margin-top: 20px;
         }
     }
 }

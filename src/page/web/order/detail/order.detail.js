@@ -50,18 +50,10 @@ export class OrderDetail extends BaseVue {
         this._$service = orderDetailService(this.$store);
         this.$nextTick(() => {
             //订单编号
-            this.orderId = this.$route.query.orderId;
             this.combinOrderNo = this.$route.query.combinOrderNo;
-            //判断登录
-            if (!localStorage._user && this.orderId) {
-                toLogin(this.$router, {
-                    toPath: '/order_detail?orderNo=' + this.orderId
-                })
-                return;
-            }
             if (!localStorage._user && this.combinOrderNo) {
                 toLogin(this.$router, {
-                    toPath: '/order_detail?orderNo=' + this.combinOrderNo
+                    toPath: '/order_detail?combinOrderNo=' + this.combinOrderNo
                 })
                 return;
             }
@@ -79,7 +71,7 @@ export class OrderDetail extends BaseVue {
         _self.totalPrice = 0;
         _self.shipFee = 0;
         if (this.orderId) {
-            this._$service.getOrderInfo(this.orderId).then((res) => {
+            this._$service.getOrderInfo(this.combinOrderNo).then((res) => {
                 if (res.data.errorCode) {
                     return;
                 }
@@ -160,6 +152,8 @@ export class OrderDetail extends BaseVue {
         _self.useRoll = false;
         _self.timeLimit = false;
         _self.totalGold = 0;
+        _self.totalRoll = 0;
+        _self.totalCommonPrice = 0;
         _self.totalDisCountMoney = 0;
         _self.orderPayType = 0; //金币购标识
         res.orders.forEach(v => {
@@ -173,17 +167,17 @@ export class OrderDetail extends BaseVue {
                 _self.timeLimit = true;
                 _self.orderPayType = 2;
             }
-
             if (v.couponMoney != null) {
                 _self.useRoll = true;
+                _self.totalRoll += Number(v.couponMoney)  || 0;
             }
 
         })
-        _self.totalCommonPrice = 0;
-        _self.totalRoll = 0;
+     
+     
         res.orderGoods.forEach(v => {
             _self.totalCommonPrice += Number(v.purchasePrice * v.number);
-            _self.totalRoll += Number(v.purchasePrice * v.number - v.totalMoney) | 0;
+      
             _self.totalDisCountMoney += Number(v.purchasePrice * v.number - v.moneyPrice * v.number);
         })
         let a = {
@@ -410,20 +404,20 @@ export class OrderDetail extends BaseVue {
      * 支付
      */
     goPay() {
-        let _this = this;
         let _parm = {
             combinOrderNo: this.orderInfo.orders.combinOrderNo,
             orderId: this.orderInfo.orders.orderId
         }
         let orderPayType = {
             combinOrderNo: this.orderInfo.orders.combinOrderNo,
-            orderPayType: _this.orderPayType
+            orderPayType: this.orderPayType,
+          
         }
 
         let _param = {
             combinOrderNo: this.orderInfo.orders.combinOrderNo,
             orderId: this.orderInfo.orders.orderId,
-            totalMoney: this.orderInfo.orders.orderId.totalMoney,
+            totalMoney:  this.totalPrice + this.shipFee,
             orderPayType: this.orderPayType
         }
         this.$router.push({path:'pay_list',query:_param});

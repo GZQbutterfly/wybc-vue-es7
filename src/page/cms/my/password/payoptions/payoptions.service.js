@@ -14,6 +14,9 @@ export default (_store) => {
     return {
         queryPasswordState() {
            return  q('api/user_pay/q_wallet_pay_password_status');
-        }
+        },
+        queryLockState() {
+            return  q('api/user_pay/check_wallet_pay_is_lock');
+         }
     };
 }

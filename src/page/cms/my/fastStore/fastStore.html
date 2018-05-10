@@ -13,7 +13,7 @@
                 <div class="fastStore-state ">当前快速仓状态: <span  class="text-color-waring">关闭</span></div>
             </div>
         </div>
-        <div v-if="fastDeliveryInfo.ifHasInfo" class="faststore-footer " :class="{'color-waring': fastDeliveryInfo.state ,'color-nomal': !fastDeliveryInfo.state}" @click="changeState">{{fastDeliveryInfo.state?'关闭':'开启'}}</div>
-        <div v-else class="faststore-footer color-nomal" @click="goEdit">点击开启</div>
+        <div v-if="fastDeliveryInfo.ifHasInfo" class="faststore-footer custom-footer" :class="{'color-waring': fastDeliveryInfo.state ,'color-nomal': !fastDeliveryInfo.state}" @click="changeState">{{fastDeliveryInfo.state?'关闭':'开启'}}</div>
+        <div v-else class="faststore-footer color-nomal custom-footer" @click="goEdit">点击开启</div>
     <router-link to="/info?infoName=quickInfo" ><u class="faststore-desc">快速仓说明</u></router-link>
 </div>

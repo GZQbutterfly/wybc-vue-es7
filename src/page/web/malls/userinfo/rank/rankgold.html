@@ -1,0 +1,32 @@
+<app-container class="gold-rank-container" :style="{'visibility': showAction ? 'visible' : 'hidden'}">
+    <!--  -->
+    <header slot="header" class="gol-rank-content_hd">
+        <div class="bg-c-fff">
+            <div class="rank-tabs weui-flex flex-center  text-center text-s-17">
+                <template v-for="(item, index) in tabs">
+                    <div class="rank-tab " :class="[currentTab == index ? 'text-c-fff bg-c-7ecc44' : 'text-c-b3b3b3 bg-c-e6e6e6']" @click="switchTab(index)">{{item.label}}</div>
+                </template>
+            </div>
+            <div class="reward" @click="toGetGift">
+                <img src="/static/images/follow_rank/gift.png" alt="奖励">
+                <div class="text-s-12 text-c-2e73db">奖励</div>
+            </div>
+        </div>
+        <div class="action-time text-s-14 text-c-808080 bg-c-f2f2f2">
+            活动时间:
+            <span class="text-c-f7b64c"> {{rankingListConfig.beginTime | date('yyyy-MM-dd hh:mm') }} 一 {{rankingListConfig.endTime | date('yyyy-MM-dd hh:mm') }}</span>
+        </div>
+    </header>
+    <!--  -->
+    <div class="gol-rank-content_bd bg-c-f2f2f2">
+        <div class="swiper-container" ref="bodyRef">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" v-for="(item, index) in tabs" :key="index">
+                    <rank-item v-if="item.create"  :opts="item"  :rankingListConfig="rankingListConfig"></rank-item>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</app-container>

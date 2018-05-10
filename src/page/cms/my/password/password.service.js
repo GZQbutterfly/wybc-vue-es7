@@ -23,6 +23,9 @@ export default (_store) => {
         },
         checkCodeAvible(data){
             return q('api/user_pay/check_phone_verification_code',data);
-        }
+        },
+        checkImgCode(data){
+            return q('api/c_img_code', data);
+        },
     };
 }

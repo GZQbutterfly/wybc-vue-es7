@@ -6,26 +6,28 @@
             <div slot="refresh-spinner" style="position:relative;top:0.1rem;">
                 <img src="/static/images/newshop/pul.gif" alt="" style="height:0.35rem;width:0.25rem;">
             </div>
-            <goods-component v-if="goods" 
-            :goods = "goods" 
-            @toCounponDetail = "toCounponDetail" 
-            @goHome = "goHome"
-            :consumptionType = "consumptionType"
-            :timeObj = "timeObj"
-            :counponObj = "counponObj"
-            :hasBannerVideo = "hasBannerVideo"
-            :playerOptions = "playerOptions"
-            :shopkeeper = "shopkeeper"
-            :bannerImg = "bannerImg"
-            :isLimitBuy="!moneyBuyFlag">
+            <goods-component
+                :goods = "goods" 
+                @toCounponDetail = "toCounponDetail" 
+                @goHome = "goHome"
+                @setWxShareConfig="setWxShareConfig"
+                :consumptionType = "consumptionType"
+                :timeObj = "timeObj"
+                :counponObj = "counponObj"
+                :hasBannerVideo = "hasBannerVideo"
+                :playerOptions = "playerOptions"
+                :shopkeeper = "shopkeeper"
+                :bannerImg = "bannerImg" 
+                :isLimitBuy= '!moneyBuyFlag'
+                v-if="goods && goods.goodsId">
             </goods-component>
         </scroller>
     </div>
-    <div class="buy-content weui-flex" >
+    <div class="buy-content weui-flex custom-footer" >
         <template v-if="!moneyBuyFlag">
             <div class="shop-car" @click="goShopcart">
                 <i class="iconfont icon-gouwuche"></i>
-                <p v-if="$store.state.shopCar.count != 0">{{$store.state.shopCar.count}}</p>
+                <p v-if="$store.state.shopCar.count != 0">{{$store.state.shopCar.count>99?"99+":$store.state.shopCar.count}}</p>
             </div>
             <div class="weui-flex-item join-car" @click="joinCar(goods)" v-show="goods.gsType==1">加入购物车</div>
             <div class="weui-flex-item buy-now" @click="buyNow(goods)">立即购买</div>

@@ -2,7 +2,7 @@
     <div class="weui-mask" @click="closeDialog()" v-if="showDialogMode"></div>
     <!-- @click="close()" -->
     <transition name="fadeAddressDialogUp">
-        <div class="address-dialog-content" v-if="showAddressDiaogContent">
+        <div class="address-dialog-content custom-footer" v-if="showAddressDiaogContent">
             <!-- 地址详情 -->
             <div v-show="!showAddAddress">
                 <header class="weui-cell">

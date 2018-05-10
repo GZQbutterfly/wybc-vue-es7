@@ -3,6 +3,38 @@
     height: calc(100% - 86px);
     display: flex;
     flex-direction: column;
+    position: relative;
+    .shopcarEntry {
+        position: absolute;
+        height: 50px;
+        width: 50px;
+        text-align:center;
+        line-height: 50px;
+        background-color: #ccc;
+        border-radius: 50%;
+        bottom: 18px;
+        left: 18px;
+        opacity: 0.8;
+        z-index: 999;
+        i{
+            font-size: 25px!important;
+            color: #7ecc44;
+        }
+        span{
+            position: absolute;
+            height: 20px;
+            min-width: 20px;
+            border-radius: 10px 10px;
+            text-align: center;
+            line-height: 20px;
+            top: 0;
+            right: 0;
+            display: block;
+            background: #ff1c1c;
+            color: #fff;
+            font-size: 12px;
+        }
+    }
     .classifyEmpty {
         background: #ffffff;
         flex: 1;
@@ -73,7 +105,7 @@
                 .right-bottom {
                     position: absolute;
                     right: 0.02rem;
-                    bottom: 0.75rem;
+                    bottom: 0.78rem;
                     z-index: 1;
                     border-radius: 0.02rem;
                     padding: 0 0.01rem;

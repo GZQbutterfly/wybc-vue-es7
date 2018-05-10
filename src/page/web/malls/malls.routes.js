@@ -128,6 +128,39 @@ const routes = [
                     }, 'web/malls/goods');
                 }
             },
+            // 粉丝记录
+            {
+                path: '/fans_record',
+                name: 'fans_record',
+                meta: { noMenu: 1, noLoginTip: false },
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./my/fans_record/fans_record')['FansRecord']);
+                    }, 'web/malls/my');
+                }
+            },
+            // 推荐开店
+            {
+                path: '/recommend_shop',
+                name: 'recommend_shop',
+                meta: { noMenu: 1, noLoginTip: false },
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./my/recommend_shop/easy')['EasyScanner']);
+                    }, 'web/malls/my');
+                }
+            },
+            // 我的推荐
+            {
+                path: '/my_recommendation',
+                name: 'my_recommendation',
+                meta: { noMenu: 1, noLoginTip: false },
+                component: resolve => {
+                    require.ensure([], require => {
+                        resolve(require('./my/my_recommendation/my_recommendation')['MyRecommendation']);
+                    }, 'web/malls/my');
+                }
+            },
             // 搜索、首页、分类的公共商品列表组件
             {
                 path: '/goods_list',
@@ -172,6 +205,33 @@ const routes = [
             require.ensure([], require => {
                 resolve(require('./shop_car/mask_coupon/mask_coupon')['maskCoupon']);
             }, 'web/malls/malls');
+        }
+    },
+    {
+        path: '/follow_shop',
+        name: 'follow_shop',
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('./userinfo/followShop/follow_shop')['FollowShop']);
+            }, 'web/malls/malls');
+        }
+    },
+    {
+        path: '/rank_gold',
+        name: 'rank_gold',
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('./userinfo/rank/rankgold')['RankGold']);
+            }, 'web/malls/rank');
+        }
+    },
+    {
+        path: '/rank_gift',
+        name: 'rank_gift',
+        component: resolve => {
+            require.ensure([], require => {
+                resolve(require('./userinfo/rank/gift/gift')['RankGift']);
+            }, 'web/malls/rank');
         }
     },
     // 金币maskCoupon

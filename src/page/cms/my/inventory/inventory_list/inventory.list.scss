@@ -1,22 +1,36 @@
 .inventory_list {
     height: 100%;
     overflow: hidden;
-    .shopcar{
-      position: fixed;
-      height: 50px;
-      width: 50px;
-      bottom: 18px;
-      left: 18px;
-      text-align: center;
-      line-height: 50px;
-      opacity: 0.8;
-      border-radius: 50%;
-      background: #ccc;
-      .icon-gouwuche{
-          font-size: 25px!important;
-          color: #7ecc44;
-      }
-    } 
+    .shopcar {
+        position: fixed;
+        height: 50px;
+        width: 50px;
+        bottom: 18px;
+        left: 18px;
+        text-align: center;
+        line-height: 50px;
+        opacity: 0.8;
+        border-radius: 50%;
+        background: #ccc;
+        .icon-gouwuche {
+            font-size: 25px !important;
+            color: #7ecc44;
+        }
+        span {
+            position: absolute;
+            height: 20px;
+            min-width: 20px;
+            border-radius: 10px 10px;
+            text-align: center;
+            line-height: 20px;
+            top: 0;
+            right: 0;
+            display: block;
+            background: #ff1c1c;
+            color: #fff;
+            font-size: 12px;
+        }
+    }
     .weui-cells {
         margin-top: 5px;
         &:first-child {
@@ -152,7 +166,7 @@
         border: 1px solid #7ecc44;
         border-radius: 2px 2px;
         .icon-gouwuche {
-            font-size: 20px!important;
+            font-size: 20px !important;
             color: #7ecc44;
         }
     }

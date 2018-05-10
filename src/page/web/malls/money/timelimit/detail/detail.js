@@ -29,15 +29,15 @@ export class MoneyTimeLimitDetail extends BaseVue {
     show2Car = false;
     showgoPay = false;
     timeObj = {
-        int_day :'00', 
-        int_hour :'00',
-        int_second :'00',
-        int_minute :'00',
-        int_mounth :"00",
-        timeShowType:1      //时间显示类型 1已开启 2y未开启但是时间小于1天 3时间大于1天
+        int_day: '00',
+        int_hour: '00',
+        int_second: '00',
+        int_minute: '00',
+        int_mounth: "00",
+        timeShowType: 1      //时间显示类型 1已开启 2y未开启但是时间小于1天 3时间大于1天
     };
-    consumptionType = 3;  
-    timeShowType=1;      //时间显示类型 1已开启 2y未开启但是时间小于1天 3时间大于1天
+    consumptionType = 3;
+    timeShowType = 1;      //时间显示类型 1已开启 2y未开启但是时间小于1天 3时间大于1天
     timerID;
     bannerImg = [];
     hasBannerVideo = false;
@@ -46,7 +46,6 @@ export class MoneyTimeLimitDetail extends BaseVue {
     playerOptions = {
         fluid: true,
     };
-    shopId;
     periodId;
     amountGold = 0;
     _$service;
@@ -55,60 +54,36 @@ export class MoneyTimeLimitDetail extends BaseVue {
         buy: 0
     };
     periodStart = 8;//几点场
-    created() {
-        this._$service = goodsService(this.$store);
-        getShopCarCount(this.$store).getShopcarGoodsesList();
-        this.getGoodsMsg();
-        this.queryTimeLimit();
-    }
+    shopId;
+    shopInfo;
 
-
-    mounted() {
+    async mounted() {
         let _query = this.$route.query;
-
+        this._$service = goodsService(this.$store);
+        this.shopInfo = await this.$store.dispatch('CHECK_WD_INFO');
+        this.shopId = this.shopInfo.shopId;
         this.$nextTick(() => {
             document.title = "商品详情";
+            this.getGoodsMsg();
+            this.queryTimeLimit();
+            getShopCarCount(this.$store).getShopcarGoodsesList();
         });
-
     }
+
     refresh(done) {
-        let _this = this;
+        let _self = this;
         setTimeout(() => {
-            _this.getGoodsMsg();
-            _this.queryTimeLimit();
+            _self.getGoodsMsg();
+            _self.queryTimeLimit();
             done(true);
         }, 500)
     }
-    //获取店信息
-    queryWdInfo(shopId) {
-        let _this = this;
-        this._$service.queryWdInfo(shopId).then((wdVipInfo) => {
-            let _wdVipInfo = wdVipInfo;
-            if (!_wdVipInfo.wdImg) {
-                _wdVipInfo.wdImg = "/static/images/newshop/touxiang.png"
-            }
-            _this.shopkeeper = {
-                wdName: _wdVipInfo.wdName,
-                wdImg: _wdVipInfo.wdImg,
-                vipGrade: _wdVipInfo.wdVipGrade,
-                school: _wdVipInfo.school,
-            }
-        });
-    }
+
     async getGoodsMsg() {
-        let _this = this;
-        _this.shopId = this.$route.query.shopId;
-        let wdInfo = (await  this.$store.dispatch('CHECK_WD_INFO'));
-        if (!_this.shopId) {
-            _this.shopId = wdInfo.infoId;
-        }
-        if (isArray(_this.shopId)) {
-            _this.shopId = _this.shopId[0];
-        }
-        _this.queryWdInfo(_this.shopId);
+        let _self = this;
         let opt = {
-            goodsId: _this.$route.query.goodsId,
-            shopId: _this.shopId
+            goodsId: _self.$route.query.goodsId,
+            shopId: _self.shopId
         }
         this._$service.goodsInfo(opt)
             .then(res => {
@@ -127,13 +102,13 @@ export class MoneyTimeLimitDetail extends BaseVue {
                             window.history.back();
                         }
                     };
-                    _this.$store.state.$dialog({ dialogObj });
+                    _self.$store.state.$dialog({ dialogObj });
                     return;
                 }
-                _this.goods = _result.data;
+                _self.goods = _result.data;
                 let arr = _result.data.bannerImg.split(",");
                 if (_result.data.bannerVideo) {
-                    _this.playerOptions = {
+                    _self.playerOptions = {
                         muted: true,
                         sources: [{
                             type: "video/mp4",
@@ -147,14 +122,14 @@ export class MoneyTimeLimitDetail extends BaseVue {
                             newArr.push(arr[index]);
                         }
                     }
-                    _this.hasBannerVideo = true;
-                    _this.bannerImg = newArr;
+                    _self.hasBannerVideo = true;
+                    _self.bannerImg = newArr;
                 } else {
-                    _this.bannerImg = arr;
+                    _self.bannerImg = arr;
                 }
 
                 if (_result.data.goodsVideo) {
-                    _this.coverVideoOptions = {
+                    _self.coverVideoOptions = {
                         fluid: true,
                         muted: true,
                         sources: [{
@@ -164,20 +139,6 @@ export class MoneyTimeLimitDetail extends BaseVue {
                         poster: _result.data.goodsVideoImg,
                     }
                 }
-                this.fetchShopData()
-                    .then((res) => {
-                        let config = {
-                            title: '限时低价，整点开抢中!',
-                            desc: '优质商品限时低价尽在学惠精选，快来抢购吧 ！',
-                            imgUrl: _this.goods.coverImg,
-                            link: window.location.href.split('#')[0] + '&shopId=' + res.infoId,
-                            success: function () {
-                                _this.shareSuccessDone();
-                            }
-
-                        }
-                        _this.updateWxShare(config);
-                    })
             }).catch(err => {
 
             });
@@ -236,7 +197,7 @@ export class MoneyTimeLimitDetail extends BaseVue {
                 _self.timeObj.timeShowType = 1;
                 if (_result.leftTimeStamp > 0) {
                     _self.countDown(_result.leftTimeStamp);
-                } 
+                }
             } else {
                 let flag = _self.isDayGreaterThanZero(_result.leftTimeStamp);
                 if (flag) {
@@ -255,35 +216,24 @@ export class MoneyTimeLimitDetail extends BaseVue {
             }
         })
     }
-    /**
-     * 分享成功的回调
-     */
-    async shareSuccessDone() {
-        let _self = this;
-        let data = {
-            goodsId: _self.$route.query.goodsId
-        }
-        let res = await _self._$service.shareDone(data);
-        res = res.data;
-        if (!res.errorCode) {
-            //分享成功
-            console.log('分享结果', res)
-        }
-    }
+
 
     goShopcart() {
         this.$router.push({ path: "shop_car" });
     }
+
     joinCar(goodsId) {
         let _self = this;
         this.queryStock(function () {
             _self.show2Car = true;
         });
     }
+
     changeShowIt() {
         this.show2Car = false;
         this.showgoPay = false;
     }
+
     buyNow() {
         let goodsId = this.$route.query.goodsId;
         let periodId = this.$route.query.periodId;
@@ -298,10 +248,10 @@ export class MoneyTimeLimitDetail extends BaseVue {
             _self.showgoPay = true;
         });
     }
+
     numberpckerHide() {
         this.show2Car = this.showgoPay = false;
     }
-
 
     async finishgoPay(num) {
         let goodsId = this.goods.goodsId;
@@ -354,43 +304,75 @@ export class MoneyTimeLimitDetail extends BaseVue {
     //倒计时
     countDown(leftchektime) {
         this.timerID && clearInterval(this.timerID);
-        let time_distance, _this = this;
+        let time_distance, _self = this;
         time_distance = leftchektime / 1000;
         this.timerID = setInterval(function () {
             time_distance--;
             if (time_distance > 0) {
-                // _this.int_day = Math.floor(time_distance / (60 * 60 * 24));
+                // _self.int_day = Math.floor(time_distance / (60 * 60 * 24));
 
-                _this.timeObj.int_hour = Math.floor(time_distance / (60 * 60) % 24);
+                _self.timeObj.int_hour = Math.floor(time_distance / (60 * 60) % 24);
 
-                _this.timeObj.int_minute = Math.floor(time_distance / 60 % 60);
+                _self.timeObj.int_minute = Math.floor(time_distance / 60 % 60);
 
-                _this.timeObj.int_second = Math.floor(time_distance % 60);
+                _self.timeObj.int_second = Math.floor(time_distance % 60);
                 //加0
-                if (_this.timeObj.int_hour < 10)
-                    _this.timeObj.int_hour = "0" + _this.timeObj.int_hour;
-                if (_this.timeObj.int_minute < 10)
-                    _this.timeObj.int_minute = "0" + _this.timeObj.int_minute;
-                if (_this.timeObj.int_second < 10)
-                    _this.timeObj.int_second = "0" + _this.timeObj.int_second;
+                if (_self.timeObj.int_hour < 10)
+                    _self.timeObj.int_hour = "0" + _self.timeObj.int_hour;
+                if (_self.timeObj.int_minute < 10)
+                    _self.timeObj.int_minute = "0" + _self.timeObj.int_minute;
+                if (_self.timeObj.int_second < 10)
+                    _self.timeObj.int_second = "0" + _self.timeObj.int_second;
             }
             else {
-                _this.timeObj = {
+                _self.timeObj = {
                     int_day: '00',
                     int_hour: '00',
                     int_minute: '00',
                     int_second: '00',
-                    timeShowType: _this.timeObj.timeShowType
+                    timeShowType: _self.timeObj.timeShowType
                 }
-                clearInterval(_this.timerID);
-                _this.getGoodsMsg();
-                _this.queryTimeLimit();
+                clearInterval(_self.timerID);
+                _self.getGoodsMsg();
+                _self.queryTimeLimit();
             }
         }, 1000);
     }
+
     goHome() {
         this.$router.push({ path: 'home', query: { shopId: this.shopId } })
     }
+
+    setWxShareConfig() {
+        let _self = this;
+        let config = {
+            title: '限时低价，整点开抢中!',
+            desc: '优质商品限时低价尽在学惠精选，快来抢购吧 ！',
+            imgUrl: _self.goods.coverImg,
+            link: location.origin + location.pathname + '?&goodsId=' + _self.goods.goodsId + '&shopId=' + _self.shopInfo.infoId + '&periodId=' + _self.periodId,
+            success: function () {
+                _self.shareSuccessDone();
+            }
+        };
+        _self.updateWxShare(config);
+    }
+
+    /**
+    * 分享成功的回调
+    */
+    async shareSuccessDone() {
+        let _self = this;
+        let data = {
+            goodsId: _self.$route.query.goodsId
+        }
+        let res = await _self._$service.shareDone(data);
+        res = res.data;
+        if (!res.errorCode) {
+            //分享成功
+            console.log('分享结果', res)
+        }
+    }
+
     destroyed() {
         this.timerID && clearInterval(this.timerID);
     }

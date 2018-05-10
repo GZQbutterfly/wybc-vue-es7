@@ -10,6 +10,6 @@ export default async ()=>{
     // }
 
 
-    await nocache();
+    // await nocache();
     return true;
 }

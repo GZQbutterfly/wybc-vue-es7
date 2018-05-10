@@ -75,7 +75,7 @@ export class ShopChief extends BaseVue{
                     let _flag = await _self.fetchGoodsData(_self.currentClassifyId, _self.currentIndex, 1);
                     done(_flag);
                 } else {
-                    _self.$router.replace({ path: "classify", query: { classify: -1 } });
+                    _self.$router.replace({ path: "shop_chief", query: { classify: -1 } });
                     await _self.queryClassifyNav();
                     await _self.fetchGoodsData(-1, 0, 1);
                     _self.setPage();
@@ -104,6 +104,9 @@ export class ShopChief extends BaseVue{
      */
     async isClassifyId(classifyId) {
         let _classify = (await this._$service.classfyList()).data;
+        if(_classify.data.length==0){
+            return false;
+        }
         let arr = {
             classifyName: "全部商品",
             goodsClassifyId: -1,
@@ -159,6 +162,7 @@ export class ShopChief extends BaseVue{
         if (!_classify || _classify.errorCode || _classify.data.length == 0) {
             this.classfyGoodsList = [];
             this.classifyAdImgPic = [];
+            this.classifyNav = [];
             return;
         }
         let arr = {
@@ -288,10 +292,10 @@ export class ShopChief extends BaseVue{
         if (flag) { //更新数据
             this.setCurrentPageData(id, index);
         } else {
-            this.$router.replace({ path: "classify", query: { classify: -1 } });
             await this.queryClassifyNav();
             await this.fetchGoodsData(-1, 0, 1);
             this.setPage();
+            this.$router.replace({ path: "shop_chief", query: { classify: -1 } });
         }
         let _res = await this.fetchShopData();
         let config = {
@@ -352,5 +356,9 @@ export class ShopChief extends BaseVue{
         this.moveTime = timeout(() => {
             _self.showPage = false;
         }, 1500);
+    }
+    toShopcar(){
+        event.stopPropagation();
+        this.$router.push({ path:"shop_car"});
     }
 }

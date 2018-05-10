@@ -78,8 +78,9 @@
                 margin-right: 10px;
                 width: 58px;
                 border: 1px solid #333;
-                border-radius: 10px;
+                border-radius: 5px;
                 height: 22px;
+                text-align: center;
                 line-height: 20px;
             }
         }
@@ -93,11 +94,11 @@
     }
     .layout-nav-footer {
         position: absolute;
-        bottom: 0;
         z-index: 500;
         width: 100%;
         height: 60px;
         background-color: #fff;
+        
         .line {
             height: 1px;
             width: inherit;

@@ -17,39 +17,40 @@
 		<li :class="{active:i==tabIndex}" v-for="(v,i) in tabs" @click="onTabChange(i)">{{v}}</li>
 	</ul>  -->
     <div class="box_goodses">
-        
-        <pull-refresh  :refresh="refresh" :infinite="infinite">
-                <div class="weui-cells" v-for="goods in goodsData" >
-                    <div @click="goGoodsDetail(goods.goodsId)">
-                        <div class="weui-cell box_goods">
-                            <div class="weui-cell__hd" >
-                                <figure class="pic_goods">
-                                    <img :src="goods.coverImg" alt="">
-                                </figure>
-                            </div>
-                            <div class="weui-cell__bd">
-                                <h4 class="txt_goodsName" v-text="goods.goodsName || goods.name || goods.goodsname"></h4>
-                                <p class="txt_goodsPrice">进货价:
-                                    <span>{{goods.moneyPrice | localMoney}}</span>
-                                </p>
-                            </div>
-                            <div class="position-joinCar" @click="joinCar(goods.goodsId)">
-                                <i class="iconfont icon-gouwuche"></i>
-                            </div>
+
+        <pull-refresh :refresh="refresh" :infinite="infinite">
+            <div class="weui-cells" v-for="goods in goodsData">
+                <div @click="goGoodsDetail(goods.goodsId)">
+                    <div class="weui-cell box_goods">
+                        <div class="weui-cell__hd">
+                            <figure class="pic_goods">
+                                <img :src="goods.coverImg" alt="">
+                            </figure>
                         </div>
-                        <div class="weui-cell">
-                            <div class="weui-cell__hd"></div>
-                            <div class="weui-cell__ft full-width">
-                                <p class="txt_goodsNumb">当前库存:
-                                    <span>{{goods.amount}}</span>
-                                </p>
-                            </div>
+                        <div class="weui-cell__bd">
+                            <h4 class="txt_goodsName" v-text="goods.goodsName || goods.name || goods.goodsname"></h4>
+                            <p class="txt_goodsPrice">进货价:
+                                <span>{{goods.moneyPrice | localMoney}}</span>
+                            </p>
+                        </div>
+                        <!-- <div class="position-joinCar" @click="joinCar(goods.goodsId)">
+                            <i class="iconfont icon-gouwuche"></i>
+                        </div> -->
+                    </div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd"></div>
+                        <div class="weui-cell__ft full-width">
+                            <p class="txt_goodsNumb">当前库存:
+                                <span>{{goods.amount}}</span>
+                            </p>
                         </div>
                     </div>
                 </div>
-            </pull-refresh>
+            </div>
+        </pull-refresh>
     </div>
-    <div class="shopcar" @click="toShopcar">
+    <!-- <div class="shopcar" @click="toShopcar">
         <i class="iconfont icon-gouwuche"></i>
-    </div>
+        <span>{{shopCarCount > 99 ? '99+' : shopCarCount}}</span>
+    </div> -->
 </div>

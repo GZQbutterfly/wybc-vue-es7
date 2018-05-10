@@ -1,4 +1,4 @@
-<div v-if="contentVisit" class="pay-list-continer">
+<div v-if="contentVisit" class="pay-list-continer ">
     <div class="pay-list-title">
         <div class="pay-list-sys-name">学惠精选</div>
         <div class="pay-list-price">{{query.totalMoney|localMoney}}</div>
@@ -6,36 +6,36 @@
     </div>
 
     <div class="pay-list-content">
-        <div @click="chooseWxPay" class="pay-list-item">
+        <div v-if="!isNative" @click="chooseWxPay" class="pay-list-item">
             <div class="pay-list-item-hd">
                 <i class="icon iconfont icon-x-campaign-wechat pay-wecat"></i>
             </div>
             <div class="pay-list-item-bd">
-                    微信
+                    微信支付
             </div>
             <i :class="[selectPayType=='WX'?'weui-icon-success':'weui-icon-circle']"></i>
         </div>
         <div v-if="!isWx" @click="chooseAliPay" class="pay-list-item">
             <div class="pay-list-item-hd">
-                <i class="icon iconfont icon-x-campaign-wechat pay-wecat"></i>
+                <i class="icon iconfont icon-rectangle390 pay-ali"></i>
             </div>
             <div class="pay-list-item-bd">
-                    支付宝
+                    支付宝支付
             </div>            
             <i :class="[selectPayType=='ALI'?'weui-icon-success':'weui-icon-circle']"></i>
         </div>
         <div v-if="wallet" @click="chooseWallet" class="pay-list-item">
             <div class="pay-list-item-hd">
-                <i class="icon iconfont icon-x-campaign-wechat pay-wecat"></i>
+                <img class="xuehui-fang" src="/static/images/newshop/xuehui-fang.png" alt="">
             </div>
             <div class="pay-list-item-bd" :class="{'text-gray':!walletAvible}">
-                    余额钱包 <span class="wallet-desc">(剩余{{userMoney|localMoney}} <span v-if="!walletAvible" class="wallet-warnning">余额不足</span>)</span>
+                    学惠钱包支付 <span class="wallet-desc">(剩余{{userMoney|localMoney}} <span v-if="!walletAvible" class="wallet-warnning">余额不足</span>)</span>
             </div>
             <i :class="[selectPayType=='SYS'?'weui-icon-success':'weui-icon-circle']"></i>
         </div>
     </div>
 
-    <footer @click="payOrder" class="pay-list-button">
+    <footer @click="payOrder" class="pay-list-button custom-footer">
         确认支付{{query.moneyPrice}}
     </footer>
 </div>

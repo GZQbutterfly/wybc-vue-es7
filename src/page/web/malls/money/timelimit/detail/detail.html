@@ -4,13 +4,21 @@
             <div slot="refresh-spinner" style="position:relative;top:0.1rem;">
                 <img src="/static/images/newshop/pul.gif" alt="" style="height:0.35rem;width:0.25rem;">
             </div>
-            <goods-component v-if="goods" :goods="goods"  @goHome="goHome" :consumptionType="consumptionType"
-                :timeObj="timeObj"  :hasBannerVideo="hasBannerVideo" :playerOptions="playerOptions" :shopkeeper="shopkeeper"
+            <goods-component 
+                v-if="goods && goods.goodsId" 
+                :goods="goods"  
+                @goHome="goHome" 
+                @setWxShareConfig="setWxShareConfig"
+                :consumptionType="consumptionType"
+                :timeObj="timeObj"  
+                :hasBannerVideo="hasBannerVideo" 
+                :playerOptions="playerOptions" 
+                :shopkeeper="shopkeeper"
                 :bannerImg="bannerImg">
             </goods-component>
         </scroller>
     </div>
-    <div class="buy-content weui-flex">
+    <div class="buy-content weui-flex custom-footer">
         <div class="weui-flex-item buy-now" v-if="timeObj.timeShowType!=1" style="background:#ccc;">立即购买</div>
         <div class="weui-flex-item buy-now" @click="buyNow" v-else>立即购买</div>
     </div>

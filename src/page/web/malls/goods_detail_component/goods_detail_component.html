@@ -16,8 +16,8 @@
                       原价:{{goods.purchasePrice | localMoney}}
                     </span>
                     <div v-if="consumptionType==2" class="money-buy-price">
-                        <span class="label-money">{{goods.moneyPrice| localMoney}}</span>
-                        <span class="concat">+</span>
+                        <span v-if="goods.moneyPrice" class="label-money">{{goods.moneyPrice| localMoney}}</span>
+                        <span v-if="goods.moneyPrice" class="concat">+</span>
                         <img src="/static/images/money/icon.png" alt="">
                         <span class="label-money-volume">{{goods.goldPrice}}</span>
                         <span class="invalid-money">原价 {{goods.purchasePrice | localMoney}}</span>
@@ -78,7 +78,7 @@
                         回到店铺首页
                         <i class="iconfont icon-mjiantou sercher"></i>
                     </span>
-                    <div class="serBox-angent text-s-12 text-c-657bff" v-if="isLimitBuy&&($route.query.isAgent||$route.query.isAgent=='true')">店铺直营</div>
+                    <div class="serBox-angent text-s-12 text-c-657bff" v-if="isLimitBuy&&($route.query.isAgent==true||$route.query.isAgent=='true')">店长直营</div>
                     <div class="serBox-angent-red text-s-12" v-if="isLimitBuy&&(!$route.query.isAgent||$route.query.isAgent=='false')">店铺代理</div>
                 </div>
             </div>

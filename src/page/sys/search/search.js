@@ -22,8 +22,7 @@ export class Search extends BaseVue {
     search_limit = 10;
     search_flag = false;
     _$service;
-    agentUnderLineShow = true;
-    navIndex = 0;
+    navIndex = -1;
     status = 'agentmalls';
     magType = 0;//搜索状态 0是代理 1是直营
     created() {
@@ -95,27 +94,25 @@ export class Search extends BaseVue {
     //搜索来源 默认选中哪一个
     entryMode(data_goods_arr) {
         let _origin = this.$route.query.origin;
+        if (this.navIndex != -1) {
+            // 第一次的 搜索来源 默认选中哪一个
+            return;
+        }
         if (_origin == 'home' || _origin == 'classify') {
             if (data_goods_arr[0].length != 0) {
                 this.navIndex = 0;
-                this.agentUnderLineShow = true;
             } else if (data_goods_arr[0].length == 0 && data_goods_arr[1].length != 0) {
                 this.navIndex = 1;
-                this.agentUnderLineShow = false;
             } else {
                 this.navIndex = 0;
-                this.agentUnderLineShow = true;
             }
         } else {
             if (data_goods_arr[1].length != 0) {
                 this.navIndex = 1;
-                this.agentUnderLineShow = false;
             } else if (data_goods_arr[1].length == 0 && data_goods_arr[0].length != 0) {
                 this.navIndex = 0;
-                this.agentUnderLineShow = true;
             } else {
                 this.navIndex = 1;
-                this.agentUnderLineShow = false;
             }
         }
 
@@ -146,7 +143,10 @@ export class Search extends BaseVue {
             if (this.$route.query.search) {
                 this.$router.replace({ path: 'search', query: query });
             } else {
-                this.$router.push({ path: 'search', query: query });
+                setTimeout(() => {
+                    this.$router.push({ path: 'search', query: query });
+                }, 100);
+               
             }
         }
         event.preventDefault();
@@ -194,9 +194,9 @@ export class Search extends BaseVue {
     search_init(callBack) {
         //TODO page=0
         this.search_page = 0;
-        this.search_pages_arr = [1,1]
+        this.search_pages_arr = [1, 1]
         this.data_goods_arr = [[], []];
-        this.data_goods = { 'data': [] };
+        // this.data_goods = { 'data': [] };
         this.search_flag = true;
         this.search_next(callBack);
     }
@@ -208,30 +208,30 @@ export class Search extends BaseVue {
         let directmalls = (await this._$service.getGoods(this.ipt_format, 1, this.search_limit, 1)).data;
         let agentmalls = (await this._$service.getGoods(this.ipt_format, 1, this.search_limit, 0)).data;
 
-        if (!directmalls.direct){
-            directmalls.direct =[];
-        }else{
+        if (!directmalls.direct) {
+            directmalls.direct = [];
+        } else {
             directmalls.direct.forEach(element => {
                 element.warehouseFlag = 1
-            }); 
+            });
         }
         if (!agentmalls.agent) {
             agentmalls.agent = [];
-        }else{
+        } else {
             agentmalls.agent.forEach(element => {
                 element.warehouseFlag = 0
-            }); 
+            });
         }
         _self.$set(_self.data_goods_arr, 0, _self.data_goods_arr[0].concat(directmalls.direct));
         _self.$set(_self.data_goods_arr, 1, _self.data_goods_arr[1].concat(agentmalls.agent));
 
-        if ( directmalls.direct.length != 0 || agentmalls.agent.length != 0) {
+        if (_self.ipt_format&&(directmalls.direct.length != 0 || agentmalls.agent.length != 0)) {
             //保存到历史记录
-            _self._$service.setHistory(_self.ipt_format); 
+            _self._$service.setHistory(_self.ipt_format);
         }
         //默认加载哪一项
         _self.entryMode(_self.data_goods_arr);
-        
+
         _self.data_goods.data = _self.data_goods_arr[_self.navIndex];
         //检查是否有下一页
         _self.search_flag = true;
@@ -244,7 +244,7 @@ export class Search extends BaseVue {
             this.search_pages_arr[0] = 2;
         }
         let directmalls = (await this._$service.getGoods(this.ipt_format, this.search_pages_arr[0], this.search_limit, 1)).data;
-        if (!directmalls.direct || directmalls.direct.length==0) {
+        if (!directmalls.direct || directmalls.direct.length == 0) {
             directmalls.direct = [];
         } else {
             directmalls.direct.forEach(element => {
@@ -256,13 +256,13 @@ export class Search extends BaseVue {
         callBack && callBack();
     }
 
-    async search_next_agentmalls(callBack){
+    async search_next_agentmalls(callBack) {
         this.search_pages_arr[1]++;
-        if (this.search_pages_arr[1]==1){
+        if (this.search_pages_arr[1] == 1) {
             this.search_pages_arr[1] = 2;
         }
         let agentmalls = (await this._$service.getGoods(this.ipt_format, this.search_pages_arr[1], this.search_limit, 0)).data;
-        if (!agentmalls.agent || agentmalls.agent.length==0) {
+        if (!agentmalls.agent || agentmalls.agent.length == 0) {
             agentmalls.agent = [];
         } else {
             agentmalls.agent.forEach(element => {
@@ -273,15 +273,15 @@ export class Search extends BaseVue {
         this.data_goods.data = this.data_goods_arr[this.navIndex];
         callBack && callBack();
     }
-  
+
     joinCar(item) {
-       // console.log(item.warehouseFlag);
-        finishToCar(this.$store).finishToCar(this, item, "search",item.warehouseFlag);
+        // console.log(item.warehouseFlag);
+        finishToCar(this.$store).finishToCar(this, item, "search", item.warehouseFlag);
     }
     //刷新
     refresh(done) {
         setTimeout(() => {
-            this.search_init(done());
+            this.search_init(done);
         }, 500)
     }
 
@@ -289,22 +289,21 @@ export class Search extends BaseVue {
     infinite(done) {
         let _self = this;
         if (this.search_flag) {
-            if(this.navIndex==0){
+            if (this.navIndex == 0) {
                 setTimeout(() => {
                     _self.search_next_directmalls(done(true));
                 }, 500)
-            }else{
+            } else {
                 setTimeout(() => {
                     _self.search_next_agentmalls(done(true));
-                }, 500) 
+                }, 500)
             }
-           
+
         } else {
             done(true);
         }
     }
     swichNav(index) {
-        this.agentUnderLineShow = !this.agentUnderLineShow;
         this.navIndex = index;
         this.data_goods.data = this.data_goods_arr[index];
         this.status = index == 0 ? 'agentmalls' : 'officialmalls';

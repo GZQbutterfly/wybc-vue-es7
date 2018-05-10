@@ -28,7 +28,7 @@ export class CouponItem extends Vue {
         if (_coupon.goodsLimit && _coupon.state==0) {
             this.$router.push({path:'cms_coupon_detail',query:{couponId:_coupon.couponId}});
         }else{
-            this.$router.push({path:'cms_purchase_classify'});
+            this.$router.push({path:'cms_goods_shelves'});
         }
     }
 

@@ -62,7 +62,7 @@
                 <i :class="{'iconfont':true,'icon-shop':orderInfo.userVipGrade>0,'icon-ID':orderInfo.userVipGrade==0}"></i>
                 <span>{{orderInfo.buyerName}}</span>
             </div>
-            <div class="goods-item weui-flex" @click="toGoodsDetail(goodsInfo.goodsId)">
+            <div v-for="(goodsInfo ,index) in orderGoods" class="goods-item weui-flex" @click="toGoodsDetail(goodsInfo.goodsId)">
                 <img :src="goodsInfo.coverImg">
                 <div class="order-goods-right flex-1">
                     <div class="goods-title weui-flex ">

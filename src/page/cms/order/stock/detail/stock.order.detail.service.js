@@ -24,7 +24,7 @@ export default (_store) => {
         getOrderInfo(orderId, combinOrderNo) {
             let data = {
                 orderId: orderId,
-                combinOrderNo
+                combinOrderNo,combinOrderNo
             }
             return q(orderinfourl, data);
         },

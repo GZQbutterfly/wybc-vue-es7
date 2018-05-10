@@ -1,0 +1,54 @@
+.pay-result-contianer{
+    position: relative;
+    height: 100%;
+    .pay-result-title{
+        text-align: center;
+        background-color: #fff;
+        img{
+            margin-top: .3rem;
+            width: .85rem;
+            height: .85rem;
+        }
+        .pay-result-text{
+            font-size: 21px;
+            text-align: center;
+        }
+        .pay-result-value{
+            font-size: 15px;
+        }
+    }
+    .pay-result-order{
+        margin-top: 5px;
+        padding: 0 .125rem;
+        background-color: #fff;
+        .pay-result-item{
+            display: flex;
+            span{
+                line-height: .5rem;
+                &:nth-child(1){
+                    flex: 1
+                }
+            }
+        }
+    }
+    .button-footer{
+        text-align: center;
+        margin-top: .66rem;
+        button {
+            height: 50px;
+            width: 297px;
+            border-radius: 5px;
+            font-size: 21px;
+            color: #7ecc44;
+            background-color: #fff;
+            border: 1px solid #7ecc44;
+            margin-bottom: 14px;
+        }
+        .ok {
+            background-color: #7ecc44;
+            color: #fff;
+            border: none;
+        }
+    }
+   
+}

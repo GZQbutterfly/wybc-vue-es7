@@ -11,9 +11,12 @@ export default (store) => {
     }
     return {
         queryCoupon(query){
+            query.type = 1;
             return q('api/activites/q_single_coupon',query);
         },
         getGoodsList(data){
+            data.type = 1;
+            debugger;
             return q('api/activites/q_goods_byCouponId',data);
         }
     }

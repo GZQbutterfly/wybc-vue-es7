@@ -1,0 +1,131 @@
+.shelves-layout-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    flex-direction: column;
+    overflow-y: scroll;
+    &-no-scroll {
+        .scrolltab-content {
+            overflow-y: hidden !important;
+        }
+    }
+    .shelves-layout-content {
+        &_hd {
+            .wdinfo-header {
+                border-bottom: 5px solid #f2f2f2;
+            }
+            .title {
+                padding: 8px 12px 6px 12px;
+                border-bottom: 2px solid #f2f2f2;
+                .jhq {
+                    display: inline-table;
+                    border: 1px solid #ff1c1c;
+                    border-radius: 2px;
+                    margin-right: 8px;
+                }
+            }
+        }
+        &_bd {
+            position: relative;
+            margin-bottom: 82px;
+        }
+        &_ft {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            z-index: 2;
+            .shopcar-info {
+                height: 32px;
+                line-height: 32px;
+                padding-left: 67px;
+                .weui-icon-warn {
+                    position: relative;
+                    top: -2px;
+                    right: -1px;
+                }
+            }
+            .shopcar {
+                position: relative;
+                height: 49px;
+                box-shadow: 0 1px 10px #b3b3b3;
+                z-index: 30;
+                &_hd {
+                    position: relative;
+                    .icon {
+                        font-size: 40px;
+                    }
+                    padding-left: 20px;
+                    padding-right: 30px;
+                    .tuqi-tip {
+                        position: absolute;
+                        top: 0px;
+                        left: 16px;
+                        width: 50px;
+                        height: 20px;
+                        border-top-right-radius: 100%;
+                        border-top-left-radius: 100%;
+                        background-color: #fff;
+                        box-shadow: 0 -1px 10px #b3b3b3;
+                        z-index: -2;
+                    }
+                    .tuqi-tip-b {
+                        position: absolute;
+                        top: 7px;
+                        left: 0;
+                        width: 100px;
+                        height: 20px;
+                        background-color: #fff;
+                        z-index: -1;
+                    }
+                    .weui-badge {
+                        position: absolute;
+                        top: 8px;
+                        left: 50px;
+                    }
+                }
+                &_ft {
+                    width: 100px;
+                    height: 100%;
+                    line-height: 50px;
+                }
+            }
+        }
+    }
+    .mbottom {
+        margin-bottom: 50px;
+    }
+    .wdinfo-header {
+        padding: 12px;
+        .logoimg {
+            height: 50px;
+            width: 50px;
+            margin-right: 10px;
+        }
+        .official-flag {
+            border-radius: 2px;
+        }
+        .search-btn {
+            margin-top: 15px;
+        }
+    }
+    // ::-webkit-scrollbar {
+    //     width: 3px;
+    // }
+    // ::-webkit-scrollbar-track {
+    //     -webkit-border-radius: 10px;
+    //     border-radius: 10px;
+    // }
+    // ::-webkit-scrollbar-thumb {
+    //     -webkit-border-radius: 10px;
+    //     border-radius: 10px;
+    //     background-color: #b3b3b3;
+    // }
+    // ::-webkit-scrollbar-thumb:window-inactive {
+    //     background-color: #b3b3b3;
+    // }
+}

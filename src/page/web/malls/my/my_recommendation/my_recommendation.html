@@ -1,0 +1,43 @@
+<div class="myrecommendation">
+    <div class="weui-cell bg-fff">
+        <div class="weui-cell__bd title-img">
+           <img src="/static/images/shop-4.6/fensi.png">
+           <span>推荐开店人数<b>{{recordsTotal}}</b>人</span>
+        </div>
+        <div class="weui-cell__bd align-right">
+           推荐开店获得金币<b>{{totalGold}}</b>
+        </div>
+       
+    </div>
+    <pull-refresh :refresh="refresh" :infinite="infinite">
+        <div class="weui-cells" v-for="item in dataList">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <figure :data-vip="'M' + item.wdVipGrade">
+                        <img :src="item.wdImg" alt="">
+                    </figure>
+                    <span>{{item.wdName}}</span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="imgBox">
+                        <img src="../../../static/images/minishop/ipho.png" alt="">
+                    </div>
+                    <span>手机号: {{item.phone}}</span>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="imgBox">
+                        <img src="../../../static/images/minishop/xm.png" alt="">
+                    </div>
+                    <span>店长: {{item.userName}}</span>
+                </div>
+                <div class="weui-cell__ft">
+                    <span>{{item.applyTime}}</span>
+                </div>
+            </div>
+        </div>
+    </pull-refresh>
+</div>

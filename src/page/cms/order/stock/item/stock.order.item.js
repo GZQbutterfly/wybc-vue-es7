@@ -3,7 +3,7 @@ import { Component, Vue } from 'vue-property-decorator';
 
 import './stock.order.item.scss';
 import itemService from './stock.order.item.service';
-import { getLocalUserInfo, toWEB} from 'common.env';
+import { getLocalUserInfo} from 'common.env';
 
 
 
@@ -36,12 +36,9 @@ export class StockOrderItem extends Vue {
 	}
 
 	toOrderDetail(orderId) {
-		let query = {};
-		if (this.$props.order.orders[0].orderState == 1 || this.$props.order.orders[0].orderState == 6) {//待支付或者交易关闭
-			query.combinOrderNo = this.$props.order.orders[0].combinOrderNo;
-		} else {
-			query.orderId = this.$props.order.orders[0].orderId;
-		}
+		let query = {
+			combinOrderNo : this.$props.order.orders[0].combinOrderNo
+		};	
 		this.$router.push({
 			path: 'cms_purchase_order_detail',
 			query: query,
@@ -50,13 +47,12 @@ export class StockOrderItem extends Vue {
 
 	//支付订单
 	payOrder(combinOrderNo,ownStore) {
-		let obj = this.$store.state.$loadding();
 		let data = {
 			combinOrderNo: combinOrderNo,
 			totalMoney:this.orderTotalMoney(),
 			submitType:2
 		}
-		toWEB("sys_pay_list",data);
+		this.$router.push({path:"sys_pay_list",query:data});
 	}
 
 

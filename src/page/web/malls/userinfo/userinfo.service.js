@@ -77,7 +77,10 @@ export default (_store) => {
         },
 
         queryUserRoll(){
-            return q('api/wallet/q_gold_wallet');
+            return q('api/user/q_first_user_info');//api/wallet/q_gold_wallet
+        },
+        queryUserFollowNum(){
+            return q("api/wd_vip/q_my_attention_wd_count");
         }
     }
 

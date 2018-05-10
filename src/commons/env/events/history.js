@@ -17,10 +17,12 @@ window.addEventListener('popstate', (event) => {
 
 // ==> history back function
 let webPath = {
-    'order_detail': { noBacks: ['order_submit'], to: 'user_order' },
-    'user_order': { noBacks: ['order_submit','sys_pay_list','sys_pay'], to: 'userinfo' },
+    'order_detail': { noBacks: ['order_submit', 'pay_list'], to: 'user_order' },
+    'user_order': { noBacks: ['order_submit', 'sys_pay_list', 'sys_pay', 'pay_list'], to: 'userinfo' },
+    'pay_list': { noBacks: ['order_submit'], to: 'user_order?listValue=1' },
+    'shop_chief': { noBacks: ['search'], to: "home" },
     // 限时购页面
-    'money_timelimit_list': {noBacks: ['order_submit', 'money_timelimit_detail'], to: 'home'},
+    'money_timelimit_list': { noBacks: ['order_submit', 'money_timelimit_detail'], to: 'home' },
     'wybc_protocol': { noBacks: ['login'], to: 'login' }, // 登录页面存在参数，默认将参数存入sessionStorage里
     '*': { noBacks: ['login', 'login_back'], to: 'home' }
 };
@@ -33,23 +35,26 @@ function WEBHistory() {
     let formPathName = localStorage._activePathname.replace('/', ''); // this value in 'commons/auth/router' has set
     // console.log('to  route  name: ', toPathName);
     // console.log('form  route name: ', formPathName);
-    if(/login/.test(toPathName)){
+    if (/login/.test(toPathName)) {
         to(localStorage._prevPath);
-    }else{
+    } else {
         parse(toPathName, formPathName, webPath);
     }
 }
 
 let cmsPath = {
-    'cms_stock_order': { noBacks: ['cms_purchase_submit_order'], to: 'cms_purchase_userinfo' },
-    'cms_purchase_order_detail': { noBacks: ['cms_purchase_submit_order'], to: 'cms_purchase_userinfo' },
+    'cms_stock_order': { noBacks: ['cms_purchase_submit_order', 'sys_pay_list'], to: 'cms_goods_shelves' },
+    'cms_purchase_order_detail': { noBacks: ['cms_purchase_submit_order', 'sys_pay_list'], to: 'cms_goods_shelves' },
     'grade': { noBacks: ['grade_up'], to: 'cms_home' },
-    'cms_home': { noBacks: ['realname_form','faststore_info'], to: 'cms_home' },
+    'cms_home': { noBacks: ['realname_form', 'faststore_info'], to: 'cms_home' },
     // 实名认证结果页面
     'realname_result': { noBacks: ['realname_form'], to: 'cms_home' },
     'faststore_info': { noBacks: ['fast_store'], to: 'cms_home' },
-    'options': { noBacks: ['faststore_info','password_set'], to: 'cms_home' },
+    'options': { noBacks: ['faststore_info', 'password_set'], to: 'cms_home' },
     'delivery_m_order': { noBacks: ['faststore_info'], to: 'cms_home' },
+    'sys_pay_list': { noBacks: ['cms_purchase_submit_order', 'cms_purchase_goods_detail'], to: 'cms_stock_order?listValue=1' },
+    'sys_pay': { noBacks: ['cms_purchase_submit_order', 'cms_purchase_goods_detail'], to: 'cms_stock_order?listValue=1' },
+    'password': { noBacks: ['cms_purchase_submit_order','cms_goods_shelves'], to: 'cms_stock_order?listValue=1' },
     // 配送员认证结果页面
     'distributor_realname_result': { noBacks: ['distributor_realname_form'], to: 'cms_home' },
     '*': { noBacks: ['login', 'login_back'], to: 'cms_home' }
@@ -66,7 +71,11 @@ function CMSHistory() {
     if (match(thisPathName, cmsPath['*'].noBacks)) {
         toPathName = thisPathName;
     }
-    parse(toPathName, formPathName, cmsPath);
+    if (/cms_goods_shelves/.test(formPathName)) {
+        to('cms_home');
+    } else {
+        parse(toPathName, formPathName, cmsPath);
+    }
 }
 
 // ==> util
@@ -86,7 +95,7 @@ function parse(toPathName, formPathName, mapPath) {
 
 function to(path) {
     let _targetPath = getPath(path);
-    history.pushState(_targetPath, null, _targetPath);
+    history.replaceState(_targetPath, null, _targetPath);
 }
 
 function getContentPath() {

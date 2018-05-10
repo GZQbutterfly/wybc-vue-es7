@@ -48,8 +48,8 @@
         </div>
     </div>
     <div class="web_searchNav weui-flex" v-show="frm_push">
-        <div class="agent" :class="{underline:agentUnderLineShow}" @click="swichNav(0)">店长直营</div>
-        <div class="agentmall" :class="{underline:!agentUnderLineShow}" @click="swichNav(1)">店铺代理</div>
+        <div class="agent" :class="{underline:navIndex==0}" @click="swichNav(0)">店长直营</div>
+        <div class="agentmall" :class="{underline:navIndex==1}" @click="swichNav(1)">店铺代理</div>
     </div>
     <!-- 搜索结果 -->
     <div class="box-search-after" v-show="frm_push">
@@ -63,7 +63,10 @@
         </section>
         <div id="goodspullrefresh" v-else>
             <!-- :pages="{page:search_page, total: data_goods.data.length, bottom: '0.2rem'}" -->
-            <pull-refresh ref="my_scroller" :refresh="refresh" :infinite="infinite">
+            <pull-refresh ref="my_scroller" :refresh="refresh" :infinite="infinite" v-show='navIndex==0'>
+                <list-goods :dataList="data_goods" @joinCar='joinCar' :status='status'></list-goods>
+            </pull-refresh>
+            <pull-refresh ref="my_scroller" :refresh="refresh" :infinite="infinite" v-show='navIndex==1'>
                 <list-goods :dataList="data_goods" @joinCar='joinCar' :status='status'></list-goods>
             </pull-refresh>
         </div>

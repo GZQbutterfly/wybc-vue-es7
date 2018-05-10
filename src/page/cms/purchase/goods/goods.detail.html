@@ -81,7 +81,7 @@
                         </dd>
                     </dl>
                     <div class="serBox">
-                        <router-link to="/cms_purchase_classify">
+                        <router-link to="/cms_goods_shelves">
                             回到店铺首页
                             <i class="iconfont icon-mjiantou sercher"></i>
                         </router-link>
@@ -161,7 +161,7 @@
         <div class="buy-content weui-flex">
             <div class="shop-car" @click="goShopcart">
                     <i class="iconfont icon-gouwuche"></i>
-                    <p v-if="$store.state.shopCar.count != 0">{{$store.state.shopCar.count}}</p>
+                    <p v-if="shopCarCount != 0">{{shopCarCount>99?"99+":shopCarCount}}</p>
                 </div>
                 <div class="weui-flex-item join-car" @click="joinCar(goods)" v-show="goods.gsType==1">加入进货单</div>
             <div class="weui-flex-item buy-now" @click="buyNow(goods)"

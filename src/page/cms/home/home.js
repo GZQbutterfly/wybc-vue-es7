@@ -257,7 +257,7 @@ export class CmsHome extends BaseVue {
         let _self = this;
         let res = [
             {
-                href: 'cms_purchase',
+                href: 'cms_goods_shelves',
                 icon: '/static/images/minishop/s1.png',
                 title: '我要进货',
                 toDo: _self.visit,
@@ -284,15 +284,7 @@ export class CmsHome extends BaseVue {
                 redRidus: true,
                 redRidusNum: 0
             },
-            {
-                href: 'my_inventory_list',
-                icon: '/static/images/minishop/s3.png',
-                title: '我的库存',
-                toDo: _self.visit,
-                canVisit: true,
-                redRidus: false,
-                redRidusNum: 0
-            },
+           
             {
                 href: 'delivery_m_order',
                 icon: '/static/images/minishop/s11.png',
@@ -303,27 +295,28 @@ export class CmsHome extends BaseVue {
                 redRidusNum: 0
             },
             {
-                href: 'delivery_order',
-                icon: '/static/images/minishop/ps.png',
-                title: '抢单配送',
-                toDo: _self.checkRealname,
+                href: 'my_inventory_list',
+                icon: '/static/images/minishop/s3.png',
+                title: '我的库存',
+                toDo: _self.visit,
                 canVisit: true,
-                redRidus: true,
+                redRidus: false,
                 redRidusNum: 0
             },
+           
             {
-                href: 'my_spread',
-                icon: '/static/images/minishop/s5.png',
-                title: '我要推广',
+                href: 'my_team',
+                icon: '/static/images/minishop/s8.png',
+                title: '我的团队',
                 toDo: _self.visit,
                 canVisit: true,
                 redRidus: false,
                 redRidusNum: 0
             },
             {
-                href: 'my_team',
-                icon: '/static/images/minishop/s8.png',
-                title: '我的团队',
+                href: 'my_spread',
+                icon: '/static/images/minishop/s5.png',
+                title: '我要推广',
                 toDo: _self.visit,
                 canVisit: true,
                 redRidus: false,
@@ -347,14 +340,23 @@ export class CmsHome extends BaseVue {
                 redRidus: false,
                 redRidusNum: 0
             },
+             {
+                href: 'delivery_order',
+                icon: '/static/images/minishop/ps.png',
+                title: '抢单配送',
+                toDo: _self.checkRealname,
+                canVisit: true,
+                redRidus: true,
+                redRidusNum: 0
+            },
         ];
         this._$service.getRedRidusNum().then(redRidusNum=>{
             let _result = redRidusNum.data;
             if(!_result.errorCode){
                 res[1].redRidusNum = _result.outOrderCount;
                 res[2].redRidusNum = _result.wholeOrderCount;
-                res[4].redRidusNum = _result.waitDeliveryCount;
-                res[5].redRidusNum = _result.robDeliveryCount;
+                res[3].redRidusNum = _result.waitDeliveryCount;
+                res[9].redRidusNum = _result.robDeliveryCount;
             }
             for (var i = 0, len = res.length; i < len; i += 6) {
                 _self.gridsData.push(res.slice(i, i + 6));

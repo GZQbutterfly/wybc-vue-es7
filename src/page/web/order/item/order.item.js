@@ -58,7 +58,7 @@ export class OrderItem extends Vue {
 	toOrderDetail() {
 		let query = {};
 		query.combinOrderNo = this.$props.order.combinOrderNo;
-		query.orderId = this.$props.order.orderId;
+		// query.orderId = this.$props.order.orderId;
 		this.$router.push({
 			path: 'order_detail',
 			query: query
@@ -81,7 +81,7 @@ export class OrderItem extends Vue {
 	
 		let _param = {
 			combinOrderNo: order.combinOrderNo,
-			totalMoney:order.totalMoney,
+			totalMoney: self.orderTotalMoney(),
 			orderPayType:orderPayType
 		};
 

@@ -1,0 +1,116 @@
+ .followShop {
+     height: 100%;
+     position: relative;
+     display: flex;
+     flex-direction: column;
+     .classifyEmpty {
+         background: #ffffff;
+         flex: 1;
+         border-bottom: 0.06rem solid #f2f2f2;
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         padding-bottom: 50px;
+         img {
+             height: 1.08rem;
+             width: 1.08rem;
+         }
+         h3,
+         h4 {
+             color: #b3b3b3;
+             font-weight: normal;
+         }
+         p {
+             height: 0.3rem;
+             width: 1rem;
+             border: 0.01rem solid #7ecc44;
+             color: #7ecc44;
+             text-align: center;
+             line-height: 0.3rem;
+             border-radius: 0.05rem;
+             margin-top: 10px;
+         }
+     }
+     .indexBox_logo {
+         height: 0.86rem;
+         padding: 0.13rem 0;
+         display: flex;
+         justify-content: space-around;
+         background-color: #fff;
+         margin-bottom: 1px;
+     }
+     .wdName {
+         width: 80%;
+         height: 100%;
+         padding-left: 0.1rem;
+         display: flex;
+         align-items: center;
+         dt {
+             height: 0.5rem;
+             width: 0.5rem;
+             overflow: hidden;
+             border-radius: 0.05rem;
+             img {
+                 height: 100%;
+                 width: 100%;
+             }
+         }
+         dd {
+             height: 100%;
+             flex: 1;
+             display: flex;
+             flex-direction: column;
+             padding-left: 0.1rem;
+             line-height: 1;
+             overflow: hidden;
+             h4 {
+                 font-size: 0.16rem;
+                 max-height: .16rem;
+                 font-weight: normal;
+                 max-width: 120px;
+                 margin-right: 5px;
+             }
+             .wd-directsale {
+                 border: 1px solid #657bff;
+                 border-radius: 2px;
+                 padding: 1px;
+             }
+             .wd-directsale-red {
+                 border: 1px solid #ff6594;
+                 border-radius: 2px;
+                 padding: 1px;
+                 color: #ff6594;
+             }
+             .wd-school {
+                 max-height: .12rem;
+                 margin: 5px 0;
+             }
+             p {
+                 height: 0.14rem;
+                 width: 0.7rem;
+                 background: url("/static/images/newshop/vip.png") center center;
+                 background-size: 100% 100%; // line-height: 0.14rem;
+                 display: flex;
+                 align-items: center;
+                 span {
+                     display: inline-block;
+                     margin-left: 0.3rem;
+                     font-size: 0.12rem;
+                     color: #fff;
+                 }
+             }
+         }
+     }
+     .wdName_ft {
+         .add-follow {
+             margin-right: 10px;
+             width: 58px;
+             border: 1px solid #333;
+             border-radius: 5px;
+             height: 22px;
+             text-align: center;
+             line-height: 20px;
+         }
+     }
+ }

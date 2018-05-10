@@ -13,10 +13,14 @@ export class PayOptions extends BaseVue {
 
     hasPassword = false;
 
+    passwordAble = false;
+
     mounted(){
         this._$service = service(this.$store);
+        let _self = this;
         this.$nextTick(() => {
-            this.initPage();
+            document.title = '支付设置';
+            _self.initPage();
         });
     }
 
@@ -24,6 +28,11 @@ export class PayOptions extends BaseVue {
         let _result = await this._$service.queryPasswordState();
         if (_result && !_result.errorCode) {
             this.hasPassword = _result.data.status;
+        }
+
+        let _lock = await this._$service.queryLockState();
+        if (_lock && !_lock.errorCode) {
+            this.passwordAble = !_lock.data.isLock;
         }
     }
 

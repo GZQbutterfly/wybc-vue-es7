@@ -6,15 +6,13 @@
 		<tab style="padding: 0 0.1rem" :tabs="tabItemList" @on-change="onChange" :index="index"></tab>
 	</div>
 
-	<div class="order-list-content flex-1">
-		<div v-for="(tab,tindex) in tabItemList">
-			<div v-show="tableIndex==tindex">
-				<pull-refresh :refresh="refresh" :infinite="infinite">
-					<div v-for="order in ordersList[tableIndex]" v-if="tableIndex==tindex">
-						<oi :order="order" @removeItem="resetAllData"></oi>
-					</div>
-				</pull-refresh>
-			</div>
+	<div class="order-list-content">
+		<div v-for="(tab,tindex) in tabItemList" v-show="tableIndex==tindex" class=" flex-1">
+			<pull-refresh :refresh="refresh" :infinite="infinite">
+				<div v-for="order in ordersList[tableIndex]" v-if="tableIndex==tindex">
+					<oi :order="order" @removeItem="resetAllData"></oi>
+				</div>
+			</pull-refresh>
 		</div>
 	</div>
 </div>

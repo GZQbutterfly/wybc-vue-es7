@@ -1,0 +1,32 @@
+<div class="followShop">
+    <div class="classifyEmpty" v-if="isEmpty">
+        <img src="/static/images/shop-4.6/gunzhudianpu.png" alt="" />
+        <!-- <h3>该店铺直营商品出售</h3> -->
+        <h4>您还没有店铺关注哟！</h4>
+    </div>
+    <pull-refresh :refresh="refresh" :infinite="infinite" v-else>
+        <div class="indexBox_logo" v-for="(item,i) in wdList" >
+            <dl class="wdName" @click="goHome(item)">
+                <dt>
+                    <img :src="item.wdImg?item.wdImg:'/static/images/newshop/touxiang.png'">
+                </dt>
+                <dd>
+                    <div class="weui-flex flex-align-m">
+                        <h4 class="text-ellipsis">{{item.wdName}}</h4>
+                    </div>
+                    <div class="wd-school text-ellipsis text-c-333 text-s-12">{{item.school}}</div>
+                    <p>
+                        <span>{{'M' +item.wdVipGrade}}</span>
+                    </p>
+                </dd>
+            </dl>
+            <div class="wdName_ft weui-flex flex-align-m">
+                <!-- 4.6.3 v-show="$route.name === 'new_home'-->
+                <div class="add-follow text-c-333 text-center" @click="followShop(item,i)">
+                    <span class="text-s-15" v-if="!item.isFollow">+</span>
+                    <span class="text-s-13 ">{{item.followName}}</span>
+                </div>
+            </div>
+        </div>
+    </pull-refresh>
+</div>

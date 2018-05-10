@@ -38,7 +38,7 @@
                                 <div class="shop-name" v-html="goods.descri"></div>
                                 <div class="shop-money">
                                     {{ goods.incomeType }}:
-                                    <span :class="item.consuType ? 'xs-money' : 'tc-money' ">{{ item.consuType ? '+': '-' }}{{ goods.amount | localMoney}}</span>
+                                    <span :class="item.consuType ? 'xs-money' : 'tc-money' ">{{ item.consuType ? '+': '' }}{{ goods.amount | localMoney}}</span>
                                 </div>
                                 <div class="shop-date">{{ goods.createAt }}</div>
                             </div>

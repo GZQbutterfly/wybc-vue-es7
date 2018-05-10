@@ -66,7 +66,6 @@ export class Delivering extends Vue {
     refresh(done = (() => { })) {
         let _self = this;
         let _result = _self.queryList();
-
         setTimeout(() => {
             _result.then((datas) => {
                 _self.setList(datas);
@@ -147,10 +146,9 @@ export class Delivering extends Vue {
             // this.refresh();
         }
 
-        timeout(() => {
-            this.refresh();
+        this.refresh(()=>{
             loadding.close();
-        }, 1200);
+        });
     }
 
     confirmDialog() {

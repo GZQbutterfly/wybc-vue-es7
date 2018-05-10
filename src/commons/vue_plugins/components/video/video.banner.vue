@@ -1,11 +1,13 @@
 <template lang="html">
-    <div class="swiper-container" ref="swiperRef">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide" v-if="hasVideo">
-                <fsvideo :playerOptions="playerOptions" ></fsvideo>
-            </div>
-             <div class="swiper-slide" v-for="(item,index) in dataList" :key="index">
-                <img :src="item" alt="">
+    <div class="video-container">
+        <div class="swiper-container" ref="swiperRef">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" v-if="hasVideo">
+                    <fsvideo :playerOptions="playerOptions" ></fsvideo>
+                </div>
+                <div class="swiper-slide" v-for="(item,index) in dataList" :key="index">
+                    <img :src="item" alt="">
+                </div>
             </div>
         </div>
     </div>
@@ -66,28 +68,30 @@ export default {
 </script>
 
 <style lang="scss">
-.swiper-container {
-    width: 100%;
-    height: 100%;
-    .swiper-wrapper {
+.video-container{
+    .swiper-container {
         width: 100%;
         height: 100%;
-    }
-    .swiper-slide {
-        background-position: center;
-        background-size: cover;
-        width: 100%;
-        height: 100%;
-        img {
+        .swiper-wrapper {
             width: 100%;
             height: 100%;
         }
-    }
-    .swiper-pagination-bullet {
-        width: 10px;
-        height: 10px;
-        display: inline-block;
-        background: #7c5e53;
+        .swiper-slide {
+            background-position: center;
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .swiper-pagination-bullet {
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+            background: #7c5e53;
+        }
     }
 }
 </style>

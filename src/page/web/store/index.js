@@ -14,9 +14,10 @@ import { getLocalUserInfo } from 'common.env';
 import envStore from '../../../commons/config/store';
 
 
-import mutations  from './mutations';
-import actions  from './actions';
-import getters  from './getters';
+import mutations from './mutations';
+import actions from './actions';
+import getters from './getters';
+import cache from './cache';
 
 const store = new Vuex.Store({
     modules: {
@@ -38,9 +39,7 @@ const store = new Vuex.Store({
             count: 0
         },
         // 缓存数据
-        cache: {
-
-        },
+        cache,
         // 礼包VO
         giftVO: {
             opts: {},

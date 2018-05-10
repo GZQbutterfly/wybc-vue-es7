@@ -22,7 +22,7 @@
                 <!-- 待发货,待收货,交易完成 -->
                 <span class="weui-flex-item flex-1 text-rigth text-color-green">{{orderInfo.orderState==3?'待发货':(orderInfo.orderState==4?'已发货':'交易完成')}}</span>
             </div>
-            <div class="goods-item weui-flex" @click="toGoodsDetail(goods.goodsId)">
+            <div v-for="(goodsInfo,index) in orderGoods" class="goods-item weui-flex" @click="toGoodsDetail(goodsInfo.goodsId)">
                 <img :src="goodsInfo.coverImg">
                 <div class="order-goods-right flex-1">
                     <div class="goods-title weui-flex ">

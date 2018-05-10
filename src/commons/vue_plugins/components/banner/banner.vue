@@ -1,22 +1,24 @@
 <template lang="html">
-    <div class="swiper-container" ref="bannerSwiper">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide" v-for="(str, index) in listImg" :key="index">
-                <div @click="goDetile($event,str.linkTarget,str.goodsId)" v-if="index == 0">
-                    <template>
-                        <!-- <img :src="str.url"> -->
-                        <progressive-img :src="str[imgField]" :placeholder="str[imgField]" />
+    <div class="banner-container">
+        <div class="swiper-container" ref="bannerSwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" v-for="(str, index) in listImg" :key="index">
+                    <div @click="goDetile(str)" v-if="index == 0">
+                        <template>
+                            <!-- <img :src="str.url"> -->
+                            <progressive-img :src="str[imgField]" :placeholder="str[imgField]" />
+                        </template>
+                    </div>
+                    <template v-if="index != 0">
+                        <!-- <img :src="str.url">  -->
+                        <img v-lazy="str[imgField]" @click="goDetile(str)" />
+                        <!-- <img class="swiper-lazy" :data-src="str.url" :data-srcset="str.url + ' 2x'">
+                        <div class="swiper-lazy-preloader"></div> -->
                     </template>
                 </div>
-                <template v-if="index != 0">
-                    <!-- <img :src="str.url">  -->
-                    <img v-lazy="str[imgField]" @click="goDetile($event,str.linkTarget,str.goodsId,str.linkType)" />
-                    <!-- <img class="swiper-lazy" :data-src="str.url" :data-srcset="str.url + ' 2x'">
-                    <div class="swiper-lazy-preloader"></div> -->
-                </template>
             </div>
+            <div class="swiper-pagination"></div>
         </div>
-        <div class="swiper-pagination"></div>
     </div>
 </template>
 
@@ -32,6 +34,10 @@ export default {
         imgField:{
             type: String,
             default: 'url'
+        },
+         orgin:{
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -79,13 +85,29 @@ export default {
     },
     destroyed() {},
     methods: {
-        goDetile(e, linkTarget, goodsId, linkType) {
-            if (!goodsId || linkType == 1) {
-                location.href = linkTarget;
+        goDetile(item) {
+            if (!item.goodsId || item.linkType == 1) {
+                if (item.linkTarget.indexOf(location.host)!=-1) {//当前web应用
+                    let _result = item.linkTarget.split(/\:\/\/|\/|\?/g);//[http,host,pathName,queryStr];
+                    let _path = '/';
+                    if (_result.length>2) {
+                        _path = _result[2]?_result[2]:'/';
+                        if (_result.length>3) {
+                            _path = _path + '?' + _result[3];
+                        }
+                    }
+                   this.$router.push({path:_path});
+                }else{
+                    location.href = item.linkTarget;
+                }
             } else {
+                if(this.$props.orgin=='home'){
+                    this.$emit("toDetaile",item);
+                    return;
+                }
                 let pathname = location.pathname;
                 let toPath = /cms/.test(pathname) ? 'cms_purchase_goods_detail' : 'goods_detail';
-                this.$router.push({path: toPath, query: {goodsId}});
+                this.$router.push({path: toPath, query: {goodsId:item.goodsId }});
             }
         }
     }
@@ -93,29 +115,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.swiper-container {
-    width: 100%;
-    height: 100%;
-    .swiper-wrapper {
+.banner-container{
+    .swiper-container {
         width: 100%;
         height: 100%;
-    }
-    .swiper-slide {
-        background-position: center;
-        background-size: cover;
-        width: 100%;
-        height: 100%;
-        img {
+        .swiper-wrapper {
             width: 100%;
             height: 100%;
-            display: block;
         }
-    }
-    .swiper-pagination-bullet {
-        width: 10px;
-        height: 10px;
-        display: inline-block;
-        background: #7c5e53;
+        .swiper-slide {
+            background-position: center;
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .swiper-pagination-bullet {
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+            background: #7c5e53;
+        }
     }
 }
 </style>

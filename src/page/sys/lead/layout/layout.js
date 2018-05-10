@@ -51,6 +51,10 @@ export class Layout extends BaseVue {
     async initPage() {
         let login = !isNotLogin();
         let flag = true;
+        let config = {
+            hideAllItem:true,
+        }
+        this.updateWxShare(config);
         // 获取 浏览店铺 足迹
         if (login) {//未登录状态足迹为空
             flag = await this.queryHistory();

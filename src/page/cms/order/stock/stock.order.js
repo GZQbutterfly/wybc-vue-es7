@@ -1,6 +1,7 @@
 //进货订单
 import BaseVue from 'base.vue';
 import { Component } from 'vue-property-decorator';
+import { timeout } from 'common.env';
 
 import MultiTab from '../../../../commons/vue_plugins/components/multitab/multitab.vue';
 import stockOrderService from './stock.order.service';
@@ -41,6 +42,23 @@ export class StockOrder extends BaseVue {
         this.tabIndex = Number(this.$route.query.listValue) ? Number(this.$route.query.listValue) : 0;
     }
 
+    mounted() {
+        this.$nextTick(() => {
+            this.preInitPage();
+        });
+    }
+
+    preInitPage() {
+        timeout(() => {
+            let bh = document.body.offsetHeight;
+            let _th = this.$refs.titleRef.$el.offsetHeight;
+            this.$refs.contentRef.style.height = bh - _th + 'px';
+            // debugger;
+
+            console.log(bh, _th);
+        }, 100)
+    }
+
     resetAllData() {
 
         this.dataStockList = [];
@@ -76,12 +94,12 @@ export class StockOrder extends BaseVue {
                 order.orders = new Array();
                 let combinOrderNo = order.combinOrderNo;
                 //组合订单
-                if (combinOrderNo && (order.orderState == 1 || order.orderState == 6)) {
+                if (combinOrderNo) {
                     while (orders[i] && orders[i].combinOrderNo && combinOrderNo == orders[i].combinOrderNo) {
                         order.orders.push(orders[i]);
                         for (let k = 0; k < goodses.length; ++k) {
                             let goods = goodses[k]
-                            if (goods.orderId == order.orderId) {
+                            if (goods.orderId == orders[i].orderId) {
                                 order.goodses.push(goods);
                             }
                         }
@@ -89,7 +107,7 @@ export class StockOrder extends BaseVue {
                     }
                     --i;
                 } else {
-                  
+
                     order.orders.push(orders[i]);
                     for (let k = 0; k < goodses.length; ++k) {
                         let goods = goodses[k]

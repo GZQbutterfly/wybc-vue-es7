@@ -29,7 +29,7 @@ export class OutOrderDetail extends BaseVue {
     //当前店铺折扣
     curShopBuyDisct = 100;
 
-    goodsInfo = {};
+    orderGoods = [];
 
     rebate = {};
 
@@ -60,7 +60,7 @@ export class OutOrderDetail extends BaseVue {
                         self.$store.state.$dialog({ dialogObj });
                     } else {
                         self.orderInfo = res.data.order;
-                        self.goodsInfo = res.data.orderGoods;
+                        self.orderGoods = res.data.orderGoods;
                         self.rebate = res.data.rebate;
                     }
                 })

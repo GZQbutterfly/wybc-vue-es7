@@ -52,6 +52,8 @@ export class Search extends BaseVue {
         });
         this.data_history = this._$service.getShowHistory();
         this.$nextTick(() => {
+
+            this.$refs.containerRef.style.height = document.body.offsetHeight + 'px';
             //初始化
             this.initSearch();
         });

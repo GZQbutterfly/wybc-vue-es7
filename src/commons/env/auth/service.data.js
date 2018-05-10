@@ -83,6 +83,8 @@ export default [
     'api/q_api_withdraw',
     /* 获取推广码  */
     'api/wd_vip/myInviteCode',
+    'api/wd_vip/q_invited_user_info',
+    'api/wd_vip/hasInvited',
     /*获取店信息*/
     "api/q_wdInfo_by_userId",
     /* 我的库存 */
@@ -166,10 +168,29 @@ export default [
 
     //进货端
     "api/activites/q_wd_order_coupons",
+    'api/q_all_claid_goods',
+    'api/q_all_pur_coupons',
 
     //支付密码
     "api/user_pay/q_wallet_pay_password_status",
     "api/user_pay/setting_pay_password",
     "api/user_pay/check_pay_password",
     "api/pay/order",
+    "api/user_pay/check_wallet_pay_is_lock",
+
+    //关注店铺
+    'api/wd_vip/check_if_attention',
+    'api/wd_vip/user_attention_wd',
+    'api/wd_vip/user_give_up_attention',
+    'api/wd_vip/q_my_attention_wd',
+    'api/wd_vip/q_my_attention_wd_count',
+    'api/wd_vip/q_ranking_list',
+    
+    //粉丝
+    'api/fans/q_fans',
+    'api/user/q_first_user_info',
+
+    // 排行榜
+    'api/ranking/q_ranking_data_with_now',
+    'api/ranking/q_ranking_state'
 ];

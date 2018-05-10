@@ -6,6 +6,12 @@
         <!-- <h3>该店铺直营商品出售</h3> -->
         <h4>暂无商品销售</h4>
     </div>
+
+   <div class="shopcarEntry" @click="toShopcar">
+        <i class="iconfont icon-gouwuche"></i>
+        <span>{{$store.state.shopCar.count>99?'99+':$store.state.shopCar.count}}</span>
+   </div> 
+
   <navScrollc v-if="classifyNav.length>1" @swichTab="swichTabGoods" :classifyNav="classifyNav" :currentClassifyId="currentClassifyId"
                 :currentIndex="currentIndex"></navScrollc>
     <div class="shopChief_content" ref="homeContentRef"  @touchmove="touchMove($event)" @touchend="touchEnd($event)" v-if="classifyNav.length>1">

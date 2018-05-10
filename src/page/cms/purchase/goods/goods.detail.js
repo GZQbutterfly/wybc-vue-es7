@@ -1,13 +1,10 @@
-import { Component} from 'vue-property-decorator';
-import  BaseVue  from 'base.vue';
+import { Component } from 'vue-property-decorator';
+import BaseVue from 'base.vue';
 
 import { isNotLogin, toLogin, getLocalUserInfo } from "common.env";
 import { NumberPicker } from './picker/num.picker';
-import  VideoBanner from 'components/video/video.banner.vue';
-import VueVideo  from 'components/video/video.vue';
-
-
-import shopCarGoodsService from '../classify/getShopCarCount';
+import VideoBanner from 'components/video/video.banner.vue';
+import VueVideo from 'components/video/video.vue';
 
 import goodsService from './goods.service';
 import './goods.detail.scss';
@@ -41,15 +38,16 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
     goodsPrice = 0;
     moneyPrice = 0;
     minExport = {
-       flag:false,
-       leastBuy:0,
-       buy:1
+        flag: false,
+        leastBuy: 0,
+        buy: 1
     }
+    shopCarCount = 0;
     counponList = [];
     counponObj = {};
     playerOptions = {
     }
-    shopkeeper =  {
+    shopkeeper = {
         wdName: "学惠精选官方商城",
         wdImg: "/static/images/newshop/xuehui-fang.png",
         id: 0
@@ -76,17 +74,28 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
         let _this = this;
         setTimeout(() => {
             _this.getGoodsMsg();
-           _this.queryGoodsCoupons();
+            _this.queryGoodsCoupons();
             done(true);
         }, 500)
     }
 
-    mounted(){
+    mounted() {
         this._$service = goodsService(this.$store);
         this.getGoodsMsg();
         this.queryGoodsCoupons();
+        this.shopcarNum();
     }
-    
+    shopcarNum() {
+        let _self = this;
+        this.$store.dispatch('QUERY_SHOP_CAR').then((list) => {
+            let _countTotal = 0;
+            for (let i = 0, len = list.length; i < len; i++) {
+                let _item = list[i];
+                _countTotal += _item.number;
+            }
+            _self.shopCarCount = _countTotal;
+        });
+    }
     getGoodsMsg() {
         document.title = "商品详情";
         let _this = this;
@@ -104,7 +113,7 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
 
         _this._$service.goodsInfo(_this.$route.query.goodsId)//获取商品信息
             .then(res => {
-                if (res.data.errorCode || (res.data.data.state != 1 || res.data.data.onSaleState != 1)) {
+                if (res.data.errorCode || (res.data.data.state != 1 || res.data.data.onStockState != 1)) {
                     let dialogObj = {
                         title: '',
                         content: '该商品已下架或停售',
@@ -250,7 +259,8 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
         this.$router.push({ path: 'cms_mask_coupon', query: { goodsId: this.$route.query.goodsId } });
     }
     goShopcart() {
-        this.$router.push({ path: "cms_purchase_shop_car" });
+        this.$router.push({ path: "cms_goods_shelves" });
+        //, query: { from: 'my_inventory_list' }
     }
     joinCar(goodsId) {
 
@@ -269,7 +279,7 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
 
     }
     buyNow(goodsId) {
-        if (!this.goods.state || !this.goods.onSaleState) {  
+        if (!this.goods.state || !this.goods.onStockState) {
             let dialogObj = {
                 title: '',
                 content: '该商品已下架或停售',
@@ -287,10 +297,10 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
         }
         this.queryStock(1);
         this.showgoPay = true;
-        this.minExport.buy=0;
+        this.minExport.buy = 0;
         // console.log(this.minExport);
     }
-    onClose(){
+    onClose() {
         this.stockTypeShow = false;
     }
     numberpckerHide() {
@@ -299,22 +309,37 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
     }
 
     finish2Car(num) {
+        if (this.fastStockState.amount<=0){
+             return;
+        }
         this.goods.number = num;
         let _this = this;
-            let opt = {
-                goodsId: _this.goods.goodsId,
-                number: num
-            }
-            goodsService(_this.$store).addGoods(opt).then(res => {
-                if (res.data.errorCode) {
-                    let _toast = _this.$store.state.$toast;
-                    _toast({ title: res.data.msg, success: false });
-                    return;
-                }
+        let opt = {
+            goodsId: _this.goods.goodsId,
+            number: num
+        }
+        goodsService(_this.$store).addGoods(opt).then(res => {
+            if (res.data.errorCode) {
                 let _toast = _this.$store.state.$toast;
-                _toast({ title: '加入进货单成功' });
-                shopCarGoodsService(this.$store).getShopcarGoodsesList();
-            });
+                _toast({ title: res.data.msg, success: false });
+                return;
+            }
+            let _toast = _this.$store.state.$toast;
+            _toast({ title: '加入进货单成功' });
+          
+            if (res.data.oldNumber < res.data.amount){
+                if (Number(num) + res.data.oldNumber > res.data.amount){
+                    _this.shopCarCount += res.data.amount - res.data.oldNumber;
+                }else{
+                    _this.shopCarCount += Number(num)
+                }
+            }
+            
+          
+  
+          
+            
+        });
     }
 
     finishgoPay(num) {
@@ -322,7 +347,7 @@ export class CmsPurchaseGoodsDetail extends BaseVue {
         let goodsId = this.goods.goodsId;
         this.$router.push({ path: 'cms_purchase_submit_order', query: { goodsId: goodsId, goodsType: "entity", number: num, orderSrouce: 'goods', stockType: 1 } });
     }
-  
+
     //库存
     async queryStock(buyType) {
         let _self = this;

@@ -4,7 +4,6 @@ import {
 import BaseVue from 'base.vue';
 import service from './passwordset.service';
 import passwordInput from '../../../../../commons/vue_plugins/components/pay/input.vue';
-import keyboard from '../../../../../commons/vue_plugins/components/pay/keyboard.vue';
 import {
     stringMD5
 } from 'common.env';
@@ -16,7 +15,6 @@ import './passwordset.scss';
     template: require('./passwordset.html'),
     components: {
         psinput: passwordInput,
-        keyboard: keyboard
     }
 })
 
@@ -41,92 +39,87 @@ export class PayPasswordSet extends BaseVue {
         this._$service = service(this.$store);
     }
 
-    keyUpHandle(text) {
-        if (!text) {
-            return;
-        }
+
+    passwordOver(text) {
         if (this.currentStep == 1) { //第一次设置密码
-            let len = this.fristPassword.length
-            this.fristPassword.push(text)
-            let _self = this;
-            if (this.fristPassword.length >= 6) {
-                let _passwordStr = this.fristPassword.join('');
-                if (this.checkContinuous(this.fristPassword)||this.checkRepeat(this.fristPassword)) {
-                    this.$store.state.$dialog({
-                        dialogObj: {
-                            title: '提示',
-                            content: '不能设置为连续或重复数字',
-                            type: 'error',
-                            mainBtn: '确认',
-                            mainFn() {
-                                _self.fristPassword = [];
-                                _self.currentStep = 1;
-                            }
+            if (this.checkContinuous(text) || this.checkRepeat(text)) {
+                let _self = this;
+                this.$store.state.$dialog({
+                    dialogObj: {
+                        title: '提示',
+                        content: '不能设置为连续或重复数字',
+                        type: 'error',
+                        mainBtn: '确认',
+                        mainFn() {
+                            _self.currentStep = 1;
                         }
-                    });
-                }else{
-                    this.currentStep = 2;
-                }
+                    }
+                });
+            } else {
+                this.fristPassword = text;
+                this.currentStep = 2;
             }
         } else {
-            let len = this.secondPassword.length
-            this.secondPassword.push(text)
-            if (this.secondPassword.length >= 6) {
-                if (!this.equalsArray(this.fristPassword, this.secondPassword)) {
-                    let _self = this;
-                    this.$store.state.$dialog({
-                        dialogObj: {
-                            title: '提示',
-                            content: '两次密码不一致，请重新设置',
-                            type: 'error',
-                            mainBtn: '确认',
-                            mainFn() {
-                                _self.fristPassword = [];
-                                _self.secondPassword = [];
-                                _self.currentStep = 1;
-                            }
+            if (!this.equalsArray(this.fristPassword, text)) {
+                let _self = this;
+                this.$store.state.$dialog({
+                    dialogObj: {
+                        title: '提示',
+                        content: '两次密码不一致，请重新设置',
+                        type: 'error',
+                        mainBtn: '确认',
+                        mainFn() {
+                            _self.fristPassword = [];
+                            _self.secondPassword = [];
+                            _self.currentStep = 1;
                         }
-                    });
-                } else {
-                    let _password = this.secondPassword.join('');
-                    let _data = {
-                        payPassword: stringMD5(_password),
-                        phone: this.phone,
-                        sign: this.sign,
-                        type: this.sign ? 1 : 2,
                     }
-                    let _self = this;
-                    this._$service.setPassword(_data)
-                        .then(res => {
-                            if (!res || !res.data || res.data.errorCode) {
-                                _self.$store.state.$dialog({
-                                    dialogObj: {
-                                        title: '提示',
-                                        content: res.data.msg ? res.data.msg : '系统错误',
-                                        type: 'error',
-                                        mainBtn: '确认',
-                                        mainFn() {
-                                            _self.fristPassword = [];
-                                            _self.secondPassword = [];
-                                            _self.currentStep = 1;
+                });
+            } else {
+                let _password = text;
+                let _data = {
+                    payPassword: stringMD5(_password),
+                    phone: this.phone,
+                    sign: this.sign,
+                    type: this.sign ? 1 : 2,
+                }
+                let _self = this;
+                this._$service.setPassword(_data)
+                    .then(res => {
+                        if (!res || !res.data || res.data.errorCode) {
+                            _self.$store.state.$dialog({
+                                dialogObj: {
+                                    title: '提示',
+                                    content: res.data.msg ? res.data.msg : '系统错误',
+                                    type: 'error',
+                                    mainBtn: '确认',
+                                    mainFn() {
+                                        _self.fristPassword = [];
+                                        _self.secondPassword = [];
+                                        _self.currentStep = 1;
+                                    }
+                                }
+                            });
+                        } else {
+                            _self.$store.state.$dialog({
+                                dialogObj: {
+                                    title: '',
+                                    content: '支付密码设置成功',
+                                    type: 'info',
+                                    mainBtn: '确认',
+                                    mainFn() {
+                                        if (_self.$route.query.toPay) {
+                                            _self.payOrder();
+                                        } else {
+                                            _self.$router.back();
                                         }
                                     }
-                                });
-                            } else {
-                                _self.$router.back();
-                            }
-                        })
-                }
+                                }
+                            });
+                        }
+                    })
             }
         }
-    }
-
-    delHandle() {
-        let _password = this.currentStep == 1 ? this.fristPassword : this.secondPassword;
-        if (_password.length <= 0) {
-            return false;
-        }
-        _password.pop();
     }
 
     equalsArray(arr1, arr2) {
@@ -167,5 +160,45 @@ export class PayPasswordSet extends BaseVue {
             }
         }
         return true;
+    }
+
+    payOrder() {
+        let _param = {
+            combinOrderNo: this.$route.query.combinOrderNo,
+            payType: 'SYS',
+        }
+
+        let _self = this;
+        this._$service.payCMSOrder(_param)
+            .then(res => {
+                let _data = res.data;
+                if (!_data || _data.errorCode) {
+                    let dialogObj = {
+                        title: '提示',
+                        content: _data.msg ? _data.msg : '系统错误',
+                        assistBtn: '',
+                        type: 'info',
+                        mainBtn: '确定',
+                        assistFn() {},
+                        mainFn() {}
+                    }
+                    _self.$store.state.$dialog({
+                        dialogObj
+                    });
+                    return;
+                } else {
+                    let _sign = _data.sign;
+                    let _query = _self.$route.query;
+                    let _toQuery = {
+                        combinOrderNo: _query.combinOrderNo,
+                        totalMoney: _query.orderTotalMoney,
+                        sign: _sign
+                    }
+                    _self.$router.replace({
+                        path: 'sys_pay',
+                        query: _toQuery
+                    })
+                }
+            })
     }
 }

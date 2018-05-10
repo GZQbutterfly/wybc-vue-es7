@@ -12,6 +12,7 @@ export default (store) => {
 
     return {
         getCMSCouponList(data) {
+            data.type =1;
             return q('api/activites/q_user_coupons', data);
         }
     };

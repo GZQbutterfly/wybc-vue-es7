@@ -1,0 +1,86 @@
+<div class="shelves-layout-container weui-flex bg-c-fff">
+
+    <header class="shelves-layout-content_hd" @touchmove="noTouchMove">
+        <div class="wdinfo-header weui-flex bg-c-fff">
+            <div class="">
+                <img :src="shopkeeper.wdImg" alt="" class="logoimg">
+            </div>
+            <div class="weui-flex__item">
+                <h4>{{shopkeeper.wdName}}</h4>
+                <span>{{shopkeeper.school}}</span>
+                <span v-if="shopkeeper.id==0" class="official-flag text-s-10 text-c-fff bg-c-ff1c1c">官方</span>
+                <p v-if="shopkeeper.id==1">
+                    <span>{{'M'+shopkeeper.vipGrade}}</span>
+                </p>
+            </div>
+            <div class="search-btn" @click="toSearch">
+                <i class="iconfont icon-sousuo sercher text-s-20 text-c-808080"></i>
+            </div>
+        </div>
+        <div class="title weui-flex bg-c-fff text-s-12 flex-align-b" @click="goRoute('cms_mask_coupon')" v-if="counponObj.moneyPrice">
+            <label class="jhq  text-c-ff1c1c">进货券</label>
+            <div class="weui-flex__item text-c-333 text-ellipsis">
+                <template v-if="counponObj.minOrderPrice">
+                    <span>满{{counponObj.minOrderPrice | localMoney}} 减{{counponObj.moneyPrice/100}}元</span>
+                </template>
+                <template v-else>
+                    <span>立减{{counponObj.moneyPrice/100}}元</span>
+                </template>
+                <template v-if="counponObj.count > 1">
+                    ...
+                </template>
+            </div>
+            <div class="weui-flex__item  text-right">
+                <template v-if="counponObj.count">
+                    共{{counponObj.count}}张
+                </template>
+                <i class="icon iconfont icon-mjiantou"></i>
+            </div>
+        </div>
+    </header>
+
+    <section class="shelves-layout-content_bd weui-flex__item" :class="{'mbottom': !diffLeastMoney()}" v-if="showClassify">
+        <scroll-tab :callback="change" v-if="list.length" ref="scrolltabRef">
+            <scroll-tab-panel v-for="(item, index) in list" :opts="item" :key="index">
+                <shelves-item :opts="item" @inCar="inCar" @toDetail="toDetail" :carmap="carmap"></shelves-item>
+            </scroll-tab-panel>
+        </scroll-tab>
+    </section>
+
+
+    <footer class="shelves-layout-content_ft custom-footer">
+        <div class="shopcar  bg-c-fff weui-flex flex-align-m">
+            <div class="shopcar_hd" @click="viewShopCar">
+                <i class="icon iconfont icon-gouwuche text-c-7ecc44"></i>
+                <div class="tuqi-tip"></div>
+                <div class="tuqi-tip-b"></div>
+                <div class="weui-badge" v-show="shopcarOpts.countTotal">{{ shopcarOpts.countTotal > 99 ? '99+' : shopcarOpts.countTotal }}</div>
+            </div>
+            <div class="shopcar_bd weui-flex__item text-c-333" @click="viewShopCar">
+                <div class="text-c-15">
+                    <template v-if="shopcarOpts.totalPrice">
+                        总计：
+                        <span class="text-c-ff1c1c">{{ shopcarOpts.totalPrice |localMoney}}</span>
+                    </template>
+                    <template v-else>
+                        未选择任何商品
+                    </template>
+                </div>
+                <div class="text-s-13">最低进货金额：
+                    <span class="text-c-ee893e">{{shopcarOpts.leastMoney |localMoney}}</span>
+                </div>
+            </div>
+            <div class="shopcar_ft diff-btn  text-c-fff text-s-17 text-center" @click="balanceCar" :class="[accordWithBalance() ? 'bg-c-ff3a80' : 'bg-c-ccc']">
+                结算
+            </div>
+        </div>
+    </footer>
+
+    <shelves-shopcar ref="shelvesShopcarRef" 
+                     :opts="shopcarOpts" 
+                     @cleanCar="cleanCar" 
+                     @queryCar="queryCarGoodsList" 
+                     :carmap="carmap"
+                     @triggerCar="triggerCar"></shelves-shopcar>
+
+</div>
